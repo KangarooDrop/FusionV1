@@ -1,0 +1,271 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Board",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/Board.gd"
+}, {
+"base": "Reference",
+"class": "Card",
+"language": "GDScript",
+"path": "res://Scripts/Cards/Card.gd"
+}, {
+"base": "CardCreature",
+"class": "CardAbomination",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardAbomination.gd"
+}, {
+"base": "CardEnchantment",
+"class": "CardAnthem",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardAnthem.gd"
+}, {
+"base": "CardCreature",
+"class": "CardCerberus",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardCerberus.gd"
+}, {
+"base": "CardCreature",
+"class": "CardCombust",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardCombust.gd"
+}, {
+"base": "Card",
+"class": "CardCreature",
+"language": "GDScript",
+"path": "res://Scripts/Cards/CardCreature.gd"
+}, {
+"base": "CardCreature",
+"class": "CardCyberWolf",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardCyberWolf.gd"
+}, {
+"base": "CardCreature",
+"class": "CardDjinn",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardDjinn.gd"
+}, {
+"base": "CardCreature",
+"class": "CardDrifter",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardDrifter.gd"
+}, {
+"base": "CardCreature",
+"class": "CardEarth",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardEarth.gd"
+}, {
+"base": "Card",
+"class": "CardEnchantment",
+"language": "GDScript",
+"path": "res://Scripts/Cards/CardEnchantment.gd"
+}, {
+"base": "CardCreature",
+"class": "CardFactory",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardFactory.gd"
+}, {
+"base": "CardCreature",
+"class": "CardFiend",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardFiend.gd"
+}, {
+"base": "CardCreature",
+"class": "CardFire",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardFire.gd"
+}, {
+"base": "CardCreature",
+"class": "CardFlameCannon",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardFlameCannon.gd"
+}, {
+"base": "CardCreature",
+"class": "CardGargantua",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardGargantua.gd"
+}, {
+"base": "CardCreature",
+"class": "CardGolem",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardGolem.gd"
+}, {
+"base": "CardCreature",
+"class": "CardGraveRobber",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardGraveRobber.gd"
+}, {
+"base": "CardCreature",
+"class": "CardLeviathan",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardLeviathan.gd"
+}, {
+"base": "CardCreature",
+"class": "CardLichomancer",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardLichomancer.gd"
+}, {
+"base": "CardCreature",
+"class": "CardMech",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardMech.gd"
+}, {
+"base": "CardCreature",
+"class": "CardMiner",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardMiner.gd"
+}, {
+"base": "CardCreature",
+"class": "CardNecro",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardNecro.gd"
+}, {
+"base": "CardCreature",
+"class": "CardNecroWolf",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardNecroWolf.gd"
+}, {
+"base": "Node2D",
+"class": "CardNode",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/CardNode.gd"
+}, {
+"base": "CardCreature",
+"class": "CardNullCreature",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardNull.gd"
+}, {
+"base": "Node",
+"class": "CardSlot",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/CardSlot.gd"
+}, {
+"base": "CardCreature",
+"class": "CardSludge",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardSludge.gd"
+}, {
+"base": "CardCreature",
+"class": "CardSteamer",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardSteamer.gd"
+}, {
+"base": "CardCreature",
+"class": "CardStoneSerpant",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardStoneSerpant.gd"
+}, {
+"base": "CardCreature",
+"class": "CardTorrent",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardTorrent.gd"
+}, {
+"base": "CardCreature",
+"class": "CardVolcan",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T2/CardVolcan.gd"
+}, {
+"base": "CardCreature",
+"class": "CardWater",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardWater.gd"
+}, {
+"base": "CardCreature",
+"class": "CardWolf",
+"language": "GDScript",
+"path": "res://Scripts/Cards/T1/CardWolf.gd"
+}, {
+"base": "Reference",
+"class": "Deck",
+"language": "GDScript",
+"path": "res://Scripts/Classes/Deck.gd"
+}, {
+"base": "Node2D",
+"class": "HandNode",
+"language": "GDScript",
+"path": "res://Scripts/Classes/Hand.gd"
+}, {
+"base": "Node2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://Scripts/Classes/Player.gd"
+} ]
+_global_script_class_icons={
+"Board": "",
+"Card": "",
+"CardAbomination": "",
+"CardAnthem": "",
+"CardCerberus": "",
+"CardCombust": "",
+"CardCreature": "",
+"CardCyberWolf": "",
+"CardDjinn": "",
+"CardDrifter": "",
+"CardEarth": "",
+"CardEnchantment": "",
+"CardFactory": "",
+"CardFiend": "",
+"CardFire": "",
+"CardFlameCannon": "",
+"CardGargantua": "",
+"CardGolem": "",
+"CardGraveRobber": "",
+"CardLeviathan": "",
+"CardLichomancer": "",
+"CardMech": "",
+"CardMiner": "",
+"CardNecro": "",
+"CardNecroWolf": "",
+"CardNode": "",
+"CardNullCreature": "",
+"CardSlot": "",
+"CardSludge": "",
+"CardSteamer": "",
+"CardStoneSerpant": "",
+"CardTorrent": "",
+"CardVolcan": "",
+"CardWater": "",
+"CardWolf": "",
+"Deck": "",
+"HandNode": "",
+"Player": ""
+}
+
+[application]
+
+config/name="Yugioh"
+run/main_scene="res://Scenes/Networking/Lobby.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+ListOfCards="*res://Scripts/ListOfCards.gd"
+Settings="*res://Scripts/Settings.gd"
+Server="*res://Scripts/Networking/Server.gd"
+
+[display]
+
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray(  )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_clear_color=Color( 1, 1, 1, 1 )
+environment/default_environment="res://default_env.tres"

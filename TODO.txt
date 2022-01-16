@@ -1,0 +1,12 @@
+TODO:
+  Fusing with null, bonks
+  Marker for fusion order in hand 
+  Enchantment card examples
+
+IDEAS:
+  Death Cloud:
+	Creatures enter the battlefield taking one damage
+  Ruinous Affliction:
+	Creatures dying deal 1 damage to their controller
+  Gradure:
+	Creatures enter with +1 health
