@@ -1,5 +1,8 @@
 extends Node2D
 
+var fileName = "deck_test"
+var path = "user://decks/"
+	
 var slotPageWidth = 4
 var slotPageHeight = 3
 var slotPageNum = slotPageWidth * slotPageHeight
@@ -53,6 +56,18 @@ func _ready():
 				slot.cardNode = cardPlacing
 				cardPlacing.slot = slot
 	setCurrentPage(0)
+	
+	
+	var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
+	var error = Deck.verifyDeck(dataRead)
+	print("Deck validity: " + str(error))
+	if error == Deck.DECK_VALIDITY_TYPE.VALID or error == Deck.DECK_VALIDITY_TYPE.WRONG_SIZE:
+		for k in dataRead.keys():
+			var id = int(k)
+			for i in range(int(dataRead[k])):
+				$DeckDisplay.addCard(id)
+	else:
+		print("Deck file is not valid")
 
 func onSlotEnter(slot : CardSlot):
 	pass
@@ -64,9 +79,22 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if button_index == 1:
 		if slot.cardNode != null:
 			$DeckDisplay.addCard(slot.cardNode.card.UUID)
+			return
+	elif button_index == 2:
+		if slot.cardNode != null:
+			for i in range($DeckDisplay.data.size()):
+				if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
+					$DeckDisplay.removeCard(i)
+					return
 		
 func onSavePressed():
 	hasSaved = true
+	
+	var error = FileIO.writeToJSON(path, fileName, $DeckDisplay.getDeckData())
+	if error != 0:
+		print("ERROR CODE WHEN WRITING TO FILE : " + str(error))
+	else:
+		print("Deck successfully saved")
 	
 enum CONFIRM_TYPES {NONE, NEW, EXIT}
 var confirmType = CONFIRM_TYPES.NONE
@@ -110,10 +138,6 @@ func setCurrentPage(newPage : int):
 		pages[currentPage].visible = false
 		currentPage = newPage
 		pages[newPage].visible = true
-		print("NEW PAGE")
-		
-		for i in range(pages.size()):
-			print(pages[i].visible)
 	
 	
 func getCurrentPage() -> int:

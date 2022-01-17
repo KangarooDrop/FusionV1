@@ -3,7 +3,7 @@ extends Node2D
 var deckDisplayData = preload("res://Scenes/UI/DeckDisplayData.tscn")
 
 var data := []
-var total := 0 setget setTotal, getTotal
+var total := -1 setget setTotal, getTotal
 var deckMax = 20
 
 func setTotal(newTotal : int):
@@ -11,18 +11,23 @@ func setTotal(newTotal : int):
 		total = newTotal
 		$Label.text = str(newTotal) + " / " + str(deckMax)
 		get_parent().deckModified()
+		
+		if total != deckMax:
+			$Label.set("custom_colors/font_color", Color.black)
+		else:
+			$Label.set("custom_colors/font_color", Color.blueviolet)
 	
 func getTotal() -> int:
 	return total
+
+func _ready():
+	setTotal(0)
 
 func clearData():
 	while(data.size() > 0):
 		removeCard(0)
 
 func addCard(id : int) -> bool:
-	if total >= deckMax:
-		return false
-	
 	for i in range(data.size()):
 		if data[i].card.UUID == id:
 			if data[i].count <= 3:
@@ -65,3 +70,9 @@ func onDeckDataClicked(d) -> bool:
 		return removeCard(index)
 	else:
 		return false
+
+func getDeckData() -> Dictionary:
+	var rtn = {}
+	for d in data:
+		rtn[d.card.UUID] = d.count
+	return rtn

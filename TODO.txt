@@ -6,6 +6,8 @@ TODO:
   Fusing above tier 1
   More creatures for each type
 
+  Opponent verifies contents of opponent deck
+
   Observe games in progress
 
   Deck editor and saver (to json)
