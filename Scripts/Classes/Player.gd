@@ -13,13 +13,10 @@ var hand
 var enchantNum := 2
 var creatureNum := 5
 
-func _init():
-	var cardList_A : Array
-	for i in range(20):
-		var cardID = randi() % 7
-		cardList_A.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
-		
-	deck = Deck.new(cardList_A)
+var isOpponent = false
+
+func _init(cardList):
+	deck = Deck.new(cardList)
 
 func initHand(board):
 	hand.initHand(board, self)

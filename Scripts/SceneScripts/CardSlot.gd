@@ -18,4 +18,6 @@ func _ready():
 	
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		board.slotClicked(self, event.button_index)
+		board.slotClicked(self, event.button_index, false)
+		
+		print(isOpponent)

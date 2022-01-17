@@ -5,7 +5,6 @@ var cards : Array
 
 func _init(cards):
 	self.cards = cards
-	shuffle()
 
 func shuffle():
 	cards.shuffle()
@@ -25,3 +24,17 @@ func draw(count : int) -> Array:
 		else:
 			pass
 	return c
+
+func serialize() -> Array:
+	var data = []
+	for c in cards:
+		data.append(c.serialize())
+	return data
+	
+func deserialize(data):
+	cards.clear()
+	for d in data:
+		cards.append(ListOfCards.deserialize(d))
+
+func _to_string() -> String:
+	return str(cards)
