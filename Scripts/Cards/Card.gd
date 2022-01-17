@@ -12,6 +12,8 @@ var cardType : int
 var texture : Texture
 var tier : int
 
+var abilities := []
+
 func _init(params):
 	if params.has("UUID"):
 		UUID = params["UUID"]
@@ -78,3 +80,6 @@ static func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 			return c
 	else:
 		return cardB
+
+func getHoverData() -> String:
+	return name

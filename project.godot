@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "Ability",
+"language": "GDScript",
+"path": "res://Scripts/Classes/Ability.gd"
+}, {
 "base": "Node2D",
 "class": "BoardMP",
 "language": "GDScript",
@@ -200,6 +205,7 @@ _global_script_classes=[ {
 "path": "res://Scripts/Classes/Player.gd"
 } ]
 _global_script_class_icons={
+"Ability": "",
 "BoardMP": "",
 "Card": "",
 "CardAbomination": "",

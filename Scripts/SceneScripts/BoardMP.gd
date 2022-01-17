@@ -7,6 +7,7 @@ var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
+var hoverScene = preload("res://Scenes/UI/Hover.tscn")
 
 var cardDists = 16
 
@@ -154,14 +155,19 @@ func _physics_process(delta):
 				shownHover = true
 				if hoveringOn.currentZone == CardSlot.ZONES.DECK:
 					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
-					var string = ""
-					if numCards == 1:
-						string = "There is currently 1 card in this deck"
-					else:
-						string = "There are currently " + str(numCards) + " cards in this deck"
-					print(string)
+					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
+					createHoverNode(pos, str(numCards))
+					
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
-					print("This card is ", hoveringOn.cardNode.card.name)
+					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
+					createHoverNode(pos, hoveringOn.cardNode.card.getHoverData())
+
+func createHoverNode(position : Vector2, text : String):
+	var hoverInst = hoverScene.instance()
+	add_child(hoverInst)
+	hoverInst.global_position = position
+	hoverInst.setText(text)
+	hoveringWindow = hoverInst
 
 func initZones():
 	var cardInst = null
@@ -317,6 +323,7 @@ var hoverTimer = 0
 var hoverMaxTime = 1
 var hoveringOn = null
 var shownHover = false
+var hoveringWindow = null
 		
 func onSlotEnter(slot : CardSlot):
 	hoveringOn = slot
@@ -326,6 +333,9 @@ func onSlotEnter(slot : CardSlot):
 func onSlotExit(slot : CardSlot):
 	hoveringOn = null
 	shownHover = false
+	if is_instance_valid(hoveringWindow):
+		hoveringWindow.fadeOut()
+		hoveringWindow = null
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if not fromServer:
