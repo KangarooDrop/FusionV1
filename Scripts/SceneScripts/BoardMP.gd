@@ -340,6 +340,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							while cardsHolding.size() > 0:
 								var c = cardsHolding[0]
 								var cardNode = c.cardNode
+								cardNode.setCardVisible(true)
 								cardsHolding.erase(c)
 								fuseQueue.append(cardNode)
 								cardNode.get_parent().remove_child(cardNode)
