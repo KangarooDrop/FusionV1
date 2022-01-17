@@ -1,7 +1,6 @@
 TODO:
   Timer for whole game, current turn, total time during your turn
   Who's turn
-  Both creature types visible
   Preview of the combination
   Hovering over card give info
   Fusing above tier 1
@@ -25,6 +24,7 @@ TODO:
 	cards in hand
 	creatures on board
   Lose when going to 0 life
+  Both creature types visible
 
 
 
