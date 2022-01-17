@@ -248,7 +248,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Yugioh"
+config/name="ProjectFusion"
 run/main_scene="res://Scenes/Networking/Lobby.tscn"
 config/icon="res://icon.png"
 

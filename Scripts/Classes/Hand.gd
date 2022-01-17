@@ -78,7 +78,6 @@ func drawCard():
 		addCard(card)
 
 func addCard(card : Card):
-	print("Card is an opponent's ", player.isOpponent)
 	if card != null:
 		if Settings.playAnimations:
 			drawQueue.append(card)
