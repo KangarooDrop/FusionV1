@@ -9,6 +9,7 @@ func onBackPressed():
 	visible = false
 
 func onLobbyPressed():
+	Server.closeServer()
 	var error = get_tree().change_scene("res://Scenes/Networking/Lobby.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))

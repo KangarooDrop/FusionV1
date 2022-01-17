@@ -8,6 +8,7 @@ var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 var hoverScene = preload("res://Scenes/UI/Hover.tscn")
+var previewScene = preload("res://Scenes/UI/Preview.tscn")
 
 var cardDists = 16
 
@@ -186,6 +187,21 @@ func _physics_process(delta):
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
 					createHoverNode(pos, str(numCards))
 					
+				elif cardsHolding.size() > 0 and hoveringOn.playerID == players[0].UUID:
+					var cardList = []
+					if is_instance_valid(hoveringOn.cardNode):
+						cardList.append(hoveringOn.cardNode.card)
+					for c in cardsHolding:
+						cardList.append(c.cardNode.card)
+					var newCard = Card.fuseCards(cardList)
+					var endsCreature = newCard.cardType == Card.CARD_TYPE.Creature
+					
+					if endsCreature and hoveringOn.currentZone == CardSlot.ZONES.CREATURE:
+						preview = previewScene.instance()
+						preview.get_node("CardNode").card = newCard
+						add_child(preview)
+						preview.global_position = hoveringOn.global_position
+					
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
 					createHoverNode(pos, hoveringOn.cardNode.card.getHoverData())
@@ -350,6 +366,7 @@ var hoverMaxTime = 1
 var hoveringOn = null
 var shownHover = false
 var hoveringWindow = null
+var preview = null
 		
 func onSlotEnter(slot : CardSlot):
 	hoveringOn = slot
@@ -360,6 +377,8 @@ func onSlotExit(slot : CardSlot):
 	if slot == hoveringOn:
 		hoveringOn = null
 		shownHover = false
+		if is_instance_valid(preview):
+			preview.fadeOut()
 		if is_instance_valid(hoveringWindow):
 			hoveringWindow.fadeOut()
 			hoveringWindow = null
@@ -404,6 +423,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					endsCreature = newCard.cardType == Card.CARD_TYPE.Creature
 					
 					if endsCreature:
+						if is_instance_valid(preview):
+							preview.queue_free()
+						
 						
 						if Settings.playAnimations:
 						

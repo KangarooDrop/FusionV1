@@ -31,7 +31,6 @@ var cardVisible = true setget setCardVisible, getCardVisible
 func _ready():
 	setCardVisible(cardVisible)
 			
-			
 func setCardVisible(isVis : bool):
 	if isVis:
 		if card != null:
