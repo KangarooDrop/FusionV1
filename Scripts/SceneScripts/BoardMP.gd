@@ -60,7 +60,7 @@ func _ready():
 	
 	var cardList : Array
 	for i in range(20):
-		var cardID = randi() % 7
+		var cardID = randi() % 6 + 1
 		cardList.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
 	
 	var player_A = Player.new(cardList)
