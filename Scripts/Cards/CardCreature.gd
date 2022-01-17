@@ -6,7 +6,7 @@ var cardNode = preload("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
 
-var creatureType : int
+var creatureType := []
 var power : int
 var toughness : int
 

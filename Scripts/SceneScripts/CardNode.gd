@@ -38,7 +38,12 @@ func setCardVisible(isVis : bool):
 			if card.cardType == Card.CARD_TYPE.Creature:
 				$Label.visible = true
 				$CardType.visible = true
-				$CardType.texture = ListOfCards.creatureTypeImageList[card.creatureType]
+				$CardType.texture = ListOfCards.creatureTypeImageList[card.creatureType[0]]
+				
+				if card.creatureType.size() > 1:
+					$CardType2.visible = true
+					$CardType2.texture = ListOfCards.creatureTypeImageList[card.creatureType[1]]
+				
 			$CardPortrait.texture = card.texture
 		else:
 			$CardPortrait.texture = ListOfCards.noneCardTex

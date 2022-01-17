@@ -4,7 +4,7 @@ var showing = false
 var spinTimer = 0
 var spinMaxTime = 1
 var off = 0.2
-var spinRate = 2 * PI * 3 + randf() * off - off / 2
+var spinRate = 2 * PI * 3 + (randf() * off) - (off / 2)
 var scaleFinal = 5
 
 func showWinLose(win : bool):

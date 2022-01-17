@@ -22,6 +22,11 @@ texture = ExtResource( 1 )
 position = Vector2( 17, -26 )
 texture = ExtResource( 5 )
 
+[node name="CardType2" type="Sprite" parent="."]
+visible = false
+position = Vector2( -17, -26 )
+texture = ExtResource( 5 )
+
 [node name="Label" type="Label" parent="."]
 visible = false
 anchor_left = 0.5

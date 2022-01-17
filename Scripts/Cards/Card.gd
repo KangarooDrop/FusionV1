@@ -71,7 +71,7 @@ static func fuseCards(cards : Array) -> Card:
 static func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	var tier = cardA.tier + cardB.tier
 	if tier - 2 >= 0 and tier - 2 < ListOfCards.fusionList.size():
-		var cardEnd = ListOfCards.fusionList[tier-2][cardA.creatureType][cardB.creatureType]
+		var cardEnd = ListOfCards.fusionList[tier-2][cardA.creatureType[0]][cardB.creatureType[0]]
 		if cardEnd == null:
 			if hasSwapped:
 				return null

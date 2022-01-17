@@ -72,9 +72,10 @@ remote func serverFetchDeck(requester):
 	var player_id = get_tree().get_rpc_sender_id()
 	
 	var board = get_node_or_null("/root/main/Board")
-	while board == null or board.gameStarted:
-		board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted:
+		print("Board not ready yet, waiting")
 		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
 	var data = board.players[0].deck.serialize()
 		
 	rpc_id(player_id, "returnDeck", data, requester)
@@ -168,7 +169,10 @@ remote func serverSetActivePlayer(index : int):
 	var player_id = get_tree().get_rpc_sender_id()
 	
 	var board = get_node_or_null("/root/main/Board")
-	board.activePlayer = board.players[index]
-	board.hasStartingPlayer = true
+	while not is_instance_valid(board) or board.gameStarted:
+		print("Board not ready yet, waiting")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+	board.setStartingPlayer(board.players[index])
 		
 

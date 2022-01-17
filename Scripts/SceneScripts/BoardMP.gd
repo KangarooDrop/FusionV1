@@ -80,13 +80,14 @@ func _ready():
 	if Server.online and Server.host:
 		var startingPlayerIndex = randi() % 2
 		activePlayer = players[(startingPlayerIndex + 1) % 2]
+		print("Send: Starting player")
 		Server.setActivePlayer(startingPlayerIndex)
 		hasStartingPlayer = true
 	
 	initZones()
 	initHands()
 	
-	print("Fetching opponent's deck list")
+	print("Fetch: Opponent's deck list")
 	Server.fetchDeck(get_instance_id())
 
 var deckDataSet = false
@@ -94,14 +95,21 @@ var readyToStart = false
 var hasStartingPlayer = false
 
 func setDeckData(data):
+	print("Receive: Opponent deck data")
 	players[1].deck.deserialize(data)
 	
-	print("Sending game start signal to opponent")
+	print("Send: Game start signal")
 	Server.onGameStart()
 	deckDataSet = true
 
 func onGameStart():
+	print("Receive: Ready to start")
 	readyToStart = true
+
+func setStartingPlayer(player : Player):
+	print("Receive: Starting player")
+	activePlayer = player
+	hasStartingPlayer = true
 
 var playerRestart = false
 var opponentRestart = false
@@ -115,6 +123,7 @@ func _physics_process(delta):
 		gameStarted = true
 		players[0].initHand(self)
 		players[1].initHand(self)
+		print("Notice: Players ready, starting game")
 		
 	if playerRestart and opponentRestart:
 		var error = get_tree().change_scene("res://Scenes/main.tscn")

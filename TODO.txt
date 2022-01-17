@@ -9,8 +9,8 @@ TODO:
 
   Observe games in progress
 
-  Art...?
   Deck editor and saver (to json)
+  Art...?
 
   Spells
   Enchantment card examples
