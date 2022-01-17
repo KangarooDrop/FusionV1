@@ -21,10 +21,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -38.5
-margin_top = -40.0
-margin_right = 38.5
-margin_bottom = 40.0
+margin_left = -51.0
+margin_top = -55.0
+margin_right = 51.0
+margin_bottom = 55.0
 custom_constants/separation = 10
 alignment = 1
 __meta__ = {
@@ -32,29 +32,29 @@ __meta__ = {
 }
 
 [node name="RestartButton" type="Button" parent="VBoxContainer"]
-margin_right = 77.0
+margin_right = 102.0
 margin_bottom = 20.0
 text = "Restart"
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
 margin_top = 30.0
-margin_right = 77.0
+margin_right = 102.0
 margin_bottom = 50.0
 text = "Back"
 
-[node name="LobbyButton" type="Button" parent="VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
 margin_top = 60.0
-margin_right = 77.0
+margin_right = 102.0
 margin_bottom = 80.0
-text = "To Lobby"
+text = "To Main Menu"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
 margin_top = 90.0
-margin_right = 77.0
+margin_right = 102.0
 margin_bottom = 110.0
 text = "Exit Game"
 
 [connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
 [connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]
-[connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
+[connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="onMainMenuPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]

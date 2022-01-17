@@ -279,7 +279,7 @@ _global_script_class_icons={
 [application]
 
 config/name="ProjectFusion"
-run/main_scene="res://Scenes/Networking/Lobby.tscn"
+run/main_scene="res://Scenes/StartupScreen.tscn"
 config/icon="res://icon.png"
 
 [autoload]

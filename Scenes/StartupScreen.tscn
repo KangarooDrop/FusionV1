@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
+
+[node name="StartupScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -42.5
+margin_top = -38.0
+margin_right = 42.5
+margin_bottom = 38.0
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeckEditButton" type="Button" parent="VBoxContainer"]
+margin_right = 85.0
+margin_bottom = 20.0
+text = "Deck Editor"
+
+[node name="LobbyButton" type="Button" parent="VBoxContainer"]
+margin_top = 28.0
+margin_right = 85.0
+margin_bottom = 48.0
+text = "Lobby"
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+visible = false
+margin_top = 48.0
+margin_right = 40.0
+margin_bottom = 68.0
+text = "Settings"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+margin_top = 56.0
+margin_right = 85.0
+margin_bottom = 76.0
+text = "Exit"
+
+[connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
+[connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
