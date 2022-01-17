@@ -52,6 +52,8 @@ var fuseWaiting = false
 var fuseWaitTimer = 0
 var fuseWaitMaxTime = 0.2
 
+var gameOver = false
+
 func _ready():
 	var gameSeed = OS.get_system_time_msecs()
 	print("current game seed is ", gameSeed)
@@ -63,9 +65,9 @@ func _ready():
 		var cardID = randi() % 6 + 1
 		cardList.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
 	
-	var player_A = Player.new(cardList)
+	var player_A = Player.new(cardList, self)
 	player_A.deck.shuffle()
-	var player_B = Player.new([])
+	var player_B = Player.new([], self)
 	player_B.isOpponent = true
 	players.append(player_A)
 	players.append(player_B)
@@ -352,6 +354,9 @@ func onSlotExit(slot : CardSlot):
 			hoveringWindow = null
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
+	if gameOver:
+		return
+		
 	if button_index == 1:
 		if slot.playerID == activePlayer.UUID or slot.playerID == -1:
 			if slot.currentZone == CardSlot.ZONES.HAND:
@@ -571,6 +576,8 @@ func _input(event):
 			
 			
 func nextTurn():
+	if gameOver:
+		return
 	#Engine.time_scale = 0.1
 	print("NEXT TURN")
 	while cardsHolding.size() > 0:
@@ -579,6 +586,7 @@ func nextTurn():
 		cardsHolding.remove(0)
 	if is_instance_valid(selectedCard):
 		selectedCard.cardNode.rotation = 0
+		selectedCard = null
 		
 	######################	ON END OF TURN EFFECTS
 	for slot in boardSlots:
@@ -598,3 +606,15 @@ func nextTurn():
 	for slot in slotsToCheck:
 			slot.cardNode.card.onStartOfTurn(self)
 	######################
+
+func onLoss(player : Player):
+	gameOver = true
+	var text = ""
+	var color
+	if player == players[0]:
+		text = "LOSE"
+		color = Color.red
+	else:
+		text = "WIN!"
+		color = Color.lightblue
+	get_node("/root/main/WinLose").showText(text, color)

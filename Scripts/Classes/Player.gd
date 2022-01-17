@@ -15,11 +15,15 @@ var creatureNum := 5
 
 var isOpponent = false
 
-func _init(cardList):
+func _init(cardList, board):
 	deck = Deck.new(cardList)
+	self.board = board
 
 func initHand(board):
 	hand.initHand(board, self)
 
 func takeDamage(dmg : int, source : CardNode):
 	life -= dmg
+	
+	if life <= 0:
+		board.onLoss(self)

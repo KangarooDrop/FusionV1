@@ -8,4 +8,3 @@ func _init(card : Card).("Production", "This creature create a mech at the start
 func onStartOfTurn(board):
 	.onStartOfTurn(board)
 	card.addCreatureToBoard(ListOfCards.getCard(5), board)
-	print("ACTIVATING ", card)

@@ -26,8 +26,8 @@ func initHand(board, player):
 	self.board = board
 	self.player = player
 	isOpponent = player.isOpponent
-	if isOpponent:
-		handVisible = false
+	#if isOpponent:
+	#	handVisible = false
 	for i in range(handSize + (0 if board.activePlayer == player else 1)):
 		addCard(player.deck.pop())
 	
