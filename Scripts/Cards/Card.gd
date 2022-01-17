@@ -25,16 +25,20 @@ func _init(params):
 		playerID = params["player_id"]
 	
 func onEnter(board):
-	pass
+	for abl in abilities:
+		abl.onEnter(board)
 	
 func onDeath(board):
-	pass
+	for abl in abilities:
+		abl.onDeath(board)
 	
 func onStartOfTurn(board):
-	pass
+	for abl in abilities:
+		abl.onStartOfTurn(board)
 
 func onEndOfTurn(board):
-	pass
+	for abl in abilities:
+		abl.onEndOfTurn(board)
 
 
 

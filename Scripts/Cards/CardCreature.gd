@@ -51,9 +51,12 @@ func onStartOfTurn(board):
 	
 func onAttack(blocker, board):
 	hasAttacked = true
+	for abl in abilities:
+		abl.onAttack(blocker, board)
 	
 func onBeingAttacked(attacker, board):
-	pass
+	for abl in abilities:
+		abl.onBeingAttacked(attacker, board)
 	
 func _to_string() -> String:
 	return ._to_string() + " - " + str(power) + "/" + str(toughness)
