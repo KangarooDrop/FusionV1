@@ -10,3 +10,8 @@ export var board : NodePath
 
 func _ready():
 	pass
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.scancode == KEY_ESCAPE:
+			$PauseMenu.visible = !$PauseMenu.visible

@@ -74,7 +74,11 @@ func _ready():
 	enchants[-1] = []
 	creatures[player_A.UUID] = []
 	creatures[player_B.UUID] = []
-	activePlayer = player_A if Server.host else player_B
+	if Server.online and Server.host:
+		var startingPlayerIndex = randi() % 2
+		activePlayer = players[(startingPlayerIndex + 1) % 2]
+		Server.setActivePlayer(startingPlayerIndex)
+		hasStartingPlayer = true
 	
 	initZones()
 	initHands()
@@ -84,6 +88,7 @@ func _ready():
 
 var deckDataSet = false
 var readyToStart = false
+var hasStartingPlayer = false
 
 func setDeckData(data):
 	players[1].deck.deserialize(data)
@@ -95,12 +100,22 @@ func setDeckData(data):
 func onGameStart():
 	readyToStart = true
 
+var playerRestart = false
+var opponentRestart = false
+func onRestartPressed():
+	opponentRestart = true
+
 func _physics_process(delta):
-	if readyToStart and deckDataSet:
+	if readyToStart and deckDataSet and hasStartingPlayer:
 		readyToStart = false
 		deckDataSet = false
 		players[0].initHand(self)
 		players[1].initHand(self)
+		
+	if playerRestart and opponentRestart:
+		var error = get_tree().change_scene("res://Scenes/main.tscn")
+		if error != 0:
+			print("Error loading test1.tscn. Error Code = " + str(error))
 		
 		
 	if is_instance_valid(selectedCard):
@@ -315,8 +330,6 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
 	
-	print("SLOT CLICKED ", parent.name, "  ", slotID, "  ", isOpponent)
-	
 	slotClicked(parent.get_child(slotID), button_index, true)
 		
 var hoverTimer = 0
@@ -331,11 +344,12 @@ func onSlotEnter(slot : CardSlot):
 	shownHover = false
 		
 func onSlotExit(slot : CardSlot):
-	hoveringOn = null
-	shownHover = false
-	if is_instance_valid(hoveringWindow):
-		hoveringWindow.fadeOut()
-		hoveringWindow = null
+	if slot == hoveringOn:
+		hoveringOn = null
+		shownHover = false
+		if is_instance_valid(hoveringWindow):
+			hoveringWindow.fadeOut()
+			hoveringWindow = null
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if not fromServer:
@@ -577,4 +591,3 @@ func nextTurn():
 	for slot in slotsToCheck:
 			slot.cardNode.card.onStartOfTurn(self)
 	######################
-

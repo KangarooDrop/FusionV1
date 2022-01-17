@@ -135,3 +135,40 @@ remote func serverOnNextTurn():
 	board.nextTurn()
 		
 
+
+####################################################################
+
+remote func onRestart():
+	var id = 1
+	if Server.host:
+		id = otherPlayerData
+	else:
+		pass
+	rpc_id(id, "serverOnRestart")
+	
+remote func serverOnRestart():
+	var player_id = get_tree().get_rpc_sender_id()
+	
+	var board = get_node_or_null("/root/main/Board")
+	board.onRestartPressed()
+		
+
+
+####################################################################
+
+remote func setActivePlayer(index : int):
+	var id = 1
+	if Server.host:
+		id = otherPlayerData
+	else:
+		pass
+	rpc_id(id, "serverSetActivePlayer", index)
+	
+remote func serverSetActivePlayer(index : int):
+	var player_id = get_tree().get_rpc_sender_id()
+	
+	var board = get_node_or_null("/root/main/Board")
+	board.activePlayer = board.players[index]
+	board.hasStartingPlayer = true
+		
+

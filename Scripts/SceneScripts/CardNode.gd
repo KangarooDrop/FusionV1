@@ -137,3 +137,7 @@ func dealDamageTo(slot, board):
 		for p in slot.board.players:
 			if p.UUID == slot.playerID:
 				p.takeDamage(card.power, self)
+				
+func _exit_tree():
+	if slot != null:
+		slot.board.onSlotExit(slot)

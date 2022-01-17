@@ -47,7 +47,6 @@ margin_right = 100.0
 margin_bottom = 7.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Text"
-align = 1
 valign = 1
 autowrap = true
 __meta__ = {

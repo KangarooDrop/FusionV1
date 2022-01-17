@@ -86,4 +86,7 @@ static func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 		return cardB
 
 func getHoverData() -> String:
-	return name
+	var string = name
+	for abl in abilities:
+		string += "\n" + str(abl)
+	return string

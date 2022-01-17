@@ -5,6 +5,7 @@ var text := ""
 var fadeMaxTime = 0.3
 var fadeTimer = fadeMaxTime
 var fadingOut = false
+var maxTextLen = 300
 
 func _ready():
 	pass
@@ -12,20 +13,19 @@ func _ready():
 func setText(text : String, margin = 4):
 	var font = $Label.get_font("font")
 	var textLength = font.get_string_size(text).x
-	if textLength > 100:
-		textLength = 100
+	if textLength > maxTextLen:
+		textLength = maxTextLen
 	
 	self.text = text
 	$Label.text = text
 	$Label.rect_position.x = margin + 6
 	$Label.rect_size.x = textLength
+	$Label.rect_position.y = -$Label.rect_size.y / 2
 	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.rect_size.y + margin * 2)
 	$HoverBack.rect_position.y = -$HoverBack.rect_size.y / 2
-	print(textLength + margin * 2)
 	
 func fadeOut():
 	fadingOut = true
-	print($HoverBack.rect_size)
 	
 func _physics_process(delta):
 	if fadingOut:
