@@ -72,7 +72,7 @@ remote func serverFetchDeck(requester):
 	var player_id = get_tree().get_rpc_sender_id()
 	
 	var board = get_node_or_null("/root/main/Board")
-	while board == null or board.deckDataSet:
+	while board == null or board.gameStarted:
 		board = get_node_or_null("/root/main/Board")
 		yield(get_tree().create_timer(0.1), "timeout")
 	var data = board.players[0].deck.serialize()

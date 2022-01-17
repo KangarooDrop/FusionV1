@@ -5,11 +5,13 @@ var spinTimer = 0
 var spinMaxTime = 1
 var off = 0.2
 var spinRate = 2 * PI * 3 + randf() * off - off / 2
-var scaleFinal = 10
+var scaleFinal = 5
 
-func showText(text, color):
-	$Node2D/Label.text = text
-	$Node2D/Label.set("custom_colors/font_color", color)
+func showWinLose(win : bool):
+	if win:
+		$Sprite.region_rect = Rect2(Vector2(0, 0), Vector2(64, 32))
+	else:
+		$Sprite.region_rect = Rect2(Vector2(0, 32), Vector2(64, 32))
 	showing = true
 	visible = true
 
@@ -17,9 +19,9 @@ func _physics_process(delta):
 	if showing:
 		spinTimer += delta
 		
-		$Node2D.rotation = spinTimer * spinRate
+		$Sprite.rotation = spinTimer * spinRate
 		var sc = lerp(0, scaleFinal, spinTimer / spinMaxTime)
-		$Node2D.scale = Vector2(sc, sc)
+		$Sprite.scale = Vector2(sc, sc)
 		
 		if spinTimer >= spinMaxTime:
 			showing = false

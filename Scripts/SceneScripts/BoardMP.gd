@@ -52,6 +52,7 @@ var fuseWaiting = false
 var fuseWaitTimer = 0
 var fuseWaitMaxTime = 0.2
 
+var gameStarted = false
 var gameOver = false
 
 func _ready():
@@ -111,6 +112,7 @@ func _physics_process(delta):
 	if readyToStart and deckDataSet and hasStartingPlayer:
 		readyToStart = false
 		deckDataSet = false
+		gameStarted = true
 		players[0].initHand(self)
 		players[1].initHand(self)
 		
@@ -355,6 +357,9 @@ func onSlotExit(slot : CardSlot):
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if gameOver:
+		return
+		
+	if activePlayer == null:
 		return
 		
 	if button_index == 1:
@@ -609,12 +614,4 @@ func nextTurn():
 
 func onLoss(player : Player):
 	gameOver = true
-	var text = ""
-	var color
-	if player == players[0]:
-		text = "LOSE"
-		color = Color.red
-	else:
-		text = "WIN!"
-		color = Color.lightblue
-	get_node("/root/main/WinLose").showText(text, color)
+	get_node("/root/main/WinLose").showWinLose(player != players[0])

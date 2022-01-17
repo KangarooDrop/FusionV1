@@ -29,7 +29,7 @@ func initHand(board, player):
 	if isOpponent:
 		handVisible = false
 	for i in range(handSize + (0 if board.activePlayer == player else 1)):
-		addCard(player.deck.pop())
+		drawCard()
 	
 func centerCards(cardWidth, cardDists):
 	BoardMP.centerNodes(cardNodes, Vector2(), cardWidth, cardDists)
