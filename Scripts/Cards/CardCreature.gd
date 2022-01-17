@@ -21,7 +21,6 @@ func _init(params).(params):
 	
 func serialize() -> Dictionary:
 	var rtn = .serialize()
-	rtn["creature_type"] = creatureType
 	rtn["power"] = power
 	rtn["toughness"] = toughness
 	rtn["has_attacked"] = hasAttacked

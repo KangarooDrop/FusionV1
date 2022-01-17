@@ -73,4 +73,16 @@ func _ready():
 func getCard(index : int) -> Card:
 	if index < 0 or index >= cardList.size():
 		return null
-	return cardList[index].clone()
+	var card = cardList[index].get_script().new(null)
+	card.UUID = index
+	return card
+
+static func deserialize(data : Dictionary) -> Card:
+	var card : Card = ListOfCards.getCard(data["id"])
+	card.playerID = data["player_id"]
+	if card is CardCreature:
+		card.power = data["power"]
+		card.toughness = data["toughness"]
+		card.hasAttacked = data["has_attacked"]
+	return card
+	

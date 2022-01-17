@@ -56,8 +56,8 @@ func _ready():
 	print("current game seed is ", gameSeed)
 	seed(gameSeed)
 	
-	var player_A = Player.new()
-	var player_B = Player.new()
+	var player_A = Player.new([])
+	var player_B = Player.new([])
 	players.append(player_A)
 	players.append(player_B)
 	enchants[player_A.UUID] = []

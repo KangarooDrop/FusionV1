@@ -41,20 +41,15 @@ func _to_string() -> String:
 	return name
 
 func clone() -> Card:
-	return deserialize(serialize())
+	var c : Card = ListOfCards.deserialize(serialize())
+	return c
 	
 func copyBase() -> Card:
 	return get_script().new(null)
 	
 func serialize() -> Dictionary:
-	return {"name":name, "card_type":cardType, "tex":texture, "player_id":playerID, "tier":tier}
-	
-func deserialize(data : Dictionary) -> Card:
-	return get_script().new(data)
-	
-	
-	
-	
+	var rtn = {"id":UUID, "player_id":playerID}
+	return rtn
 	
 static func fuseCards(cards : Array) -> Card:
 	if cards.size() > 1:
@@ -79,6 +74,7 @@ static func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 		elif cardEnd == -1:
 			return null
 		else:
-			return ListOfCards.getCard(cardEnd)
+			var c : Card = ListOfCards.getCard(cardEnd)
+			return c
 	else:
 		return cardB

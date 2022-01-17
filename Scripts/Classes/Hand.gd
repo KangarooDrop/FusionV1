@@ -25,6 +25,7 @@ export var handVisible := true
 func initHand(board, player):
 	self.board = board
 	self.player = player
+	isOpponent = player.isOpponent
 	for i in range(handSize + (0 if board.activePlayer == player else 1)):
 		addCard(player.deck.pop())
 	
@@ -77,6 +78,7 @@ func drawCard():
 		addCard(card)
 
 func addCard(card : Card):
+	print("Card is an opponent's ", player.isOpponent)
 	if card != null:
 		if Settings.playAnimations:
 			drawQueue.append(card)

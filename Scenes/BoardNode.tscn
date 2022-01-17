@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scripts/SceneScripts/Board.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/SceneScripts/BoardMP.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Classes/Hand.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/HealthNode.tscn" type="PackedScene" id=3]
 
