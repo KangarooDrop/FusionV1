@@ -146,7 +146,22 @@ func _physics_process(delta):
 					fuseQueue = []
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.onEnter(self)
-		
+	
+	if hoveringOn != null:
+		if not shownHover:
+			hoverTimer += delta
+			if hoverTimer > hoverMaxTime * (0.2 if hoveringOn.currentZone == CardSlot.ZONES.DECK else 1):
+				shownHover = true
+				if hoveringOn.currentZone == CardSlot.ZONES.DECK:
+					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
+					var string = ""
+					if numCards == 1:
+						string = "There is currently 1 card in this deck"
+					else:
+						string = "There are currently " + str(numCards) + " cards in this deck"
+					print(string)
+				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
+					print("This card is ", hoveringOn.cardNode.card.name)
 
 func initZones():
 	var cardInst = null
@@ -297,6 +312,20 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 	print("SLOT CLICKED ", parent.name, "  ", slotID, "  ", isOpponent)
 	
 	slotClicked(parent.get_child(slotID), button_index, true)
+		
+var hoverTimer = 0
+var hoverMaxTime = 1
+var hoveringOn = null
+var shownHover = false
+		
+func onSlotEnter(slot : CardSlot):
+	hoveringOn = slot
+	hoverTimer = 0
+	shownHover = false
+		
+func onSlotExit(slot : CardSlot):
+	hoveringOn = null
+	shownHover = false
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if not fromServer:

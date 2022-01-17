@@ -32,8 +32,8 @@ func initHand(board, player):
 		addCard(player.deck.pop())
 	
 func centerCards(cardWidth, cardDists):
-	Board.centerNodes(cardNodes, Vector2(), cardWidth, cardDists)
-	Board.centerNodes(cardSlotNodes, Vector2(), cardWidth, cardDists)
+	BoardMP.centerNodes(cardNodes, Vector2(), cardWidth, cardDists)
+	BoardMP.centerNodes(cardSlotNodes, Vector2(), cardWidth, cardDists)
 
 func _physics_process(delta):
 	if drawQueue.size() > 0:

@@ -16,8 +16,12 @@ func _ready():
 	else:
 		$SpotSprite.visible = true
 	
+func mouseEnter():
+	board.onSlotEnter(self)
+	
+func mouseExit():
+	board.onSlotExit(self)
+	
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		board.slotClicked(self, event.button_index, false)
-		
-		print(isOpponent)

@@ -1,7 +1,26 @@
 TODO:
-  Fusing with null, bonks
-  Marker for fusion order in hand 
+  Timer for whole game, current turn, total time during your turn
+  Who's turn
+  Number of cards in deck
+  Both types visible
+  Lose when going to 0 life
+  Preview of the combination
+  Hovering over card give info
+  Fusing above tier 1
+  More creatures for each type
+  Not controlling opponent
+
+  Observe games in progress
+
+  Art...?
+  Deck editor and saver (to json)
+
+  Spells
   Enchantment card examples
+
+  Draft format
+
+
 
 IDEAS:
   Death Cloud:
