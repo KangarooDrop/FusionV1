@@ -1,16 +1,12 @@
 TODO:
   Timer for whole game, current turn, total time during your turn
   Who's turn
-  Number of cards in deck
   Both creature types visible
   Lose when going to 0 life
   Preview of the combination
   Hovering over card give info
   Fusing above tier 1
   More creatures for each type
-  Not controlling opponent
-  Reset button
-  Randomize who goes first
 
   Observe games in progress
 
@@ -21,6 +17,14 @@ TODO:
   Enchantment card examples
 
   Draft format
+
+-----------
+  Reset button
+  Randomize who goes first
+  Number of cards in deck
+  Not controlling opponent
+	cards in hand
+	creatures on board
 
 
 

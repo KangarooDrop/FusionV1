@@ -352,14 +352,13 @@ func onSlotExit(slot : CardSlot):
 			hoveringWindow = null
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
-	if not fromServer:
-		Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
-	
-	
 	if button_index == 1:
 		if slot.playerID == activePlayer.UUID or slot.playerID == -1:
 			if slot.currentZone == CardSlot.ZONES.HAND:
 				#ADDING CARDS TO THE FUSION LIST
+				if slot.playerID != players[0].UUID and not fromServer:
+					return
+				
 				if is_instance_valid(slot.cardNode) and not playedThisTurn:
 					if cardsHolding.has(slot):
 						cardsHolding.erase(slot)
@@ -371,6 +370,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							slot.position.y -= cardDists
 							slot.cardNode.position.y = slot.position.y
 			elif slot.currentZone == CardSlot.ZONES.CREATURE:
+				if slot.playerID != players[0].UUID and not fromServer:
+					return
 				if cardsHolding.size() > 0:
 					#PUTTING A CREATURE ONTO THE FIELD
 					var endsCreature = false
@@ -510,6 +511,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 				pass
 		else:
 			if slot.currentZone == CardSlot.ZONES.CREATURE:
+				if slot.playerID != players[1].UUID and not fromServer:
+					return
 				if is_instance_valid(slot.cardNode) and is_instance_valid(selectedCard):
 					selectedCard.cardNode.card.onAttack(slot, self)
 					slot.cardNode.card.onBeingAttacked(selectedCard, self)
@@ -534,6 +537,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							selectedCard.cardNode.rotation = 0
 							selectRotTimer = 0
 							selectedCard = null
+							
+	#CODE IS ONLY REACHABLE IF NOT RETURNED
+	if not fromServer:
+		Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 
 func isMyTurn() -> bool:
 	return players[0] == activePlayer
