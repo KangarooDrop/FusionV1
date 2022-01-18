@@ -76,3 +76,10 @@ func getDeckData() -> Dictionary:
 	for d in data:
 		rtn[d.card.UUID] = d.count
 	return rtn
+
+func getDeckDataAsJSON() -> Dictionary:
+	var rtn = {}
+	var data = getDeckData()
+	for d in data.keys():
+		rtn[str(d)] = float(data[d])
+	return rtn

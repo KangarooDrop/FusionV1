@@ -71,26 +71,32 @@ __meta__ = {
 }
 
 [node name="SaveButton" type="Button" parent="VBoxContainer"]
-margin_right = 76.0
+margin_right = 84.0
 margin_bottom = 20.0
-text = "Save"
+text = "Save Deck"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewButton" type="Button" parent="VBoxContainer"]
+[node name="LoadButton" type="Button" parent="VBoxContainer"]
 margin_top = 24.0
-margin_right = 76.0
+margin_right = 84.0
 margin_bottom = 44.0
+text = "Load Deck"
+
+[node name="NewButton" type="Button" parent="VBoxContainer"]
+margin_top = 48.0
+margin_right = 84.0
+margin_bottom = 68.0
 text = "New Deck"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
-margin_top = 48.0
-margin_right = 76.0
-margin_bottom = 68.0
+margin_top = 72.0
+margin_right = 84.0
+margin_bottom = 92.0
 text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -110,5 +116,6 @@ position = Vector2( 300, -200 )
 [connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmYesButton" to="." method="onConfirmYesPressed"]
 [connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmNoButton" to="." method="onConfirmNoPressed"]
 [connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="onSavePressed"]
+[connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="onLoadPressed"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="onNewPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]

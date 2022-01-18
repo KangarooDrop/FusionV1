@@ -56,18 +56,6 @@ func _ready():
 				slot.cardNode = cardPlacing
 				cardPlacing.slot = slot
 	setCurrentPage(0)
-	
-	
-	var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
-	var error = Deck.verifyDeck(dataRead)
-	print("Deck validity: " + str(error))
-	if error == Deck.DECK_VALIDITY_TYPE.VALID or error == Deck.DECK_VALIDITY_TYPE.WRONG_SIZE:
-		for k in dataRead.keys():
-			var id = int(k)
-			for i in range(int(dataRead[k])):
-				$DeckDisplay.addCard(id)
-	else:
-		print("Deck file is not valid")
 
 func onSlotEnter(slot : CardSlot):
 	pass
@@ -86,17 +74,19 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 				if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
 					$DeckDisplay.removeCard(i)
 					return
+	
+func onLoadPressed():
+	confirmType = CONFIRM_TYPES.LOAD
+	if not hasSaved:
+		$ConfirmNode.visible = true
+	else:
+		onConfirmYesPressed()
 		
 func onSavePressed():
-	hasSaved = true
+	confirmType = CONFIRM_TYPES.SAVE
+	$ConfirmNode.visible = true
 	
-	var error = FileIO.writeToJSON(path, fileName, $DeckDisplay.getDeckData())
-	if error != 0:
-		print("ERROR CODE WHEN WRITING TO FILE : " + str(error))
-	else:
-		print("Deck successfully saved")
-	
-enum CONFIRM_TYPES {NONE, NEW, EXIT}
+enum CONFIRM_TYPES {NONE, NEW, EXIT, LOAD, SAVE}
 var confirmType = CONFIRM_TYPES.NONE
 	
 func onNewPressed():
@@ -117,11 +107,43 @@ func onConfirmYesPressed():
 	
 	if confirmType == CONFIRM_TYPES.NEW:
 		$DeckDisplay.clearData()
+		
+		
 	elif confirmType == CONFIRM_TYPES.EXIT:
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
-	
+			
+			
+	elif confirmType == CONFIRM_TYPES.LOAD:
+		var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
+		var error = Deck.verifyDeck(dataRead)
+		print("Deck validity: " + str(error))
+		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			for k in dataRead.keys():
+				var id = int(k)
+				for i in range(int(dataRead[k])):
+					$DeckDisplay.addCard(id)
+			hasSaved = true
+		else:
+			print("Deck file is not valid")
+			MessageManager.notify("Error loading deck\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+			
+			
+	elif confirmType == CONFIRM_TYPES.SAVE:
+		var error = Deck.verifyDeck($DeckDisplay.getDeckDataAsJSON())
+		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			var fileError = FileIO.writeToJSON(path, fileName, $DeckDisplay.getDeckData())
+			if fileError != 0:
+				print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
+			else:
+				print("Deck successfully saved")
+				MessageManager.notify("Deck successfully saved")
+				hasSaved = true
+		else:
+			MessageManager.notify("Error verifying deck\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+			
+			
 	$ConfirmNode.visible = false
 	confirmType = CONFIRM_TYPES.NONE
 	
