@@ -85,7 +85,11 @@ func _ready():
 	for i in range(cardList.size()):
 		dict[i] = cardList[i].params
 	
-	FileIO.writeToJSON(path, fileName, dict)
+	var error = FileIO.writeToJSON(path, fileName, dict)
+	if error != 0:
+		print("Error: Writing card list to JSON : ", error)
+	else:
+		print("Card list written to JSON at path: ", path, "/", fileName + ".json")
 
 func getCard(index : int) -> Card:
 	if index < 0 or index >= cardList.size():
