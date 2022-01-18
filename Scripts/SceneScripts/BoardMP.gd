@@ -119,8 +119,8 @@ var hasStartingPlayer = false
 func setDeckData(data, order):
 	print("Receive: Opponent deck data")
 	
-	var error = Deck.verifyDeck(data)
-	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+	var good = verifyDeckData(data, order)
+	if good:
 		players[1].deck.deserialize(order)
 	else:
 		MessageManager.notify("Opponent's deck is invalid")
@@ -134,6 +134,42 @@ func setDeckData(data, order):
 	print("Send: Game start signal")
 	Server.onGameStart()
 	deckDataSet = true
+
+func verifyDeckData(data, order) -> bool:
+	var error = Deck.verifyDeck(data)
+	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+		
+		var dict = {}
+		for id in order:
+			if not dict.has(str(id)):
+				dict[str(id)] = 0
+			dict[str(id)] += 1
+		for k in dict.keys():
+			dict[k] = float(dict[k])
+			
+		var dictKeys = dict.keys()
+		var dataKeys = data.keys()
+		for k in data.keys():
+			if dictKeys.has(k):
+				dictKeys.erase(k)
+			else:
+				return false
+		for k in dict.keys():
+			if dataKeys.has(k):
+				dataKeys.erase(k)
+			else:
+				return false
+		if dictKeys.size() > 0 or dataKeys.size() > 0:
+			return false
+			
+		for k in data.keys():
+			if data[k] != dict[k]:
+				return false
+			
+		return true
+	else:
+		return false
+			
 
 func onGameStart():
 	print("Receive: Ready to start")

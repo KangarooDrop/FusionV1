@@ -28,13 +28,13 @@ func draw(count : int) -> Array:
 func serialize() -> Array:
 	var data = []
 	for c in cards:
-		data.append(c.serialize())
+		data.append(c.UUID)
 	return data
 	
 func deserialize(data):
 	cards.clear()
 	for d in data:
-		cards.append(ListOfCards.deserialize(d))
+		cards.append(ListOfCards.getCard(d))
 
 func _to_string() -> String:
 	return str(cards)

@@ -76,6 +76,8 @@ remote func serverFetchDeck(requester):
 		print("Board not ready yet, waiting")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
 	var data = board.players[0].deck.getJSONData()
 	var order = board.players[0].deck.serialize()
 		
@@ -172,6 +174,8 @@ remote func serverSetActivePlayer(index : int):
 		print("Board not ready yet, waiting")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
 	board.setStartingPlayer(board.players[index])
 		
 
