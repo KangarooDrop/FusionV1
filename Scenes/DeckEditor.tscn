@@ -19,7 +19,7 @@ anchor_bottom = 0.5
 margin_left = -64.0
 margin_top = -43.0
 margin_right = 64.0
-margin_bottom = 47.0
+margin_bottom = 58.0
 texture = ExtResource( 3 )
 patch_margin_left = 4
 patch_margin_top = 4
@@ -38,6 +38,7 @@ margin_left = -43.5
 margin_top = -31.0
 margin_right = 43.5
 margin_bottom = 31.0
+custom_constants/separation = 10
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -50,15 +51,15 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Are you sure?"
 
 [node name="ConfirmYesButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 18.0
+margin_top = 24.0
 margin_right = 87.0
-margin_bottom = 38.0
+margin_bottom = 44.0
 text = "Yes"
 
 [node name="ConfirmNoButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 42.0
+margin_top = 54.0
 margin_right = 87.0
-margin_bottom = 62.0
+margin_bottom = 74.0
 text = "Back"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -66,12 +67,13 @@ margin_left = -482.0
 margin_top = -250.0
 margin_right = -406.0
 margin_bottom = -182.0
+custom_constants/separation = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SaveButton" type="Button" parent="VBoxContainer"]
-margin_right = 84.0
+margin_right = 134.0
 margin_bottom = 20.0
 text = "Save Deck"
 __meta__ = {
@@ -79,25 +81,25 @@ __meta__ = {
 }
 
 [node name="LoadButton" type="Button" parent="VBoxContainer"]
-margin_top = 24.0
-margin_right = 84.0
-margin_bottom = 44.0
+margin_top = 30.0
+margin_right = 134.0
+margin_bottom = 50.0
 text = "Load Deck"
 
 [node name="NewButton" type="Button" parent="VBoxContainer"]
-margin_top = 48.0
-margin_right = 84.0
-margin_bottom = 68.0
+margin_top = 60.0
+margin_right = 134.0
+margin_bottom = 80.0
 text = "New Deck"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ExitButton" type="Button" parent="VBoxContainer"]
-margin_top = 72.0
-margin_right = 84.0
-margin_bottom = 92.0
-text = "Exit"
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+margin_top = 90.0
+margin_right = 134.0
+margin_bottom = 110.0
+text = "Back to Main Menu"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -118,4 +120,4 @@ position = Vector2( 300, -200 )
 [connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="onSavePressed"]
 [connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="onLoadPressed"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="onNewPressed"]
-[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onExitPressed"]

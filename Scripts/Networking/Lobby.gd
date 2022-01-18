@@ -1,5 +1,18 @@
 extends Node
 
+var waitMaxTime = 0.6
+var waitTimer = waitMaxTime
+var waitNum = -1
+var waitNumMax = 4
+
+func _physics_process(delta):
+	if $WaitLabel.visible:
+		waitTimer += delta
+		if waitTimer >= waitMaxTime:
+			waitNum = (waitNum+1) % (waitNumMax + 1)
+			waitTimer = 0
+			$WaitLabel.text = "Waiting" + ".".repeat(waitNum)
+
 func hostButtonPressed():
 	Server.host = true
 	Server.online = true

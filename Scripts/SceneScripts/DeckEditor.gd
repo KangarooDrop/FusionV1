@@ -22,7 +22,7 @@ func _ready():
 	var cardsToAdd := []
 	for i in range(ListOfCards.cardList.size()):
 		var c = ListOfCards.getCard(i)
-		if c.tier <= 2:
+		if c.tier <= 1:
 			cardsToAdd.append(c)
 
 	var remainder = slotPageNum - (cardsToAdd.size() % slotPageNum)
@@ -120,6 +120,7 @@ func onConfirmYesPressed():
 		var error = Deck.verifyDeck(dataRead)
 		print("Deck validity: " + str(error))
 		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			$DeckDisplay.clearData()
 			for k in dataRead.keys():
 				var id = int(k)
 				for i in range(int(dataRead[k])):
