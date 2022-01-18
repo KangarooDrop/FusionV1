@@ -1,6 +1,5 @@
 extends Node
 
-
 func hostButtonPressed():
 	Server.host = true
 	Server.online = true

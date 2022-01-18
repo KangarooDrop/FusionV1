@@ -3,12 +3,8 @@
 [ext_resource path="res://Scripts/Networking/Lobby.gd" type="Script" id=1]
 
 [node name="Lobby" type="Control"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -124.0
-margin_right = 124.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

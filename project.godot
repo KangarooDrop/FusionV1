@@ -301,6 +301,7 @@ ListOfAbilities="*res://Scripts/ListOfAbilities.gd"
 Settings="*res://Scripts/Settings.gd"
 Server="*res://Scripts/Networking/Server.gd"
 FileIO="*res://Scripts/FileIO.gd"
+MessageManager="*res://Scripts/UI/MessageManager.gd"
 
 [display]
 
@@ -314,6 +315,7 @@ enabled=PoolStringArray(  )
 [gdnative]
 
 singletons=[ "res://git_api.gdnlib" ]
+singletons_disabled=[  ]
 
 [physics]
 
