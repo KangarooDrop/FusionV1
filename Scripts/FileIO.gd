@@ -32,6 +32,10 @@ func readJSON(path : String) -> Dictionary:
 	if file.file_exists(path):
 		file.open(path, file.READ)
 		text = file.get_as_text()
-		dict = parse_json(text)
+		var par = parse_json(text)
+		if par != null:
+			dict = par
+		else:
+			MessageManager.notify("Error parsing deck save file")
 		file.close()
 	return dict

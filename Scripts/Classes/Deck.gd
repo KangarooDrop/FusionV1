@@ -40,14 +40,25 @@ func _to_string() -> String:
 	return str(cards)
 	
 #DECK DATA IS NOT VERIFIED BY THIS FUNCTION, MUST BE PERFORMED BEFORE
-func readDeckData(deckData : Dictionary):
+func readJSONData(deckData : Dictionary):
 	cards.clear()
 	for k in deckData.keys():
-		for i in range(deckData[k]):
-			cards.append(ListOfCards.getCard(k))
+		var id = int(k)
+		for i in range(int(deckData[k])):
+			cards.append(ListOfCards.getCard(id))
+	
+func getJSONData() -> Dictionary:
+	var rtn = {}
+	for c in cards:
+		if not rtn.has(str(c.UUID)):
+			rtn[str(c.UUID)] = 0
+		rtn[str(c.UUID)] += 1
+	for k in rtn.keys():
+		rtn[k] = float(rtn[k])
+	return rtn
+	
 	
 enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE}
-	
 #deckData [%id%] : %count%
 static func verifyDeck(deckData) -> int:
 	var numCards = 20

@@ -116,7 +116,7 @@ func onConfirmYesPressed():
 			
 			
 	elif confirmType == CONFIRM_TYPES.LOAD:
-		var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
+		var dataRead = FileIO.readJSON(path + fileName + ".json")
 		var error = Deck.verifyDeck(dataRead)
 		print("Deck validity: " + str(error))
 		if error == Deck.DECK_VALIDITY_TYPE.VALID:

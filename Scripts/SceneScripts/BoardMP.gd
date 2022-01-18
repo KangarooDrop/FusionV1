@@ -61,11 +61,32 @@ func _ready():
 	print("current game seed is ", gameSeed)
 	seed(gameSeed)
 	
+	var fileName = "deck_test"
+	var path = "user://decks"
 	
-	var cardList : Array
-	for i in range(20):
-		var cardID = randi() % 6 + 1
-		cardList.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
+	var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
+	var error = Deck.verifyDeck(dataRead)
+	var cardList := []
+	
+	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+		for k in dataRead.keys():
+			var id = int(k)
+			for i in range(int(dataRead[k])):
+				cardList.append(ListOfCards.getCard(id))
+	else:
+		MessageManager.notify("Invalid Deck:\nverify deck file contents")
+		Server.disconnectMessage("Error: Opponent's deck is invalid")
+		print("INVALID DECK : ", error, " : ", Deck.DECK_VALIDITY_TYPE.keys()[error])
+	
+		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+		if sceneError != 0:
+			print("Error loading test1.tscn. Error Code = " + str(sceneError))
+	
+	
+	#var cardList : Array
+	#for i in range(20):
+	#	var cardID = randi() % 6 + 1
+	#	cardList.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
 	
 	var player_A = Player.new(cardList, self)
 	player_A.deck.shuffle()
@@ -95,9 +116,20 @@ var deckDataSet = false
 var readyToStart = false
 var hasStartingPlayer = false
 
-func setDeckData(data):
+func setDeckData(data, order):
 	print("Receive: Opponent deck data")
-	players[1].deck.deserialize(data)
+	
+	var error = Deck.verifyDeck(data)
+	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+		players[1].deck.deserialize(order)
+	else:
+		MessageManager.notify("Opponent's deck is invalid")
+		Server.disconnectMessage("Error: Your deck has been flagged by the opponent as invalid")
+		print("INVALID DECK OPPONENT")
+	
+		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+		if sceneError != 0:
+			print("Error loading test1.tscn. Error Code = " + str(sceneError))
 	
 	print("Send: Game start signal")
 	Server.onGameStart()

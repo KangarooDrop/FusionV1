@@ -76,14 +76,15 @@ remote func serverFetchDeck(requester):
 		print("Board not ready yet, waiting")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
-	var data = board.players[0].deck.serialize()
+	var data = board.players[0].deck.getJSONData()
+	var order = board.players[0].deck.serialize()
 		
-	rpc_id(player_id, "returnDeck", data, requester)
+	rpc_id(player_id, "returnDeck", data, order, requester)
 
-remote func returnDeck(data, requester):
+remote func returnDeck(data, order, requester):
 	var inst = instance_from_id(requester)
 	if inst:
-		inst.setDeckData(data)
+		inst.setDeckData(data, order)
 	else:
 		print("AAAAAAAAAAAAAAAAAAAAAAAAAAA! NO REQ")
 
@@ -136,7 +137,6 @@ remote func serverOnNextTurn():
 	board.nextTurn()
 		
 
-
 ####################################################################
 
 remote func onRestart():
@@ -153,7 +153,6 @@ remote func serverOnRestart():
 	var board = get_node_or_null("/root/main/Board")
 	board.onRestartPressed()
 		
-
 
 ####################################################################
 
@@ -174,5 +173,25 @@ remote func serverSetActivePlayer(index : int):
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 	board.setStartingPlayer(board.players[index])
+		
+
+####################################################################
+
+remote func disconnectMessage(message : String):
+	var id = 1
+	if Server.host:
+		id = otherPlayerData
+	else:
+		pass
+	rpc_id(id, "serverDisconnectMessage", message)
+	
+remote func serverDisconnectMessage(message : String):
+	Server.closeServer()
+	
+	MessageManager.notify(message)
+	
+	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
 		
 
