@@ -177,7 +177,6 @@ remote func serverSetActivePlayer(index : int):
 		if not Server.online:
 			return
 	board.setStartingPlayer(index)
-		
 
 ####################################################################
 
@@ -197,5 +196,26 @@ remote func serverDisconnectMessage(message : String):
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
+
+####################################################################
+
+remote func fetchVersion(requester):
+	var id = 1
+	if Server.host:
+		id = otherPlayerData
+	else:
+		pass
+	rpc_id(id, "serverFetchVersion", requester)
+	
+remote func serverFetchVersion(requester):
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(player_id, "returnVersion", Settings.versionID, requester)
+
+remote func returnVersion(version, requester):
+	var inst = instance_from_id(requester)
+	if inst:
+		inst.compareVersion(version)
+	else:
+		print("AAAAAAAAAAAAAAAAAAAAAAAAAAA! NO REQ")
 		
 

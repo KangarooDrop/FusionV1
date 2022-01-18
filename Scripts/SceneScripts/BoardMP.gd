@@ -78,6 +78,7 @@ func _ready():
 	
 		print("Fetch: Opponent's deck list")
 		Server.fetchDeck(get_instance_id())
+		Server.fetchVersion(get_instance_id())
 		
 	elif Settings.gameMode == GAME_MODE.REPLAY:
 		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
@@ -122,6 +123,7 @@ func setOwnCardList(cardList : Array):
 var deckDataSet = false
 var readyToStart = false
 var hasStartingPlayer = false
+var versionConfirmed = false
 
 func setOpponentCardList(cardList : Array):
 	var cards = []
@@ -196,6 +198,21 @@ func verifyDeckData(data, order) -> bool:
 		return false
 			
 
+func compareVersion(version):
+	if Settings.gameMode == GAME_MODE.PLAYING:
+		dataLog.append("VERSION " + version)
+	var error = Settings.compareVersion(Settings.versionID, version)
+	if error == 0:
+		versionConfirmed = true
+	else:
+		MessageManager.notify("Error: Incompatable game versions")
+		Server.disconnectMessage("Error: Incompatable game versions")
+		print("INVALID VERSIONS")
+	
+		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+		if sceneError != 0:
+			print("Error loading test1.tscn. Error Code = " + str(sceneError))
+
 func onGameStart():
 	print("Receive: Ready to start")
 	readyToStart = true
@@ -221,13 +238,15 @@ func _physics_process(delta):
 		if replayTimer >= 0.3:
 			nextReplayAction()
 	
-	if readyToStart and deckDataSet and hasStartingPlayer:
+	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed:
 		enchants[-1] = []
 		initZones()
 		initHands()
 		
 		readyToStart = false
 		deckDataSet = false
+		versionConfirmed = false
+		hasStartingPlayer = false
 		gameStarted = true
 		players[0].initHand(self)
 		players[1].initHand(self)
@@ -368,6 +387,8 @@ func processReplayCommand(command : String):
 			slotClickedServer(coms[1] != "True", int(coms[2]), int(coms[3]), 1)
 		"OPPONENT_SLOT":
 			slotClickedServer(coms[1] != "True", int(coms[2]), int(coms[3]), 1)
+		"VERSION":
+			compareVersion(coms[1])
 		_:
 			print("ERROR: Unknown replay command " + coms[0])
 	
@@ -766,8 +787,8 @@ func _input(event):
 					for slot in creatures[players[activePlayer].UUID]:
 						if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
 							attacking = true
-						if not attacking:
-							waiting = false
+					if not attacking:
+						waiting = false
 							
 					for p in players:
 						if p.hand.drawQueue.size() > 0:
