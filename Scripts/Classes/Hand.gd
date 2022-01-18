@@ -28,7 +28,7 @@ func initHand(board, player):
 	isOpponent = player.isOpponent
 	if isOpponent:
 		handVisible = false
-	for i in range(handSize + (0 if board.activePlayer == player else 1)):
+	for i in range(handSize + (0 if board.players[board.activePlayer] == player else 1)):
 		drawCard()
 	
 func centerCards(cardWidth, cardDists):

@@ -27,7 +27,7 @@ func serialize() -> Dictionary:
 	return rtn
 	
 func addCreatureToBoard(card, board):
-	if board.activePlayer.UUID == playerID:
+	if board.players[board.activePlayer].UUID == playerID:
 		for slot in board.creatures[playerID]:
 			if not is_instance_valid(slot.cardNode):
 				card.playerID = playerID
@@ -45,7 +45,7 @@ func addCreatureToBoard(card, board):
 
 func onStartOfTurn(board):
 	.onStartOfTurn(board)
-	if board.activePlayer.UUID == playerID:
+	if board.players[board.activePlayer].UUID == playerID:
 		hasAttacked = false
 	
 	

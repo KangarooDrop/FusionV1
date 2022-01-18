@@ -40,9 +40,24 @@ func readJSON(path : String) -> Dictionary:
 		file.close()
 	return dict
 
+func getDataLog(path : String) -> Array:
+	var file := File.new()
+	file.open(path, File.READ)
+	var rtn = []
+	if file.file_exists(path):
+		while not file.eof_reached():
+			var text = file.get_line()
+			rtn.append(text)
+	else:
+		MessageManager.notify("Error parsing game log file")
+	file.close()
+		
+	return rtn
+	
+
 func dumpDataLog(gameLog : Array, makeFolders = false) -> int:
 	var path = "user://dumps/"
-	var fileName = "game_dump_" + str(randi())  +".txt"
+	var fileName = "game_dump_" + str(OS.get_system_time_msecs())  +".txt"
 	
 	if makeFolders:
 		var directory = Directory.new( )

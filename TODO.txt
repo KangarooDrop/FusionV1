@@ -5,9 +5,11 @@ TODO:
   Hovering over card give info
   Fusing above tier 1
   More creatures for each type
+  Finish database of cards
 
 
   Observe games in progress
+  Replay system
 
   Art...?
 
