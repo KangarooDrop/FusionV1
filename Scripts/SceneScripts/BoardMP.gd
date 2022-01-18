@@ -61,10 +61,10 @@ func _ready():
 	print("current game seed is ", gameSeed)
 	seed(gameSeed)
 	
-	var fileName = "deck_test"
-	var path = "user://decks"
+	var fileName = Settings.selectedDeck
+	var path = Settings.path
 	
-	var dataRead = FileIO.readJSON(path + "/" + fileName + ".json")
+	var dataRead = FileIO.readJSON(path + fileName)
 	var error = Deck.verifyDeck(dataRead)
 	var cardList := []
 	

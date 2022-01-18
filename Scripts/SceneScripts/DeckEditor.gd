@@ -1,7 +1,4 @@
 extends Node2D
-
-#var fileName = "deck_test"
-var path = "user://decks/"
 	
 var slotPageWidth = 4
 var slotPageHeight = 3
@@ -122,7 +119,7 @@ func onConfirmYesPressed():
 		
 		var files = []
 		var dir = Directory.new()
-		dir.open(path)
+		dir.open(Settings.path)
 		dir.list_dir_begin()
 		while true:
 			var file = dir.get_next()
@@ -159,7 +156,7 @@ func onFileLoadBackPressed():
 func onFileLoadButtonPressed(fileName : String):
 	print("File ", fileName, " selected")
 	
-	var dataRead = FileIO.readJSON(path + fileName)
+	var dataRead = FileIO.readJSON(Settings.path + fileName)
 	var error = Deck.verifyDeck(dataRead)
 	print("Deck validity: " + str(error))
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
@@ -185,7 +182,7 @@ func onFileSaveButtonPressed():
 	
 	var error = Deck.verifyDeck($DeckDisplay.getDeckDataAsJSON())
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		var fileError = FileIO.writeToJSON(path, fileName, $DeckDisplay.getDeckData())
+		var fileError = FileIO.writeToJSON(Settings.path, fileName, $DeckDisplay.getDeckData())
 		if fileError != 0:
 			MessageManager.notify("Error: File could not be saved")
 			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
@@ -206,7 +203,7 @@ func onDeleteButtonPressed():
 		
 	var files = []
 	var dir = Directory.new()
-	dir.open(path)
+	dir.open(Settings.path)
 	dir.list_dir_begin()
 	while true:
 		var file = dir.get_next()
@@ -237,7 +234,7 @@ func onDeleteFileButtonPressed(fileName : String):
 	
 func onDeleteConfirmed():
 	var dir = Directory.new()
-	var error = dir.remove(path + "/" + fileToDelete)
+	var error = dir.remove(Settings.path + "/" + fileToDelete)
 	print(error)
 	onDeleteBackPressed()
 	

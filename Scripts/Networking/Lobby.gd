@@ -15,21 +15,15 @@ func _physics_process(delta):
 
 func hostButtonPressed():
 	Server.host = true
-	Server.online = true
-	Server.startServer()
-	
 	$MultiplayerUI.visible = false
-	$WaitLabel.visible = true
+	openFileSelector()
 	
 func joinButtonPressed():
-	Server.ip = $MultiplayerUI/HBoxContainer2/LineEdit.text
-	Server.connectToServer()
-	Server.online = true
-	
 	$MultiplayerUI.visible = false
-	$WaitLabel.visible = true
+	openFileSelector()
 		
 func backButtonPressed():
+	Server.host = false
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
@@ -38,7 +32,55 @@ func startGame():
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
+	
+func openFileSelector():
+	$DeckSelector.visible = true
+		
+	var files = []
+	var dir = Directory.new()
+	dir.open(Settings.path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with(".") and file.ends_with("json"):
+			files.append(file)
+	dir.list_dir_end()
+	
+	for c in $DeckSelector/VBoxContainer.get_children():
+		if c is Button and c.name != "BackButton":
+			c.queue_free()
+	for i in range(files.size()):
+		var b = Button.new()
+		$DeckSelector/VBoxContainer.add_child(b)
+		b.text = str(files[i])
+		b.connect("pressed", self, "onFileButtonClicked", [files[i]])
+		$DeckSelector/VBoxContainer.move_child(b, i+1)
+	$DeckSelector/VBoxContainer.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$DeckSelector/Background.rect_size = $DeckSelector/VBoxContainer.rect_size + Vector2(60, 20)
+	$DeckSelector/Background.rect_position = $DeckSelector/VBoxContainer.rect_position - Vector2(30, 10)
+	
+	
+	
+	
+func onFileButtonClicked(fileName : String):
+	$WaitLabel.visible = true
+	$DeckSelector.visible = false
+		
+	Settings.selectedDeck = fileName
+	if Server.host:
+		Server.online = true
+		Server.startServer()
+		$WaitLabel.visible = true
+	else:
+		Server.ip = $MultiplayerUI/HBoxContainer2/LineEdit.text
+		Server.online = true
+		Server.connectToServer()
 
+func onBackButtonClicked():
+	$DeckSelector.visible = false
+	$MultiplayerUI.visible = true
 	
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
