@@ -115,6 +115,8 @@ func setStartingPlayer(player : Player):
 var playerRestart = false
 var opponentRestart = false
 func onRestartPressed():
+	if not playerRestart and not opponentRestart:
+		MessageManager.notify("Opponent has requested to restart")
 	opponentRestart = true
 
 func _physics_process(delta):

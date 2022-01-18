@@ -1,8 +1,11 @@
 extends Control
 	
 func onRestartPressed():
-	get_node("/root/main/Board").playerRestart = true
-	Server.onRestart()
+	if not get_node("/root/main/Board").playerRestart:
+		if not get_node("/root/main/Board").opponentRestart:
+			MessageManager.notify("Restart request sent to opponent")
+		get_node("/root/main/Board").playerRestart = true
+		Server.onRestart()
 	onBackPressed()
 
 func onBackPressed():

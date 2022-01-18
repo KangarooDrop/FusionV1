@@ -33,7 +33,7 @@ func _process(delta):
 		else:
 			moving.erase(n)
 
-func notify(text : String):
+func notify(text : String, textLength = 128, margin = 4):
 	
 	for n in messageHolder.get_children():
 		if moving.has(n):
@@ -42,6 +42,14 @@ func notify(text : String):
 			moving[n] = yOff
 	
 	var n = notif.instance()
-	n.get_node("Label").text = text
+	var nLabel = n.get_node("Label")
+	var nRect = n.get_node("Background")
+	nLabel.text = text
 	messageHolder.add_child(n)
+	
+	nLabel.rect_position.x = margin + 6
+	nLabel.rect_size.x = textLength
+	nLabel.rect_position.y = -nLabel.rect_size.y / 2
+	nRect.rect_size = Vector2(textLength + margin * 2, nLabel.rect_size.y + margin * 2)
+	nRect.rect_position.y = -nRect.rect_size.y / 2
 	
