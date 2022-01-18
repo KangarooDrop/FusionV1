@@ -93,10 +93,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
-margin_top = 35.0
+[node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
+margin_top = 24.0
 margin_right = 280.0
-margin_bottom = 55.0
+margin_bottom = 38.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+
+[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
+margin_top = 46.0
+margin_right = 280.0
+margin_bottom = 66.0
 text = "Back"
 
 [node name="ConfirmNode" type="Node2D" parent="."]
@@ -154,6 +161,62 @@ margin_right = 87.0
 margin_bottom = 74.0
 text = "Back"
 
+[node name="ConfirmDeleteNode" type="Node2D" parent="."]
+visible = false
+z_index = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="ConfirmDeleteNode"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -128.0
+margin_top = -64.0
+margin_right = 128.0
+margin_bottom = 64.0
+texture = ExtResource( 3 )
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmDeleteNode"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -102.0
+margin_top = -45.5
+margin_right = 102.0
+margin_bottom = 45.5
+custom_constants/separation = 10
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ConfirmDeleteNode/VBoxContainer"]
+margin_right = 204.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Are you sure you want to delete
+fileName"
+
+[node name="ConfirmYesButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
+margin_top = 41.0
+margin_right = 204.0
+margin_bottom = 61.0
+text = "Yes"
+
+[node name="ConfirmNoButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
+margin_top = 71.0
+margin_right = 204.0
+margin_bottom = 91.0
+text = "Back"
+
 [node name="Menu" type="VBoxContainer" parent="."]
 margin_left = -482.0
 margin_top = -250.0
@@ -187,10 +250,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackButton" type="Button" parent="Menu"]
+[node name="Button" type="Button" parent="Menu"]
 margin_top = 90.0
 margin_right = 134.0
 margin_bottom = 110.0
+text = "Delete Deck File"
+
+[node name="BackButton" type="Button" parent="Menu"]
+margin_top = 120.0
+margin_right = 134.0
+margin_bottom = 140.0
 text = "Back to Main Menu"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -212,7 +281,10 @@ position = Vector2( 300, -200 )
 [connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
 [connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmYesButton" to="." method="onConfirmYesPressed"]
 [connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmNoButton" to="." method="onConfirmNoPressed"]
+[connection signal="pressed" from="ConfirmDeleteNode/VBoxContainer/ConfirmYesButton" to="." method="onDeleteConfirmed"]
+[connection signal="pressed" from="ConfirmDeleteNode/VBoxContainer/ConfirmNoButton" to="." method="onDeleteBackPressed"]
 [connection signal="pressed" from="Menu/SaveButton" to="." method="onSavePressed"]
 [connection signal="pressed" from="Menu/LoadButton" to="." method="onLoadPressed"]
 [connection signal="pressed" from="Menu/NewButton" to="." method="onNewPressed"]
+[connection signal="pressed" from="Menu/Button" to="." method="onDeleteButtonPressed"]
 [connection signal="pressed" from="Menu/BackButton" to="." method="onExitPressed"]

@@ -86,7 +86,7 @@ func onLoadPressed():
 func onSavePressed():
 	$SaveDisplay.visible = true
 	
-enum CONFIRM_TYPES {NONE, NEW, EXIT, LOAD}
+enum CONFIRM_TYPES {NONE, NEW, EXIT, LOAD, DELETE}
 var confirmType = CONFIRM_TYPES.NONE
 	
 func onNewPressed():
@@ -118,6 +118,7 @@ func onConfirmYesPressed():
 			
 	elif confirmType == CONFIRM_TYPES.LOAD:
 		$FileDisplay.visible = true
+		$FileDisplay/ButtonHolder/Label.text = "Load File"
 		
 		var files = []
 		var dir = Directory.new()
@@ -132,14 +133,14 @@ func onConfirmYesPressed():
 		dir.list_dir_end()
 		
 		for c in $FileDisplay/ButtonHolder.get_children():
-			if c.name != "BackButton":
+			if c is Button and c.name != "BackButton":
 				c.queue_free()
 		for i in range(files.size()):
 			var b = Button.new()
 			$FileDisplay/ButtonHolder.add_child(b)
 			b.text = str(files[i])
 			b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
-			$FileDisplay/ButtonHolder.move_child(b, i)
+			$FileDisplay/ButtonHolder.move_child(b, i+1)
 		$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
 		$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
 		$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
@@ -197,6 +198,53 @@ func onFileSaveButtonPressed():
 	
 	onFileSaveBackPressed()
 		
+var fileToDelete = ""
+		
+func onDeleteButtonPressed():
+	$FileDisplay.visible = true
+	$FileDisplay/ButtonHolder/Label.text = "Delete File"
+		
+	var files = []
+	var dir = Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with(".") and file.ends_with("json"):
+			files.append(file)
+	dir.list_dir_end()
+	
+	for c in $FileDisplay/ButtonHolder.get_children():
+		if c is Button and c.name != "BackButton":
+			c.queue_free()
+	for i in range(files.size()):
+		var b = Button.new()
+		$FileDisplay/ButtonHolder.add_child(b)
+		b.text = str(files[i])
+		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
+		$FileDisplay/ButtonHolder.move_child(b, i+1)
+	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
+	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
+	
+func onDeleteFileButtonPressed(fileName : String):
+	fileToDelete = fileName
+	$FileDisplay.visible = false
+	$ConfirmDeleteNode.visible = true
+	$ConfirmDeleteNode/VBoxContainer/Label.text = "Are you sure you want to delete \n" + fileName
+	
+func onDeleteConfirmed():
+	var dir = Directory.new()
+	var error = dir.remove(path + "/" + fileToDelete)
+	print(error)
+	onDeleteBackPressed()
+	
+func onDeleteBackPressed():
+	$ConfirmDeleteNode.visible = false
+	fileToDelete = ""
+	
 func deckModified():
 	hasSaved = false
 	
