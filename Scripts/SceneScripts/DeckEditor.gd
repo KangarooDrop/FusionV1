@@ -8,6 +8,7 @@ var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
+var hoverScene = preload("res://Scenes/UI/Hover.tscn")
 var cardDists = 16
 
 var currentPage := -1 setget setCurrentPage, getCurrentPage
@@ -55,23 +56,63 @@ func _ready():
 	setCurrentPage(0)
 	hasSaved = true
 
+func _physics_process(delta):
+	if slotViewing != null:
+		if viewTimer < viewMaxTime:
+			viewTimer += delta
+			slotViewing.cardNode.position = lerp(slotViewing.global_position, Vector2(), viewTimer / viewMaxTime)
+			#slotViewing.cardNode.scale.x = cos(abs(2 * PI * viewTimer / viewMaxTime))
+			slotViewing.cardNode.scale = lerp(Vector2(1, 1), Vector2(viewScale, viewScale), viewTimer / viewMaxTime)
+		else:
+			if not is_instance_valid(infoWindow):
+				print(get_viewport_rect().size / 2)
+				createHoverNode(Vector2(-cardWidth * viewScale * 3.0/5, 0), slotViewing.cardNode.card.getHoverData())
+	if slotReturning != null:
+		if returnTimer < returnMaxTime:
+			returnTimer += delta
+			if returnTimer > returnMaxTime:
+				slotReturning.cardNode.global_position = slotReturning.global_position
+				slotReturning.cardNode.scale = Vector2(1, 1)
+				slotReturning.cardNode.z_index -= 1
+				slotReturning = null
+			else:
+				slotReturning.cardNode.global_position = lerp(Vector2(), slotReturning.global_position, returnTimer / returnMaxTime)
+				slotReturning.cardNode.scale = lerp(Vector2(viewScale, viewScale), Vector2(1, 1), returnTimer / returnMaxTime)
+
 func onSlotEnter(slot : CardSlot):
 	pass
 	
 func onSlotExit(slot : CardSlot):
 	pass
 	
+var slotViewing = null
+var viewTimer = 0
+var viewMaxTime = 0.3
+var viewScale = 3
+var slotReturning = null
+var returnTimer = 0
+var returnMaxTime = 0.3
+var infoWindow = null
+	
+func createHoverNode(position : Vector2, text : String):
+	var hoverInst = hoverScene.instance()
+	hoverInst.z_index = 3
+	add_child(hoverInst)
+	hoverInst.global_position = position
+	hoverInst.flipped = true
+	hoverInst.setText(text)
+	infoWindow = hoverInst
+	
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if button_index == 1:
-		if slot.cardNode != null:
+		if slot.cardNode != null and slotViewing == null:
 			$DeckDisplay.addCard(slot.cardNode.card.UUID)
 			return
 	elif button_index == 2:
-		if slot.cardNode != null:
-			for i in range($DeckDisplay.data.size()):
-				if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
-					$DeckDisplay.removeCard(i)
-					return
+		if slotViewing == null and slot.cardNode != null:
+			slotViewing = slot
+			slotViewing.cardNode.z_index += 2
+			viewTimer = 0
 	
 func onLoadPressed():
 	confirmType = CONFIRM_TYPES.LOAD
@@ -261,3 +302,14 @@ func _input(event):
 			setCurrentPage(getCurrentPage() - 1)
 		elif event.scancode == KEY_D:
 			setCurrentPage(getCurrentPage() + 1)
+			
+	if event is InputEventMouseButton:
+		if event.pressed and (event.button_index == 1 or event.button_index == 2):
+			if slotViewing != null and slotReturning == null:
+				yield(get_tree().create_timer(0.02), "timeout")
+				if is_instance_valid(infoWindow):
+					infoWindow.fadeOut()
+				slotReturning = slotViewing
+				slotViewing.cardNode.z_index -= 1
+				slotViewing = null
+				returnTimer = 0

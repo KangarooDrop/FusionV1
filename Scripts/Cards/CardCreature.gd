@@ -60,3 +60,17 @@ func onBeingAttacked(attacker, board):
 	
 func _to_string() -> String:
 	return ._to_string() + " - " + str(power) + "/" + str(toughness)
+
+func getHoverData() -> String:
+	var string = name + "\n"
+	
+	string += "Types: "
+	for i in range(creatureType.size()):
+		string += CREATURE_TYPE.keys()[creatureType[i]].to_lower().capitalize()
+		if i < creatureType.size() - 1:
+			string += "/"
+			
+	for abl in abilities:
+		string += "\n" + str(abl)
+		
+	return string

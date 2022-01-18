@@ -6,6 +6,7 @@ var fadeMaxTime = 0.3
 var fadeTimer = fadeMaxTime
 var fadingOut = false
 var maxTextLen = 300
+var flipped = false
 
 func _ready():
 	pass
@@ -24,6 +25,11 @@ func setText(text : String, margin = 4):
 	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.rect_size.y + margin * 2)
 	$HoverBack.rect_position.y = -$HoverBack.rect_size.y / 2
 	
+	if flipped:
+		scale.x = -1
+		$Label.rect_scale.x = -1
+		$Label.rect_position.x += $Label.rect_size.x
+	
 func fadeOut():
 	fadingOut = true
 	
@@ -36,5 +42,6 @@ func _physics_process(delta):
 		$TextureRect.modulate = c
 		$Label.modulate = c
 		
-		if fadeTimer >= fadeMaxTime:
+		if fadeTimer <= 0:
 			queue_free()
+			print("GONE!")
