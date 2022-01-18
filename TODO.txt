@@ -6,11 +6,9 @@ TODO:
   Fusing above tier 1
   More creatures for each type
 
-  Opponent verifies contents of opponent deck
 
   Observe games in progress
 
-  Deck editor and saver (to json)
   Art...?
 
   Spells
@@ -27,6 +25,8 @@ TODO:
 	creatures on board
   Lose when going to 0 life
   Both creature types visible
+  Opponent verifies contents of opponent deck
+  Deck editor and saver (to json)
 
 
 

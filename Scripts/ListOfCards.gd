@@ -29,6 +29,16 @@ var fusionList := \
 		[-1,   0,   16,    17,   18,   19,   20,   null],
 		[-1,   0,   22,    23,   24,   25,   26,   27]
 	]
+#	[
+#		[-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1],
+#		[-1, 	0, 		null, 	null, 	null, 	null, 	null, 	null],
+#		[-1, 	0, 		0, 		null, 	null, 	null, 	null, 	null],
+#		[-1, 	0, 		0, 		0, 		null, 	null, 	null, 	null],
+#		[-1, 	0, 		0, 		0, 		0, 		null, 	null, 	null],
+#		[-1, 	0, 		0, 		0, 		0, 		0, 		null, 	null],
+#		[-1, 	0, 		0, 		0, 		0, 		0, 		0,	 	null],
+#		[-1, 	0, 		0, 		0, 		0, 		0, 		0, 		0]
+#	]
 ]
 
 func _ready():

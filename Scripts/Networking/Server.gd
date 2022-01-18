@@ -176,7 +176,7 @@ remote func serverSetActivePlayer(index : int):
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
 			return
-	board.setStartingPlayer(board.players[index])
+	board.setStartingPlayer(index)
 		
 
 ####################################################################

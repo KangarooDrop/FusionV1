@@ -83,13 +83,11 @@ func _ready():
 			print("Error loading test1.tscn. Error Code = " + str(sceneError))
 	
 	
-	#var cardList : Array
-	#for i in range(20):
-	#	var cardID = randi() % 6 + 1
-	#	cardList.append(ListOfCards.getCard(21 if cardID == 6 else cardID))
-	
 	var player_A = Player.new(cardList, self)
 	player_A.deck.shuffle()
+	
+	dataLog.append("PLAYER DECK: " + str(player_A.deck.serialize()))
+	
 	var player_B = Player.new([], self)
 	player_B.isOpponent = true
 	players.append(player_A)
@@ -103,6 +101,7 @@ func _ready():
 		var startingPlayerIndex = randi() % 2
 		activePlayer = players[(startingPlayerIndex + 1) % 2]
 		print("Send: Starting player")
+		dataLog.append("OWN SET PLAYER: " + str((startingPlayerIndex + 1) % 2))
 		Server.setActivePlayer(startingPlayerIndex)
 		hasStartingPlayer = true
 	
@@ -122,6 +121,7 @@ func setDeckData(data, order):
 	var good = verifyDeckData(data, order)
 	if good:
 		players[1].deck.deserialize(order)
+		dataLog.append("OPPONENT DECK: " + str(players[1].deck.serialize()))
 	else:
 		MessageManager.notify("Opponent's deck is invalid")
 		Server.disconnectMessage("Error: Your deck has been flagged by the opponent as invalid")
@@ -175,9 +175,10 @@ func onGameStart():
 	print("Receive: Ready to start")
 	readyToStart = true
 
-func setStartingPlayer(player : Player):
+func setStartingPlayer(playerIndex : int):
 	print("Receive: Starting player")
-	activePlayer = player
+	dataLog.append("OPPONENT SET PLAYER: " + str(playerIndex))
+	activePlayer = players[playerIndex]
 	hasStartingPlayer = true
 
 var playerRestart = false
@@ -264,7 +265,7 @@ func _physics_process(delta):
 					for c in cardsHolding:
 						cardList.append(c.cardNode.card)
 					var newCard = Card.fuseCards(cardList)
-					var endsCreature = newCard.cardType == Card.CARD_TYPE.Creature
+					var endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
 					
 					if endsCreature and hoveringOn.currentZone == CardSlot.ZONES.CREATURE:
 						preview = previewScene.instance()
@@ -490,7 +491,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					for c in cardsHolding:
 						cardList.append(c.cardNode.card)
 					var newCard = Card.fuseCards(cardList)
-					endsCreature = newCard.cardType == Card.CARD_TYPE.Creature
+					endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
 					
 					if endsCreature:
 						if is_instance_valid(preview):
@@ -650,6 +651,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							selectedCard = null
 							
 	#CODE IS ONLY REACHABLE IF NOT RETURNED
+	dataLog.append(("OWN " if not fromServer else "OPPONENT ") + "SLOT CLICKED: : " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
 	if not fromServer:
 		Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 
@@ -686,6 +688,8 @@ func nextTurn():
 		return
 	#Engine.time_scale = 0.1
 	print("NEXT TURN")
+	dataLog.append("NEXT TURN")
+	
 	while cardsHolding.size() > 0:
 		cardsHolding[0].position.y += cardDists
 		cardsHolding[0].cardNode.position.y = cardsHolding[0].position.y
@@ -716,3 +720,8 @@ func nextTurn():
 func onLoss(player : Player):
 	gameOver = true
 	get_node("/root/main/WinLose").showWinLose(player != players[0])
+
+var dataLog := []
+func _exit_tree():
+	print("NOTICE: DUMPING GAME LOG")
+	FileIO.dumpDataLog(dataLog)
