@@ -42,57 +42,60 @@ var fusionList := \
 ]
 
 func _ready():
-	cardList.append(CardNullCreature.new(null))
-	cardList.append(CardFire.new(null))
-	cardList.append(CardWater.new(null))
-	cardList.append(CardEarth.new(null))
-	cardList.append(CardWolf.new(null))
-	cardList.append(CardMech.new(null))
+	cardList.append(CardCreature.new({"name":"Null", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_NULL.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Null], "tier":1}))
+	cardList.append(CardCreature.new({"name":"Fire Elemental", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_FIRE.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityDash]}))
+	cardList.append(CardCreature.new({"name":"Water Elemental", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_WATER.png", "power":0, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityWisdom]}))
+	cardList.append(CardCreature.new({"name":"Earth Elemental", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_ROCK.png", "power":0, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityTough]}))
+	cardList.append(CardCreature.new({"name":"Wolf", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_WOLF.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Beast], "tier":1}))
+	cardList.append(CardCreature.new({"name":"Automaton", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_ROBOT.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityProduction]}))
 	
-	cardList.append(CardFiend.new(null))
-	cardList.append(CardDjinn.new(null))
-	cardList.append(CardTorrent.new(null))
-	cardList.append(CardVolcan.new(null))
-	cardList.append(CardSludge.new(null))
-	cardList.append(CardGolem.new(null))
+	cardList.append(CardCreature.new({"name":"Fiend", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_FIEND.png", "power":3, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire], "tier":2, "abilities":[AbilityDash]}))
+	cardList.append(CardCreature.new({"name":"Djinn", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_DJINN.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire, CardCreature.CREATURE_TYPE.Water], "tier":2, "abilities":[AbilityDash, AbilityWisdom]}))
+	cardList.append(CardCreature.new({"name":"Torrent", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_TORRENT.png", "power":1, "toughness":3, "creature_type":[CardCreature.CREATURE_TYPE.Water], "tier":2, "abilities":[AbilityWisdom, AbilityWisdom]}))
+	cardList.append(CardCreature.new({"name":"Volcan", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_VOLCAN.png", "power":2, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Fire, CardCreature.CREATURE_TYPE.Earth], "tier":2, "abilities":[AbilityDash, AbilityTough]}))
+	cardList.append(CardCreature.new({"name":"Sludge", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_SLUDGE.png", "power":0, "toughness":3, "creature_type":[CardCreature.CREATURE_TYPE.Earth, CardCreature.CREATURE_TYPE.Water], "tier":2, "abilities":[AbilityWisdom, AbilityTough]}))
+	cardList.append(CardCreature.new({"name":"Golem", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_GOLEM.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":2, "abilities":[AbilityTough, AbilityTough]}))
 	
-	cardList.append(CardCerberus.new(null))
-	cardList.append(CardLeviathan.new(null))
-	cardList.append(CardStoneSerpant.new(null))
-	cardList.append(CardGargantua.new(null))
-	cardList.append(CardFlameCannon.new(null))
-	cardList.append(CardSteamer.new(null))
-	cardList.append(CardMiner.new(null))
-	cardList.append(CardCyberWolf.new(null))
-	cardList.append(CardFactory.new(null))
+	cardList.append(CardCreature.new({"name":"Cerberus", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_CERBERUS.png", "power":3, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Beast, CardCreature.CREATURE_TYPE.Fire], "tier":2, "abilities":[AbilityDash]}))
+	cardList.append(CardCreature.new({"name":"Leviathan", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LEVIATHAN.png", "power":1, "toughness":3, "creature_type":[CardCreature.CREATURE_TYPE.Beast, CardCreature.CREATURE_TYPE.Water], "tier":2, "abilities":[AbilityWisdom]}))
+	cardList.append(CardCreature.new({"name":"Stone Serpant", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_STONE_SERPANT.png", "power":2, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Beast, CardCreature.CREATURE_TYPE.Earth], "tier":2, "abilities":[AbilityTough]}))
+	cardList.append(CardCreature.new({"name":"Gargantua", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_GARGANTUA.png", "power":3, "toughness":3, "creature_type":[CardCreature.CREATURE_TYPE.Beast], "tier":2}))
+	cardList.append(CardCreature.new({"name":"Flame Cannon", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_FLAME_CANNON.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire, CardCreature.CREATURE_TYPE.Mech], "tier":2, "abilities":[AbilityDash, AbilityProduction]}))
+	cardList.append(CardCreature.new({"name":"Steamer", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_STEAMER.png", "power":1, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Mech, CardCreature.CREATURE_TYPE.Water], "tier":2, "abilities":[AbilityProduction, AbilityWisdom]}))
+	cardList.append(CardCreature.new({"name":"Miner", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_Miner.png", "power":1, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Mech, CardCreature.CREATURE_TYPE.Earth], "tier":2, "abilities":[AbilityTough, AbilityProduction]}))
+	cardList.append(CardCreature.new({"name":"Cyber wolf", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_CYBER_WOLF.png", "power":2, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Beast, CardCreature.CREATURE_TYPE.Mech], "tier":2, "abilities":[AbilityProduction]}))
+	cardList.append(CardCreature.new({"name":"Factory", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_FACTORY.png", "power":1, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Mech], "tier":2, "abilities":[AbilityProduction, AbilityProduction]}))
 	
 	
-	cardList.append(CardNecro.new(null))
-	
-	cardList.append(CardCombust.new(null))
-	cardList.append(CardDrifter.new(null))
-	cardList.append(CardGraveRobber.new(null))
-	cardList.append(CardNecroWolf.new(null))
-	cardList.append(CardAbomination.new(null))
-	cardList.append(CardLichomancer.new(null))
+	cardList.append(CardCreature.new( {"name":"Necro", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_NECRO.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Combust", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_COMBUST.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire, CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilityDash, AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Drifter", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_DRIFTER.png", "power":1, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Water, CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilityWisdom, AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Grave Robber", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_DRIFTER.png", "power":1, "toughness":3, "creature_type":[CardCreature.CREATURE_TYPE.Earth, CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilityTough, AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Necro-Wolf", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_NECRO_WOLF.png", "power":3, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Beast, CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Abomination", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_ABOMINATION.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro, CardCreature.CREATURE_TYPE.Mech], "tier":2, "abilities":[AbilityProduction, AbilitySacrifice]}))
+	cardList.append(CardCreature.new({"name":"Lichomancer", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilitySacrifice, AbilitySacrifice]}))
 	
 	
 	for i in range(cardList.size()):
 		cardList[i].UUID = i
+		
+	var path = "user:/"
+	var fileName = "card_list"
+	var dict = {}
+	for i in range(cardList.size()):
+		dict[i] = cardList[i].params
+	
+	FileIO.writeToJSON(path, fileName, dict)
 
 func getCard(index : int) -> Card:
 	if index < 0 or index >= cardList.size():
 		return null
-	var card = cardList[index].get_script().new(null)
+	var card = cardList[index].get_script().new(cardList[index].params)
 	card.UUID = index
 	return card
 
 static func deserialize(data : Dictionary) -> Card:
 	var card : Card = ListOfCards.getCard(data["id"])
 	card.playerID = data["player_id"]
-	if card is CardCreature:
-		card.power = data["power"]
-		card.toughness = data["toughness"]
-		card.hasAttacked = data["has_attacked"]
 	return card
 	

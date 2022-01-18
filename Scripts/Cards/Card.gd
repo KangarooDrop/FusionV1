@@ -4,6 +4,7 @@ class_name Card
 enum CARD_TYPE {Creature, Enchantment}
 
 var UUID = -1
+var params
 
 var playerID = -1
 
@@ -15,14 +16,18 @@ var tier : int
 var abilities := []
 
 func _init(params):
+	self.params = params
 	if params.has("UUID"):
 		UUID = params["UUID"]
 	name = params["name"]
 	cardType = params["card_type"]
-	texture = params["tex"]
+	texture = load(params["tex"])
 	tier = params["tier"]
 	if params.has("player_id"):
 		playerID = params["player_id"]
+	if params.has("abilities"):
+		for abl in params["abilities"]:
+			abilities.append(abl.new(self))
 	
 func onEnter(board):
 	for abl in abilities:
