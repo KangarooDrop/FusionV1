@@ -10,6 +10,7 @@
 font_data = ExtResource( 2 )
 
 [node name="CardNode" type="Node2D"]
+z_index = 1
 script = ExtResource( 3 )
 
 [node name="CardBackground" type="Sprite" parent="."]

@@ -19,7 +19,13 @@ func onOtherEnter(board, slot):
 func onOtherDeath(board, slot):
 	pass
 	
+func onOtherLeave(board, slot):
+	pass
+	
 func onDeath(board):
+	pass
+	
+func onLeave(board):
 	pass
 	
 func onStartOfTurn(board):

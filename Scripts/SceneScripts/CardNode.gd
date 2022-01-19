@@ -104,6 +104,7 @@ func _physics_process(delta):
 			dealtDamage = false
 			if attackingSlots.size() == 0:
 				attacking = false
+				z_index -= 1
 				attackReturnPos = null
 			else:
 				attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
@@ -119,6 +120,7 @@ func takeDamage(dmg : int, board):
 
 func attack(board, slots : Array):
 	if Settings.playAnimations:
+		z_index += 1
 		attacking = true
 		dealtDamage = false
 		attackWaitTimer = 0
@@ -168,9 +170,11 @@ func fight(slot, board, damageSelf = true):
 				
 func checkState(board):
 	if card.toughness <= 0:
+		card.onLeave(board)
 		card.onDeath(board)
 		for s in board.creatures[slot.playerID]:
-			if is_instance_valid(s.cardNode):
+			if is_instance_valid(s.cardNode) and s != slot:
+				s.cardNode.card.onOtherLeave(board, slot)
 				s.cardNode.card.onOtherDeath(board, slot)
 		self.slot.cardNode = null
 		queue_free()

@@ -59,9 +59,17 @@ func onOtherDeath(board, slot):
 	for abl in abilities.duplicate():
 		abl.onOtherDeath(board, slot)
 	
+func onOtherLeave(board, slot):
+	for abl in abilities.duplicate():
+		abl.onOtherLeave(board, slot)
+	
 func onDeath(board):
 	for abl in abilities.duplicate():
 		abl.onDeath(board)
+	
+func onLeave(board):
+	for abl in abilities.duplicate():
+		abl.onLeave(board)
 	
 func onStartOfTurn(board):
 	if board.players[board.activePlayer].UUID == playerID:

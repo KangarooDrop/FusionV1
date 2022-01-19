@@ -44,7 +44,7 @@ var fuseReturnTimer = 0
 var fuseReturnMaxTime = 0.3
 var fuseWaiting = false
 var fuseWaitTimer = 0
-var fuseWaitMaxTime = 0.2
+var fuseWaitMaxTime = 0.3
 
 var gameStarted = false
 var gameOver = false
@@ -293,7 +293,7 @@ func _physics_process(delta):
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.onEnter(self, fuseEndSlot)
 					for s in creatures[fuseEndSlot.playerID]:
-						if is_instance_valid(s.cardNode):
+						if is_instance_valid(s.cardNode) and s != fuseEndSlot:
 							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					hoverTimer = 0
 					shownHover = false
@@ -302,7 +302,7 @@ func _physics_process(delta):
 	if hoveringOn != null:
 		if not shownHover:
 			hoverTimer += delta
-			if hoverTimer > hoverMaxTime * (0.2 if hoveringOn.currentZone == CardSlot.ZONES.DECK else 1):
+			if hoverTimer > hoverMaxTime:
 				shownHover = true
 				if hoveringOn.currentZone == CardSlot.ZONES.DECK:
 					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
@@ -310,7 +310,7 @@ func _physics_process(delta):
 					createHoverNode(pos, str(numCards))
 					
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
-					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
+					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5 * Settings.cardSlotScale, 0)
 					createHoverNode(pos, hoveringOn.cardNode.card.getHoverData())
 
 func nextReplayAction():
@@ -503,7 +503,7 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 	slotClicked(parent.get_child(slotID), button_index, true)
 		
 var hoverTimer = 0
-var hoverMaxTime = 1
+var hoverMaxTime = 0.3
 var hoveringOn = null
 var shownHover = false
 var hoveringWindow = null
@@ -529,9 +529,9 @@ func onSlotExit(slot : CardSlot):
 					hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
 		shownHover = false
-		if is_instance_valid(hoveringWindow):
-			hoveringWindow.fadeOut()
-			hoveringWindow = null
+	if is_instance_valid(hoveringWindow):
+		hoveringWindow.fadeOut()
+		hoveringWindow = null
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if gameOver:
@@ -542,19 +542,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 		
 	if Settings.gameMode == GAME_MODE.REPLAY and not fromServer:
 		return
-		
-	#if slot is hand
-	#	if slot is player[0]
-	#		etc.
-	#elif slot is creatures
-	#	if cardsHolding > 0
-	#		fuse
-	#	else
-	#		if slot is player[0]
-	#			card select
-	#		else
-	#			card attack
-	#
 		
 	if button_index == 1:
 		if slot.currentZone == CardSlot.ZONES.HAND:
@@ -581,12 +568,17 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							slot.position.y -= cardDists
 							slot.cardNode.position.y = slot.position.y
 		elif slot.currentZone == CardSlot.ZONES.CREATURE:
-			if cardsHolding.size() > 0:
+			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
 				
 				var cardList = []
 				if is_instance_valid(slot.cardNode):
 					cardList.append(slot.cardNode.card)
+					slot.cardNode.card.onLeave(self)
+					for s in creatures[slot.playerID]:
+						if s != slot and is_instance_valid(s.cardNode):
+							s.cardNode.card.onOtherLeave(self, slot)
+					
 				for c in cardsHolding:
 					cardList.append(c.cardNode.card)
 					
@@ -930,6 +922,6 @@ var replayTimer = 0
 var replayWaiting = false
 
 func _exit_tree():
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == GAME_MODE.PLAYING and Settings.dumpLogOnExit:
 		print("NOTICE: DUMPING GAME LOG")
 		FileIO.dumpDataLog(dataLog)

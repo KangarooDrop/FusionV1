@@ -22,7 +22,7 @@ func setText(text : String, margin = 4):
 	$Label.rect_position.x = margin + 6
 	$Label.rect_size.x = textLength
 	$Label.rect_position.y = -$Label.rect_size.y / 2
-	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.rect_size.y + margin * 2)
+	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.rect_size.y / 2 + margin * 2 + 16)
 	$HoverBack.rect_position.y = -$HoverBack.rect_size.y / 2
 	
 	if flipped:

@@ -137,8 +137,7 @@ func _physics_process(delta):
 			slotViewing.cardNode.scale = lerp(Vector2(1, 1), Vector2(viewScale, viewScale), viewTimer / viewMaxTime)
 		else:
 			if not is_instance_valid(infoWindow):
-				print(get_viewport_rect().size / 2)
-				createHoverNode(Vector2(-cardWidth * viewScale * 3.0/5, 0), slotViewing.cardNode.card.getHoverData())
+				createHoverNode(Vector2(-cardWidth * viewScale * 3.0/5 * Settings.cardSlotScale, 0), slotViewing.cardNode.card.getHoverData())
 	if slotReturning != null:
 		if returnTimer < returnMaxTime:
 			returnTimer += delta

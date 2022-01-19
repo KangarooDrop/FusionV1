@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/Ability.gd"
 }, {
 "base": "Ability",
+"class": "AbilityComposite",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityComposite.gd"
+}, {
+"base": "Ability",
 "class": "AbilityDash",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityDash.gd"
@@ -23,6 +28,11 @@ _global_script_classes=[ {
 "class": "AbilityDegenerate",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityDegenerate.gd"
+}, {
+"base": "Ability",
+"class": "AbilityFrostbite",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityFrostbite.gd"
 }, {
 "base": "Ability",
 "class": "AbilityFrozen",
@@ -111,8 +121,10 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Ability": "",
+"AbilityComposite": "",
 "AbilityDash": "",
 "AbilityDegenerate": "",
+"AbilityFrostbite": "",
 "AbilityFrozen": "",
 "AbilityPhalanx": "",
 "AbilityProduction": "",
