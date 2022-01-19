@@ -10,7 +10,6 @@ var board
 var deck
 var hand
 
-var enchantNum := 2
 var creatureNum := 5
 
 var isOpponent = false

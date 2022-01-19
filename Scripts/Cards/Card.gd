@@ -1,7 +1,7 @@
 
 class_name Card
 
-enum CARD_TYPE {Creature, Enchantment}
+enum CARD_TYPE {Creature, Spell}
 
 var UUID = -1
 var params

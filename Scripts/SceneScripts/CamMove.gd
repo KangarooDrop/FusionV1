@@ -16,6 +16,9 @@ var newScale = -1
 var moveAmount = 175
 var scaleAmount = 1.5
 
+func _ready():
+	moveCam(CAM_STATES.WIDE, Vector2(0, 0), zoom * scaleAmount)
+
 func _physics_process(delta):
 	if moving:
 		moveTimer -= delta

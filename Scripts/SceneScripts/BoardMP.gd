@@ -8,13 +8,9 @@ var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 var hoverScene = preload("res://Scenes/UI/Hover.tscn")
-var previewScene = preload("res://Scenes/UI/Preview.tscn")
 
 var cardDists = 16
 
-var enchantNumShared := 1
-
-var enchants : Dictionary
 var creatures : Dictionary
 var graves : Dictionary
 var decks : Dictionary
@@ -26,7 +22,6 @@ var players : Array
 var activePlayer := -1
 var playedThisTurn = false
 
-onready var enchantHolder = $EnchantHolder
 onready var creatures_A_Holder = $Creatures_A
 onready var creatures_B_Holder = $Creatures_B
 onready var graveHolder = $GraveHolder
@@ -110,7 +105,6 @@ func getDeckFromFile() -> Array:
 func setOwnCardList(cardList : Array):
 	var player_A = Player.new(cardList, self)
 	players.insert(0, player_A)
-	enchants[player_A.UUID] = []
 	creatures[player_A.UUID] = []
 	
 	var logDeck = "OWN_DECK "
@@ -133,7 +127,6 @@ func setOpponentCardList(cardList : Array):
 	var player_B = Player.new(cards, self)
 	player_B.isOpponent = true
 	players.insert(1, player_B)
-	enchants[player_B.UUID] = []
 	creatures[player_B.UUID] = []
 	
 	var logDeck = "OPPONENT_DECK "
@@ -239,7 +232,6 @@ func _physics_process(delta):
 			nextReplayAction()
 	
 	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed:
-		enchants[-1] = []
 		initZones()
 		initHands()
 		
@@ -295,13 +287,15 @@ func _physics_process(delta):
 				if fuseReturnTimer >= fuseReturnMaxTime:
 					var cardNode = fuseQueue[0]
 					fuseEndSlot.cardNode = fuseQueue[0]
-					cardNode.slot = fuseEndSlot
 					cardNode.get_parent().remove_child(cardNode)
+					cardNode.slot = fuseEndSlot
 					creatures_A_Holder.add_child(cardNode)
 					cardNode.global_position = fuseEndSlot.global_position
 					fuseQueue = []
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.onEnter(self)
+					hoverTimer = 0
+					shownHover = false
 	
 	if hoveringOn != null:
 		if not shownHover:
@@ -312,21 +306,6 @@ func _physics_process(delta):
 					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
 					createHoverNode(pos, str(numCards))
-					
-				elif cardsHolding.size() > 0 and hoveringOn.playerID == players[0].UUID:
-					var cardList = []
-					if is_instance_valid(hoveringOn.cardNode):
-						cardList.append(hoveringOn.cardNode.card)
-					for c in cardsHolding:
-						cardList.append(c.cardNode.card)
-					var newCard = Card.fuseCards(cardList)
-					var endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
-					
-					if endsCreature and hoveringOn.currentZone == CardSlot.ZONES.CREATURE:
-						preview = previewScene.instance()
-						preview.get_node("CardNode").card = newCard
-						add_child(preview)
-						preview.global_position = hoveringOn.global_position
 					
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
@@ -402,27 +381,9 @@ func createHoverNode(position : Vector2, text : String):
 
 func initZones():
 	var cardInst = null
-	#	SHARED SLOTS	#
-	for i in range(enchantNumShared):
-		cardInst = cardSlot.instance()
-		cardInst.currentZone = CardSlot.ZONES.ENCHANTMENT
-		cardInst.board = self
-		enchantHolder.add_child(cardInst)
-		enchants[-1].append(cardInst)
-		boardSlots.append(cardInst)
-	centerNodes(enchants[-1], Vector2(), cardWidth, cardDists)
 	
 	#	PLAYER 1 SLOTS  	#
 	var p = players[0]
-	for i in range(p.enchantNum):
-		cardInst = cardSlot.instance()
-		cardInst.currentZone = CardSlot.ZONES.ENCHANTMENT
-		cardInst.board = self
-		cardInst.playerID = p.UUID
-		enchantHolder.add_child(cardInst)
-		enchants[p.UUID].append(cardInst)
-		boardSlots.append(cardInst)
-	centerNodes(enchants[p.UUID], Vector2(0, cardHeight + cardDists), cardWidth, cardDists)
 	
 	for i in range(p.creatureNum):
 		cardInst = cardSlot.instance()
@@ -461,16 +422,6 @@ func initZones():
 	
 	#	PLAYER 2 SLOTS  	#
 	p = players[1]
-	for i in range(p.enchantNum):
-		cardInst = cardSlot.instance()
-		cardInst.isOpponent = true
-		cardInst.currentZone = CardSlot.ZONES.ENCHANTMENT
-		cardInst.board = self
-		cardInst.playerID = p.UUID
-		enchantHolder.add_child(cardInst)
-		enchants[p.UUID].append(cardInst)
-		boardSlots.append(cardInst)
-	centerNodes(enchants[p.UUID], Vector2(0, -cardHeight - cardDists), cardWidth, cardDists)
 	
 	for i in range(p.creatureNum):
 		cardInst = cardSlot.instance()
@@ -533,8 +484,6 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 			parent = null
 		CardSlot.ZONES.HAND:
 			parent = players[playerIndex].hand
-		CardSlot.ZONES.ENCHANTMENT:
-			parent = enchantHolder
 		CardSlot.ZONES.CREATURE:
 			if playerIndex == 0:
 				parent = creatures_A_Holder
@@ -552,7 +501,6 @@ var hoverMaxTime = 1
 var hoveringOn = null
 var shownHover = false
 var hoveringWindow = null
-var preview = null
 		
 func onSlotEnter(slot : CardSlot):
 	if hoveringOn != null:
@@ -573,8 +521,6 @@ func onSlotExit(slot : CardSlot):
 				hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
 		shownHover = false
-		if is_instance_valid(preview):
-			preview.fadeOut()
 		if is_instance_valid(hoveringWindow):
 			hoveringWindow.fadeOut()
 			hoveringWindow = null
@@ -624,9 +570,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
 					
 					if endsCreature:
-						if is_instance_valid(preview):
-							preview.queue_free()
-						
 						
 						if Settings.playAnimations:
 						
@@ -707,46 +650,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							selectRotTimer = 0
 							selectedCard = slot
 						
-			elif slot.currentZone == CardSlot.ZONES.ENCHANTMENT:
-				if cardsHolding.size() > 0:
-					#PUTTING A CREATURE ONTO THE FIELD
-					var endsEnchant = false
-					
-					var cardList = []
-					if is_instance_valid(slot.cardNode):
-						cardList.append(slot.cardNode.card)
-					for c in cardsHolding:
-						cardList.append(c.cardNode.card)
-					var newCard = Card.fuseCards(cardList)
-					endsEnchant = newCard.cardType == Card.CARD_TYPE.Enchantment
-					
-					if endsEnchant:
-						if is_instance_valid(slot.cardNode):
-							cardsHolding.insert(0, slot)
-							
-						for c in cardsHolding:
-							card_A_Holder.cardNodes.erase(c.cardNode)
-							card_B_Holder.cardNodes.erase(c.cardNode)
-							c.cardNode.queue_free()
-							
-							if c.currentZone == CardSlot.ZONES.HAND:
-								card_A_Holder.cardSlotNodes.erase(c)
-								card_B_Holder.cardSlotNodes.erase(c)
-								c.queue_free()
-						cardsHolding.clear()
-						
-						var cardPlacing = cardNode.instance()
-						cardPlacing.card = newCard
-						creatures_A_Holder.add_child(cardPlacing)
-						cardPlacing.global_position = slot.global_position
-						slot.cardNode = cardPlacing
-						cardPlacing.slot = slot
-						
-						card_A_Holder.centerCards(cardWidth, cardDists)
-						card_B_Holder.centerCards(cardWidth, cardDists)
-						
-						playedThisTurn = true
-				
 			elif slot.currentZone == CardSlot.ZONES.GRAVE:
 				pass
 			else:
