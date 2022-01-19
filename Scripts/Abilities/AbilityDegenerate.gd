@@ -6,7 +6,7 @@ func _init(card : Card).("Degenerate", "On fusion, the card loses all creature t
 	pass
 
 func onFusion(card):
-	card.creatureType = [CardCreature.CREATURE_TYPE.Null]
+	card.creatureType = [Card.CREATURE_TYPE.Null]
 	var scr = get_script()
 	for abl in card.abilities:
 		if abl is scr:

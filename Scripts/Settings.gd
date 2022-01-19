@@ -1,7 +1,19 @@
 extends Node
 
-var versionID = "0.00.00.06"
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
+var versionID = "0.00.00.07"
+
+var playAnimations = true
+var selectedDeck = ""
+var path = "user://decks/"
+
+var dumpPath = "user://dumps/"
+var dumpFile = "x_.txt"
+
+var gameMode : int
+
+var cardSlotScale = 1.5
+
 static func compareVersion(comp1 : String, comp2 : String) -> int:
 	var spl = comp1.split(".")
 	var spl2 = comp2.split(".")
@@ -94,12 +106,3 @@ static func versionCompUnitTest():
 	
 	##################################################################################################################################################################
 	
-
-var playAnimations = true
-var selectedDeck = ""
-var path = "user://decks/"
-
-var dumpPath = "user://dumps/"
-var dumpFile = "x_.txt"
-
-var gameMode : int

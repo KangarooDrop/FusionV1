@@ -74,11 +74,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Cards/Card.gd"
 }, {
-"base": "Card",
-"class": "CardCreature",
-"language": "GDScript",
-"path": "res://Scripts/Cards/CardCreature.gd"
-}, {
 "base": "Node2D",
 "class": "CardNode",
 "language": "GDScript",
@@ -123,7 +118,6 @@ _global_script_class_icons={
 "AbilityWisdom": "",
 "BoardMP": "",
 "Card": "",
-"CardCreature": "",
 "CardNode": "",
 "CardSlot": "",
 "Deck": "",

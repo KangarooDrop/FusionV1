@@ -14,24 +14,24 @@ position = Vector2( 0, 100 )
 position = Vector2( 0, -100 )
 
 [node name="GraveHolder" type="Node2D" parent="."]
-position = Vector2( 250, 0 )
+position = Vector2( 346, 0 )
 
 [node name="DeckHolder" type="Node2D" parent="."]
-position = Vector2( 350, 0 )
+position = Vector2( 446, 0 )
 
 [node name="Card_A_Holder" type="Node2D" parent="."]
-position = Vector2( 0, 300 )
+position = Vector2( 0, 268 )
 script = ExtResource( 2 )
 
 [node name="Card_B_Holder" type="Node2D" parent="."]
-position = Vector2( 0, -300 )
+position = Vector2( 0, -268 )
 script = ExtResource( 2 )
 
 [node name="HealthNode" parent="." instance=ExtResource( 3 )]
-position = Vector2( -300, 250 )
+position = Vector2( -350, 100 )
 
 [node name="HealthNode2" parent="." instance=ExtResource( 3 )]
-position = Vector2( -300, -250 )
+position = Vector2( -350, -100 )
 
 [node name="Fusion_A_Holder" type="Node2D" parent="."]
 position = Vector2( 0, 200 )

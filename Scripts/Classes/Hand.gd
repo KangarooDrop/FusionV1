@@ -44,15 +44,17 @@ func _physics_process(delta):
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
+			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			cardSlotNodes.append(slotInst)
 			
 			var cardInst = cardNode.instance()
 			cardInst.card = drawQueue[0]
 			cardInst.cardVisible = false
+			cardInst.playerID = player.UUID
+			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+			add_child(cardInst)
 			if handVisible:
 				cardInst.flip()
-			cardInst.playerID = player.UUID
-			add_child(cardInst)
 			cardNodes.append(cardInst)
 			
 			slotInst.cardNode = cardInst

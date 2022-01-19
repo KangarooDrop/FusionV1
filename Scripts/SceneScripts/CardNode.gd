@@ -25,6 +25,7 @@ var flipping = false
 var hasFlipped = false
 var flipTimer = 0
 var flipMaxTime = 0.5
+var originalScale = 1
 
 var cardVisible = true setget setCardVisible, getCardVisible
 
@@ -34,16 +35,15 @@ func _ready():
 func setCardVisible(isVis : bool):
 	if isVis:
 		if card != null:
-			if card.cardType == Card.CARD_TYPE.Creature:
-				$Label.visible = true
-				$CardType.visible = true
-				$CardType.texture = ListOfCards.creatureTypeImageList[card.creatureType[0]]
-				
-				if card.creatureType.size() > 1:
-					$CardType2.visible = true
-					$CardType2.texture = ListOfCards.creatureTypeImageList[card.creatureType[1]]
-				else:
-					$CardType2.visible = false
+			$Label.visible = true
+			$CardType.visible = true
+			$CardType.texture = ListOfCards.creatureTypeImageList[card.creatureType[0]]
+			
+			if card.creatureType.size() > 1:
+				$CardType2.visible = true
+				$CardType2.texture = ListOfCards.creatureTypeImageList[card.creatureType[1]]
+			else:
+				$CardType2.visible = false
 				
 			$CardPortrait.texture = card.texture
 		else:
@@ -58,15 +58,15 @@ func getCardVisible() -> bool:
 	return cardVisible
 
 func _physics_process(delta):
-	if card != null and card.cardType == Card.CARD_TYPE.Creature:
+	if card != null:
 		$Label.text = str(card.power) + "/" + str(card.toughness)
 		
-	if is_instance_valid(card) and card.cardType == Card.CARD_TYPE.Creature and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
+	if is_instance_valid(card) and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
 		$CardBackground.texture = (ListOfCards.cardBackground if card.hasAttacked else ListOfCards.cardBackgroundActive)
 		
 	if flipping:
 		flipTimer += delta
-		scale.x = abs(cos(flipTimer / flipMaxTime * PI))
+		scale.x = abs(cos(flipTimer / flipMaxTime * PI)) * originalScale
 		if not hasFlipped and flipTimer >= flipMaxTime / 2:
 			hasFlipped = true
 			setCardVisible(!getCardVisible())
@@ -143,6 +143,7 @@ func attack(pos, slot):
 
 func flip():
 	flipping = true
+	originalScale = scale.x
 	
 func fight(slot, board, damageSelf = true):
 	if is_instance_valid(slot.cardNode):

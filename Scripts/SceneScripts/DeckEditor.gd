@@ -47,8 +47,8 @@ func sort():
 	
 	var cardsToAdd = []
 	if sortOrder == SORT_ORDER.TYPE or sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
-		for i in CardCreature.CREATURE_TYPE.values():
-			for j in CardCreature.CREATURE_TYPE.values():
+		for i in Card.CREATURE_TYPE.values():
+			for j in Card.CREATURE_TYPE.values():
 				var typesToComp = []
 				if i != 0:
 					typesToComp.append(i)

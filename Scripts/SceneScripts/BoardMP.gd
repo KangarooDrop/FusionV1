@@ -394,6 +394,7 @@ func initZones():
 		cardInst.board = self
 		cardInst.playerID = p.UUID
 		creatures_A_Holder.add_child(cardInst)
+		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		creatures[p.UUID].append(cardInst)
 		boardSlots.append(cardInst)
 	centerNodes(creatures[p.UUID], Vector2(), cardWidth, cardDists)
@@ -403,6 +404,7 @@ func initZones():
 	cardInst.board = self
 	cardInst.playerID = p.UUID
 	graveHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, cardHeight + cardDists)
 	
 	cardInst = cardSlot.instance()
@@ -410,14 +412,16 @@ func initZones():
 	cardInst.board = self
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, cardHeight + cardDists)
 	var cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
 	cardNodeInst.cardVisible = false
 	cardNodeInst.playerID = p.UUID
-	cardInst.add_child(cardNodeInst)
+	deckHolder.add_child(cardNodeInst)
+	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
-	cardNodeInst.position = Vector2()
+	cardNodeInst.position = cardInst.position
 	decks[p.UUID] = cardInst
 	
 	fusionHolders[p.UUID] = fusion_A_Holder
@@ -433,6 +437,7 @@ func initZones():
 		cardInst.board = self
 		cardInst.playerID = p.UUID
 		creatures_B_Holder.add_child(cardInst)
+		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		creatures[p.UUID].append(cardInst)
 		boardSlots.append(cardInst)
 	centerNodes(creatures[p.UUID], Vector2(), cardWidth, cardDists)
@@ -443,6 +448,7 @@ func initZones():
 	cardInst.board = self
 	cardInst.playerID = p.UUID
 	graveHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, -cardHeight - cardDists)
 	
 	cardInst = cardSlot.instance()
@@ -451,14 +457,16 @@ func initZones():
 	cardInst.board = self
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, -cardHeight - cardDists)
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
 	cardNodeInst.cardVisible = false
 	cardNodeInst.playerID = p.UUID
-	cardInst.add_child(cardNodeInst)
+	deckHolder.add_child(cardNodeInst)
+	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
-	cardNodeInst.position = Vector2()
+	cardNodeInst.position = cardInst.position
 	decks[p.UUID] = cardInst
 		
 	fusionHolders[p.UUID] = fusion_B_Holder
@@ -476,7 +484,7 @@ func initHands():
 				
 static func centerNodes(nodes : Array, position : Vector2, cardWidth : int, cardDists : int):
 	for i in range(nodes.size()):
-		nodes[i].position = position + Vector2(-(nodes.size() - 1) / 2.0 * (cardWidth + cardDists) + (cardWidth + cardDists) * i, 0)
+		nodes[i].position = position + Vector2(-(nodes.size() - 1) / 2.0 * (cardWidth * Settings.cardSlotScale + cardDists) + (cardWidth * Settings.cardSlotScale + cardDists) * i, 0)
 		
 		
 func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
@@ -538,6 +546,19 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	if Settings.gameMode == GAME_MODE.REPLAY and not fromServer:
 		return
 		
+	#if slot is hand
+	#	if slot is player[0]
+	#		etc.
+	#elif slot is creatures
+	#	if cardsHolding > 0
+	#		fuse
+	#	else
+	#		if slot is player[0]
+	#			card select
+	#		else
+	#			card attack
+	#
+		
 	if button_index == 1:
 		if slot.playerID == players[activePlayer].UUID or slot.playerID == -1:
 			if slot.currentZone == CardSlot.ZONES.HAND:
@@ -562,7 +583,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					return
 				if cardsHolding.size() > 0:
 					#PUTTING A CREATURE ONTO THE FIELD
-					var endsCreature = false
 					
 					var cardList = []
 					if is_instance_valid(slot.cardNode):
@@ -570,78 +590,76 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					for c in cardsHolding:
 						cardList.append(c.cardNode.card)
 					var newCard = ListOfCards.fuseCards(cardList)
-					endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
+						
+					if Settings.playAnimations:
 					
-					if endsCreature:
+						if is_instance_valid(slot.cardNode):
+							cardsHolding.insert(0, slot)
+							
+						while cardsHolding.size() > 0:
+							var c = cardsHolding[0]
+							var cardNode = c.cardNode
+							cardNode.setCardVisible(true)
+							cardsHolding.erase(c)
+							fuseQueue.append(cardNode)
+							cardNode.get_parent().remove_child(cardNode)
+							fusionHolders[slot.playerID].add_child(cardNode)
+							cardNode.position = Vector2()
+							c.cardNode = null
+							card_A_Holder.cardNodes.erase(cardNode)
+							card_B_Holder.cardNodes.erase(cardNode)
+							if c.currentZone == CardSlot.ZONES.HAND:
+								card_A_Holder.cardSlotNodes.erase(c)
+								card_B_Holder.cardSlotNodes.erase(c)
+								c.queue_free()
 						
-						if Settings.playAnimations:
+						fuseStartPos = fuseQueue[0].global_position
+						fuseEndSlot = slot
+						fuseTimer = 0
+						fuseReturnTimer = 0
 						
-							if is_instance_valid(slot.cardNode):
-								cardsHolding.insert(0, slot)
-								
-							while cardsHolding.size() > 0:
-								var c = cardsHolding[0]
-								var cardNode = c.cardNode
-								cardNode.setCardVisible(true)
-								cardsHolding.erase(c)
-								fuseQueue.append(cardNode)
-								cardNode.get_parent().remove_child(cardNode)
-								fusionHolders[slot.playerID].add_child(cardNode)
-								cardNode.position = Vector2()
-								c.cardNode = null
-								card_A_Holder.cardNodes.erase(cardNode)
-								card_B_Holder.cardNodes.erase(cardNode)
-								if c.currentZone == CardSlot.ZONES.HAND:
-									card_A_Holder.cardSlotNodes.erase(c)
-									card_B_Holder.cardSlotNodes.erase(c)
-									c.queue_free()
-							
-							fuseStartPos = fuseQueue[0].global_position
-							fuseEndSlot = slot
-							fuseTimer = 0
-							fuseReturnTimer = 0
-							
-							
-							card_A_Holder.centerCards(cardWidth, cardDists)
-							card_B_Holder.centerCards(cardWidth, cardDists)
-							centerNodes(fusion_A_Holder.get_children(), Vector2(), cardWidth, cardDists)
-							centerNodes(fusion_B_Holder.get_children(), Vector2(), cardWidth, cardDists)
-							
-							fuseWaiting = true
-							fuseWaitTimer = 0
-							playedThisTurn = true
-						else:
+						
+						card_A_Holder.centerCards(cardWidth, cardDists)
+						card_B_Holder.centerCards(cardWidth, cardDists)
+						centerNodes(fusion_A_Holder.get_children(), Vector2(), cardWidth, cardDists)
+						centerNodes(fusion_B_Holder.get_children(), Vector2(), cardWidth, cardDists)
+						
+						fuseWaiting = true
+						fuseWaitTimer = 0
+						playedThisTurn = true
+					else:
 
-							while cardsHolding.size() > 0:
-								var c = cardsHolding[0]
-								cardsHolding.remove(0)
-								var cardNode = c.cardNode
-								cardNode.get_parent().remove_child(cardNode)
-								card_A_Holder.cardNodes.erase(cardNode)
-								card_B_Holder.cardNodes.erase(cardNode)
-								if c.currentZone == CardSlot.ZONES.HAND:
-									card_A_Holder.cardSlotNodes.erase(c)
-									card_B_Holder.cardSlotNodes.erase(c)
-									c.queue_free()
-									
-							var cardPlacing = cardNode.instance()
-							newCard.playerID = slot.playerID
-							cardPlacing.card = newCard
-							creatures_A_Holder.add_child(cardPlacing)
-							cardPlacing.global_position = slot.global_position
-							if is_instance_valid(slot.cardNode):
-								slot.cardNode.queue_free()
-							slot.cardNode = cardPlacing
-							cardPlacing.slot = slot
-							
-							newCard.onEnter(self, slot)
-							for s in creatures[slot.playerID]:
-								if is_instance_valid(s.cardNode):
-									s.cardNode.card.onOtherEnter(self, slot)
-							playedThisTurn = true
-							
-							card_A_Holder.centerCards(cardWidth, cardDists)
-							card_B_Holder.centerCards(cardWidth, cardDists)
+						while cardsHolding.size() > 0:
+							var c = cardsHolding[0]
+							cardsHolding.remove(0)
+							var cardNode = c.cardNode
+							cardNode.get_parent().remove_child(cardNode)
+							card_A_Holder.cardNodes.erase(cardNode)
+							card_B_Holder.cardNodes.erase(cardNode)
+							if c.currentZone == CardSlot.ZONES.HAND:
+								card_A_Holder.cardSlotNodes.erase(c)
+								card_B_Holder.cardSlotNodes.erase(c)
+								c.queue_free()
+								
+						var cardPlacing = cardNode.instance()
+						newCard.playerID = slot.playerID
+						cardPlacing.card = newCard
+						creatures_A_Holder.add_child(cardPlacing)
+						cardPlacing.global_position = slot.global_position
+						cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+						if is_instance_valid(slot.cardNode):
+							slot.cardNode.queue_free()
+						slot.cardNode = cardPlacing
+						cardPlacing.slot = slot
+						
+						newCard.onEnter(self, slot)
+						for s in creatures[slot.playerID]:
+							if is_instance_valid(s.cardNode):
+								s.cardNode.card.onOtherEnter(self, slot)
+						playedThisTurn = true
+						
+						card_A_Holder.centerCards(cardWidth, cardDists)
+						card_B_Holder.centerCards(cardWidth, cardDists)
 							
 				else:
 					#ATTACKING
