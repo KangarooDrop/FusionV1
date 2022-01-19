@@ -22,17 +22,17 @@ var fusionList := \
 		0,
 		
 		
-		[-1,   0,    1,    2,    3,     4,   5,    21],
+		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
 		
 	[
-		[-1,   -1,   -1,   -1,   -1,    -1,  -1,   -1],
-		[-1,   0,    1,    2,    3,     4,   5,    21],
-		[-1,   0,    6,    null, null, null, null, null],
-		[-1,   0,    7,    8,    null, null, null, null],
-		[-1,   0,    9,    10,   11,   null, null, null],
-		[-1,   0,   12,    13,   14,   15,   null, null],
-		[-1,   0,   16,    17,   18,   19,   20,   null],
-		[-1,   0,   22,    23,   24,   25,   26,   27]
+		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
+		[-1,   0,    -1,   -1,   -1,   -1,   -1,   -1],
+		[-1,   -1,   6,     null, null, null, null, null],
+		[-1,   -1,   7,     8,    null, null, null, null],
+		[-1,   -1,   9,     10,   11,   null, null, null],
+		[-1,   -1,   12,    13,   14,   15,   null, null],
+		[-1,   -1,   16,    17,   18,   19,   20,   null],
+		[-1,   -1,   22,    23,   24,   25,   26,   27]
 	]
 #	[
 #		[-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1],
@@ -78,6 +78,12 @@ func _ready():
 	cardList.append(CardCreature.new({"name":"Lichomancer", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":2, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":2, "abilities":[AbilitySacrifice, AbilitySacrifice]}))
 	
 	
+	
+	cardList.append(CardCreature.new({"name":"Spitfire", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
+	cardList.append(CardCreature.new({"name":"Legionstones", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":0, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
+	
+	
+	
 	for i in range(cardList.size()):
 		cardList[i].UUID = i
 		
@@ -118,12 +124,28 @@ func fuseCards(cards : Array) -> Card:
 	return cards[cards.size() - 1]
 	
 func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
-	var types = []
+	var uniques = []
 	for t in (cardA.creatureType + cardB.creatureType):
-		if not types.has(t) and t != CardCreature.CREATURE_TYPE.Null:
-			types.append(t)
-	var numTypes = types.size()
+		if not uniques.has(t) and t != CardCreature.CREATURE_TYPE.Null:
+			uniques.append(t)
+			
+	var canFuse = (uniques.size() <= 2)
+	var types = []
 	
+	if uniques.size() == 0:
+		pass
+	elif uniques.size() == 1:
+		if (cardA.creatureType + cardB.creatureType).has(CardCreature.CREATURE_TYPE.Null):
+			types = [uniques[0], CardCreature.CREATURE_TYPE.Null]
+		else:
+			types = [uniques[0], uniques[0]] 
+				
+	elif uniques.size() == 2:
+		types = uniques
+	else:
+		return cardB
+	
+	var numTypes = types.size()
 	if numTypes <= 2:
 		var newIndex
 		match numTypes:
@@ -135,6 +157,12 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 				newIndex = fusionList[2][types[0]][types[1]]
 				if newIndex == null:
 					newIndex = fusionList[2][types[1]][types[0]]
+		
+		if newIndex == -1:
+			if cardA.creatureType.has(CardCreature.CREATURE_TYPE.Null):
+				newIndex = cardB.UUID
+			else:
+				newIndex = cardA.UUID
 		
 		var cardNew = ListOfCards.getCard(newIndex)
 		cardNew.power = cardA.power + cardB.power

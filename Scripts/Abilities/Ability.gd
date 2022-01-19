@@ -10,7 +10,10 @@ func _init(name : String, desc : String, card : Card):
 	self.desc = desc
 	self.card = card
 
-func onEnter(board):
+func onEnter(board, slot):
+	pass
+	
+func onOtherEnter(board, slot):
 	pass
 	
 func onDeath(board):

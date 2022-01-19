@@ -13,6 +13,8 @@ var cardType : int
 var texture : Texture
 var tier : int
 
+var cardNode
+
 var abilities := []
 
 func _init(params):
@@ -29,9 +31,14 @@ func _init(params):
 		for abl in params["abilities"]:
 			abilities.append(abl.new(self))
 	
-func onEnter(board):
+func onEnter(board, slot):
+	cardNode = slot.cardNode
 	for abl in abilities:
-		abl.onEnter(board)
+		abl.onEnter(board, slot)
+	
+func onOtherEnter(board, slot):
+	for abl in abilities:
+		abl.onOtherEnter(board, slot)
 	
 func onDeath(board):
 	for abl in abilities:

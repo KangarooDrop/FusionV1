@@ -293,7 +293,10 @@ func _physics_process(delta):
 					cardNode.global_position = fuseEndSlot.global_position
 					fuseQueue = []
 					cardNode.card.playerID = fuseEndSlot.playerID
-					cardNode.card.onEnter(self)
+					cardNode.card.onEnter(self, fuseEndSlot)
+					for s in creatures[fuseEndSlot.playerID]:
+						if is_instance_valid(s.cardNode):
+							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					hoverTimer = 0
 					shownHover = false
 	
@@ -631,7 +634,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							slot.cardNode = cardPlacing
 							cardPlacing.slot = slot
 							
-							newCard.onEnter(self)
+							newCard.onEnter(self, slot)
+							for s in creatures[slot.playerID]:
+								if is_instance_valid(s.cardNode):
+									s.cardNode.card.onOtherEnter(self, slot)
 							playedThisTurn = true
 							
 							card_A_Holder.centerCards(cardWidth, cardDists)

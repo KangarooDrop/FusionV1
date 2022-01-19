@@ -2,7 +2,7 @@ extends Card
 
 class_name CardCreature
 
-var cardNode = preload("res://Scenes/CardNode.tscn")
+var cardNodeScene = preload("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
 
@@ -32,7 +32,7 @@ func addCreatureToBoard(card, board):
 			if not is_instance_valid(slot.cardNode):
 				card.playerID = playerID
 				
-				var cardPlacing = cardNode.instance()
+				var cardPlacing = cardNodeScene.instance()
 				cardPlacing.card = card
 				board.add_child(cardPlacing)
 				cardPlacing.global_position = slot.global_position

@@ -42,6 +42,8 @@ func setCardVisible(isVis : bool):
 				if card.creatureType.size() > 1:
 					$CardType2.visible = true
 					$CardType2.texture = ListOfCards.creatureTypeImageList[card.creatureType[1]]
+				else:
+					$CardType2.visible = false
 				
 			$CardPortrait.texture = card.texture
 		else:
@@ -84,7 +86,17 @@ func _physics_process(delta):
 			attackWaitTimer += delta
 		elif attackReturnTimer < attackReturnMaxTime:
 			if not dealtDamage:
-				dealDamageTo(attackingSlot, slot.board)
+				var isPronged = false
+				for abl in card.abilities:
+					if abl is AbilityPronged:
+						isPronged = true
+				
+				if not isPronged:
+					dealDamageTo(attackingSlot, slot.board)
+				else:
+					var neighbors = attackingSlot.getNeighbors()
+					for ne in neighbors:
+						dealDamageTo(ne, slot.board, false)
 				dealtDamage = true
 			attackReturnTimer += delta
 			global_position = lerp(attackPos, attackReturnPos, attackReturnTimer / attackReturnMaxTime)
@@ -119,14 +131,24 @@ func attack(pos, slot):
 			attackRotation += PI
 		attackRotation -= PI / 2
 	else:
-		dealDamageTo(slot, slot.board)
+		var isPronged = false
+		for abl in card.abilities:
+			if abl is AbilityPronged:
+				isPronged = true
+		if not isPronged:
+			dealDamageTo(attackingSlot, slot.board)
+		else:
+			var neighbors = attackingSlot.getNeighbors()
+			for ne in neighbors:
+				dealDamageTo(ne, slot.board, false)
 
 func flip():
 	flipping = true
 	
-func dealDamageTo(slot, board):
+func dealDamageTo(slot, board, damageSelf = true):
 	if is_instance_valid(slot.cardNode):
-		takeDamage(slot.cardNode.card.power, board)
+		if damageSelf:
+			takeDamage(slot.cardNode.card.power, board)
 		slot.cardNode.takeDamage(card.power, board)
 		
 		if card.toughness <= 0:
