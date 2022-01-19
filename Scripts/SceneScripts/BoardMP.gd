@@ -270,7 +270,7 @@ func _physics_process(delta):
 					if fuseTimer >= fuseMaxTime:
 						fuseTimer = 0
 						fusing = false
-						fuseQueue[0].card = Card.fusePair(fuseQueue[0].card, fuseQueue[1].card)
+						fuseQueue[0].card = ListOfCards.fusePair(fuseQueue[0].card, fuseQueue[1].card)
 						fuseQueue[0].setCardVisible(true)
 						fuseQueue[1].queue_free()
 						fuseQueue.remove(1)
@@ -566,7 +566,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 						cardList.append(slot.cardNode.card)
 					for c in cardsHolding:
 						cardList.append(c.cardNode.card)
-					var newCard = Card.fuseCards(cardList)
+					var newCard = ListOfCards.fuseCards(cardList)
 					endsCreature = (newCard != null and newCard.cardType == Card.CARD_TYPE.Creature)
 					
 					if endsCreature:

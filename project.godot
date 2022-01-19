@@ -40,11 +40,6 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityWisdom.gd"
 }, {
 "base": "Node2D",
-"class": "Board",
-"language": "GDScript",
-"path": "res://Scripts/SceneScripts/Board.gd"
-}, {
-"base": "Node2D",
 "class": "BoardMP",
 "language": "GDScript",
 "path": "res://Scripts/SceneScripts/BoardMP.gd"
@@ -96,7 +91,6 @@ _global_script_class_icons={
 "AbilitySacrifice": "",
 "AbilityTough": "",
 "AbilityWisdom": "",
-"Board": "",
 "BoardMP": "",
 "Card": "",
 "CardCreature": "",

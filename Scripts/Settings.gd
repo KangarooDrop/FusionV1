@@ -1,6 +1,6 @@
 extends Node
 
-var versionID = "0.00.00.01"
+var versionID = "0.00.00.02"
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
 static func compareVersion(comp1 : String, comp2 : String) -> int:
 	var spl = comp1.split(".")
