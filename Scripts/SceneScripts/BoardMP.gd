@@ -555,12 +555,22 @@ var hoveringWindow = null
 var preview = null
 		
 func onSlotEnter(slot : CardSlot):
+	if hoveringOn != null:
+		onSlotExit(hoveringOn)
+		
 	hoveringOn = slot
 	hoverTimer = 0
 	shownHover = false
+	
+	if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+		if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
+			hoveringOn.cardNode.position.y -= 5
 		
 func onSlotExit(slot : CardSlot):
 	if slot == hoveringOn:
+		if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+			if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
+				hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
 		shownHover = false
 		if is_instance_valid(preview):
@@ -590,6 +600,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					if cardsHolding.has(slot):
 						cardsHolding.erase(slot)
 						slot.position.y += cardDists
+						if hoveringOn != null:
+							onSlotExit(slot)
 						slot.cardNode.position.y = slot.position.y
 					else:
 						if cardsHolding.size() < 2:

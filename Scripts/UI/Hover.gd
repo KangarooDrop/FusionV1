@@ -44,4 +44,3 @@ func _physics_process(delta):
 		
 		if fadeTimer <= 0:
 			queue_free()
-			print("GONE!")
