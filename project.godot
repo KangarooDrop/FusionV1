@@ -35,6 +35,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityPronged.gd"
 }, {
 "base": "Ability",
+"class": "AbilityRampage",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRampage.gd"
+}, {
+"base": "Ability",
 "class": "AbilitySacrifice",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilitySacrifice.gd"
@@ -100,6 +105,7 @@ _global_script_class_icons={
 "AbilityPhalanx": "",
 "AbilityProduction": "",
 "AbilityPronged": "",
+"AbilityRampage": "",
 "AbilitySacrifice": "",
 "AbilityTough": "",
 "AbilityWisdom": "",

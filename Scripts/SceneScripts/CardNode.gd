@@ -86,17 +86,16 @@ func _physics_process(delta):
 			attackWaitTimer += delta
 		elif attackReturnTimer < attackReturnMaxTime:
 			if not dealtDamage:
-				var isPronged = false
-				for abl in card.abilities:
-					if abl is AbilityPronged:
-						isPronged = true
 				
-				if not isPronged:
-					dealDamageTo(attackingSlot, slot.board)
+				if not ListOfCards.hasAbility(card, AbilityPronged):
+					fight(attackingSlot, slot.board)
 				else:
 					var neighbors = attackingSlot.getNeighbors()
 					for ne in neighbors:
-						dealDamageTo(ne, slot.board, false)
+						fight(ne, slot.board, false)
+					if is_instance_valid(attackingSlot.cardNode):
+						takeDamage(attackingSlot.cardNode.card.power, slot.board)
+						checkState(slot.board)
 				dealtDamage = true
 			attackReturnTimer += delta
 			global_position = lerp(attackPos, attackReturnPos, attackReturnTimer / attackReturnMaxTime)
@@ -136,33 +135,39 @@ func attack(pos, slot):
 			if abl is AbilityPronged:
 				isPronged = true
 		if not isPronged:
-			dealDamageTo(attackingSlot, slot.board)
+			fight(attackingSlot, slot.board)
 		else:
 			var neighbors = attackingSlot.getNeighbors()
 			for ne in neighbors:
-				dealDamageTo(ne, slot.board, false)
+				fight(ne, slot.board, false)
 
 func flip():
 	flipping = true
 	
-func dealDamageTo(slot, board, damageSelf = true):
+func fight(slot, board, damageSelf = true):
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:
 			takeDamage(slot.cardNode.card.power, board)
 		slot.cardNode.takeDamage(card.power, board)
 		
-		if card.toughness <= 0:
-			card.onDeath(board)
-			self.slot.cardNode = null
-			queue_free()
-		if slot.cardNode.card.toughness <= 0:
-			slot.cardNode.card.onDeath(board)
-			slot.cardNode.queue_free()
-			slot.cardNode = null
+		if ListOfCards.hasAbility(card, AbilityRampage) and slot.cardNode.card.toughness < 0:
+			for p in slot.board.players:
+				if p.UUID == slot.playerID:
+					p.takeDamage(-slot.cardNode.card.toughness, self)
+		
+		checkState(board)
+		slot.cardNode.checkState(board)
 	else:
 		for p in slot.board.players:
 			if p.UUID == slot.playerID:
 				p.takeDamage(card.power, self)
+				
+				
+func checkState(board):
+	if card.toughness <= 0:
+		card.onDeath(board)
+		self.slot.cardNode = null
+		queue_free()
 				
 func _exit_tree():
 	if slot != null:

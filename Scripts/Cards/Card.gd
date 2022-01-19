@@ -51,8 +51,7 @@ func onStartOfTurn(board):
 func onEndOfTurn(board):
 	for abl in abilities:
 		abl.onEndOfTurn(board)
-
-
+				
 
 
 func _to_string() -> String:
