@@ -17,7 +17,7 @@ var pages := []
 var hasSaved = true
 
 enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
-var sortOrder : int = SORT_ORDER.POWER
+var sortOrder : int = SORT_ORDER.TYPE
 
 func _ready():
 	sort()

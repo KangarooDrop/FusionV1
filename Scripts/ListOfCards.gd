@@ -79,10 +79,10 @@ func _ready():
 	
 	
 	
-	cardList.append(CardCreature.new({"name":"Spitfire", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
-	cardList.append(CardCreature.new({"name":"Legionstones", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":0, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
-	cardList.append(CardCreature.new({"name":"Badger", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
-	cardList.append(CardCreature.new({"name":"Bonelord", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/card_LICHOMANCER.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
+	cardList.append(CardCreature.new({"name":"Spitfire", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/FireBob.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
+	cardList.append(CardCreature.new({"name":"Legionstones", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/Rocks.png", "power":0, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
+	cardList.append(CardCreature.new({"name":"Badger", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
+	cardList.append(CardCreature.new({"name":"Bonelord", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
 	
 	
 	
