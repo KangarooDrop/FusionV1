@@ -8,9 +8,9 @@ var playerID = -1
 
 var attacking = false
 var dealtDamage = false
-var attackPos = null
+var attackingPositions = []
 var attackReturnPos = null
-var attackingSlot = null
+var attackingSlots = null
 var attackRotation = 0
 var attackStartupTimer = 0
 var attackStartupMaxTime = 0.1
@@ -81,65 +81,67 @@ func _physics_process(delta):
 			rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
 		elif attackTimer < attackMaxTime:
 			attackTimer += delta
-			global_position = lerp(attackReturnPos, attackPos, attackTimer / attackMaxTime)
+			global_position = lerp(attackReturnPos, attackingPositions[0], attackTimer / attackMaxTime)
 		elif attackWaitTimer < attackWaitMaxTime:
 			attackWaitTimer += delta
 		elif attackReturnTimer < attackReturnMaxTime:
 			if not dealtDamage:
-				
-				if not ListOfCards.hasAbility(card, AbilityPronged):
-					fight(attackingSlot, slot.board)
-				else:
-					var neighbors = attackingSlot.getNeighbors()
-					for ne in neighbors:
-						fight(ne, slot.board, false)
-					if is_instance_valid(attackingSlot.cardNode):
-						takeDamage(attackingSlot.cardNode.card.power, slot.board)
-						checkState(slot.board)
+				fight(attackingSlots[0], slot.board)
 				dealtDamage = true
 			attackReturnTimer += delta
-			global_position = lerp(attackPos, attackReturnPos, attackReturnTimer / attackReturnMaxTime)
+			global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
 			rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
 		else:
 			global_position = attackReturnPos
 			rotation = 0
 			
-			attacking = false
-			attackPos = null
-			attackReturnPos = null
+			attackingPositions.remove(0)
+			attackingSlots.remove(0)
 			attackStartupTimer = 0
+			attackWaitTimer = 0
 			attackTimer = 0
 			attackReturnTimer = 0
+			dealtDamage = false
+			if attackingSlots.size() == 0:
+				attacking = false
+				attackReturnPos = null
+			else:
+				attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
+				if attackRotation > PI:
+					attackRotation -= PI
+				elif attackRotation < 0:
+					attackRotation += PI
+				attackRotation -= PI / 2
 			
 
 func takeDamage(dmg : int, board):
 	card.toughness -= dmg
 
-func attack(pos, slot):
+func attack(board, slots : Array):
 	if Settings.playAnimations:
 		attacking = true
 		dealtDamage = false
 		attackWaitTimer = 0
-		attackPos = pos
-		attackingSlot = slot
+		attackingSlots = slots
+		attackingPositions.clear()
+		for s in slots:
+			attackingPositions.append(s.global_position + (global_position - s.global_position).normalized() * ListOfCards.cardBackground.get_width() * Settings.cardSlotScale)
 		attackReturnPos = global_position
-		attackRotation = attackReturnPos.angle_to_point(attackPos)
+		attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
 		if attackRotation > PI:
 			attackRotation -= PI
 		elif attackRotation < 0:
 			attackRotation += PI
 		attackRotation -= PI / 2
+		
+		card.onAttack(self, board)
+		for s in slots:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onBeingAttacked(self, board)
+		
 	else:
-		var isPronged = false
-		for abl in card.abilities:
-			if abl is AbilityPronged:
-				isPronged = true
-		if not isPronged:
-			fight(attackingSlot, slot.board)
-		else:
-			var neighbors = attackingSlot.getNeighbors()
-			for ne in neighbors:
-				fight(ne, slot.board, false)
+		for s in slots:
+			fight(s, slot.board)
 
 func flip():
 	flipping = true

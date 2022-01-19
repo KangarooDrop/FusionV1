@@ -21,6 +21,12 @@ func _ready():
 	control.rect_position.y -= 128
 	messageHolder = control
 	
+	var label = Label.new()
+	label.text = "Version: " + str(Settings.versionID)
+	canvas.add_child(label)
+	label.rect_position += Vector2(8, 8)
+	label.set("custom_colors/font_color", Color(0,0,0))
+	
 
 func _process(delta):
 	var move = delta * yOff / moveTime

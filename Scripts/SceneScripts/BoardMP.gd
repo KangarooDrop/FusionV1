@@ -680,32 +680,20 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 				pass
 		else:
 			if slot.currentZone == CardSlot.ZONES.CREATURE:
-				if slot.playerID != players[1].UUID and not fromServer:
+				if slot.playerID != players[1].UUID and not fromServer or not is_instance_valid(selectedCard):
 					return
-				if is_instance_valid(slot.cardNode) and is_instance_valid(selectedCard):
-					selectedCard.cardNode.card.onAttack(slot, self)
-					slot.cardNode.card.onBeingAttacked(selectedCard, self)
-					selectedCard.cardNode.attack(slot.global_position + (selectedCard.cardNode.global_position - slot.global_position).normalized() * cardHeight, slot)
 					
+				var slots = []
+				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+					slots = slot.getNeighbors()
+				else:
+					slots = [slot]
 					
-					if is_instance_valid(selectedCard.cardNode):
-						selectedCard.cardNode.rotation = 0
-						selectRotTimer = 0
-						
-					selectedCard = null
-				elif is_instance_valid(selectedCard):
-#					var foundCreature = false
-#					for s in creatures[slot.playerID]:
-#						if is_instance_valid(s.cardNode):
-#							foundCreature = true
-#					if not foundCreature:
-					for p in players:
-						if p.UUID == slot.playerID:
-							selectedCard.cardNode.card.onAttack(null, self)
-							selectedCard.cardNode.attack(slot.global_position + (selectedCard.cardNode.global_position - slot.global_position).normalized() * cardHeight, slot)
-							selectedCard.cardNode.rotation = 0
-							selectRotTimer = 0
-							selectedCard = null
+				selectedCard.cardNode.attack(self, slots)
+				if is_instance_valid(selectedCard.cardNode):
+					selectedCard.cardNode.rotation = 0
+					selectRotTimer = 0
+				selectedCard = null
 							
 	#CODE IS ONLY REACHABLE IF NOT RETURNED
 	if Settings.gameMode == GAME_MODE.PLAYING:
