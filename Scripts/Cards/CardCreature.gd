@@ -39,7 +39,7 @@ func addCreatureToBoard(card, board):
 				slot.cardNode = cardPlacing
 				cardPlacing.slot = slot
 				
-				card.onEnter(board)
+				card.onEnter(board, slot)
 				
 				return
 

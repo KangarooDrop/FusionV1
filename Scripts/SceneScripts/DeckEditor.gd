@@ -1,6 +1,6 @@
 extends Node2D
 	
-var slotPageWidth = 4
+var slotPageWidth = 6
 var slotPageHeight = 3
 var slotPageNum = slotPageWidth * slotPageHeight
 
@@ -26,11 +26,11 @@ func clearPages():
 	slotViewing = null
 	slotReturning = null
 
-	for p in pages:
-		for s in p.get_children():
+	while pages.size() > 0:
+		for s in pages[0].get_children():
 			s.queue_free()
-		p.queue_free()
-		pages.erase(p)
+		pages[0].queue_free()
+		pages.erase(pages[0])
 
 func setSortOrder(order : int):
 	sortOrder = order
@@ -86,15 +86,22 @@ func sort():
 			cardsToAdd.append(highest)
 			listOfCards.erase(highest)
 				
-
-	var remainder = slotPageNum - (cardsToAdd.size() % slotPageNum)
+	var mod
+	if cardsToAdd.size() == 0:
+		mod = 0
+	elif cardsToAdd.size() % slotPageNum == 0:
+		mod = slotPageNum
+	else:
+		mod = cardsToAdd.size() % slotPageNum
+		
+	var remainder = slotPageNum - mod
 	for i in range(remainder):
 		cardsToAdd.append(null)
 			
 	for i in range(cardsToAdd.size() / slotPageNum):
 		var page = Node2D.new()
 		page.name = "page_" + str(i)
-		add_child(page)
+		$PageHolder.add_child(page)
 		page.visible = false
 		pages.append(page)
 		for j in range(slotPageNum):
@@ -124,7 +131,7 @@ func _physics_process(delta):
 	if slotViewing != null:
 		if viewTimer < viewMaxTime:
 			viewTimer += delta
-			slotViewing.cardNode.position = lerp(slotViewing.global_position, Vector2(), viewTimer / viewMaxTime)
+			slotViewing.cardNode.global_position = lerp(slotViewing.global_position, $PageHolder.position, viewTimer / viewMaxTime)
 			#slotViewing.cardNode.scale.x = cos(abs(2 * PI * viewTimer / viewMaxTime))
 			slotViewing.cardNode.scale = lerp(Vector2(1, 1), Vector2(viewScale, viewScale), viewTimer / viewMaxTime)
 		else:
@@ -140,7 +147,7 @@ func _physics_process(delta):
 				slotReturning.cardNode.z_index -= 1
 				slotReturning = null
 			else:
-				slotReturning.cardNode.global_position = lerp(Vector2(), slotReturning.global_position, returnTimer / returnMaxTime)
+				slotReturning.cardNode.global_position = lerp($PageHolder.position, slotReturning.global_position, returnTimer / returnMaxTime)
 				slotReturning.cardNode.scale = lerp(Vector2(viewScale, viewScale), Vector2(1, 1), returnTimer / returnMaxTime)
 
 func onSlotEnter(slot : CardSlot):
@@ -151,7 +158,7 @@ func onSlotExit(slot : CardSlot):
 	
 var slotViewing = null
 var viewTimer = 0
-var viewMaxTime = 0.3
+var viewMaxTime = 0.15
 var viewScale = 3
 var slotReturning = null
 var returnTimer = 0

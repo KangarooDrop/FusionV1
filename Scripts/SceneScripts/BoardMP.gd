@@ -739,6 +739,11 @@ func nextTurn():
 		selectedCard.cardNode.rotation = 0
 		selectedCard = null
 		
+	for p in players:
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.checkState(self)
+		
 	######################	ON END OF TURN EFFECTS
 	for slot in boardSlots:
 		if is_instance_valid(slot.cardNode):

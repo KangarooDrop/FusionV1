@@ -34,5 +34,8 @@ func onAttack(blocker, board):
 func onBeingAttacked(attacker, board):
 	pass
 
+func onFusion(card):
+	pass
+	
 func _to_string():
 	return name + " - " + desc

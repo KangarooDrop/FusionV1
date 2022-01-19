@@ -319,6 +319,8 @@ __meta__ = {
 current = true
 
 [node name="PageHolder" type="Node2D" parent="."]
+position = Vector2( 0, 32 )
+scale = Vector2( 1.5, 1.5 )
 
 [node name="FusionPreview" type="Node2D" parent="."]
 position = Vector2( 0, 192 )

@@ -56,6 +56,9 @@ func onEndOfTurn(board):
 	for abl in abilities:
 		abl.onEndOfTurn(board)
 				
+func onFusion(card):
+	for abl in abilities:
+		abl.onFusion(card)
 
 
 func _to_string() -> String:

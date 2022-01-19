@@ -83,6 +83,7 @@ func _ready():
 	cardList.append(CardCreature.new({"name":"Legionstones", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/Rocks.png", "power":0, "toughness":2, "creature_type":[CardCreature.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
 	cardList.append(CardCreature.new({"name":"Badger", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
 	cardList.append(CardCreature.new({"name":"Bonelord", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":1, "creature_type":[CardCreature.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
+	cardList.append(CardCreature.new({"name":"Slime", "card_type":Card.CARD_TYPE.Creature, "tex":"res://Art/portraits/BoneLord.png", "power":0, "toughness":0, "creature_type":[CardCreature.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityDegenerate]}))
 	
 	
 	
@@ -172,6 +173,9 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 		cardNew.abilities.clear()
 		for abl in (cardA.abilities + cardB.abilities):
 			cardNew.abilities.append(abl.get_script().new(cardNew))
+		cardNew.hasAttacked = cardA.hasAttacked
+		cardA.onFusion(cardNew)
+		cardB.onFusion(cardNew)
 		return cardNew
 	else:
 		return cardB

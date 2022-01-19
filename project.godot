@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityDash.gd"
 }, {
 "base": "Ability",
+"class": "AbilityDegenerate",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityDegenerate.gd"
+}, {
+"base": "Ability",
 "class": "AbilityPhalanx",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityPhalanx.gd"
@@ -107,6 +112,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Ability": "",
 "AbilityDash": "",
+"AbilityDegenerate": "",
 "AbilityPhalanx": "",
 "AbilityProduction": "",
 "AbilityPronged": "",
