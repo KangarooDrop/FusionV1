@@ -59,10 +59,10 @@ func getCardVisible() -> bool:
 
 func _physics_process(delta):
 	if card != null:
-		$Label.text = str(card.power) + "/" + str(card.toughness)
+		$Label.text = str(card.power) + " / " + str(card.toughness)
 		
 	if is_instance_valid(card) and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
-		$CardBackground.texture = (ListOfCards.cardBackground if card.hasAttacked else ListOfCards.cardBackgroundActive)
+		$CardBackground.texture = (ListOfCards.cardBackground if (card.hasAttacked or not card.canAttackThisTurn) else ListOfCards.cardBackgroundActive)
 		
 	if flipping:
 		flipTimer += delta

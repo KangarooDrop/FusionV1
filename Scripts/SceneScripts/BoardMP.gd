@@ -14,13 +14,13 @@ var cardDists = 16
 var creatures : Dictionary
 var graves : Dictionary
 var decks : Dictionary
-var fusionHolders : Dictionary
 
 var boardSlots : Array
 
 var players : Array
 var activePlayer := -1
-var playedThisTurn = false
+var cardsPerTurn = 2#99
+var cardsPlayed = 0
 
 onready var creatures_A_Holder = $Creatures_A
 onready var creatures_B_Holder = $Creatures_B
@@ -28,8 +28,6 @@ onready var graveHolder = $GraveHolder
 onready var deckHolder = $DeckHolder
 onready var card_A_Holder = $Card_A_Holder
 onready var card_B_Holder = $Card_B_Holder
-onready var fusion_A_Holder = $Fusion_A_Holder
-onready var fusion_B_Holder = $Fusion_B_Holder
 
 var cardsHolding : Array
 var selectedCard : CardSlot
@@ -299,6 +297,7 @@ func _physics_process(delta):
 							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					hoverTimer = 0
 					shownHover = false
+					cardNode.checkState(self)
 	
 	if hoveringOn != null:
 		if not shownHover:
@@ -424,8 +423,6 @@ func initZones():
 	cardNodeInst.position = cardInst.position
 	decks[p.UUID] = cardInst
 	
-	fusionHolders[p.UUID] = fusion_A_Holder
-	
 	
 	#	PLAYER 2 SLOTS  	#
 	p = players[1]
@@ -468,8 +465,6 @@ func initZones():
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.position = cardInst.position
 	decks[p.UUID] = cardInst
-		
-	fusionHolders[p.UUID] = fusion_B_Holder
 	
 		
 func initHands():
@@ -523,13 +518,15 @@ func onSlotEnter(slot : CardSlot):
 	
 	if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
 		if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
-			hoveringOn.cardNode.position.y -= 5
+			if cardsPlayed < cardsPerTurn:
+				hoveringOn.cardNode.position.y -= 5
 		
 func onSlotExit(slot : CardSlot):
 	if slot == hoveringOn:
 		if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
 			if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
-				hoveringOn.cardNode.position.y += 5
+				if cardsPlayed < cardsPerTurn:
+					hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
 		shownHover = false
 		if is_instance_valid(hoveringWindow):
@@ -560,6 +557,152 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 	#
 		
 	if button_index == 1:
+		if slot.currentZone == CardSlot.ZONES.HAND:
+			if slot.playerID == players[activePlayer].UUID:
+				#ADDING CARDS TO THE FUSION LIST
+				if slot.playerID != players[0].UUID and not fromServer:
+					return
+				
+				if is_instance_valid(selectedCard):
+					selectedCard.cardNode.rotation = 0
+					selectRotTimer = 0
+					selectedCard = null
+				
+				if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
+					if cardsHolding.has(slot):
+						cardsHolding.erase(slot)
+						slot.position.y += cardDists
+						if hoveringOn != null:
+							onSlotExit(slot)
+						slot.cardNode.position.y = slot.position.y
+					else:
+						if cardsPerTurn - cardsPlayed - cardsHolding.size() > 0:
+							cardsHolding.append(slot)
+							slot.position.y -= cardDists
+							slot.cardNode.position.y = slot.position.y
+		elif slot.currentZone == CardSlot.ZONES.CREATURE:
+			if cardsHolding.size() > 0:
+				#PUTTING A CREATURE ONTO THE FIELD
+				
+				var cardList = []
+				if is_instance_valid(slot.cardNode):
+					cardList.append(slot.cardNode.card)
+				for c in cardsHolding:
+					cardList.append(c.cardNode.card)
+					
+				cardsPlayed += cardsHolding.size()
+					
+				if Settings.playAnimations:
+					if is_instance_valid(slot.cardNode):
+						if not slot.cardNode.card.canFuseThisTurn:
+							return
+						else:
+							if slot == selectedCard:
+								selectedCard.cardNode.rotation = 0
+								selectRotTimer = 0
+								selectedCard = null
+							cardsHolding.insert(0, slot)
+						
+					while cardsHolding.size() > 0:
+						var c = cardsHolding[0]
+						var cardNode = c.cardNode
+						cardNode.setCardVisible(true)
+						cardsHolding.erase(c)
+						fuseQueue.append(cardNode)
+						cardNode.get_parent().remove_child(cardNode)
+						$Fusion_Holder.add_child(cardNode)
+						cardNode.position = Vector2()
+						c.cardNode = null
+						card_A_Holder.cardNodes.erase(cardNode)
+						card_B_Holder.cardNodes.erase(cardNode)
+						if c.currentZone == CardSlot.ZONES.HAND:
+							card_A_Holder.cardSlotNodes.erase(c)
+							card_B_Holder.cardSlotNodes.erase(c)
+							c.queue_free()
+					
+					fuseStartPos = fuseQueue[0].global_position
+					fuseEndSlot = slot
+					fuseTimer = 0
+					fuseReturnTimer = 0
+					
+					
+					card_A_Holder.centerCards(cardWidth, cardDists)
+					card_B_Holder.centerCards(cardWidth, cardDists)
+					centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
+					
+					fuseWaiting = true
+					fuseWaitTimer = 0
+				else:
+				
+					if is_instance_valid(slot.cardNode):
+						if not slot.cardNode.card.canFuseThisTurn:
+							return
+						cardsHolding.insert(0, slot)
+						
+					while cardsHolding.size() > 0:
+						var c = cardsHolding[0]
+						cardsHolding.remove(0)
+						var cardNode = c.cardNode
+						cardNode.get_parent().remove_child(cardNode)
+						card_A_Holder.cardNodes.erase(cardNode)
+						card_B_Holder.cardNodes.erase(cardNode)
+						if c.currentZone == CardSlot.ZONES.HAND:
+							card_A_Holder.cardSlotNodes.erase(c)
+							card_B_Holder.cardSlotNodes.erase(c)
+							c.queue_free()
+							
+					var newCard = ListOfCards.fuseCards(cardList)
+					var cardPlacing = cardNode.instance()
+					newCard.playerID = slot.playerID
+					cardPlacing.card = newCard
+					cardPlacing.checkState(self)
+					creatures_A_Holder.add_child(cardPlacing)
+					cardPlacing.global_position = slot.global_position
+					cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+					if is_instance_valid(slot.cardNode):
+						slot.cardNode.queue_free()
+					slot.cardNode = cardPlacing
+					cardPlacing.slot = slot
+					
+					newCard.onEnter(self, slot)
+					for s in creatures[slot.playerID]:
+						if is_instance_valid(s.cardNode):
+							s.cardNode.card.onOtherEnter(self, slot)
+					
+					card_A_Holder.centerCards(cardWidth, cardDists)
+					card_B_Holder.centerCards(cardWidth, cardDists)
+						
+			else:
+				if slot.playerID == players[activePlayer].UUID:
+					#ATTACKING
+					if is_instance_valid(slot) and selectedCard == slot:
+						selectedCard.cardNode.rotation = 0
+						selectRotTimer = 0
+						selectedCard = null
+					else:
+						if is_instance_valid(slot.cardNode) and (not slot.cardNode.card.hasAttacked and slot.cardNode.card.canAttackThisTurn):
+							if is_instance_valid(selectedCard):
+								selectedCard.cardNode.rotation = 0
+							selectRotTimer = 0
+							selectedCard = slot
+				else:
+					if is_instance_valid(selectedCard):
+						var slots = []
+						if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+							slots = slot.getNeighbors()
+						else:
+							slots = [slot]
+							
+						selectedCard.cardNode.attack(self, slots)
+						if is_instance_valid(selectedCard.cardNode):
+							selectedCard.cardNode.rotation = 0
+							selectRotTimer = 0
+						selectedCard = null
+					
+		
+		
+		
+		"""
 		if slot.playerID == players[activePlayer].UUID or slot.playerID == -1:
 			if slot.currentZone == CardSlot.ZONES.HAND:
 				#ADDING CARDS TO THE FUSION LIST
@@ -594,6 +737,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					if Settings.playAnimations:
 					
 						if is_instance_valid(slot.cardNode):
+							if not slot.cardNode.card.canFuseThisTurn:
+								return
 							cardsHolding.insert(0, slot)
 							
 						while cardsHolding.size() > 0:
@@ -628,7 +773,12 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 						fuseWaitTimer = 0
 						playedThisTurn = true
 					else:
-
+					
+						if is_instance_valid(slot.cardNode):
+							if not slot.cardNode.card.canFuseThisTurn:
+								return
+							cardsHolding.insert(0, slot)
+							
 						while cardsHolding.size() > 0:
 							var c = cardsHolding[0]
 							cardsHolding.remove(0)
@@ -668,7 +818,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 						selectRotTimer = 0
 						selectedCard = null
 					else:
-						if is_instance_valid(slot.cardNode) and not slot.cardNode.card.hasAttacked:
+						if is_instance_valid(slot.cardNode) and (not slot.cardNode.card.hasAttacked and slot.cardNode.card.canAttackThisTurn):
 							if is_instance_valid(selectedCard):
 								selectedCard.cardNode.rotation = 0
 							selectRotTimer = 0
@@ -694,6 +844,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					selectedCard.cardNode.rotation = 0
 					selectRotTimer = 0
 				selectedCard = null
+	"""
 							
 	#CODE IS ONLY REACHABLE IF NOT RETURNED
 	if Settings.gameMode == GAME_MODE.PLAYING:
@@ -733,7 +884,6 @@ func nextTurn():
 	if gameOver:
 		return
 	#Engine.time_scale = 0.1
-	print("NEXT TURN")
 	if Settings.gameMode == GAME_MODE.PLAYING:
 		dataLog.append("NEXT_TURN")
 	
@@ -756,7 +906,7 @@ func nextTurn():
 			slot.cardNode.card.onEndOfTurn(self)
 	######################
 		
-	playedThisTurn = false
+	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
 	players[activePlayer].hand.drawCard()
 		

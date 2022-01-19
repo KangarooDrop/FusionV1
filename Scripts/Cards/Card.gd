@@ -16,6 +16,8 @@ var power : int
 var toughness : int
 
 var hasAttacked = true
+var canAttackThisTurn = true
+var canFuseThisTurn = true
 
 var params
 
@@ -41,32 +43,36 @@ func _init(params):
 	toughness = params["toughness"]
 	if params.has("has_attacked"):
 		hasAttacked = params["has_attacked"]
+	if params.has("can_attack"):
+		canAttackThisTurn = params["can_attack"]
 	
 func onEnter(board, slot):
 	cardNode = slot.cardNode
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onEnter(board, slot)
 	
 func onOtherEnter(board, slot):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onOtherEnter(board, slot)
 	
 func onOtherDeath(board, slot):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onOtherDeath(board, slot)
 	
 func onDeath(board):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onDeath(board)
 	
 func onStartOfTurn(board):
 	if board.players[board.activePlayer].UUID == playerID:
 		hasAttacked = false
-	for abl in abilities:
+		canAttackThisTurn = true
+		canFuseThisTurn = true
+	for abl in abilities.duplicate():
 		abl.onStartOfTurn(board)
 
 func onEndOfTurn(board):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onEndOfTurn(board)
 				
 func onFusion(card):
@@ -76,11 +82,12 @@ func onFusion(card):
 	
 func onAttack(blocker, board):
 	hasAttacked = true
-	for abl in abilities:
+	canAttackThisTurn = false
+	for abl in abilities.duplicate():
 		abl.onAttack(blocker, board)
 	
 func onBeingAttacked(attacker, board):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onBeingAttacked(attacker, board)
 	
 func addCreatureToBoard(card, board):
@@ -116,6 +123,7 @@ func serialize() -> Dictionary:
 	rtn["power"] = power
 	rtn["toughness"] = toughness
 	rtn["has_attacked"] = hasAttacked
+	rtn["can_attack"] = canAttackThisTurn
 	return rtn
 
 func getHoverData() -> String:
@@ -125,7 +133,7 @@ func getHoverData() -> String:
 	for i in range(creatureType.size()):
 		string += CREATURE_TYPE.keys()[creatureType[i]].to_lower().capitalize()
 		if i < creatureType.size() - 1:
-			string += "/"
+			string += " / "
 			
 	for abl in abilities:
 		string += "\n" + str(abl)

@@ -84,7 +84,8 @@ func _ready():
 	cardList.append(Card.new({"name":"Badger", "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
 	cardList.append(Card.new({"name":"Bonelord", "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
 	cardList.append(Card.new({"name":"Slime", "tex":"res://Art/portraits/BoneLord.png", "power":0, "toughness":0, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityDegenerate]}))
-	
+	cardList.append(Card.new({"name":"Frostling", "tex":"res://Art/portraits/Snowflake.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityFrozen]}))
+	cardList.append(Card.new({"name":"Blighted", "tex":"res://Art/portraits/ToasterToilet.png", "power":-2, "toughness":-2, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[]}))
 	
 	
 	for i in range(cardList.size()):
@@ -146,39 +147,37 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	elif uniques.size() == 2:
 		types = uniques
 	else:
-		return cardB
+		return cardA
 	
 	var numTypes = types.size()
-	if numTypes <= 2:
-		var newIndex
-		match numTypes:
-			0:
-				newIndex = fusionList[0]
-			1:
-				newIndex = fusionList[1][types[0]]
-			2:
-				newIndex = fusionList[2][types[0]][types[1]]
-				if newIndex == null:
-					newIndex = fusionList[2][types[1]][types[0]]
-		
-		if newIndex == -1:
-			if cardA.creatureType.has(Card.CREATURE_TYPE.Null):
-				newIndex = cardB.UUID
-			else:
-				newIndex = cardA.UUID
-		
-		var cardNew = ListOfCards.getCard(newIndex)
-		cardNew.power = cardA.power + cardB.power
-		cardNew.toughness = cardA.toughness + cardB.toughness
-		cardNew.abilities.clear()
-		for abl in (cardA.abilities + cardB.abilities):
-			cardNew.abilities.append(abl.get_script().new(cardNew))
-		cardNew.hasAttacked = cardA.hasAttacked
-		cardA.onFusion(cardNew)
-		cardB.onFusion(cardNew)
-		return cardNew
-	else:
-		return cardB
+	var newIndex
+	match numTypes:
+		0:
+			newIndex = fusionList[0]
+		1:
+			newIndex = fusionList[1][types[0]]
+		2:
+			newIndex = fusionList[2][types[0]][types[1]]
+			if newIndex == null:
+				newIndex = fusionList[2][types[1]][types[0]]
+	
+	if newIndex == -1:
+		if cardA.creatureType.has(Card.CREATURE_TYPE.Null):
+			newIndex = cardB.UUID
+		else:
+			newIndex = cardA.UUID
+	
+	var cardNew = ListOfCards.getCard(newIndex)
+	cardNew.power = cardA.power + cardB.power
+	cardNew.toughness = cardA.toughness + cardB.toughness
+	cardNew.abilities.clear()
+	for abl in (cardA.abilities + cardB.abilities):
+		cardNew.abilities.append(abl.get_script().new(cardNew))
+	cardNew.hasAttacked = cardA.hasAttacked
+	cardNew.canAttackThisTurn = cardA.canAttackThisTurn
+	cardA.onFusion(cardNew)
+	cardB.onFusion(cardNew)
+	return cardNew
 
 func hasAbility(card : Card, abl) -> bool:
 	var hasAbl = false

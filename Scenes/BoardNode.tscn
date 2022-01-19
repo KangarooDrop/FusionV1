@@ -33,8 +33,4 @@ position = Vector2( -350, 100 )
 [node name="HealthNode2" parent="." instance=ExtResource( 3 )]
 position = Vector2( -350, -100 )
 
-[node name="Fusion_A_Holder" type="Node2D" parent="."]
-position = Vector2( 0, 200 )
-
-[node name="Fusion_B_Holder" type="Node2D" parent="."]
-position = Vector2( 0, -200 )
+[node name="Fusion_Holder" type="Node2D" parent="."]

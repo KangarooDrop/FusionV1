@@ -52,11 +52,12 @@ func sort():
 				var typesToComp = []
 				if i != 0:
 					typesToComp.append(i)
-				if j != 0:
-					typesToComp.append(j)
 					
 				for c in listOfCards:
 					var hasAll = true
+					for t in typesToComp:
+						if not c.creatureType.has(t):
+							hasAll = false
 					for t in c.creatureType:
 						if not typesToComp.has(t):
 							hasAll = false
