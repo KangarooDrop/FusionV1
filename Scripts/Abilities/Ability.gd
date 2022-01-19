@@ -16,6 +16,9 @@ func onEnter(board, slot):
 func onOtherEnter(board, slot):
 	pass
 	
+func onOtherDeath(board, slot):
+	pass
+	
 func onDeath(board):
 	pass
 	

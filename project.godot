@@ -45,6 +45,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilitySacrifice.gd"
 }, {
 "base": "Ability",
+"class": "AbilityScavenge",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityScavenge.gd"
+}, {
+"base": "Ability",
 "class": "AbilityTough",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTough.gd"
@@ -107,6 +112,7 @@ _global_script_class_icons={
 "AbilityPronged": "",
 "AbilityRampage": "",
 "AbilitySacrifice": "",
+"AbilityScavenge": "",
 "AbilityTough": "",
 "AbilityWisdom": "",
 "BoardMP": "",

@@ -166,6 +166,9 @@ func fight(slot, board, damageSelf = true):
 func checkState(board):
 	if card.toughness <= 0:
 		card.onDeath(board)
+		for s in board.creatures[slot.playerID]:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onOtherDeath(board, slot)
 		self.slot.cardNode = null
 		queue_free()
 				

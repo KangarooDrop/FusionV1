@@ -40,6 +40,10 @@ func onOtherEnter(board, slot):
 	for abl in abilities:
 		abl.onOtherEnter(board, slot)
 	
+func onOtherDeath(board, slot):
+	for abl in abilities:
+		abl.onOtherDeath(board, slot)
+	
 func onDeath(board):
 	for abl in abilities:
 		abl.onDeath(board)
