@@ -173,5 +173,5 @@ func checkState(board):
 		queue_free()
 				
 func _exit_tree():
-	if slot != null:
+	if is_instance_valid(slot) and is_instance_valid(slot.board):
 		slot.board.onSlotExit(slot)

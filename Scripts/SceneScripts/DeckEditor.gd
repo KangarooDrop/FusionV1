@@ -16,12 +16,76 @@ var pages := []
 
 var hasSaved = true
 
+enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
+var sortOrder : int = SORT_ORDER.POWER
+
 func _ready():
-	var cardsToAdd := []
+	sort()
+
+func clearPages():
+	slotViewing = null
+	slotReturning = null
+
+	for p in pages:
+		for s in p.get_children():
+			s.queue_free()
+		p.queue_free()
+		pages.erase(p)
+
+func setSortOrder(order : int):
+	sortOrder = order
+	sort()
+
+func sort():
+	clearPages()
+	
+	var listOfCards := []
 	for i in range(ListOfCards.cardList.size()):
 		var c = ListOfCards.getCard(i)
 		if c.tier <= 1:
-			cardsToAdd.append(c)
+			listOfCards.append(c)
+	
+	var cardsToAdd = []
+	if sortOrder == SORT_ORDER.TYPE or sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
+		for i in CardCreature.CREATURE_TYPE.values():
+			for j in CardCreature.CREATURE_TYPE.values():
+				var typesToComp = []
+				if i != 0:
+					typesToComp.append(i)
+				if j != 0:
+					typesToComp.append(j)
+					
+				for c in listOfCards:
+					var hasAll = true
+					for t in c.creatureType:
+						if not typesToComp.has(t):
+							hasAll = false
+					if hasAll:
+						cardsToAdd.append(c)
+						listOfCards.erase(c)
+	if sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
+		for c in cardsToAdd:
+			listOfCards.append(c)
+		cardsToAdd = []
+		while listOfCards.size() > 0:
+			var highest = null
+			for c in listOfCards:
+				if highest == null:
+					highest = c
+				else:
+					var compA
+					var compB
+					if sortOrder == SORT_ORDER.POWER:
+						compA = highest.power
+						compB = c.power
+					elif sortOrder == SORT_ORDER.TOUGHNESS:
+						compA = highest.toughness
+						compB = c.toughness
+					if compB > compA:
+						highest = c
+			cardsToAdd.append(highest)
+			listOfCards.erase(highest)
+				
 
 	var remainder = slotPageNum - (cardsToAdd.size() % slotPageNum)
 	for i in range(remainder):
@@ -288,10 +352,9 @@ func deckModified():
 	
 func setCurrentPage(newPage : int):
 	newPage = max(min(newPage, pages.size() - 1), 0)
-	if newPage != currentPage:
-		pages[currentPage].visible = false
-		currentPage = newPage
-		pages[newPage].visible = true
+	pages[currentPage].visible = false
+	currentPage = newPage
+	pages[newPage].visible = true
 	
 func getCurrentPage() -> int:
 	return currentPage
