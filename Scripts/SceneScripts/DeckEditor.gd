@@ -175,15 +175,16 @@ func createHoverNode(position : Vector2, text : String):
 	infoWindow = hoverInst
 	
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
-	if button_index == 1:
-		if slot.cardNode != null and slotViewing == null:
-			$DeckDisplay.addCard(slot.cardNode.card.UUID)
-			return
-	elif button_index == 2:
-		if slotViewing == null and slot.cardNode != null:
-			slotViewing = slot
-			slotViewing.cardNode.z_index += 2
-			viewTimer = 0
+	if not $SaveDisplay.visible and not $FileDisplay.visible and not $ConfirmNode.visible and not $ConfirmDeleteNode.visible:
+		if button_index == 1:
+			if slot.cardNode != null and slotViewing == null:
+				$DeckDisplay.addCard(slot.cardNode.card.UUID)
+				return
+		elif button_index == 2:
+			if slotViewing == null and slot.cardNode != null:
+				slotViewing = slot
+				slotViewing.cardNode.z_index += 2
+				viewTimer = 0
 	
 func onLoadPressed():
 	confirmType = CONFIRM_TYPES.LOAD
@@ -194,6 +195,7 @@ func onLoadPressed():
 		
 func onSavePressed():
 	$SaveDisplay.visible = true
+	$SaveDisplay/Background/LineEdit.grab_focus()
 	
 enum CONFIRM_TYPES {NONE, NEW, EXIT, LOAD, DELETE}
 var confirmType = CONFIRM_TYPES.NONE
@@ -204,6 +206,10 @@ func onNewPressed():
 		$ConfirmNode.visible = true
 	else:
 		onConfirmYesPressed()
+	
+func onSaveEnter(s : String):
+	onFileSaveButtonPressed()
+	print("E")
 	
 func onExitPressed():
 	confirmType = CONFIRM_TYPES.EXIT

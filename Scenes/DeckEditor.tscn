@@ -328,6 +328,7 @@ position = Vector2( 0, 192 )
 [node name="DeckDisplay" parent="." instance=ExtResource( 2 )]
 position = Vector2( 300, -200 )
 
+[connection signal="text_entered" from="SaveDisplay/Background/LineEdit" to="." method="onSaveEnter"]
 [connection signal="pressed" from="SaveDisplay/Background/SaveButton" to="." method="onFileSaveButtonPressed"]
 [connection signal="pressed" from="SaveDisplay/Background/BackButton" to="." method="onFileSaveBackPressed"]
 [connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]

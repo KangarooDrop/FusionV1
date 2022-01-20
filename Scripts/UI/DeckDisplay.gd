@@ -108,11 +108,12 @@ func removeCard(index : int) -> bool:
 
 func onDeckDataClicked(d) -> bool:
 	var index = -1
-	for i in range(data.size()):
-		if data[i] == d:
-			index = i
-			break
-	if index != null:
+	if not get_parent().get_node("SaveDisplay").visible and not get_parent().get_node("FileDisplay").visible and not get_parent().get_node("ConfirmNode").visible and not get_parent().get_node("ConfirmDeleteNode").visible:
+		for i in range(data.size()):
+			if data[i] == d:
+				index = i
+				break
+	if index != -1:
 		return removeCard(index)
 	else:
 		return false
