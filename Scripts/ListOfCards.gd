@@ -81,7 +81,7 @@ func _ready():
 	
 	cardList.append(Card.new({"name":"Spitfire", "tex":"res://Art/portraits/FireBob.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
 	cardList.append(Card.new({"name":"Legionstones", "tex":"res://Art/portraits/Rocks.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
-	cardList.append(Card.new({"name":"Badger", "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
+	cardList.append(Card.new({"name":"Badger", "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
 	cardList.append(Card.new({"name":"Bonelord", "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
 	cardList.append(Card.new({"name":"Slime", "tex":"res://Art/portraits/slime.png", "power":0, "toughness":0, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityDegenerate]}))
 	cardList.append(Card.new({"name":"Frostling", "tex":"res://Art/portraits/Snowflake.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityFrozen]}))
@@ -175,7 +175,8 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	cardNew.toughness = cardA.toughness + cardB.toughness
 	cardNew.abilities.clear()
 	for abl in (cardA.abilities + cardB.abilities):
-		cardNew.abilities.append(abl.get_script().new(cardNew))
+		cardNew.abilities.append(abl.clone(cardNew))
+	cardNew.trimAbilities()
 	cardNew.hasAttacked = cardA.hasAttacked
 	cardNew.canAttackThisTurn = cardA.canAttackThisTurn
 	cardA.onFusion(cardNew)

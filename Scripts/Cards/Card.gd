@@ -127,12 +127,56 @@ func copyBase() -> Card:
 	return get_script().new(null)
 	
 func serialize() -> Dictionary:
-	var rtn = {"id":UUID, "player_id":playerID}
+	var rtn = {}
+	rtn["id"] = UUID
+	rtn["name"] = name
+	rtn["tier"] = tier
+	rtn["tex"] = texture.resource_path
+	rtn["player_id"] = playerID
 	rtn["power"] = power
 	rtn["toughness"] = toughness
 	rtn["has_attacked"] = hasAttacked
 	rtn["can_attack"] = canAttackThisTurn
+	rtn["abilities"] = []
+	for abl in abilities:
+		rtn["abilities"].append(abl.get_script())
+	rtn["creature_type"] = creatureType
+	
 	return rtn
+
+static func areIdentical(dict1 : Dictionary, dict2 : Dictionary) -> bool:
+	var keys1 = dict1.keys()
+	var keys2 = dict2.keys()
+	
+	for k in keys1:
+		if not dict2.has(k):
+			return false
+		else:
+			if k == "abilities":
+				var a1 = dict1[k]
+				var a2 = dict2[k]
+				for abl in a1:
+					if not a2.has(abl):
+						return false
+				for abl in a2:
+					if not a1.has(abl):
+						return false
+					
+			else:
+				if dict1[k] != dict2[k]:
+					return false
+					
+	for k in keys2:
+		if not dict1.has(k):
+			return false
+		else:
+			if k == "abilities":
+				pass
+			else:
+				if dict1[k] != dict2[k]:
+					return false
+	
+	return true
 
 func getHoverData() -> String:
 	var string = name + "\n"
@@ -147,3 +191,18 @@ func getHoverData() -> String:
 		string += "\n" + str(abl)
 		
 	return string
+
+func trimAbilities():
+	var newAbilities = []
+	while abilities.size() > 0:
+		var foundAbility = false
+		for abl in abilities:
+			if abl != abilities[0] and abl is abilities[0].get_script():
+				abilities[0].combine(abl)
+				abilities.erase(abl)
+				foundAbility = true
+				break
+		if not foundAbility:
+			newAbilities.append(abilities[0])
+			abilities.remove(0)
+	abilities = newAbilities

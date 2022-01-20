@@ -160,24 +160,12 @@ func fight(slot, board, damageSelf = true):
 				if p.UUID == slot.playerID:
 					p.takeDamage(-slot.cardNode.card.toughness, self)
 		
-		checkState(board)
-		slot.cardNode.checkState(board)
 	else:
 		for p in slot.board.players:
 			if p.UUID == slot.playerID:
 				p.takeDamage(card.power, self)
 				
-				
-func checkState(board):
-	if card.toughness <= 0:
-		card.onLeave(board)
-		card.onDeath(board)
-		for s in board.creatures[slot.playerID]:
-			if is_instance_valid(s.cardNode) and s != slot:
-				s.cardNode.card.onOtherLeave(board, slot)
-				s.cardNode.card.onOtherDeath(board, slot)
-		self.slot.cardNode = null
-		queue_free()
+	board.checkState()
 				
 func _exit_tree():
 	if is_instance_valid(slot) and is_instance_valid(slot.board):

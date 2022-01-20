@@ -1,5 +1,14 @@
 extends Control
 
+func _ready():
+	var c1 = ListOfCards.getCard(0)
+	var d1 = c1.serialize()
+	print(d1)
+	c1.power += 1
+	var d2 = c1.serialize()
+	print(d2)
+	print(Card.areIdentical(d1, d2))
+
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")
 	if error != 0:

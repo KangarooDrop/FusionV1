@@ -43,5 +43,12 @@ func onBeingAttacked(attacker, board):
 func onFusion(card):
 	pass
 	
+func combine(abl : Ability):
+	pass
+	
 func _to_string():
 	return name + " - " + desc
+
+func clone(card : Card) -> Ability:
+	var abl = get_script().new(card)
+	return abl

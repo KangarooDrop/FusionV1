@@ -297,7 +297,7 @@ func _physics_process(delta):
 							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					hoverTimer = 0
 					shownHover = false
-					cardNode.checkState(self)
+					checkState()
 	
 	if hoveringOn != null:
 		if not shownHover:
@@ -647,7 +647,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					var cardPlacing = cardNode.instance()
 					newCard.playerID = slot.playerID
 					cardPlacing.card = newCard
-					cardPlacing.checkState(self)
+					checkState()
 					creatures_A_Holder.add_child(cardPlacing)
 					cardPlacing.global_position = slot.global_position
 					cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -887,10 +887,7 @@ func nextTurn():
 		selectedCard.cardNode.rotation = 0
 		selectedCard = null
 		
-	for p in players:
-		for s in creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
-				s.cardNode.checkState(self)
+	checkState()
 		
 	######################	ON END OF TURN EFFECTS
 	for slot in boardSlots:
@@ -910,6 +907,47 @@ func nextTurn():
 	for slot in slotsToCheck:
 			slot.cardNode.card.onStartOfTurn(self)
 	######################
+
+func checkState():
+	var boardState = []
+	var slots = []
+	for p in players:
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				boardState.append(s.cardNode.card.serialize())
+			else:
+				boardState.append({})
+	
+	var creaturesDying = []
+	for p in players:
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				if s.cardNode.card.toughness <= 0:
+					creaturesDying.append(s.cardNode)
+				
+	for cardNode in creaturesDying:
+		cardNode.card.onLeave(self)
+		cardNode.card.onDeath(self)
+		for s in creatures[cardNode.slot.playerID]:
+			if is_instance_valid(s.cardNode) and s != cardNode.slot:
+				s.cardNode.card.onOtherLeave(self, cardNode.slot)
+				s.cardNode.card.onOtherDeath(self, cardNode.slot)
+		cardNode.slot.cardNode = null
+		cardNode.queue_free()
+		
+
+	var boardStateNew = []
+	for p in players:
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				boardStateNew.append(s.cardNode.card.serialize())
+			else:
+				boardStateNew.append({})
+				
+	for i in range(boardState.size()):
+		if not Card.areIdentical(boardState[i], boardStateNew[i]):
+			#yield(get_tree().create_timer(0.1), "timeout")
+			checkState()
 
 func onLoss(player : Player):
 	gameOver = true
