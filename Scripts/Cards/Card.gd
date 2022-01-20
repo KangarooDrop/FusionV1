@@ -38,9 +38,12 @@ func _init(params):
 		for abl in params["abilities"]:
 			abilities.append(abl.new(self))
 			
-	creatureType = params["creature_type"]
-	power = params["power"]
-	toughness = params["toughness"]
+	if params.has("creature_type"):
+		creatureType = params["creature_type"]
+	if params.has("power"):
+		power = params["power"]
+	if params.has("toughness"):
+		toughness = params["toughness"]
 	if params.has("has_attacked"):
 		hasAttacked = params["has_attacked"]
 	if params.has("can_attack"):

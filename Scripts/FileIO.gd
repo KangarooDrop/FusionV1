@@ -56,19 +56,16 @@ func getDataLog(path : String) -> Array:
 	
 
 func dumpDataLog(gameLog : Array, makeFolders = false) -> int:
-	var path = "user://dumps/"
-	var fileName = "game_dump_" + str(OS.get_system_time_msecs())  +".txt"
 	
 	if makeFolders:
 		var directory = Directory.new( )
-		directory.make_dir_recursive(path)
+		directory.make_dir_recursive(Settings.dumpPath)
 	
 	var file = File.new()
-	var error = file.open(path + fileName, File.WRITE)
+	var error = file.open(Settings.dumpPath + Settings.dumpFile, File.WRITE)
 	if error != 0:
 		if not makeFolders:
-			var errorNew = dumpDataLog(gameLog, true)
-			return errorNew
+			return dumpDataLog(gameLog, true)
 		else:
 			print("ERROR DUMPING GAME LOG")
 			return error

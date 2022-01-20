@@ -36,25 +36,32 @@ margin_right = 102.0
 margin_bottom = 20.0
 text = "Restart"
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="ReplayButton" type="Button" parent="VBoxContainer"]
 margin_top = 30.0
 margin_right = 102.0
 margin_bottom = 50.0
-text = "Back"
+text = "Save Replay"
 
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer"]
 margin_top = 60.0
 margin_right = 102.0
 margin_bottom = 80.0
-text = "To Main Menu"
+text = "Back"
 
-[node name="ExitButton" type="Button" parent="VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
 margin_top = 90.0
 margin_right = 102.0
 margin_bottom = 110.0
+text = "To Main Menu"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+margin_top = 120.0
+margin_right = 102.0
+margin_bottom = 140.0
 text = "Exit Game"
 
 [connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
+[connection signal="pressed" from="VBoxContainer/ReplayButton" to="." method="onSaveReplayPressed"]
 [connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]
 [connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="onMainMenuPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]

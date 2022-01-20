@@ -80,6 +80,9 @@ func drawCard():
 		deck.cardNode = null
 	if card != null:
 		addCard(card)
+	else:
+		addCard(ListOfCards.getCard(0))
+		player.takeDamage(1, null)
 
 func addCard(card : Card):
 	if card != null:

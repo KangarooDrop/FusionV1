@@ -8,6 +8,11 @@ func onRestartPressed():
 		Server.onRestart()
 	onBackPressed()
 
+func onSaveReplayPressed():
+	get_node("/root/main/SaveNode").visible = true
+	get_node("/root/main/SaveNode/SaveControl/LineEdit").grab_focus()
+	onBackPressed()
+	
 func onBackPressed():
 	visible = false
 

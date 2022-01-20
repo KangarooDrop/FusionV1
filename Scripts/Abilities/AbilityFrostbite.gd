@@ -6,7 +6,9 @@ func _init(card : Card).("Frostbite", "Inflicts Frozen on the enemy creature whe
 	pass
 	
 func onAttack(blocker, board):
-	blocker.card.abilities.append(AbilityFrozen.new(blocker.card))
+	if is_instance_valid(blocker.cardNode):
+		blocker.cardNode.card.abilities.append(AbilityFrozen.new(blocker.cardNode.card))
 	
 func onBeingAttacked(attacker, board):
-	attacker.card.abilities.append(AbilityFrozen.new(attacker.card))
+	if is_instance_valid(attacker.cardNode):
+		attacker.cardNode.card.abilities.append(AbilityFrozen.new(attacker.cardNode.card))

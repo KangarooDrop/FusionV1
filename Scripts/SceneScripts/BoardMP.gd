@@ -571,6 +571,21 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
 				
+				if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
+					return
+				##
+				if is_instance_valid(slot.cardNode):
+					var cardA = slot.cardNode.card
+					for c in cardsHolding:
+						var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
+						if Card.areIdentical(cardA.serialize(), cardB.serialize()):
+							return false
+						else:
+							cardA = cardB
+				##
+				
+				
+				
 				var cardList = []
 				if is_instance_valid(slot.cardNode):
 					cardList.append(slot.cardNode.card)
@@ -586,14 +601,11 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					
 				if Settings.playAnimations:
 					if is_instance_valid(slot.cardNode):
-						if not slot.cardNode.card.canFuseThisTurn:
-							return
-						else:
-							if slot == selectedCard:
-								selectedCard.cardNode.rotation = 0
-								selectRotTimer = 0
-								selectedCard = null
-							cardsHolding.insert(0, slot)
+						if slot == selectedCard:
+							selectedCard.cardNode.rotation = 0
+							selectRotTimer = 0
+							selectedCard = null
+						cardsHolding.insert(0, slot)
 						
 					while cardsHolding.size() > 0:
 						var c = cardsHolding[0]
@@ -812,7 +824,6 @@ var replayIndex = 0
 var replayTimer = 0
 var replayWaiting = false
 
-func _exit_tree():
-	if Settings.gameMode == GAME_MODE.PLAYING and Settings.dumpLogOnExit:
-		print("NOTICE: DUMPING GAME LOG")
-		FileIO.dumpDataLog(dataLog)
+func saveReplay():
+	print("NOTICE: DUMPING GAME LOG")
+	FileIO.dumpDataLog(dataLog)

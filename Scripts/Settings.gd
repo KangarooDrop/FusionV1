@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.0.10"
+var versionID = "0.0.0.11"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -13,8 +13,6 @@ var dumpFile = "x_.txt"
 var gameMode : int
 
 var cardSlotScale = 1.5
-
-var dumpLogOnExit = false
 
 static func compareVersion(comp1 : String, comp2 : String) -> int:
 	var spl = comp1.split(".")
