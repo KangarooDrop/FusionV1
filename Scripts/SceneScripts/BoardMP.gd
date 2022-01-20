@@ -223,7 +223,6 @@ func onRestartPressed():
 	opponentRestart = true
 
 func _physics_process(delta):
-	
 	if Settings.gameMode == GAME_MODE.REPLAY and not replayWaiting and not gameOver:
 		replayTimer += delta
 		if replayTimer >= 0.3:
@@ -295,8 +294,9 @@ func _physics_process(delta):
 					for s in creatures[fuseEndSlot.playerID]:
 						if is_instance_valid(s.cardNode) and s != fuseEndSlot:
 							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
-					hoverTimer = 0
-					shownHover = false
+					if hoveringOn == fuseEndSlot:
+						hoverTimer = 0
+						shownHover = false
 					checkState()
 	
 	if hoveringOn != null:

@@ -209,7 +209,6 @@ func onNewPressed():
 	
 func onSaveEnter(s : String):
 	onFileSaveButtonPressed()
-	print("E")
 	
 func onExitPressed():
 	confirmType = CONFIRM_TYPES.EXIT
