@@ -18,6 +18,20 @@ func _OnConnectSucceeded():
 	
 	get_node("/root/Lobby").startGame()
 
+func _Server_Disconnected():
+	print("Server diconnected")
+	otherPlayerData = null
+	
+	closeServer()
+	
+	MessageManager.notify("Opponent disconnected")
+	#var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	#if error != 0:
+	#	print("Error loading test1.tscn. Error Code = " + str(error))
+	
+	
+
+####################################################################
 
 func startServer():
 	network = NetworkedMultiplayerENet.new()
@@ -43,12 +57,20 @@ func playerConnected(player_id):
 func playerDisconnected(player_id):
 	print("User "+ str(player_id) + " Disconnected")
 	otherPlayerData = null
+	
+	closeServer()
+	
+	MessageManager.notify("Opponent disconnected")
+	#var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	#if error != 0:
+	#	print("Error loading test1.tscn. Error Code = " + str(error))
 
 ####################################################################
 	
 func connectToServer():
 	get_tree().connect("connection_failed", self, "_OnConnectFailed")
 	get_tree().connect("connected_to_server", self, "_OnConnectSucceeded")
+	get_tree().connect("server_disconnected", self, "_Server_Disconnected")
 	
 	network = NetworkedMultiplayerENet.new()
 	

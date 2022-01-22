@@ -136,12 +136,6 @@ func attack(board, slots : Array):
 			attackRotation += PI
 		attackRotation -= PI / 2
 		
-#		if not Settings.playAnimations:
-		for s in slots:
-			if is_instance_valid(s.cardNode):
-				card.onAttack(s, board)
-				s.cardNode.card.onBeingAttacked(slot, board)
-		
 	else:
 		for s in slots:
 			fight(s, slot.board)
@@ -151,20 +145,35 @@ func flip():
 	originalScale = scale.x
 	
 func fight(slot, board, damageSelf = true):
+	card.onAttack(slot, board)
+	if is_instance_valid(slot.cardNode):
+		slot.cardNode.card.onBeingAttacked(self.slot, board)
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:
 			takeDamage(max(slot.cardNode.card.power, 0), board)
-		slot.cardNode.takeDamage(max(card.power, 0), board)
+		slot.cardNode.takeDamage(max(card.power * (2 if ListOfCards.hasAbility(card, AbilityVenemous) else 1), 0), board)
 		
 		if ListOfCards.hasAbility(card, AbilityRampage) and slot.cardNode.card.toughness < 0:
 			for p in slot.board.players:
 				if p.UUID == slot.playerID:
-					p.takeDamage(-slot.cardNode.card.toughness, self)
+					var damage = -slot.cardNode.card.toughness
+					for a in card.abilities:
+						if a is AbilityPyroclast:
+							damage += a.count
+							break
+					
+					p.takeDamage(damage, self)
 		
 	else:
 		for p in slot.board.players:
 			if p.UUID == slot.playerID:
-				p.takeDamage(max(card.power, 0), self)
+				var damage = max(card.power, 0)
+				for a in card.abilities:
+					if a is AbilityPyroclast:
+						damage += a.count
+						break
+				
+				p.takeDamage(damage, self)
 				
 	board.checkState()
 				

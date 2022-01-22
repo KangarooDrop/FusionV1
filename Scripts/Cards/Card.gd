@@ -50,7 +50,6 @@ func _init(params):
 		canAttackThisTurn = params["can_attack"]
 	
 func onEnter(board, slot):
-	cardNode = slot.cardNode
 	for abl in abilities.duplicate():
 		abl.onEnter(board, slot)
 	
@@ -90,6 +89,9 @@ func onFusion(card):
 	for abl in abilities:
 		abl.onFusion(card)
 	
+func onEnterFromFusion(board, slot):
+	for abl in abilities:
+		abl.onEnterFromFusion(board, slot)
 	
 func onAttack(blocker, board):
 	hasAttacked = true
@@ -101,23 +103,24 @@ func onBeingAttacked(attacker, board):
 	for abl in abilities.duplicate():
 		abl.onBeingAttacked(attacker, board)
 	
-func addCreatureToBoard(card, board):
-	if board.players[board.activePlayer].UUID == playerID:
-		for slot in board.creatures[playerID]:
-			if not is_instance_valid(slot.cardNode):
-				card.playerID = playerID
-				
-				var cardPlacing = cardNodeScene.instance()
-				cardPlacing.card = card
-				board.add_child(cardPlacing)
-				cardPlacing.global_position = slot.global_position
-				slot.cardNode = cardPlacing
-				cardPlacing.slot = slot
-				cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-				
-				card.onEnter(board, slot)
-				
-				return
+func addCreatureToBoard(card, board, slot = null):
+	if slot == null:
+		for s in board.creatures[playerID]:
+			if not is_instance_valid(s.cardNode):
+				slot = s
+				break
+	if slot != null:
+		card.playerID = playerID
+		
+		var cardPlacing = cardNodeScene.instance()
+		cardPlacing.card = card
+		board.add_child(cardPlacing)
+		cardPlacing.global_position = slot.global_position
+		slot.cardNode = cardPlacing
+		cardPlacing.slot = slot
+		cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+		
+		card.onEnter(board, slot)
 
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
@@ -189,7 +192,9 @@ func getHoverData() -> String:
 		string += CREATURE_TYPE.keys()[creatureType[i]].to_lower().capitalize()
 		if i < creatureType.size() - 1:
 			string += " / "
-			
+	
+	if abilities.size() > 0:
+		string += "\n"
 	for abl in abilities:
 		string += "\n" + str(abl)
 		

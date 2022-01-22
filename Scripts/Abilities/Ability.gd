@@ -4,11 +4,17 @@ class_name Ability
 var name
 var desc
 var card
+var c : Color
 
-func _init(name : String, desc : String, card : Card):
+var showCount = false
+var count = 1
+
+func _init(name : String, desc : String, card : Card, c : Color, showCount : bool):
 	self.name = name
 	self.desc = desc
 	self.card = card
+	self.c = c
+	self.showCount = showCount
 
 func onEnter(board, slot):
 	pass
@@ -43,12 +49,19 @@ func onBeingAttacked(attacker, board):
 func onFusion(card):
 	pass
 	
-func combine(abl : Ability):
+func onEnterFromFusion(board, slot):
 	pass
 	
+func combine(abl : Ability):
+	count += abl.count
+	
+func getFileName():
+	return self.get_script().get_path().get_file().get_basename()
+	
 func _to_string():
-	return name + " - " + desc
+	return "[color=#" + c.to_html(false) +"][url=" + getFileName() +"]" + name + (" x"+str(count) if (showCount and count > 1) else "") +"[/url][/color]"
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
+	abl.count = count
 	return abl

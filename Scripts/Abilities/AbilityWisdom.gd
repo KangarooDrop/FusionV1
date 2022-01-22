@@ -2,29 +2,32 @@ extends Ability
 
 class_name AbilityWisdom
 
-var buff = 1
-
-func _init(card : Card).("Wisedom", "This creature draws a card when entering the board", card):
+func _init(card : Card).("Wisedom", "When this creature is played, draw 2 cards. Removes this ability", card, Color.blue, true):
 	pass
 
 func onEnter(board, slot):
 	.onEnter(board, slot)
+	onDrawEffect(board)
+	
+func onEnterFromFusion(board, slot):
+	.onEnterFromFusion(board, slot)
+	onDrawEffect(board)
+			
+func onDrawEffect(board):
 	for p in board.players:
 		if p.UUID == card.playerID:
-			for i in range(buff):
+			for i in range(count):
 				p.hand.drawCard()
+				p.hand.drawCard()
+			break
+			
+	var scr = get_script()
+	for abl in card.abilities:
+		if abl is scr:
+			card.abilities.erase(abl)
 			break
 
 
 func combine(abl : Ability):
 	.combine(abl)
-	buff += abl.buff
-	desc = "This creature draws " + str(buff) + " cards when entering the board"
-
-func _to_string():
-	return name + " x" + str(buff) +" - " + desc
-
-func clone(card : Card) -> Ability:
-	var abl = get_script().new(card)
-	abl.buff = buff
-	return abl
+	desc = "This creature draws " + str(count * 2) + " cards when entering the board"

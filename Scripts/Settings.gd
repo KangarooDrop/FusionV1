@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.0.11"
+var versionID = "0.0.0.12"
 
 var playAnimations = true
 var selectedDeck = ""

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityDegenerate
 
-func _init(card : Card).("Degenerate", "On fusion, the card loses all creature types and becomes a null. Removes this ability", card):
+func _init(card : Card).("Degenerate", "On fusion, the card loses all creature types and becomes a null. Removes this ability", card, Color.purple, false):
 	pass
 
 func onFusion(card):

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityFrostbite
 
-func _init(card : Card).("Frostbite", "Inflicts Frozen on the enemy creature when this creature attacks or is attacked", card):
+func _init(card : Card).("Frostbite", "Inflicts " + str(AbilityFrozen.new(null)) + " on the enemy creature when this creature attacks or is attacked", card, Color.blue, false):
 	pass
 	
 func onAttack(blocker, board):

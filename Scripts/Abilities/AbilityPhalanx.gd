@@ -2,43 +2,32 @@ extends Ability
 
 class_name AbilityPhalanx
 
-var buff = 1
-
-func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card):
+func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card, Color.darkgray, true):
 	pass
 
 func onEnter(board, slot):
 	for s in card.cardNode.slot.getNeighbors():
 		if is_instance_valid(s.cardNode):
-			s.cardNode.card.power += buff
-			s.cardNode.card.toughness += buff
+			s.cardNode.card.power += count
+			s.cardNode.card.toughness += count
 
 func onOtherEnter(board, slot):
 	for s in card.cardNode.slot.getNeighbors():
 		if s == slot:
-			s.cardNode.card.power += buff
-			s.cardNode.card.toughness += buff
+			s.cardNode.card.power += count
+			s.cardNode.card.toughness += count
 
 func onLeave(board):
 	for s in card.cardNode.slot.getNeighbors():
 		if is_instance_valid(s.cardNode):
-			s.cardNode.card.power -= buff
-			s.cardNode.card.toughness -= buff
+			s.cardNode.card.power -= count
+			s.cardNode.card.toughness -= count
 
 func onOtherLeave(board, slot):
 	if slot in card.cardNode.slot.getNeighbors():
-		slot.cardNode.card.power -= buff
-		slot.cardNode.card.toughness -= buff
+		slot.cardNode.card.power -= count
+		slot.cardNode.card.toughness -= count
 	
 func combine(abl : Ability):
 	.combine(abl)
-	buff += abl.buff
-	desc = "Adjacent creatures get +" + str(buff) + "/+" + str(buff)
-	
-func _to_string():
-	return name + " x" + str(buff) +" - " + desc
-
-func clone(card : Card) -> Ability:
-	var abl = get_script().new(card)
-	abl.buff = buff
-	return abl
+	desc = "Adjacent creatures get +" + str(count) + "/+" + str(count)

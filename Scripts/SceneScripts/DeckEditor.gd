@@ -137,7 +137,7 @@ func _physics_process(delta):
 			slotViewing.cardNode.scale = lerp(Vector2(1, 1), Vector2(viewScale, viewScale), viewTimer / viewMaxTime)
 		else:
 			if not is_instance_valid(infoWindow):
-				createHoverNode(Vector2(-cardWidth * viewScale * 3.0/5 * Settings.cardSlotScale, 0), slotViewing.cardNode.card.getHoverData())
+				createHoverNode(Vector2(-cardWidth * viewScale * 0.5 * Settings.cardSlotScale, 0), slotViewing.cardNode.card.getHoverData())
 	if slotReturning != null:
 		if returnTimer < returnMaxTime:
 			returnTimer += delta
@@ -168,9 +168,9 @@ var infoWindow = null
 func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
 	hoverInst.z_index = 3
+	hoverInst.flipped = true
 	add_child(hoverInst)
 	hoverInst.global_position = position
-	hoverInst.flipped = true
 	hoverInst.setText(text)
 	infoWindow = hoverInst
 	
@@ -379,7 +379,7 @@ func _input(event):
 			setCurrentPage(getCurrentPage() + 1)
 			
 	if event is InputEventMouseButton:
-		if event.pressed and (event.button_index == 1 or event.button_index == 2):
+		if event.pressed and (event.button_index == 2):
 			if slotViewing != null and slotReturning == null:
 				yield(get_tree().create_timer(0.02), "timeout")
 				if is_instance_valid(infoWindow):

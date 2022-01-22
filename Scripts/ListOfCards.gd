@@ -90,7 +90,18 @@ func _ready():
 	cardList.append(Card.new({"name":"Frost-tongue", "tex":"res://Art/portraits/ToasterToilet.png", "power":0, "toughness":3, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityFrostbite]}))
 	cardList.append(Card.new({"name":"Chipper", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityComposite]}))
 	
-	#Mech
+	cardList.append(Card.new({"name":"Thought Sapper", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityMindrot]}))
+	cardList.append(Card.new({"name":"Rust Crawler", "tex":"res://Art/portraits/ToasterToilet.png", "power":2, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityBrittle]}))
+	cardList.append(Card.new({"name":"Torchling", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPyroclast]}))
+	cardList.append(Card.new({"name":"The Boulder", "tex":"res://Art/portraits/ToasterToilet.png", "power":0, "toughness":3, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityBulwark]}))
+	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenemous]}))
+	cardList.append(Card.new({"name":"Carrion", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityInfested]}))
+	
+	
+	#Fire - 1/1 deals 1 additional damage to players
+	#Earth - When attacked, deal as much damage taken back to the attacker
+	#Beast - 1/3 Serpant
+	#Necro - 1/1 Infested - When this creature dies, creature a 0/1 Necro with no abilities
 	
 	for i in range(cardList.size()):
 		cardList[i].UUID = i

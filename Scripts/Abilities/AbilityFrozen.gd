@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityFrozen
 
-func _init(card : Card).("Frozen", "This creature cannot attack or be fused until the end of its owners next turn", card):
+func _init(card : Card).("Frozen", "This creature cannot attack or be fused until the end of its owners next turn", card, Color.lightblue, false):
 	pass
 
 func onEnter(board, slot):

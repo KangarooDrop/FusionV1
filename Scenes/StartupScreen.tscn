@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scripts/UI/CardDisplay.gd" type="Script" id=4]
 
 [node name="StartupScreen" type="Control"]
 anchor_right = 1.0
@@ -105,6 +107,11 @@ margin_top = 35.0
 margin_right = 85.0
 margin_bottom = 55.0
 text = "Back"
+
+[node name="CardDisplay" parent="." instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 512, 54 )
+script = ExtResource( 4 )
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
