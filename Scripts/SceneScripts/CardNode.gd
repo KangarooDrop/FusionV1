@@ -146,13 +146,22 @@ func flip():
 	originalScale = scale.x
 	
 func fight(slot, board, damageSelf = true):
+	var venomA = ListOfCards.hasAbility(card, AbilityVenemous)
+	var venomB = false
+	if venomA:
+		card.power *= 2
+	if is_instance_valid(slot.cardNode):
+		venomB = ListOfCards.hasAbility(slot.cardNode.card, AbilityVenemous)
+		if venomB:
+			slot.cardNode.card.power *= 2
+	
 	card.onAttack(slot, board)
 	if is_instance_valid(slot.cardNode):
 		slot.cardNode.card.onBeingAttacked(self.slot, board)
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:
 			takeDamage(max(slot.cardNode.card.power, 0), board)
-		slot.cardNode.takeDamage(max(card.power * (2 if ListOfCards.hasAbility(card, AbilityVenemous) else 1), 0), board)
+		slot.cardNode.takeDamage(max(card.power, 0), board)
 		
 		if ListOfCards.hasAbility(card, AbilityRampage) and slot.cardNode.card.toughness < 0:
 			for p in slot.board.players:
@@ -175,6 +184,11 @@ func fight(slot, board, damageSelf = true):
 						break
 				
 				p.takeDamage(damage, self)
+				
+	if venomA:
+		card.power /= 2
+	if venomB:
+		slot.cardNode.card.power /= 2
 				
 	board.checkState()
 				
