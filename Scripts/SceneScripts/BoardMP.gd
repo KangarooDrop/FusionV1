@@ -8,11 +8,11 @@ var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 var hoverScene = preload("res://Scenes/UI/Hover.tscn")
+var fadingScene = preload("res://Scenes/UI/FadingNode.tscn")
 
 var cardDists = 16
 
 var creatures : Dictionary
-var graves : Dictionary
 var decks : Dictionary
 
 var boardSlots : Array
@@ -29,7 +29,6 @@ var cardsShaking := {}
 
 onready var creatures_A_Holder = $Creatures_A
 onready var creatures_B_Holder = $Creatures_B
-onready var graveHolder = $GraveHolder
 onready var deckHolder = $DeckHolder
 onready var card_A_Holder = $Card_A_Holder
 onready var card_B_Holder = $Card_B_Holder
@@ -37,6 +36,11 @@ onready var card_B_Holder = $Card_B_Holder
 var cardsHolding : Array
 var selectedCard : CardSlot
 var selectRotTimer = 0
+
+var millQueue : Array
+var millNode
+var millWaitTimer = 0
+var millWaitMaxTime = 0.5
 
 var isEntering = false
 var fuseQueue : Array
@@ -315,6 +319,43 @@ func _physics_process(delta):
 								s.cardNode.card.onOtherEnterFromFusion(self, fuseEndSlot)
 					checkState()
 					
+	if millQueue.size() > 0:
+		if millWaitTimer == 0:
+			var playerNum = -1
+			for i in range(players.size()):
+				if players[i].UUID == millQueue[0]:
+					playerNum = i
+			
+			var card
+			if playerNum != -1:
+				card = players[playerNum].deck.pop()
+			else:
+				millQueue.remove(0)
+				print("Player ID not found for mill")
+				
+			if card != null:
+				var cn = cardNode.instance()
+				cn.card = card
+				add_child(cn)
+				cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+				cn.global_position = decks[players[playerNum].UUID].global_position
+				var fn = fadingScene.instance()
+				fn.maxTime = 1
+				cn.add_child(fn)
+				cn.get_node("FadingNode").setVisibility(1)
+				millNode = cn
+		
+		if is_instance_valid(millNode):
+			if millWaitTimer < millWaitMaxTime:
+				millWaitTimer += delta
+				if millWaitTimer >= millWaitMaxTime:
+					millNode.get_node("FadingNode").fadeOut()
+					millNode = null
+					millQueue.remove(0)
+					millWaitTimer = 0
+				else:
+					millNode.position.x -= cardWidth * Settings.cardSlotScale * 1.5 * delta / millWaitMaxTime
+					
 	for slot in cardsShaking.keys():
 		if not is_instance_valid(slot.cardNode):
 			cardsShaking.erase(slot)
@@ -412,14 +453,6 @@ func initZones():
 	centerNodes(creatures[p.UUID], Vector2(), cardWidth, cardDists)
 	
 	cardInst = cardSlot.instance()
-	cardInst.currentZone = CardSlot.ZONES.GRAVE
-	cardInst.board = self
-	cardInst.playerID = p.UUID
-	graveHolder.add_child(cardInst)
-	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, cardHeight + cardDists)
-	
-	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.DECK
 	cardInst.board = self
 	cardInst.playerID = p.UUID
@@ -451,15 +484,6 @@ func initZones():
 		creatures[p.UUID].append(cardInst)
 		boardSlots.append(cardInst)
 	centerNodes(creatures[p.UUID], Vector2(), cardWidth, cardDists)
-	
-	cardInst = cardSlot.instance()
-	cardInst.currentZone = CardSlot.ZONES.GRAVE
-	cardInst.isOpponent = true
-	cardInst.board = self
-	cardInst.playerID = p.UUID
-	graveHolder.add_child(cardInst)
-	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, -cardHeight - cardDists)
 	
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.DECK
@@ -508,8 +532,6 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = creatures_A_Holder
 			else:
 				parent = creatures_B_Holder
-		CardSlot.ZONES.GRAVE:
-			parent = graveHolder
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
 	
@@ -581,16 +603,22 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							slot.position.y -= cardDists
 							slot.cardNode.position.y = slot.position.y
 						else:
+							if cardsShaking.has(slot):
+								MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 							cardsShaking[slot] = shakeMaxTime
 					if activePlayer == 0:
 						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 				else:
+					if cardsShaking.has(slot):
+						MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 					cardsShaking[slot] = shakeMaxTime
 		elif slot.currentZone == CardSlot.ZONES.CREATURE:
 			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
 				
 				if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
+					if cardsShaking.has(slot):
+						MessageManager.notify("This creature cannot be fused this turn")
 					cardsShaking[slot] = shakeMaxTime
 					return
 				##
@@ -599,6 +627,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					for c in cardsHolding:
 						var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
 						if Card.areIdentical(cardA.serialize(), cardB.serialize()):
+							if cardsShaking.has(slot):
+								MessageManager.notify("A creature can only fuse to have two types")
 							cardsShaking[slot] = shakeMaxTime
 							return
 						else:
@@ -711,6 +741,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							selectRotTimer = 0
 							selectedCard = slot
 						else:
+							if cardsShaking.has(slot):
+								MessageManager.notify("This creature cannot attack")
 							cardsShaking[slot] = shakeMaxTime
 				else:
 					if is_instance_valid(selectedCard):
@@ -753,6 +785,9 @@ func _input(event):
 							waiting = true
 							
 					if fuseQueue.size() > 0:
+						waiting = true
+							
+					if millQueue.size() > 0:
 						waiting = true
 							
 					yield(get_tree().create_timer(0.1), "timeout")

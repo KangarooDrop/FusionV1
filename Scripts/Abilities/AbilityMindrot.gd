@@ -7,17 +7,18 @@ func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 
 
 func onEnter(board, slot):
 	.onEnter(board, slot)
-	onEffect(board)
+	onEffect(board, slot)
 	
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
-	onEffect(board)
+	onEffect(board, slot)
 
-func onEffect(board):
+func onEffect(board, slot):
+	print(slot.playerID)
 	for p in board.players:
 		if p.UUID != card.playerID:
 			for i in range(count * 3):
-				p.deck.pop()
+				p.deck.mill(board, p.UUID)
 			
 	var scr = get_script()
 	for abl in card.abilities:

@@ -146,7 +146,7 @@ func flip():
 	originalScale = scale.x
 	
 func fight(slot, board, damageSelf = true):
-	var venomA = ListOfCards.hasAbility(card, AbilityVenemous)
+	var venomA = ListOfCards.hasAbility(card, AbilityVenemous) and is_instance_valid(slot.cardNode)
 	var venomB = false
 	if venomA:
 		card.power *= 2

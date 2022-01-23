@@ -17,9 +17,6 @@ position = Vector2( 0, 100 )
 [node name="Creatures_B" type="Node2D" parent="."]
 position = Vector2( 0, -100 )
 
-[node name="GraveHolder" type="Node2D" parent="."]
-position = Vector2( 346, 0 )
-
 [node name="DeckHolder" type="Node2D" parent="."]
 position = Vector2( 446, 0 )
 

@@ -32,6 +32,10 @@ func _physics_process(delta):
 	if fadingIn or fadingOut:
 		parent.modulate = Color(1, 1, 1, timer / maxTime)
 	
+func setVisibility(a : float):
+	parent.modulate = Color(1, 1, 1, a)
+	timer = a * maxTime
+	
 func fadeIn():
 	fadingIn = true
 	

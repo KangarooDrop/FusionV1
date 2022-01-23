@@ -16,6 +16,9 @@ func pop() -> Card:
 		cards.remove(0)
 	return c
 
+func mill(board, playerID):
+	board.millQueue.append(playerID)
+
 func draw(count : int) -> Array:
 	var c : Array
 	for i in range(count):

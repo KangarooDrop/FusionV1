@@ -23,6 +23,8 @@ export var handSize := 5
 export var isOpponent = false
 export var handVisible := true
 
+var drawDamage = 1
+
 func initHand(board, player):
 	self.board = board
 	self.player = player
@@ -66,7 +68,8 @@ func _physics_process(delta):
 				fn.connect("onFadeIn", self, "cardFadeInFinish")
 				cardInst.add_child(fn)
 				fn.fadeIn()
-				player.takeDamage(1, null)
+				player.takeDamage(drawDamage, null)
+				drawDamage += 1
 			else:
 				cardInst.setCardVisible(false)
 				if handVisible:
