@@ -195,7 +195,6 @@ config/icon="res://icon.png"
 [autoload]
 
 ListOfCards="*res://Scripts/ListOfCards.gd"
-ListOfAbilities="*res://Scripts/ListOfAbilities.gd"
 Settings="*res://Scripts/Settings.gd"
 Server="*res://Scripts/Networking/Server.gd"
 FileIO="*res://Scripts/FileIO.gd"
