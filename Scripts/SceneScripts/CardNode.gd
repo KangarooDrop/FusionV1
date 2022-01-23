@@ -167,22 +167,12 @@ func fight(slot, board, damageSelf = true):
 			for p in slot.board.players:
 				if p.UUID == slot.playerID:
 					var damage = -slot.cardNode.card.toughness
-					for a in card.abilities:
-						if a is AbilityPyroclast:
-							damage += a.count
-							break
-					
 					p.takeDamage(damage, self)
 		
 	else:
 		for p in slot.board.players:
 			if p.UUID == slot.playerID:
 				var damage = max(card.power, 0)
-				for a in card.abilities:
-					if a is AbilityPyroclast:
-						damage += a.count
-						break
-				
 				p.takeDamage(damage, self)
 				
 	if venomA:

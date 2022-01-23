@@ -5,12 +5,8 @@ class_name AbilityProduction
 func _init(card : Card).("Production", "This creature creates a mech on being played", card, Color.gray, true):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	onEffect(board)
-	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
+func onStartOfTurn(board):
+	.onStartOfTurn(board)
 	onEffect(board)
 			
 func onEffect(board):
