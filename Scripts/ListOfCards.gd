@@ -66,7 +66,7 @@ func _ready():
 	cardList.append(Card.new({"name":"Gargantua", "tex":"res://Art/portraits/card_GARGANTUA.png", "creature_type":[Card.CREATURE_TYPE.Beast], "tier":2}))
 	cardList.append(Card.new({"name":"Flame Cannon", "tex":"res://Art/portraits/card_FLAME_CANNON.png", "creature_type":[Card.CREATURE_TYPE.Fire, Card.CREATURE_TYPE.Mech], "tier":2}))
 	cardList.append(Card.new({"name":"Steamer", "tex":"res://Art/portraits/card_STEAMER.png", "creature_type":[Card.CREATURE_TYPE.Mech, Card.CREATURE_TYPE.Water], "tier":2}))
-	cardList.append(Card.new({"name":"Miner", "tex":"res://Art/portraits/card_Miner.png", "creature_type":[Card.CREATURE_TYPE.Mech, Card.CREATURE_TYPE.Earth], "tier":2}))
+	cardList.append(Card.new({"name":"Miner", "tex":"res://Art/portraits/card_MINER.png", "creature_type":[Card.CREATURE_TYPE.Mech, Card.CREATURE_TYPE.Earth], "tier":2}))
 	cardList.append(Card.new({"name":"Cyber wolf", "tex":"res://Art/portraits/card_CYBER_WOLF.png", "creature_type":[Card.CREATURE_TYPE.Beast, Card.CREATURE_TYPE.Mech], "tier":2}))
 	cardList.append(Card.new({"name":"Factory", "tex":"res://Art/portraits/card_FACTORY.png", "creature_type":[Card.CREATURE_TYPE.Mech], "tier":2}))
 	

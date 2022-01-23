@@ -52,6 +52,9 @@ func onFusion(card):
 func onEnterFromFusion(board, slot):
 	pass
 	
+func onOtherEnterFromFusion(board, slot):
+	pass
+	
 func combine(abl : Ability):
 	count += abl.count
 	

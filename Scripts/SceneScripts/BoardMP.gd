@@ -301,11 +301,14 @@ func _physics_process(delta):
 					cardNode.card.cardNode = cardNode
 					if isEntering:
 						cardNode.card.onEnter(self, fuseEndSlot)
+						for s in creatures[fuseEndSlot.playerID]:
+							if is_instance_valid(s.cardNode) and s != fuseEndSlot:
+								s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					else:
 						cardNode.card.onEnterFromFusion(self, fuseEndSlot)
-					for s in creatures[fuseEndSlot.playerID]:
-						if is_instance_valid(s.cardNode) and s != fuseEndSlot:
-							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
+						for s in creatures[fuseEndSlot.playerID]:
+							if is_instance_valid(s.cardNode) and s != fuseEndSlot:
+								s.cardNode.card.onOtherEnterFromFusion(self, fuseEndSlot)
 					checkState()
 					
 	for slot in cardsShaking.keys():

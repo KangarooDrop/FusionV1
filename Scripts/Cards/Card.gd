@@ -93,6 +93,10 @@ func onEnterFromFusion(board, slot):
 	for abl in abilities:
 		abl.onEnterFromFusion(board, slot)
 	
+func onOtherEnterFromFusion(board, slot):
+	for abl in abilities:
+		abl.onOtherEnterFromFusion(board, slot)
+	
 func onAttack(blocker, board):
 	hasAttacked = true
 	canAttackThisTurn = false
@@ -202,13 +206,15 @@ func getHoverData() -> String:
 
 func trimAbilities():
 	var newAbilities = []
+	var foundAbilities = []
 	while abilities.size() > 0:
 		var foundAbility = false
 		for abl in abilities:
-			if abl != abilities[0] and abl is abilities[0].get_script():
+			if abl != abilities[0] and abl is abilities[0].get_script() and not foundAbilities.has(abl) and not foundAbilities.has(abilities[0]):
 				abilities[0].combine(abl)
 				abilities.erase(abl)
 				foundAbility = true
+				foundAbilities.append(abl)
 				break
 		if not foundAbility:
 			newAbilities.append(abilities[0])

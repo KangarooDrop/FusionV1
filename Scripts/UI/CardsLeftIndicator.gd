@@ -35,4 +35,3 @@ func setCardData(numCanUse : int, numHeld : int, numUsed : int):
 		count += 1
 	
 	BoardMP.centerNodes(cardSprites, Vector2(), 24, 6)
-	print(cardSprites[0].region_rect, "  ", cardSprites[1].region_rect)
