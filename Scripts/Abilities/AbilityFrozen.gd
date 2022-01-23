@@ -17,7 +17,6 @@ func onEffect():
 	card.canAttackThisTurn = false
 	card.canFuseThisTurn = false
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
-	print("EEEE")
 
 func onStartOfTurn(board):
 	card.canAttackThisTurn = false

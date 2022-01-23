@@ -125,6 +125,9 @@ func addCreatureToBoard(card, board, slot = null):
 		cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		
 		card.onEnter(board, slot)
+		for s in board.creatures[slot.playerID]:
+			if is_instance_valid(s.cardNode) and s != slot:
+				s.cardNode.card.onOtherEnter(self, slot)
 
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)

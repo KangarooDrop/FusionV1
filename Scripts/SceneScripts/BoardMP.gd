@@ -247,6 +247,10 @@ func _physics_process(delta):
 		players[1].initHand(self)
 		print("Notice: Players ready, starting game")
 		
+		
+		if activePlayer == 0:
+			$TurnIndicator.startTurn()
+		
 	if playerRestart and opponentRestart:
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
 		if error != 0:
@@ -797,6 +801,8 @@ func nextTurn():
 		
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
+	if activePlayer == 0:
+		$TurnIndicator.startTurn()
 	players[activePlayer].hand.drawCard()
 		
 	if activePlayer == 0:

@@ -16,7 +16,7 @@ func onEnterFromFusion(board, slot):
 	for i in range(count - buffsApplied):
 		onEffect(board, slot)
 		buffsApplied += 1
-	
+
 func onEffect(board, slot):
 	for s in board.creatures[card.cardNode.slot.playerID]:
 		if is_instance_valid(s.cardNode) and s != slot:

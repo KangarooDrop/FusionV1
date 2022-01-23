@@ -30,7 +30,11 @@ func getNeighbors() -> Array:
 	var neighbors = []
 	var index = get_index()
 	if index > 0:
-		neighbors.append(get_parent().get_child(index - 1))
+		var c = get_parent().get_child(index - 1)
+		if c is get_script():
+			neighbors.append(c)
 	if index < get_parent().get_child_count() - 1:
-		neighbors.append(get_parent().get_child(index + 1))
+		var c = get_parent().get_child(index + 1)
+		if c is get_script():
+			neighbors.append(c)
 	return neighbors

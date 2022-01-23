@@ -37,7 +37,7 @@ func fadeIn():
 	
 func fadeOut():
 	fadingIn = false
-	fadingOut = false
+	fadingOut = true
 
 func close():
 	if freeOnFadeOut:
