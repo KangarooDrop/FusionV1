@@ -42,3 +42,5 @@ func fadeOut():
 func close():
 	if freeOnFadeOut:
 		parent.queue_free()
+	else:
+		parent.modulate = Color(1, 1, 1, 0)

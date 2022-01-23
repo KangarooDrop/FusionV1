@@ -248,6 +248,7 @@ func onConfirmYesPressed():
 		
 		for c in $FileDisplay/ButtonHolder.get_children():
 			if c is Button and c.name != "BackButton":
+				$FileDisplay/ButtonHolder.remove_child(c)
 				c.queue_free()
 		for i in range(files.size()):
 			var b = Button.new()
@@ -332,6 +333,7 @@ func onDeleteButtonPressed():
 	
 	for c in $FileDisplay/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
+			$FileDisplay/ButtonHolder.remove_child(c)
 			c.queue_free()
 	for i in range(files.size()):
 		var b = Button.new()
