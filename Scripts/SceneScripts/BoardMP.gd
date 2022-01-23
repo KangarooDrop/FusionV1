@@ -22,6 +22,11 @@ var activePlayer := -1
 var cardsPerTurn = 2#99
 var cardsPlayed = 0
 
+var shakeMaxTime = 0.5
+var shakeAmount = 0.8
+var shakeFrequency = 6
+var cardsShaking := {}
+
 onready var creatures_A_Holder = $Creatures_A
 onready var creatures_B_Holder = $Creatures_B
 onready var graveHolder = $GraveHolder
@@ -102,7 +107,7 @@ func getDeckFromFile() -> Array:
 	return cardList
 
 func setOwnCardList(cardList : Array):
-	var player_A = Player.new(cardList, self)
+	var player_A = Player.new(cardList, self, $HealthNode)
 	players.insert(0, player_A)
 	creatures[player_A.UUID] = []
 	
@@ -123,7 +128,7 @@ func setOpponentCardList(cardList : Array):
 	for id in cardList:
 		cards.append(ListOfCards.getCard(id))
 				
-	var player_B = Player.new(cards, self)
+	var player_B = Player.new(cards, self, $HealthNode2)
 	player_B.isOpponent = true
 	players.insert(1, player_B)
 	creatures[player_B.UUID] = []
@@ -302,6 +307,17 @@ func _physics_process(delta):
 						if is_instance_valid(s.cardNode) and s != fuseEndSlot:
 							s.cardNode.card.onOtherEnter(self, fuseEndSlot)
 					checkState()
+					
+	for slot in cardsShaking.keys():
+		if not is_instance_valid(slot.cardNode):
+			cardsShaking.erase(slot)
+		else:
+			cardsShaking[slot] -= delta
+			if cardsShaking[slot] < 0:
+				slot.cardNode.global_position = slot.global_position
+				cardsShaking.erase(slot)
+			else:
+				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
 
 func nextReplayAction():
 	replayWaiting = true
@@ -458,14 +474,14 @@ func initZones():
 	
 		
 func initHands():
-	$HealthNode.player = players[0]
-	$HealthNode2.player = players[1]
 	players[0].hand = card_A_Holder
 	#players[0].initHand(self)
 	players[1].hand = card_B_Holder
 	#players[1].initHand(self)
 	players[0].hand.deck = decks[players[0].UUID]
 	players[1].hand.deck = decks[players[1].UUID]
+	
+	$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
 				
 static func centerNodes(nodes : Array, position : Vector2, cardWidth : int, cardDists : int):
 	for i in range(nodes.size()):
@@ -557,11 +573,18 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							cardsHolding.append(slot)
 							slot.position.y -= cardDists
 							slot.cardNode.position.y = slot.position.y
+						else:
+							cardsShaking[slot] = shakeMaxTime
+					if activePlayer == 0:
+						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+				else:
+					cardsShaking[slot] = shakeMaxTime
 		elif slot.currentZone == CardSlot.ZONES.CREATURE:
 			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
 				
 				if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
+					cardsShaking[slot] = shakeMaxTime
 					return
 				##
 				if is_instance_valid(slot.cardNode):
@@ -569,7 +592,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					for c in cardsHolding:
 						var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
 						if Card.areIdentical(cardA.serialize(), cardB.serialize()):
-							return false
+							cardsShaking[slot] = shakeMaxTime
+							return
 						else:
 							cardA = cardB
 				##
@@ -662,6 +686,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					card_A_Holder.centerCards(cardWidth, cardDists)
 					card_B_Holder.centerCards(cardWidth, cardDists)
 						
+
+				if activePlayer == 0:
+					$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+					
 			else:
 				if slot.playerID == players[activePlayer].UUID:
 					#ATTACKING
@@ -675,6 +703,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 								selectedCard.cardNode.rotation = 0
 							selectRotTimer = 0
 							selectedCard = slot
+						else:
+							cardsShaking[slot] = shakeMaxTime
 				else:
 					if is_instance_valid(selectedCard):
 						var slots = []
@@ -732,6 +762,7 @@ func _input(event):
 					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
 					createHoverNode(pos, str(numCards))
+					hoveringWindowSlot = hoveringOn
 					
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
 					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5 * Settings.cardSlotScale, 0)
@@ -764,6 +795,9 @@ func nextTurn():
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
 	players[activePlayer].hand.drawCard()
+		
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 		
 	######################	ON START OF TURN EFFECTS
 	var slotsToCheck = []

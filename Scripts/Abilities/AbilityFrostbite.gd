@@ -7,8 +7,12 @@ func _init(card : Card).("Frostbite", "Inflicts " + str(AbilityFrozen.new(null))
 	
 func onAttack(blocker, board):
 	if is_instance_valid(blocker.cardNode):
-		blocker.cardNode.card.abilities.append(AbilityFrozen.new(blocker.cardNode.card))
+		var frozen = AbilityFrozen.new(blocker.cardNode.card)
+		frozen.onEffect()
+		blocker.cardNode.card.abilities.append(frozen)
 	
 func onBeingAttacked(attacker, board):
 	if is_instance_valid(attacker.cardNode):
-		attacker.cardNode.card.abilities.append(AbilityFrozen.new(attacker.cardNode.card))
+		var frozen = AbilityFrozen.new(attacker.cardNode.card)
+		frozen.onEffect()
+		attacker.cardNode.card.abilities.append(frozen)

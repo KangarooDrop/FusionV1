@@ -4,6 +4,7 @@ class_name HandNode
 
 var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
+var fadingNode = preload("res://Scenes/UI/FadingNode.tscn")
 
 var player
 var board
@@ -48,30 +49,49 @@ func _physics_process(delta):
 			cardSlotNodes.append(slotInst)
 			
 			var cardInst = cardNode.instance()
-			cardInst.card = drawQueue[0]
-			cardInst.cardVisible = false
+			cardInst.card = drawQueue[0][0]
 			cardInst.playerID = player.UUID
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			add_child(cardInst)
-			if handVisible:
-				cardInst.flip()
 			cardNodes.append(cardInst)
 			
 			slotInst.cardNode = cardInst
 			
 			centerCards(board.cardWidth, board.cardDists)
-			cardInst.global_position = deck.global_position
+			if drawQueue[0][1]:
+				cardInst.global_position = slotInst.global_position
+				cardInst.setCardVisible(handVisible)
+				var fn = fadingNode.instance()
+				fn.maxTime = 1
+				fn.connect("onFadeIn", self, "cardFadeInFinish")
+				cardInst.add_child(fn)
+				fn.fadeIn()
+				player.takeDamage(1, null)
+			else:
+				cardInst.setCardVisible(false)
+				if handVisible:
+					cardInst.flip()
+				cardInst.global_position = deck.global_position
 			
 			drawingSlot = slotInst
 			drawingNode = cardInst
 		else:
-			drawTimer += delta
-			drawingNode.global_position = lerp(deck.global_position, drawingSlot.global_position, drawTimer / drawMaxTime)
-			if drawTimer >= drawMaxTime:
-				drawTimer = 0
-				drawingNode.global_position = drawingSlot.global_position
-				drawingNode = null
-				drawQueue.remove(0)
+			if drawQueue[0][1]:
+				pass
+			else:
+				drawTimer += delta
+				drawingNode.global_position = lerp(deck.global_position, drawingSlot.global_position, drawTimer / drawMaxTime)
+				if drawTimer >= drawMaxTime:
+					drawTimer = 0
+					drawingNode.global_position = drawingSlot.global_position
+					drawingNode = null
+					drawQueue.remove(0)
+
+func cardFadeInFinish():
+	drawingNode.get_node("FadingNode").queue_free()
+	drawTimer = 0
+	drawingNode = null
+	drawQueue.remove(0)
 
 func drawCard():
 	var card = player.deck.pop()
@@ -79,15 +99,14 @@ func drawCard():
 		deck.cardNode.queue_free()
 		deck.cardNode = null
 	if card != null:
-		addCard(card)
+		addCard([card, false])
 	else:
-		addCard(ListOfCards.getCard(0))
-		player.takeDamage(1, null)
+		addCard([ListOfCards.getCard(0), true])
 
-func addCard(card : Card):
-	if card != null:
+func addCard(data : Array):
+	if data[0] != null:
 		if Settings.playAnimations:
-			drawQueue.append(card)
+			drawQueue.append(data)
 		else:
 			var slotInst = cardSlot.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
@@ -98,7 +117,7 @@ func addCard(card : Card):
 			cardSlotNodes.append(slotInst)
 			
 			var cardInst = cardNode.instance()
-			cardInst.card = card
+			cardInst.card = data[0]
 			cardInst.setCardVisible(true)
 			cardInst.playerID = player.UUID
 			add_child(cardInst)
@@ -107,3 +126,6 @@ func addCard(card : Card):
 			slotInst.cardNode = cardInst
 			
 			centerCards(board.cardWidth, board.cardDists)
+			
+			if data[1]:
+				player.takeDamage(1, null)

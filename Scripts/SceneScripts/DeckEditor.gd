@@ -383,7 +383,7 @@ func _input(event):
 			if slotViewing != null and slotReturning == null:
 				yield(get_tree().create_timer(0.02), "timeout")
 				if is_instance_valid(infoWindow):
-					infoWindow.fadeOut()
+					infoWindow.close()
 				slotReturning = slotViewing
 				slotViewing.cardNode.z_index -= 1
 				slotViewing = null

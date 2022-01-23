@@ -52,6 +52,7 @@ func setCardVisible(isVis : bool):
 	else:
 		$CardPortrait.texture = ListOfCards.unknownCardTex
 		$CardType.visible = false
+		$Label.visible = false
 	cardVisible = isVis
 		
 func getCardVisible() -> bool:

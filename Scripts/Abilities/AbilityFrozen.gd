@@ -6,9 +6,18 @@ func _init(card : Card).("Frozen", "This creature cannot attack or be fused unti
 	pass
 
 func onEnter(board, slot):
+	.onEnter(board, slot)
+	onEffect()
+	
+func onEnterFromFusion(board, slot):
+	.onEnterFromFusion(board, slot)
+	onEffect()
+
+func onEffect():
 	card.canAttackThisTurn = false
 	card.canFuseThisTurn = false
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
+	print("EEEE")
 
 func onStartOfTurn(board):
 	card.canAttackThisTurn = false
