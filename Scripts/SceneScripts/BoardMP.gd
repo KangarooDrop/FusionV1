@@ -366,6 +366,22 @@ func _physics_process(delta):
 				cardsShaking.erase(slot)
 			else:
 				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
+				
+	if serverQueue.size() > 0:
+		serverCheckTimer += delta
+		if serverCheckTimer >= serverCheckMaxTime:
+			if slotClicked(serverQueue[0][0], serverQueue[0][1], serverQueue[0][2]):
+				serverQueue.remove(0)
+				serverWait = 0
+				serverCheckTimer = serverCheckMaxTime
+			else:
+				serverCheckTimer = 0
+			
+		serverWait += delta
+		if serverWait >= serverMaxWait:
+			serverQueue.remove(0)
+			serverWait = 0
+			serverCheckTimer = 0
 
 func nextReplayAction():
 	replayWaiting = true
@@ -512,13 +528,23 @@ func initHands():
 	players[0].hand.deck = decks[players[0].UUID]
 	players[1].hand.deck = decks[players[1].UUID]
 	
-	$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+		$CardsLeftIndicator_B.setCardData(0, 0, cardsPerTurn)
+	else:
+		$CardsLeftIndicator_A.setCardData(0, 0, cardsPerTurn)
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
 				
 static func centerNodes(nodes : Array, position : Vector2, cardWidth : int, cardDists : int):
 	for i in range(nodes.size()):
 		nodes[i].position = position + Vector2(-(nodes.size() - 1) / 2.0 * (cardWidth * Settings.cardSlotScale + cardDists) + (cardWidth * Settings.cardSlotScale + cardDists) * i, 0)
 		
-		
+var serverQueue = []
+var serverWait = 0
+var serverMaxWait = 1
+var serverCheckMaxTime = 0.1
+var serverCheckTimer = serverCheckMaxTime
+
 func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var playerIndex = 0 if isOpponent else 1
 	var parent
@@ -534,8 +560,13 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = creatures_B_Holder
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
-	
-	slotClicked(parent.get_child(slotID), button_index, true)
+	if serverQueue.size() == 0:
+		if not slotClicked(parent.get_child(slotID), button_index, true):
+			serverQueue.append([parent.get_child(slotID), button_index, true])
+			print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
+	else:
+		serverQueue.append([parent.get_child(slotID), button_index, true])
+		print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
 		
 var hoveringOn = null
 
@@ -561,29 +592,29 @@ func onSlotExit(slot : CardSlot):
 					hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
 		
-func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
+func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	
 	if not Server.online:
-		return
+		return false
 	
 	if not is_instance_valid(slot):
-		return
+		return false
 		
 	if gameOver:
-		return
+		return false
 		
 	if activePlayer == -1:
-		return
+		return false
 		
 	if Settings.gameMode == GAME_MODE.REPLAY and not fromServer:
-		return
+		return false
 		
 	if button_index == 1:
 		if slot.currentZone == CardSlot.ZONES.HAND:
 			if slot.playerID == players[activePlayer].UUID:
 				#ADDING CARDS TO THE FUSION LIST
 				if slot.playerID != players[0].UUID and not fromServer:
-					return
+					return false
 				
 				if is_instance_valid(selectedCard):
 					selectedCard.cardNode.rotation = 0
@@ -606,12 +637,16 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							if cardsShaking.has(slot):
 								MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 							cardsShaking[slot] = shakeMaxTime
+							return false
 					if activePlayer == 0:
 						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+					else:
+						$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 				else:
 					if cardsShaking.has(slot):
 						MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 					cardsShaking[slot] = shakeMaxTime
+					return false
 		elif slot.currentZone == CardSlot.ZONES.CREATURE:
 			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
@@ -620,7 +655,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 					if cardsShaking.has(slot):
 						MessageManager.notify("This creature cannot be fused this turn")
 					cardsShaking[slot] = shakeMaxTime
-					return
+					return false
 				##
 				if is_instance_valid(slot.cardNode):
 					var cardA = slot.cardNode.card
@@ -630,7 +665,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							if cardsShaking.has(slot):
 								MessageManager.notify("A creature can only fuse to have two types")
 							cardsShaking[slot] = shakeMaxTime
-							return
+							return false
 						else:
 							cardA = cardB
 				##
@@ -687,7 +722,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 				
 					if is_instance_valid(slot.cardNode):
 						if not slot.cardNode.card.canFuseThisTurn:
-							return
+							return false
 						cardsHolding.insert(0, slot)
 						
 					while cardsHolding.size() > 0:
@@ -726,8 +761,12 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 
 				if activePlayer == 0:
 					$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+				else:
+					$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 					
 			else:
+				if activePlayer != 0 and not fromServer:
+					return false
 				if slot.playerID == players[activePlayer].UUID:
 					#ATTACKING
 					if is_instance_valid(slot) and selectedCard == slot:
@@ -744,6 +783,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 							if cardsShaking.has(slot):
 								MessageManager.notify("This creature cannot attack")
 							cardsShaking[slot] = shakeMaxTime
+							return false
 				else:
 					if is_instance_valid(selectedCard):
 						var slots = []
@@ -763,6 +803,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
 		dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
 	if not fromServer:
 		Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
+		
+	return true
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer
@@ -842,6 +884,8 @@ func nextTurn():
 		
 	if activePlayer == 0:
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+	else:
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 		
 	######################	ON START OF TURN EFFECTS
 	var slotsToCheck = []

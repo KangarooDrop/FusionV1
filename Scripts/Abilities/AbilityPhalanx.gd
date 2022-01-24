@@ -9,7 +9,6 @@ func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card, Color.
 
 func onEnter(board, slot):
 	for i in range(count - buffsApplied):
-		print(i)
 		onEffect()
 		buffsApplied += 1
 

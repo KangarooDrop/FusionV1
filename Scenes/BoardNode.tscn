@@ -39,8 +39,7 @@ position = Vector2( -350, -100 )
 [node name="CardsLeftIndicator_A" parent="." instance=ExtResource( 4 )]
 position = Vector2( 0, 184 )
 
-[node name="CardsLeftIndicator2_B" parent="." instance=ExtResource( 4 )]
-visible = false
+[node name="CardsLeftIndicator_B" parent="." instance=ExtResource( 4 )]
 position = Vector2( 0, -184 )
 
 [node name="TurnIndicator" type="Sprite" parent="."]

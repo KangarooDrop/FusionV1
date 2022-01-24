@@ -1,11 +1,14 @@
 extends Control
 	
 func onRestartPressed():
-	if not get_node("/root/main/Board").playerRestart:
-		if not get_node("/root/main/Board").opponentRestart:
-			MessageManager.notify("Restart request sent to opponent")
-		get_node("/root/main/Board").playerRestart = true
-		Server.onRestart()
+	if Server.online:
+		if not get_node("/root/main/Board").playerRestart:
+			if not get_node("/root/main/Board").opponentRestart:
+				MessageManager.notify("Restart request sent to opponent")
+			get_node("/root/main/Board").playerRestart = true
+			Server.onRestart()
+	else:
+		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()
 
 func onChangeDeckPressed():
