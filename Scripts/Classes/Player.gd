@@ -20,7 +20,7 @@ func _init(cardList, board, lifeNode):
 	deck = Deck.new(cardList)
 	self.board = board
 	self.lifeNode = lifeNode
-	setLife(20, false)
+	setLife(30, false)
 
 func initHand(board):
 	hand.initHand(board, self)

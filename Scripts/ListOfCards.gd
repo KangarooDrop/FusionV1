@@ -47,11 +47,11 @@ var fusionList := \
 ]
 
 func _ready():
-	cardList.append(Card.new({"name":"Null", "tex":"res://Art/portraits/card_NULL.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1}))
-	cardList.append(Card.new({"name":"Fire Elemental", "tex":"res://Art/portraits/card_FIRE.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityDash]}))
-	cardList.append(Card.new({"name":"Water Elemental", "tex":"res://Art/portraits/card_WATER.png", "power":0, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityWisdom]}))
-	cardList.append(Card.new({"name":"Earth Elemental", "tex":"res://Art/portraits/card_ROCK.png", "power":0, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityTough]}))
-	cardList.append(Card.new({"name":"Wolf", "tex":"res://Art/portraits/card_WOLF.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1}))
+	cardList.append(Card.new({"name":"Null", "tex":"res://Art/portraits/card_NULL.png", "power":2, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1}))
+	cardList.append(Card.new({"name":"Fire Elemental", "tex":"res://Art/portraits/card_FIRE.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityDash]}))
+	cardList.append(Card.new({"name":"Water Elemental", "tex":"res://Art/portraits/card_WATER.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityWisdom]}))
+	cardList.append(Card.new({"name":"Earth Elemental", "tex":"res://Art/portraits/card_ROCK.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityTough]}))
+	cardList.append(Card.new({"name":"Wolf", "tex":"res://Art/portraits/card_WOLF.png", "power":3, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1}))
 	cardList.append(Card.new({"name":"Automaton", "tex":"res://Art/portraits/card_ROBOT.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityProduction]}))
 	
 	cardList.append(Card.new({"name":"Fiend", "tex":"res://Art/portraits/card_FIEND.png", "creature_type":[Card.CREATURE_TYPE.Fire], "tier":2}))
@@ -70,7 +70,8 @@ func _ready():
 	cardList.append(Card.new({"name":"Cyber wolf", "tex":"res://Art/portraits/card_CYBER_WOLF.png", "creature_type":[Card.CREATURE_TYPE.Beast, Card.CREATURE_TYPE.Mech], "tier":2}))
 	cardList.append(Card.new({"name":"Factory", "tex":"res://Art/portraits/card_FACTORY.png", "creature_type":[Card.CREATURE_TYPE.Mech], "tier":2}))
 	
-	cardList.append(Card.new( {"name":"Necro", "tex":"res://Art/portraits/card_NECRO.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilitySacrifice]}))
+	cardList.append(Card.new( {"name":"Necro", "tex":"res://Art/portraits/card_NECRO.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilitySacrifice]}))
+	
 	cardList.append(Card.new({"name":"Combust", "tex":"res://Art/portraits/card_COMBUST.png", "creature_type":[Card.CREATURE_TYPE.Fire, Card.CREATURE_TYPE.Necro], "tier":2}))
 	cardList.append(Card.new({"name":"Drifter", "tex":"res://Art/portraits/card_DRIFTER.png", "creature_type":[Card.CREATURE_TYPE.Water, Card.CREATURE_TYPE.Necro], "tier":2}))
 	cardList.append(Card.new({"name":"Grave Robber", "tex":"res://Art/portraits/card_DRIFTER.png", "creature_type":[Card.CREATURE_TYPE.Earth, Card.CREATURE_TYPE.Necro], "tier":2}))
@@ -80,22 +81,22 @@ func _ready():
 	
 	
 	
-	cardList.append(Card.new({"name":"Spitfire", "tex":"res://Art/portraits/FireBob.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
-	cardList.append(Card.new({"name":"Legionstones", "tex":"res://Art/portraits/Rocks.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
-	cardList.append(Card.new({"name":"Badger", "tex":"res://Art/portraits/BADger.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
-	cardList.append(Card.new({"name":"Bonelord", "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
+	cardList.append(Card.new({"name":"Spitfire", "tex":"res://Art/portraits/FireBob.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPronged]}))
+	cardList.append(Card.new({"name":"Legionstones", "tex":"res://Art/portraits/Rocks.png", "power":0, "toughness":4, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityPhalanx]}))
+	cardList.append(Card.new({"name":"Badger", "tex":"res://Art/portraits/BADger.png", "power":2, "toughness":3, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityRampage]}))
+	cardList.append(Card.new({"name":"Bonelord", "tex":"res://Art/portraits/BoneLord.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityScavenge]}))
 	cardList.append(Card.new({"name":"Slime", "tex":"res://Art/portraits/slime.png", "power":0, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityDegenerate]}))
 	cardList.append(Card.new({"name":"Frostling", "tex":"res://Art/portraits/Snowflake.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[AbilityFrozen]}))
 	cardList.append(Card.new({"name":"Blighted", "tex":"res://Art/portraits/ToasterToilet.png", "power":-1, "toughness":-1, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1, "abilities":[]}))
-	cardList.append(Card.new({"name":"Frost-tongue", "tex":"res://Art/portraits/ToasterToilet.png", "power":0, "toughness":3, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityFrostbite]}))
-	cardList.append(Card.new({"name":"Chipper", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityComposite]}))
+	cardList.append(Card.new({"name":"Frost-tongue", "tex":"res://Art/portraits/ToasterToilet.png", "power":0, "toughness":5, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityFrostbite]}))
+	cardList.append(Card.new({"name":"Chipper", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityComposite]}))
 	
-	cardList.append(Card.new({"name":"Thought Sapper", "tex":"res://Art/portraits/card_THOUGH_SAPPER.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityMindrot]}))
-	cardList.append(Card.new({"name":"Rust Crawler", "tex":"res://Art/portraits/card_RUST_CRAWLER.png", "power":3, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityBrittle]}))
+	cardList.append(Card.new({"name":"Thought Sapper", "tex":"res://Art/portraits/card_THOUGH_SAPPER.png", "power":3, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Water], "tier":1, "abilities":[AbilityMindrot]}))
+	cardList.append(Card.new({"name":"Rust Crawler", "tex":"res://Art/portraits/card_RUST_CRAWLER.png", "power":5, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityBrittle]}))
 	cardList.append(Card.new({"name":"Torchling", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPyroclast]}))
-	cardList.append(Card.new({"name":"The Boulder", "tex":"res://Art/portraits/card_BOULDER.png", "power":0, "toughness":3, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityBulwark]}))
-	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/card_SERPENT.png", "power":1, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenemous]}))
-	cardList.append(Card.new({"name":"Carrion", "tex":"res://Art/portraits/card_CARRION.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityInfested]}))
+	cardList.append(Card.new({"name":"The Boulder", "tex":"res://Art/portraits/card_BOULDER.png", "power":0, "toughness":5, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityBulwark]}))
+	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/card_SERPENT.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenemous]}))
+	cardList.append(Card.new({"name":"Carrion", "tex":"res://Art/portraits/card_CARRION.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityInfested]}))
 	
 	
 	#Fire - 1/1 deals 1 additional damage to players

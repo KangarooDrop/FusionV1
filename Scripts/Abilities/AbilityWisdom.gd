@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityWisdom
 
-func _init(card : Card).("Wisedom", "When this creature is played, draw 2 cards. Removes this ability", card, Color.blue, true):
+func _init(card : Card).("Wisedom", "When this creature is played, draw a card. Removes this ability", card, Color.blue, true):
 	pass
 
 func onEnter(board, slot):
@@ -18,7 +18,6 @@ func onDrawEffect(board):
 		if p.UUID == card.playerID:
 			for i in range(count):
 				p.hand.drawCard()
-				p.hand.drawCard()
 			break
 			
 	var scr = get_script()
@@ -30,4 +29,4 @@ func onDrawEffect(board):
 
 func combine(abl : Ability):
 	.combine(abl)
-	desc = "This creature draws " + str(count * 2) + " cards when entering the board"
+	desc = "This creature draws " + str(count) + " cards when entering the board"

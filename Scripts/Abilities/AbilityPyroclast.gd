@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityPyroclast
 
-func _init(card : Card).("Pyroclast", "When this creature is played, it deals 2 damage to you", card, Color.red, true):
+func _init(card : Card).("Pyroclast", "When this creature is played, it deals 5 damage to you", card, Color.red, true):
 	pass
 	
 func onEnter(board, slot):
@@ -17,7 +17,7 @@ func onDrawEffect(board):
 	for p in board.players:
 		if p.UUID == card.playerID:
 			for i in range(count):
-				p.takeDamage(2, card.cardNode)
+				p.takeDamage(5, card.cardNode)
 			break
 			
 	var scr = get_script()
@@ -29,4 +29,4 @@ func onDrawEffect(board):
 
 func combine(abl : Ability):
 	.combine(abl)
-	desc = "When this creature is played, it deals " + str(count * 2) + " damage to you"
+	desc = "When this creature is played, it deals " + str(count * 5) + " damage to you"
