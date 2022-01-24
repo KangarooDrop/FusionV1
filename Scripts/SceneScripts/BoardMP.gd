@@ -85,6 +85,9 @@ func _ready():
 		
 	elif Settings.gameMode == GAME_MODE.REPLAY:
 		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
+		
+	elif Settings.gameMode == GAME_MODE.SPECTATE:
+		print("SPECTATING STARTED")
 
 func getDeckFromFile() -> Array:
 	var fileName = Settings.selectedDeck
@@ -232,6 +235,23 @@ func onRestartPressed():
 		MessageManager.notify("Opponent has requested to restart")
 	opponentRestart = true
 
+func startGame():
+	initZones()
+	initHands()
+	
+	readyToStart = false
+	deckDataSet = false
+	versionConfirmed = false
+	hasStartingPlayer = false
+	gameStarted = true
+	players[0].initHand(self)
+	players[1].initHand(self)
+	print("Notice: Players ready, starting game")
+	dataLog.append("GAME_START")
+	
+	if activePlayer == 0:
+		$TurnIndicator.startTurn()
+
 func _physics_process(delta):
 	if Settings.gameMode == GAME_MODE.REPLAY and not replayWaiting and not gameOver:
 		replayTimer += delta
@@ -239,23 +259,12 @@ func _physics_process(delta):
 			nextReplayAction()
 	
 	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed:
-		initZones()
-		initHands()
-		
-		readyToStart = false
-		deckDataSet = false
-		versionConfirmed = false
-		hasStartingPlayer = false
-		gameStarted = true
-		players[0].initHand(self)
-		players[1].initHand(self)
-		print("Notice: Players ready, starting game")
-		
-		
-		if activePlayer == 0:
-			$TurnIndicator.startTurn()
+		startGame()
 		
 	if playerRestart and opponentRestart:
+		if Server.host:
+			Server.spectatorRestart()
+		
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
@@ -344,6 +353,8 @@ func _physics_process(delta):
 				cn.add_child(fn)
 				cn.get_node("FadingNode").setVisibility(1)
 				millNode = cn
+			else:
+				millQueue.remove(0)
 		
 		if is_instance_valid(millNode):
 			if millWaitTimer < millWaitMaxTime:
@@ -415,6 +426,9 @@ func nextReplayAction():
 func processReplayCommand(command : String):
 	var coms = command.split(" ")
 	match coms[0]:
+		"GAME_START":
+			if Settings.gameMode == GAME_MODE.SPECTATE:
+				startGame()
 		"NEXT_TURN":
 			nextTurn()
 		"OWN_DECK":
@@ -545,6 +559,7 @@ var serverMaxWait = 1
 var serverCheckMaxTime = 0.1
 var serverCheckTimer = serverCheckMaxTime
 
+#F 1 8 1
 func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var playerIndex = 0 if isOpponent else 1
 	var parent
@@ -594,7 +609,7 @@ func onSlotExit(slot : CardSlot):
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	
-	if not Server.online:
+	if not Server.online and Settings.gameMode != GAME_MODE.REPLAY:
 		return false
 	
 	if not is_instance_valid(slot):
@@ -606,7 +621,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	if activePlayer == -1:
 		return false
 		
-	if Settings.gameMode == GAME_MODE.REPLAY and not fromServer:
+	if Settings.gameMode == GAME_MODE.SPECTATE and not fromServer:
 		return false
 		
 	if button_index == 1:
@@ -719,11 +734,13 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					fuseWaiting = true
 					fuseWaitTimer = 0
 				else:
-				
+					isEntering = not is_instance_valid(slot.cardNode)
+	
 					if is_instance_valid(slot.cardNode):
 						if not slot.cardNode.card.canFuseThisTurn:
 							return false
 						cardsHolding.insert(0, slot)
+						cardList.insert(0, slot.cardNode.card)
 						
 					while cardsHolding.size() > 0:
 						var c = cardsHolding[0]
@@ -736,12 +753,12 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							card_A_Holder.cardSlotNodes.erase(c)
 							card_B_Holder.cardSlotNodes.erase(c)
 							c.queue_free()
-							
+					
 					var newCard = ListOfCards.fuseCards(cardList)
 					var cardPlacing = cardNode.instance()
 					newCard.playerID = slot.playerID
 					cardPlacing.card = newCard
-					checkState()
+					newCard.cardNode = cardPlacing
 					creatures_A_Holder.add_child(cardPlacing)
 					cardPlacing.global_position = slot.global_position
 					cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -750,10 +767,18 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					slot.cardNode = cardPlacing
 					cardPlacing.slot = slot
 					
-					newCard.onEnter(self, slot)
-					for s in creatures[slot.playerID]:
-						if is_instance_valid(s.cardNode):
-							s.cardNode.card.onOtherEnter(self, slot)
+					if isEntering:
+						newCard.onEnter(self, slot)
+						for s in creatures[slot.playerID]:
+							if is_instance_valid(s.cardNode) and s != slot:
+								s.cardNode.card.onOtherEnter(self, slot)
+					else:
+						newCard.onEnterFromFusion(self, slot)
+						for s in creatures[slot.playerID]:
+							if is_instance_valid(s.cardNode) and s != slot:
+								s.cardNode.card.onOtherEnterFromFusion(self, slot)
+					
+					checkState()
 					
 					card_A_Holder.centerCards(cardWidth, cardDists)
 					card_B_Holder.centerCards(cardWidth, cardDists)
@@ -953,3 +978,16 @@ var replayWaiting = false
 func saveReplay():
 	print("NOTICE: DUMPING GAME LOG")
 	FileIO.dumpDataLog(dataLog)
+
+func serialize() -> Array:
+	var rtn = []
+	
+	#Version ID, current player, health
+	#Cards selected, cards held, millQueue size, creatures attacking
+	#Decks, 
+	#Hands, 
+	#Creatures
+	return rtn
+	
+func deserialize(data : Array):
+	pass

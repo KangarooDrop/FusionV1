@@ -139,9 +139,7 @@ func fuseCards(cards : Array) -> Card:
 		cards.remove(0)
 		cards.insert(0, c_new)
 		return fuseCards(cards)
-	else:
-		return cards[0]
-	return cards[cards.size() - 1]
+	return cards[0]
 	
 func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	var uniques = []

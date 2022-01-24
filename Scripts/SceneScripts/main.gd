@@ -29,10 +29,9 @@ func onSaveBackPressed():
 	$SaveNode.visible = false
 	
 func onSaveEnter(s : String):
-	onSaveBackPressed()
+	onSaveReplayPressed()
 
 func onDeckChangePressed():
-	print("E")
 	$PauseNode/PauseMenu.visible = false
 	$FileSelector.visible = true
 	

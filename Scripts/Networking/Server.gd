@@ -6,17 +6,18 @@ var ip = "127.0.0.1"
 
 var network
 var DEFAULT_PORT = 25565
-var MAX_PEERS = 1
+var MAX_PEERS = 2
 
 var otherPlayerData = null
+var spectators := []
 	
 func _OnConnectFailed():
 	print("failed to connect to server")
 	
 func _OnConnectSucceeded():
 	print("connected to server")
-	
 	get_node("/root/Lobby").startGame()
+	
 
 func _Server_Disconnected():
 	print("Server diconnected")
@@ -25,10 +26,6 @@ func _Server_Disconnected():
 	closeServer()
 	
 	MessageManager.notify("Opponent disconnected")
-	#var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-	#if error != 0:
-	#	print("Error loading test1.tscn. Error Code = " + str(error))
-	
 	
 
 ####################################################################
@@ -49,21 +46,29 @@ func closeServer():
 	
 func playerConnected(player_id):
 	print("User "+ str(player_id) + " Connected")
-	otherPlayerData = player_id
-	
-	get_node("/root/Lobby").startGame()
+	if otherPlayerData == null:
+		otherPlayerData = player_id
+		get_node("/root/Lobby").startGame()
+	else:
+		spectators.append(player_id)
+		setSpectateData(player_id, get_node("/root/main/Board").serialize())
+		print("Spectator joined")
 
 	
 func playerDisconnected(player_id):
-	print("User "+ str(player_id) + " Disconnected")
-	otherPlayerData = null
-	
-	closeServer()
-	
-	MessageManager.notify("Opponent disconnected")
-	#var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-	#if error != 0:
-	#	print("Error loading test1.tscn. Error Code = " + str(error))
+	if player_id == otherPlayerData:
+		print("User "+ str(player_id) + " Disconnected")
+		otherPlayerData = null
+		
+		closeServer()
+		
+		MessageManager.notify("Opponent disconnected")
+	elif player_id in spectators:
+		print("Spectator  "+ str(player_id) + " Disconnected")
+		spectators.erase(player_id)
+		
+		MessageManager.notify("Spectator disconnected")
+		
 
 ####################################################################
 	
@@ -95,10 +100,12 @@ remote func serverFetchDeck(requester):
 	
 	var board = get_node_or_null("/root/main/Board")
 	while not is_instance_valid(board) or board.gameStarted:
-		print("Board not ready yet, waiting")
+		print("Board not ready yet, waiting; fetch")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
+			return
+		if otherPlayerData != null and player_id != otherPlayerData:
 			return
 	var data = board.players[0].deck.getJSONData()
 	var order = board.players[0].deck.serialize()
@@ -131,15 +138,24 @@ remote func serverOnGameStart():
 ####################################################################
 
 remote func slotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
-	var id = 1
+	var ids = []
 	if Server.host:
-		id = otherPlayerData
+		ids.append(otherPlayerData)
+		ids += spectators
 	else:
-		pass
-	rpc_id(id, "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
+		ids.append(1)
+	for id in ids:
+		if id == otherPlayerData or id == 1:
+			rpc_id(id, "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
+		else:
+			rpc_id(id, "serverSlotClicked", not isOpponent, slotZone, slotID, button_index)
 	
 remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var player_id = get_tree().get_rpc_sender_id()
+	
+	if Server.host:
+		for id in spectators:
+			rpc_id(id, "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
 	
 	var board = get_node_or_null("/root/main/Board")
 	board.slotClickedServer(isOpponent, slotZone, slotID, button_index)
@@ -147,15 +163,21 @@ remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, b
 ####################################################################
 
 remote func onNextTurn():
-	var id = 1
+	var ids = []
 	if Server.host:
-		id = otherPlayerData
+		ids.append(otherPlayerData)
+		ids += spectators
 	else:
-		pass
-	rpc_id(id, "serverOnNextTurn")
+		ids.append(1)
+	for id in ids:
+		rpc_id(id, "serverOnNextTurn")
 	
 remote func serverOnNextTurn():
 	var player_id = get_tree().get_rpc_sender_id()
+	
+	if Server.host:
+		for id in spectators:
+			rpc_id(id, "serverOnNextTurn")
 	
 	var board = get_node_or_null("/root/main/Board")
 	board.nextTurn()
@@ -193,10 +215,12 @@ remote func serverSetActivePlayer(index : int):
 	
 	var board = get_node_or_null("/root/main/Board")
 	while not is_instance_valid(board) or board.gameStarted:
-		print("Board not ready yet, waiting")
+		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
+			return
+		if otherPlayerData != null and player_id != otherPlayerData:
 			return
 	board.setStartingPlayer(index)
 
@@ -212,6 +236,8 @@ remote func disconnectMessage(message : String):
 	
 remote func serverDisconnectMessage(message : String):
 	Server.closeServer()
+	Server.online = false
+	Server.host = false
 	
 	MessageManager.notify(message)
 	
@@ -239,5 +265,38 @@ remote func returnVersion(version, requester):
 		inst.compareVersion(version)
 	else:
 		print("AAAAAAAAAAAAAAAAAAAAAAAAAAA! NO REQ")
-		
+
+####################################################################
+
+remote func setSpectateData(to : int, data):
+	rpc_id(to, "serverSetSpectateData", data)
+	
+remote func serverSetSpectateData(data):
+	if Settings.gameMode != BoardMP.GAME_MODE.SPECTATE:
+		MessageManager.notify("The game has already begun")
+		Server.closeServer()
+		Server.online = false
+		var error = get_tree().change_scene("res://Scenes/Networking/Lobby.tscn")
+		if error != 0:
+			print("Error loading test1.tscn. Error Code = " + str(error))
+	else:
+		var board = get_node_or_null("/root/main/Board")
+		while not is_instance_valid(board):
+			print("Board not ready yet, waiting; set spectate")
+			yield(get_tree().create_timer(0.1), "timeout")
+			board = get_node_or_null("/root/main/Board")
+			if not Server.online:
+				return
+		board.deserialize(data)
+
+####################################################################
+
+remote func spectatorRestart():
+	for id in spectators:
+		rpc_id(id, "serverSpectatorRestart")
+	
+remote func serverSpectatorRestart():
+	var error = get_tree().change_scene("res://Scenes/main.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
 

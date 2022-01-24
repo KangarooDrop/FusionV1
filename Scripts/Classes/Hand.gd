@@ -118,6 +118,7 @@ func addCard(data : Array):
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
 			cardSlotNodes.append(slotInst)
+			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
 			var cardInst = cardNode.instance()
 			cardInst.card = data[0]
@@ -125,10 +126,12 @@ func addCard(data : Array):
 			cardInst.playerID = player.UUID
 			add_child(cardInst)
 			cardNodes.append(cardInst)
+			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
 			slotInst.cardNode = cardInst
 			
 			centerCards(board.cardWidth, board.cardDists)
 			
 			if data[1]:
-				player.takeDamage(1, null)
+				player.takeDamage(drawDamage, null)
+				drawDamage += 1

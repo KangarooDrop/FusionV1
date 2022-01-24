@@ -16,10 +16,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -124.0
-margin_top = -48.0
-margin_right = 124.0
-margin_bottom = 16.0
+margin_left = -69.0
+margin_top = -32.0
+margin_right = 69.0
+margin_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 custom_constants/separation = 16
@@ -28,62 +28,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerUI"]
-margin_right = 248.0
-margin_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Button" type="Button" parent="MultiplayerUI/HBoxContainer"]
-margin_left = 103.0
-margin_right = 145.0
-margin_bottom = 20.0
+[node name="HostButton" type="Button" parent="MultiplayerUI"]
+margin_top = 18.0
+margin_right = 138.0
+margin_bottom = 38.0
 text = "Host"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MultiplayerUI"]
-margin_top = 36.0
-margin_right = 248.0
-margin_bottom = 60.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MultiplayerUI/HBoxContainer2"]
-margin_top = 5.0
-margin_right = 77.0
-margin_bottom = 19.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "IP Address: "
-
-[node name="LineEdit" type="LineEdit" parent="MultiplayerUI/HBoxContainer2"]
-margin_left = 81.0
-margin_right = 209.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 128, 0 )
-text = "127.0.0.1"
-
-[node name="Button" type="Button" parent="MultiplayerUI/HBoxContainer2"]
-margin_left = 213.0
-margin_right = 248.0
-margin_bottom = 24.0
+[node name="JoinButton" type="Button" parent="MultiplayerUI"]
+margin_top = 54.0
+margin_right = 138.0
+margin_bottom = 74.0
 text = "Join"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MultiplayerUI"]
-margin_top = 76.0
-margin_right = 248.0
-margin_bottom = 96.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="SpectateButton" type="Button" parent="MultiplayerUI"]
+visible = false
+margin_top = 72.0
+margin_right = 138.0
+margin_bottom = 92.0
+text = "Spectate"
 
-[node name="Button" type="Button" parent="MultiplayerUI/HBoxContainer3"]
-margin_left = 74.0
-margin_right = 173.0
-margin_bottom = 20.0
+[node name="BackButton" type="Button" parent="MultiplayerUI"]
+margin_top = 90.0
+margin_right = 138.0
+margin_bottom = 110.0
 text = "Back to Menu"
 
 [node name="WaitLabel" type="Label" parent="."]
@@ -149,7 +116,71 @@ margin_right = 75.0
 margin_bottom = 38.0
 text = "Back"
 
-[connection signal="pressed" from="MultiplayerUI/HBoxContainer/Button" to="." method="hostButtonPressed"]
-[connection signal="pressed" from="MultiplayerUI/HBoxContainer2/Button" to="." method="joinButtonPressed"]
-[connection signal="pressed" from="MultiplayerUI/HBoxContainer3/Button" to="." method="backButtonPressed"]
+[node name="IPSet" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="IPSet"]
+margin_left = -104.0
+margin_top = 8.0
+margin_right = 105.0
+margin_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="IPSet/HBoxContainer"]
+margin_top = 5.0
+margin_right = 77.0
+margin_bottom = 19.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "IP Address: "
+
+[node name="LineEdit" type="LineEdit" parent="IPSet/HBoxContainer"]
+margin_left = 81.0
+margin_right = 209.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 128, 0 )
+text = "127.0.0.1"
+
+[node name="JoinButton" type="Button" parent="IPSet"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -45.5
+margin_top = 20.0
+margin_right = 45.5
+margin_bottom = 40.0
+text = "Join"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackButton" type="Button" parent="IPSet"]
+margin_left = -25.5
+margin_top = 72.0
+margin_right = 65.5
+margin_bottom = 92.0
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="MultiplayerUI/HostButton" to="." method="hostButtonPressed"]
+[connection signal="pressed" from="MultiplayerUI/JoinButton" to="." method="joinButtonPressed"]
+[connection signal="pressed" from="MultiplayerUI/SpectateButton" to="." method="spectateButtonPressed"]
+[connection signal="pressed" from="MultiplayerUI/BackButton" to="." method="backButtonPressed"]
 [connection signal="pressed" from="DeckSelector/VBoxContainer/BackButton" to="." method="onBackButtonClicked"]
+[connection signal="pressed" from="IPSet/JoinButton" to="." method="ipJoinButtonPressed"]
+[connection signal="pressed" from="IPSet/BackButton" to="." method="ipBackButtonPressed"]

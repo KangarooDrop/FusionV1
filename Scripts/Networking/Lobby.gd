@@ -22,6 +22,16 @@ func joinButtonPressed():
 	$MultiplayerUI.visible = false
 	openFileSelector()
 		
+func spectateButtonPressed():
+	$MultiplayerUI.visible = false
+	$IPSet.visible = true
+	Settings.gameMode = BoardMP.GAME_MODE.SPECTATE
+	
+func ipBackButtonPressed():
+	$IPSet.visible = false
+	openFileSelector()
+	
+		
 func backButtonPressed():
 	Server.host = false
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -67,21 +77,26 @@ func openFileSelector():
 		$MultiplayerUI.visible = true
 	
 	
-	
-	
 func onFileButtonClicked(fileName : String):
-	$WaitLabel.visible = true
 	$DeckSelector.visible = false
 		
+	Settings.gameMode = BoardMP.GAME_MODE.PLAYING
 	Settings.selectedDeck = fileName
 	if Server.host:
 		Server.online = true
 		Server.startServer()
 		$WaitLabel.visible = true
 	else:
-		Server.ip = $MultiplayerUI/HBoxContainer2/LineEdit.text
-		Server.online = true
-		Server.connectToServer()
+		$IPSet.visible = true
+
+func ipJoinButtonPressed():
+	Server.ip = $IPSet/HBoxContainer/LineEdit.text
+	print(Server.ip)
+	Server.online = true
+	Server.connectToServer()
+	$WaitLabel.visible = true
+	$IPSet.visible = false
+	
 
 func onBackButtonClicked():
 	$DeckSelector.visible = false
@@ -92,6 +107,8 @@ func _input(event):
 		if event.scancode == KEY_ESCAPE:
 			if Server.online:
 				Server.closeServer()
+				Server.host = false
+				Server.online = false
 				
 				$MultiplayerUI.visible = true
 				$WaitLabel.visible = false

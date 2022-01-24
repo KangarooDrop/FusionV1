@@ -17,7 +17,10 @@ func pop() -> Card:
 	return c
 
 func mill(board, playerID):
-	board.millQueue.append(playerID)
+	if Settings.playAnimations:
+		board.millQueue.append(playerID)
+	else:
+		pop()
 
 func draw(count : int) -> Array:
 	var c : Array
