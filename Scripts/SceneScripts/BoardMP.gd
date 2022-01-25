@@ -62,6 +62,7 @@ var gameStarted = false
 var gameOver = false
 
 enum GAME_MODE {PLAYING, SPECTATE, REPLAY}
+var settingSpectateData = false
 
 func _ready():
 	var gameSeed = OS.get_system_time_msecs()
@@ -255,6 +256,7 @@ func startGame():
 		$TurnIndicator.startTurn()
 
 func _physics_process(delta):
+	
 	if Settings.gameMode == GAME_MODE.REPLAY and not replayWaiting and not gameOver:
 		replayTimer += delta
 		if replayTimer >= 0.3:
@@ -396,9 +398,10 @@ func _physics_process(delta):
 			serverWait = 0
 			serverCheckTimer = 0
 			
-	if actionQueue.size() > 0 and fuseQueue.size() == 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
-		slotClicked(actionQueue[0][0], actionQueue[0][1], false)
-		actionQueue.remove(0)
+	if gameStarted:
+		if actionQueue.size() > 0 and fuseQueue.size() == 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
+			slotClicked(actionQueue[0][0], actionQueue[0][1], false)
+			actionQueue.remove(0)
 
 func nextReplayAction():
 	replayWaiting = true
@@ -433,8 +436,9 @@ func processReplayCommand(command : String):
 	var coms = command.split(" ")
 	match coms[0]:
 		"GAME_START":
-			if Settings.gameMode == GAME_MODE.SPECTATE:
-				startGame()
+			pass
+#			if Settings.gameMode == GAME_MODE.SPECTATE:
+#				startGame()
 		"NEXT_TURN":
 			nextTurn()
 		"OWN_DECK":
@@ -581,6 +585,9 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = creatures_B_Holder
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
+	#while settingSpectateData:
+	#	yield(get_tree().create_timer(0.02), "timeout")
+		
 	if serverQueue.size() == 0:
 		if not slotClicked(parent.get_child(slotID), button_index, true):
 			serverQueue.append([parent.get_child(slotID), button_index, true])
@@ -990,6 +997,19 @@ var replayWaiting = false
 func saveReplay():
 	print("NOTICE: DUMPING GAME LOG")
 	FileIO.dumpDataLog(dataLog)
+
+func setSpectatorData(data):
+	visible = false
+	settingSpectateData = true
+	var anims = Settings.playAnimations
+	Settings.playAnimations = false
+	for i in range(data.size()):
+		processReplayCommand(data[i])
+		yield(get_tree().create_timer(0.02), "timeout")
+		
+	Settings.playAnimations = anims
+	settingSpectateData = false
+	visible = true
 
 func serialize() -> Array:
 	var rtn = []

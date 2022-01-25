@@ -50,9 +50,9 @@ __meta__ = {
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
 visible = false
-margin_top = 48.0
-margin_right = 40.0
-margin_bottom = 68.0
+margin_top = 90.0
+margin_right = 85.0
+margin_bottom = 110.0
 text = "Settings"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]

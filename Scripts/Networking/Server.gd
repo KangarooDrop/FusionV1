@@ -51,7 +51,7 @@ func playerConnected(player_id):
 		get_node("/root/Lobby").startGame()
 	else:
 		spectators.append(player_id)
-		setSpectateData(player_id, get_node("/root/main/Board").serialize())
+		setSpectateData(player_id, get_node("/root/main/Board").dataLog)
 		print("Spectator joined")
 
 	
@@ -287,7 +287,7 @@ remote func serverSetSpectateData(data):
 			board = get_node_or_null("/root/main/Board")
 			if not Server.online:
 				return
-		board.deserialize(data)
+		board.setSpectatorData(data)
 
 ####################################################################
 

@@ -29,28 +29,26 @@ __meta__ = {
 }
 
 [node name="HostButton" type="Button" parent="MultiplayerUI"]
-margin_top = 18.0
 margin_right = 138.0
-margin_bottom = 38.0
+margin_bottom = 20.0
 text = "Host"
 
 [node name="JoinButton" type="Button" parent="MultiplayerUI"]
-margin_top = 54.0
+margin_top = 36.0
 margin_right = 138.0
-margin_bottom = 74.0
+margin_bottom = 56.0
 text = "Join"
 
 [node name="SpectateButton" type="Button" parent="MultiplayerUI"]
-visible = false
 margin_top = 72.0
 margin_right = 138.0
 margin_bottom = 92.0
 text = "Spectate"
 
 [node name="BackButton" type="Button" parent="MultiplayerUI"]
-margin_top = 90.0
+margin_top = 108.0
 margin_right = 138.0
-margin_bottom = 110.0
+margin_bottom = 128.0
 text = "Back to Menu"
 
 [node name="WaitLabel" type="Label" parent="."]
