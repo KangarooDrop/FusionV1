@@ -28,22 +28,25 @@ var playerID = -1
 func _init(params):
 	self.params = params
 	if params.has("UUID"):
-		UUID = params["UUID"]
+		UUID = int(params["UUID"])
 	name = params["name"]
 	texture = load(params["tex"])
-	tier = params["tier"]
+	tier = int(params["tier"])
 	if params.has("player_id"):
 		playerID = params["player_id"]
 	if params.has("abilities"):
 		for abl in params["abilities"]:
-			abilities.append(abl.new(self))
+			for data in ProjectSettings.get_setting("_global_script_classes"):
+				if data["class"] == abl:
+					abilities.append(load(data["path"]).new(self))
 			
 	if params.has("creature_type"):
-		creatureType = params["creature_type"]
+		for c in params["creature_type"]:
+			creatureType.append(int(c))
 	if params.has("power"):
-		power = params["power"]
+		power = int(params["power"])
 	if params.has("toughness"):
-		toughness = params["toughness"]
+		toughness = int(params["toughness"])
 	if params.has("has_attacked"):
 		hasAttacked = params["has_attacked"]
 	if params.has("can_attack"):

@@ -37,6 +37,8 @@ var cardsHolding : Array
 var selectedCard : CardSlot
 var selectRotTimer = 0
 
+var actionQueue : Array
+
 var millQueue : Array
 var millNode
 var millWaitTimer = 0
@@ -393,6 +395,10 @@ func _physics_process(delta):
 			serverQueue.remove(0)
 			serverWait = 0
 			serverCheckTimer = 0
+			
+	if actionQueue.size() > 0 and fuseQueue.size() == 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
+		slotClicked(actionQueue[0][0], actionQueue[0][1], false)
+		actionQueue.remove(0)
 
 func nextReplayAction():
 	replayWaiting = true
@@ -606,6 +612,9 @@ func onSlotExit(slot : CardSlot):
 				if cardsPlayed < cardsPerTurn:
 					hoveringOn.cardNode.position.y += 5
 		hoveringOn = null
+		
+func onSlotBeingClicked(slot : CardSlot, button_index : int):
+	actionQueue.append([slot, button_index])
 		
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	
@@ -855,6 +864,9 @@ func _input(event):
 						waiting = true
 							
 					if millQueue.size() > 0:
+						waiting = true
+							
+					if actionQueue.size() > 0:
 						waiting = true
 							
 					yield(get_tree().create_timer(0.1), "timeout")

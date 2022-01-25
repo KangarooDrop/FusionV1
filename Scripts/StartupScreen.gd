@@ -1,9 +1,7 @@
 extends Control
 
 func _ready():
-	for data in ProjectSettings.get_setting("_global_script_classes"):
-		if data["class"] == "AbilityPronged":
-			print("found prong")
+	pass
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")

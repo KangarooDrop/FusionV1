@@ -52,6 +52,8 @@ func sort():
 				var typesToComp = []
 				if i != 0:
 					typesToComp.append(i)
+				if j != 0:
+					typesToComp.append(j)
 					
 				for c in listOfCards:
 					var hasAll = true
@@ -64,6 +66,7 @@ func sort():
 					if hasAll:
 						cardsToAdd.append(c)
 						listOfCards.erase(c)
+				
 	if sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
 		for c in cardsToAdd:
 			listOfCards.append(c)
@@ -174,7 +177,7 @@ func createHoverNode(position : Vector2, text : String):
 	hoverInst.setText(text)
 	infoWindow = hoverInst
 	
-func slotClicked(slot : CardSlot, button_index : int, fromServer = false):
+func onSlotBeingClicked(slot : CardSlot, button_index : int):
 	if not $SaveDisplay.visible and not $FileDisplay.visible and not $ConfirmNode.visible and not $ConfirmDeleteNode.visible:
 		if button_index == 1:
 			if slot.cardNode != null and slotViewing == null:
