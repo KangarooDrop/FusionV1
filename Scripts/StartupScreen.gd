@@ -57,7 +57,8 @@ func onReplayBackPressed():
 	
 	
 func onSettingsPressed():
-	pass
+	$VBoxContainer.visible = false
+	$SettingsPage.visible = true
 	
 func onExitPressed():
 	get_tree().quit()

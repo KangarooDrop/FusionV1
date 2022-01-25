@@ -14,6 +14,32 @@ var gameMode : int
 
 var cardSlotScale = 1.5
 
+var settingsPath = "user:/"
+var settingsName = "settings"
+
+func _ready():
+	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
+	if json.keys().size() == 0:
+		FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
+		
+	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
+		
+	Settings.playAnimations = settings["play_anims"]
+	Server.MAX_PEERS = settings["num_peers"]
+	
+func writeToSettings():
+	print("Saving user settings")
+	FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
+	
+func getSettingsDict() -> Dictionary:
+	var rtn := \
+	{
+		"num_peers":Server.MAX_PEERS, 
+		"play_anims":playAnimations
+	}
+	return rtn
+	
+
 static func compareVersion(comp1 : String, comp2 : String) -> int:
 	var spl = comp1.split(".")
 	var spl2 = comp2.split(".")

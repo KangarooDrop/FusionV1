@@ -342,6 +342,11 @@ func _physics_process(delta):
 			var card
 			if playerNum != -1:
 				card = players[playerNum].deck.pop()
+				
+				if players[playerNum].deck.cards.size() <= 0 and is_instance_valid(decks[players[playerNum].UUID].cardNode):
+					decks[players[playerNum].UUID].cardNode.queue_free()
+					decks[players[playerNum].UUID].cardNode = null
+					
 			else:
 				millQueue.remove(0)
 				print("Player ID not found for mill")
@@ -985,18 +990,27 @@ func checkState():
 			checkState()
 
 func onLoss(player : Player):
+	if saveReplayOnClose:
+		saveReplay()
 	gameOver = true
 	get_node("/root/main/WinLose").showWinLose(player != players[0])
 
 var dataLog := []
+var saveReplayOnClose = false
+var hasSavedReplay = false
 
 var replayIndex = 0
 var replayTimer = 0
 var replayWaiting = false
 
+func _exit_tree():
+	if saveReplayOnClose:
+		saveReplay()
+
 func saveReplay():
-	print("NOTICE: DUMPING GAME LOG")
-	FileIO.dumpDataLog(dataLog)
+	if not hasSavedReplay:
+		FileIO.dumpDataLog(dataLog)
+		hasSavedReplay = true
 
 func setSpectatorData(data):
 	visible = false

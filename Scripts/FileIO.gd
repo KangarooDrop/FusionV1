@@ -36,7 +36,7 @@ func readJSON(path : String) -> Dictionary:
 		if par != null:
 			dict = par
 		else:
-			MessageManager.notify("Error parsing deck save file")
+			MessageManager.notify("Error parsing json save file")
 		file.close()
 	return dict
 

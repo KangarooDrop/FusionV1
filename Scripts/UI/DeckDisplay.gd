@@ -71,7 +71,7 @@ func addCard(id : int) -> bool:
 	setTotal(getTotal() + 1)
 	return true
 	
-var hoverAlpha = 0.6
+var hoverAlpha = 1
 var hoverCard = null
 var hoveringOn = null
 var onHoverTimer = 0

@@ -153,13 +153,15 @@ remote func slotClicked(isOpponent : bool, slotZone : int, slotID : int, button_
 remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var player_id = get_tree().get_rpc_sender_id()
 	
+	var board = get_node_or_null("/root/main/Board")
+	if board.activePlayer == 0 and Settings.gameMode == BoardMP.GAME_MODE.PLAYING:
+		return
+	board.slotClickedServer(isOpponent, slotZone, slotID, button_index)
+	
 	if Server.host:
 		for id in spectators:
 			rpc_id(id, "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
 	
-	var board = get_node_or_null("/root/main/Board")
-	board.slotClickedServer(isOpponent, slotZone, slotID, button_index)
-
 ####################################################################
 
 remote func onNextTurn():
@@ -175,13 +177,14 @@ remote func onNextTurn():
 remote func serverOnNextTurn():
 	var player_id = get_tree().get_rpc_sender_id()
 	
+	var board = get_node_or_null("/root/main/Board")
+	if board.activePlayer == 0 and Settings.gameMode == BoardMP.GAME_MODE.PLAYING:
+		return
+	board.nextTurn()
+		
 	if Server.host:
 		for id in spectators:
 			rpc_id(id, "serverOnNextTurn")
-	
-	var board = get_node_or_null("/root/main/Board")
-	board.nextTurn()
-		
 
 ####################################################################
 

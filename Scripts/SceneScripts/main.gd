@@ -21,8 +21,9 @@ func _input(event):
 
 func onSaveReplayPressed():
 	Settings.dumpFile = $SaveNode/SaveControl/LineEdit.text + ".txt"
-	get_node("Board").saveReplay()
+	get_node("Board").saveReplayOnClose = true
 	$SaveNode/SaveControl/LineEdit.text = ""
+	MessageManager.notify("Replay will be saved at the end of the match")
 	onSaveBackPressed()
 	
 func onSaveBackPressed():

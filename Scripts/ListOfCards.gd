@@ -34,16 +34,6 @@ var fusionList := \
 		[-1,   -1,   16,    17,   18,   19,   20,   null],
 		[-1,   -1,   22,    23,   24,   25,   26,   27]
 	]
-#	[
-#		[-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1, 	-1],
-#		[-1, 	0, 		null, 	null, 	null, 	null, 	null, 	null],
-#		[-1, 	0, 		0, 		null, 	null, 	null, 	null, 	null],
-#		[-1, 	0, 		0, 		0, 		null, 	null, 	null, 	null],
-#		[-1, 	0, 		0, 		0, 		0, 		null, 	null, 	null],
-#		[-1, 	0, 		0, 		0, 		0, 		0, 		null, 	null],
-#		[-1, 	0, 		0, 		0, 		0, 		0, 		0,	 	null],
-#		[-1, 	0, 		0, 		0, 		0, 		0, 		0, 		0]
-#	]
 ]
 
 func _ready():
@@ -51,18 +41,11 @@ func _ready():
 	file.open("res://database/card_list.json", File.READ)
 	var cardDataset : Dictionary = parse_json(file.get_as_text())
 	file.close()
-	print(cardDataset["1"]["abilities"][0])
-	print(int(1))
 	
 	for k in cardDataset.keys():
 		var dat = cardDataset[k]
 		dat["UUID"] = k
 		cardList.append(Card.new(cardDataset[k]))
-#		for data in ProjectSettings.get_setting("_global_script_classes"):
-#			if cardDataset[k].has("abilities"):
-#				for abl in cardDataset[k]["abilities"]:
-#					if data["class"] == abl:
-#						print("found " + str(abl))
 	
 	"""
 	cardList.append(Card.new({"name":"Null", "tex":"res://Art/portraits/card_NULL.png", "power":2, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Null], "tier":1}))
@@ -116,26 +99,6 @@ func _ready():
 	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/card_SERPENT.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenemous]}))
 	cardList.append(Card.new({"name":"Carrion", "tex":"res://Art/portraits/card_CARRION.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityInfested]}))
 	"""
-	
-	#Fire - 1/1 deals 1 additional damage to players
-	#Earth - When attacked, deal as much damage taken back to the attacker
-	#Beast - 1/3 Serpant
-	#Necro - 1/1 Infested - When this creature dies, creature a 0/1 Necro with no abilities
-	
-	#for i in range(cardList.size()):
-	#	cardList[i].UUID = i
-		
-	var path = "user:/"
-	var fileName = "card_list"
-	var dict = {}
-	for i in range(cardList.size()):
-		dict[i] = cardList[i].params
-	
-	var error = FileIO.writeToJSON(path, fileName, dict)
-	if error != 0:
-		print("Error: Writing card list to JSON : ", error)
-	else:
-		print("Card list written to JSON at path: ", path, "/", fileName + ".json")
 
 func getCard(index : int) -> Card:
 	if index < 0 or index >= cardList.size():

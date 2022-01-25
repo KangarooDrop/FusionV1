@@ -14,7 +14,6 @@ func onEnterFromFusion(board, slot):
 	onEffect(board, slot)
 
 func onEffect(board, slot):
-	print(slot.playerID)
 	for p in board.players:
 		if p.UUID != card.playerID:
 			for i in range(count * 3):

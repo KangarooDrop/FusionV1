@@ -29,7 +29,10 @@ func spectateButtonPressed():
 	
 func ipBackButtonPressed():
 	$IPSet.visible = false
-	openFileSelector()
+	if Settings.gameMode == BoardMP.GAME_MODE.SPECTATE:
+		onBackButtonClicked()
+	else:
+		openFileSelector()
 	
 		
 func backButtonPressed():

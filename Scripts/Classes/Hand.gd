@@ -62,7 +62,7 @@ func _physics_process(delta):
 			centerCards(board.cardWidth, board.cardDists)
 			if drawQueue[0][1]:
 				cardInst.global_position = slotInst.global_position
-				cardInst.setCardVisible(handVisible)
+				cardInst.setCardVisible(handVisible or Settings.gameMode == BoardMP.GAME_MODE.SPECTATE or Settings.gameMode == BoardMP.GAME_MODE.REPLAY)
 				var fn = fadingNode.instance()
 				fn.maxTime = 1
 				fn.connect("onFadeIn", self, "cardFadeInFinish")
@@ -72,7 +72,7 @@ func _physics_process(delta):
 				drawDamage += 1
 			else:
 				cardInst.setCardVisible(false)
-				if handVisible:
+				if handVisible or Settings.gameMode == BoardMP.GAME_MODE.SPECTATE or Settings.gameMode == BoardMP.GAME_MODE.REPLAY:
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
 			
@@ -122,7 +122,7 @@ func addCard(data : Array):
 			
 			var cardInst = cardNode.instance()
 			cardInst.card = data[0]
-			cardInst.setCardVisible(true)
+			cardInst.setCardVisible(handVisible or Settings.gameMode == BoardMP.GAME_MODE.SPECTATE or Settings.gameMode == BoardMP.GAME_MODE.REPLAY)
 			cardInst.playerID = player.UUID
 			add_child(cardInst)
 			cardNodes.append(cardInst)

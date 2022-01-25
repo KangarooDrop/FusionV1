@@ -49,12 +49,15 @@ func sort():
 	if sortOrder == SORT_ORDER.TYPE or sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
 		for i in Card.CREATURE_TYPE.values():
 			for j in Card.CREATURE_TYPE.values():
+				if i == 0:
+					break
 				var typesToComp = []
 				if i != 0:
 					typesToComp.append(i)
 				if j != 0:
 					typesToComp.append(j)
 					
+				var cardsToRemove = []
 				for c in listOfCards:
 					var hasAll = true
 					for t in typesToComp:
@@ -65,7 +68,9 @@ func sort():
 							hasAll = false
 					if hasAll:
 						cardsToAdd.append(c)
-						listOfCards.erase(c)
+						cardsToRemove.append(c)
+				for c in cardsToRemove:
+					listOfCards.erase(c)
 				
 	if sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
 		for c in cardsToAdd:
