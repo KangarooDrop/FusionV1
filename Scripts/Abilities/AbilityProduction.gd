@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityProduction
 
-func _init(card : Card).("Production", "This creature creates a mech on being played", card, Color.gray, true):
+func _init(card : Card).("Production", "When this creature is played, create a mech with no abilities. Removes this ability", card, Color.gray, true):
 	pass
 
 func onEnter(board, slot):
@@ -20,9 +20,5 @@ func onEffect(board):
 			c.abilities = []
 			card.addCreatureToBoard(c, board)
 			
-	var scr = get_script()
-	for abl in card.abilities:
-		if abl is scr:
-			card.abilities.erase(abl)
-			break
+	card.abilities.erase(self)
 	

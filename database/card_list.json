@@ -348,8 +348,8 @@
   "34": {
     "name": "Blighted",
     "tex": "res://Art/portraits/ToasterToilet.png",
-    "power": -1,
-    "toughness": -1,
+    "power": 2,
+    "toughness": -2,
     "creature_type": [
       1
     ],
@@ -460,6 +460,84 @@
     "tier": 1,
     "abilities": [
       "AbilityInfested"
+    ]
+  },
+  "43": {
+    "name": "Phoenix",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityRekindle"
+    ]
+  },
+  "44": {
+    "name": "Ice King",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityIcecage"
+    ]
+  },
+  "45": {
+    "name": "Hullera",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityShieldUp"
+    ]
+  },
+  "46": {
+    "name": "Pupa",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityEvolution"
+    ]
+  },
+  "47": {
+    "name": "Processor",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityConfigure"
+    ]
+  },
+  "48": {
+    "name": "Devourer",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityLifedrain"
     ]
   }
 }

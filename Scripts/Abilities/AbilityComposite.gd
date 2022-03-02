@@ -41,3 +41,4 @@ func clone(card : Card) -> Ability:
 func combine(abl : Ability):
 	.combine(abl)
 	abl.buffsApplied += buffsApplied
+	desc = "Gains +" + str(count) + " power for each other creature you control"

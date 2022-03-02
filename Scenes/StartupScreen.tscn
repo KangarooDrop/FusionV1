@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scripts/UI/CardDisplay.gd" type="Script" id=4]
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=5]
 [ext_resource path="res://Scripts/UI/SettingsPage.gd" type="Script" id=6]
 
@@ -112,7 +111,6 @@ text = "Back"
 [node name="CardDisplay" parent="." instance=ExtResource( 3 )]
 visible = false
 position = Vector2( 512, 54 )
-script = ExtResource( 4 )
 
 [node name="SettingsPage" type="VBoxContainer" parent="."]
 visible = false

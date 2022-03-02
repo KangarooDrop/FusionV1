@@ -2,6 +2,8 @@ extends Node
 
 class_name CardSlot
 
+var disabled = false
+
 var board
 var cardNode
 var playerID = -1
@@ -17,14 +19,17 @@ func _ready():
 		$SpotSprite.visible = true
 	
 func mouseEnter():
-	board.onSlotEnter(self)
+	if board != null and not disabled:
+		board.onSlotEnter(self)
 	
 func mouseExit():
-	board.onSlotExit(self)
+	if board != null:
+		board.onSlotExit(self)
 	
 func _input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.pressed:
-		board.onSlotBeingClicked(self, event.button_index)
+	if board != null and not disabled:
+		if event is InputEventMouseButton and event.pressed:
+			board.onSlotBeingClicked(self, event.button_index)
 
 func getNeighbors() -> Array:
 	var neighbors = []

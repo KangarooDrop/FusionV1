@@ -126,6 +126,7 @@ func addCreatureToBoard(card, board, slot = null):
 		slot.cardNode = cardPlacing
 		cardPlacing.slot = slot
 		cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+		card.cardNode = cardPlacing
 		
 		card.onEnter(board, slot)
 		for s in board.creatures[slot.playerID]:

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityPyroclast
 
-func _init(card : Card).("Pyroclast", "When this creature is played, it deals 5 damage to you", card, Color.red, true):
+func _init(card : Card).("Pyroclast", "When this creature is played, it deals 5 damage to you. Removes this ability", card, Color.red, true):
 	pass
 	
 func onEnter(board, slot):
@@ -20,11 +20,7 @@ func onDrawEffect(board):
 				p.takeDamage(5, card.cardNode)
 			break
 			
-	var scr = get_script()
-	for abl in card.abilities:
-		if abl is scr:
-			card.abilities.erase(abl)
-			break
+	card.abilities.erase(self)
 
 
 func combine(abl : Ability):

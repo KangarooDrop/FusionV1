@@ -8,7 +8,6 @@ func _ready():
 	oldtext = text
 
 func _on_LineEdit_text_changed(new_text):
-	print("E")
 	if regex.search(new_text):
 		oldtext = new_text
 	else:

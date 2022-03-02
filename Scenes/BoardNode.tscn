@@ -34,6 +34,12 @@ position = Vector2( -350, 100 )
 [node name="HealthNode2" parent="." instance=ExtResource( 3 )]
 position = Vector2( -350, -100 )
 
+[node name="ArmourNode" parent="." instance=ExtResource( 3 )]
+position = Vector2( -350, 150 )
+
+[node name="ArmourNode2" parent="." instance=ExtResource( 3 )]
+position = Vector2( -350, -150 )
+
 [node name="Fusion_Holder" type="Node2D" parent="."]
 
 [node name="CardsLeftIndicator_A" parent="." instance=ExtResource( 4 )]

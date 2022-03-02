@@ -1,8 +1,29 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DeckEditor.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=3]
+[ext_resource path="res://Art/UI/hover_arrow.png" type="Texture" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
 
 [node name="DeckEditor" type="Node2D"]
 script = ExtResource( 1 )
@@ -328,6 +349,60 @@ position = Vector2( 0, 192 )
 [node name="DeckDisplay" parent="." instance=ExtResource( 2 )]
 position = Vector2( 300, -200 )
 
+[node name="LArrow" type="Node2D" parent="."]
+visible = false
+
+[node name="Arrow1" type="Sprite" parent="LArrow"]
+position = Vector2( -10, 0 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 4 )
+
+[node name="Arrow2" type="Sprite" parent="LArrow"]
+scale = Vector2( 3, 3 )
+texture = ExtResource( 4 )
+
+[node name="Button" type="Button" parent="LArrow"]
+margin_left = -20.0
+margin_top = -17.0
+margin_right = 10.0
+margin_bottom = 17.0
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RArrow" type="Node2D" parent="."]
+visible = false
+
+[node name="Arrow2" type="Sprite" parent="RArrow"]
+scale = Vector2( 3, 3 )
+texture = ExtResource( 4 )
+flip_h = true
+
+[node name="Arrow1" type="Sprite" parent="RArrow"]
+position = Vector2( -10, 0 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 4 )
+flip_h = true
+
+[node name="Button2" type="Button" parent="RArrow"]
+margin_left = -20.0
+margin_top = -17.0
+margin_right = 10.0
+margin_bottom = 17.0
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="text_entered" from="SaveDisplay/Background/LineEdit" to="." method="onSaveEnter"]
 [connection signal="pressed" from="SaveDisplay/Background/SaveButton" to="." method="onFileSaveButtonPressed"]
 [connection signal="pressed" from="SaveDisplay/Background/BackButton" to="." method="onFileSaveBackPressed"]
@@ -344,3 +419,5 @@ position = Vector2( 300, -200 )
 [connection signal="pressed" from="Menu/NewButton" to="." method="onNewPressed"]
 [connection signal="pressed" from="Menu/Button" to="." method="onDeleteButtonPressed"]
 [connection signal="pressed" from="Menu/BackButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="LArrow/Button" to="." method="leftArrowPressed"]
+[connection signal="pressed" from="RArrow/Button2" to="." method="rightArrowPressed"]

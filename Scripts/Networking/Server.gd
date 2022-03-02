@@ -302,4 +302,3 @@ remote func serverSpectatorRestart():
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
-

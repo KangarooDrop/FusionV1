@@ -133,8 +133,21 @@ func sort():
 				cardPlacing.global_position = slot.global_position
 				slot.cardNode = cardPlacing
 				cardPlacing.slot = slot
+				
+	var offL = (-2.5 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	$LArrow.position = Vector2(offL, 30)
+	var offR = (slotPageWidth + 1.5 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	$RArrow.position = Vector2(offR, 30)
+	
 	setCurrentPage(0)
 	hasSaved = true
+	
+
+func leftArrowPressed():
+	setCurrentPage(getCurrentPage() - 1)
+
+func rightArrowPressed():
+	setCurrentPage(getCurrentPage() + 1)
 
 func _physics_process(delta):
 	if slotViewing != null:
@@ -378,6 +391,9 @@ func setCurrentPage(newPage : int):
 	currentPage = newPage
 	pages[newPage].visible = true
 	
+	$LArrow.visible = currentPage != 0
+	$RArrow.visible = currentPage != pages.size() - 1
+
 func getCurrentPage() -> int:
 	return currentPage
 	

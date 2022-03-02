@@ -20,11 +20,7 @@ func onDrawEffect(board):
 				p.hand.drawCard()
 			break
 			
-	var scr = get_script()
-	for abl in card.abilities:
-		if abl is scr:
-			card.abilities.erase(abl)
-			break
+	card.abilities.erase(self)
 
 
 func combine(abl : Ability):

@@ -10,11 +10,17 @@ var player
 var board
 
 var deck
+
 var drawingNode
 var drawingSlot
 var drawTimer = 0
 var drawMaxTime = 0.25
 var drawQueue : Array
+
+var discardMaxTime = 0.25
+var discardQueue := []
+var discardTimers := []
+var discardPositions := []
 
 var cardNodes : Array
 var cardSlotNodes : Array
@@ -39,7 +45,34 @@ func centerCards(cardWidth, cardDists):
 	BoardMP.centerNodes(cardSlotNodes, Vector2(), cardWidth, cardDists)
 
 func _physics_process(delta):
-	if drawQueue.size() > 0:
+	
+	if discardQueue.size() > 0:
+		var toRemove = []
+		for i in range(discardQueue.size()):
+			discardQueue[i].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i].global_position.y)), discardTimers[i] / discardMaxTime)
+			discardTimers[i] += delta
+			if discardTimers[i] >= discardMaxTime:
+				toRemove.append(i)
+		
+		if toRemove.size() > 0:
+			for i in range(toRemove.size()):
+				var index = toRemove[i]
+				
+				cardNodes.erase(discardQueue[index].cardNode)
+				cardSlotNodes.erase(discardQueue[index])
+				
+				discardQueue[index].cardNode.queue_free()
+				discardQueue[index].queue_free()
+				
+				discardQueue.remove(index)
+				discardTimers.remove(index)
+				discardPositions.remove(index)
+				
+				for j in range(i+1, toRemove.size()):
+					toRemove[j] -= 1
+			centerCards(board.cardWidth, board.cardDists)
+			
+	elif drawQueue.size() > 0:
 		if drawingNode == null:
 			var slotInst = cardSlot.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
@@ -89,6 +122,7 @@ func _physics_process(delta):
 					drawingNode.global_position = drawingSlot.global_position
 					drawingNode = null
 					drawQueue.remove(0)
+		
 
 func cardFadeInFinish():
 	drawingNode.get_node("FadingNode").queue_free()
@@ -105,6 +139,15 @@ func drawCard():
 		addCard([card, false])
 	else:
 		addCard([ListOfCards.getCard(0), true])
+
+func discardIndex(index : int):
+	if index >= 0 and index < cardSlotNodes.size():
+		cardSlotNodes[index].disabled = true
+		
+		cardSlotNodes[index].cardNode.setCardVisible(true)
+		discardQueue.append(cardSlotNodes[index])
+		discardPositions.append(cardSlotNodes[index].position)
+		discardTimers.append(0)
 
 func addCard(data : Array):
 	if data[0] != null:

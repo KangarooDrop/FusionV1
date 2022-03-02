@@ -117,7 +117,7 @@ func getDeckFromFile() -> Array:
 	return cardList
 
 func setOwnCardList(cardList : Array):
-	var player_A = Player.new(cardList, self, $HealthNode)
+	var player_A = Player.new(cardList, self, $HealthNode, $ArmourNode)
 	players.insert(0, player_A)
 	creatures[player_A.UUID] = []
 	
@@ -138,7 +138,7 @@ func setOpponentCardList(cardList : Array):
 	for id in cardList:
 		cards.append(ListOfCards.getCard(id))
 				
-	var player_B = Player.new(cards, self, $HealthNode2)
+	var player_B = Player.new(cards, self, $HealthNode2, $ArmourNode2)
 	player_B.isOpponent = true
 	players.insert(1, player_B)
 	creatures[player_B.UUID] = []

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityMindrot
 
-func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 cards of your opponent's deck from the game", card, Color.blue, true):
+func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 cards of your opponent's deck from the game. Removes this ability", card, Color.blue, true):
 	pass
 
 func onEnter(board, slot):
@@ -19,11 +19,7 @@ func onEffect(board, slot):
 			for i in range(count * 3):
 				p.deck.mill(board, p.UUID)
 			
-	var scr = get_script()
-	for abl in card.abilities:
-		if abl is scr:
-			card.abilities.erase(abl)
-			break
+	card.abilities.erase(self)
 
 func combine(abl : Ability):
 	.combine(abl)
