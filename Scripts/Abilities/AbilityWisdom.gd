@@ -12,15 +12,17 @@ func onEnter(board, slot):
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
 	onDrawEffect(board)
-			
+
 func onDrawEffect(board):
-	for p in board.players:
-		if p.UUID == card.playerID:
-			for i in range(count):
+	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, count]])
+	card.abilities.erase(self)
+			
+static func onDraw(params : Array):
+	for p in params[0].players:
+		if p.UUID == params[1]:
+			for i in range(params[2]):
 				p.hand.drawCard()
 			break
-			
-	card.abilities.erase(self)
 
 
 func combine(abl : Ability):

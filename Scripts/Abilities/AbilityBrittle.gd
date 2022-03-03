@@ -6,5 +6,5 @@ func _init(card : Card).("Brittle", "At the end of the turn, this creature is de
 	pass
 
 func onEndOfTurn(board):
-	card.toughness = 0
+	card.toughness = -INF
 	board.checkState()

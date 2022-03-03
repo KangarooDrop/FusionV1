@@ -16,16 +16,8 @@ func onEnterFromFusion(board, slot):
 	onEffect(board)
 	
 func onEffect(board):
-	for p in board.players:
-		if p.UUID == card.playerID:
-			for i in range(p.hand.cardSlotNodes.size()):
-				p.hand.discardIndex(i)
-			
-			for i in range(buff):
-				p.hand.drawCard()
-				p.hand.drawCard()
-				p.hand.drawCard()
-			break
+	board.abilityStack.append([get_script(), "onDiscard", [board, card.playerID]])
+	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, buff * 3]])
 	
 	card.abilities.erase(self)
 
@@ -38,3 +30,18 @@ func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
 	abl.buff = buff
 	return abl
+
+static func onDiscard(params : Array):
+	for p in params[0].players:
+		if p.UUID == params[1]:
+			for i in range(p.hand.cardSlotNodes.size()):
+				p.hand.discardIndex(i)
+			break
+
+static func onDraw(params : Array):
+	for p in params[0].players:
+		if p.UUID == params[1]:
+			for i in range(params[2]):
+				p.hand.drawCard()
+			break
+	

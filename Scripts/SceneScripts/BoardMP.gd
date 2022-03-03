@@ -64,16 +64,16 @@ var gameOver = false
 enum GAME_MODE {PLAYING, SPECTATE, REPLAY}
 var settingSpectateData = false
 
-#Abilities added to stack in reverse order,
+#Abilities on creatures added to stack in reverse order,
 # Abilities that trigger others are added to front
 # Read FI/LO
 #OF FORM:
 #	[class=Ability.get_script(), functionName="onActivate", params=[slotNum, etc.]]
 #IN CLASS:
 #	static func onActive(slotNum): etc.
-#var abilityStack : Array = []
+var abilityStack : Array = []
 
-#Only process action queue if abilityStack is empty
+### Only process action queue if abilityStack is empty
 #Only process abilityStack if both players' draw and discard queues are empty
 
 
@@ -418,9 +418,16 @@ func _physics_process(delta):
 			serverCheckTimer = 0
 			
 	if gameStarted:
-		if actionQueue.size() > 0 and fuseQueue.size() == 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
-			slotClicked(actionQueue[0][0], actionQueue[0][1], false)
-			actionQueue.remove(0)
+		if fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
+			if abilityStack.size() > 0:
+				print("Stack: ", abilityStack)
+				abilityStack[0][0].call(abilityStack[0][1], abilityStack[0][2])
+				abilityStack.remove(0)
+				checkState()
+				
+			elif actionQueue.size() > 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
+				slotClicked(actionQueue[0][0], actionQueue[0][1], false)
+				actionQueue.remove(0)
 
 func nextReplayAction():
 	replayWaiting = true

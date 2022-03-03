@@ -14,12 +14,14 @@ func onEnterFromFusion(board, slot):
 	onEffect(board, slot)
 
 func onEffect(board, slot):
-	for p in board.players:
-		if p.UUID != card.playerID:
-			for i in range(count * 3):
-				p.deck.mill(board, p.UUID)
-			
+	board.abilityStack.append([get_script(), "onMill", [board, card.playerID, count * 3]])
 	card.abilities.erase(self)
+
+static func onMill(params):
+	for p in params[0].players:
+		if p.UUID != params[1]:
+			for i in range(params[2]):
+				p.deck.mill(params[0], p.UUID)
 
 func combine(abl : Ability):
 	.combine(abl)
