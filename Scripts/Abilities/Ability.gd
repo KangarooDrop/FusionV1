@@ -62,7 +62,7 @@ func getFileName():
 	return self.get_script().get_path().get_file().get_basename()
 	
 func _to_string():
-	return "[color=#" + c.to_html(false) +"][url=" + getFileName() +"]" + name + (" x"+str(count) if (showCount and count > 1) else "") +"[/url][/color]"
+	return "[b][color=#" + c.to_html(false) +"][url=" + getFileName() +"]" + name + (" x"+str(count) if (showCount and count > 1) else "") +"[/url][/color][/b]"
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)

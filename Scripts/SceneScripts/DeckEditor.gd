@@ -398,10 +398,10 @@ func getCurrentPage() -> int:
 	return currentPage
 	
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo():
-		if event.scancode == KEY_A:
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($SaveDisplay.visible or $FileDisplay.visible or $ConfirmNode.visible or $ConfirmDeleteNode.visible):
+		if event.scancode == KEY_A or event.scancode == KEY_LEFT:
 			setCurrentPage(getCurrentPage() - 1)
-		elif event.scancode == KEY_D:
+		elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
 			setCurrentPage(getCurrentPage() + 1)
 			
 	if event is InputEventMouseButton:

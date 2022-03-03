@@ -19,7 +19,7 @@ var boardSlots : Array
 
 var players : Array
 var activePlayer := -1
-var cardsPerTurn = 2#99
+var cardsPerTurn = 2
 var cardsPlayed = 0
 
 var shakeMaxTime = 0.5
@@ -63,6 +63,20 @@ var gameOver = false
 
 enum GAME_MODE {PLAYING, SPECTATE, REPLAY}
 var settingSpectateData = false
+
+#Abilities added to stack in reverse order,
+# Abilities that trigger others are added to front
+# Read FI/LO
+#OF FORM:
+#	[class=Ability.get_script(), functionName="onActivate", params=[slotNum, etc.]]
+#IN CLASS:
+#	static func onActive(slotNum): etc.
+#var abilityStack : Array = []
+
+#Only process action queue if abilityStack is empty
+#Only process abilityStack if both players' draw and discard queues are empty
+
+
 
 func _ready():
 	var gameSeed = OS.get_system_time_msecs()

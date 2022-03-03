@@ -348,7 +348,7 @@
   "34": {
     "name": "Blighted",
     "tex": "res://Art/portraits/ToasterToilet.png",
-    "power": 2,
+    "power": -2,
     "toughness": -2,
     "creature_type": [
       1
