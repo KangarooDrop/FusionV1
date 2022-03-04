@@ -8,12 +8,20 @@ var hangTime = 4
 
 var width = 0
 
+var startPos = null
+var endPos = null
+
 func _process(delta):
+	if startPos == null:
+		startPos = -$Background.rect_size.x * rect_scale.x - offset
+	if endPos == null:
+		endPos = offset
+	
 	timer += delta
 	if timer < inTime:
-		rect_position.x = lerp(0, $Background.rect_size.x * rect_scale.x + offset, timer / inTime)
+		rect_position.x = lerp(startPos, endPos, timer / inTime)
 	elif timer < inTime + hangTime:
-		rect_position.x = $Background.rect_size.x * rect_scale.x + offset
+		rect_position.x = endPos
 	elif timer < inTime + hangTime + inTime:
 		rect_position.x -= delta * ($Background.rect_size.x * rect_scale.x + offset) / inTime
 	else:

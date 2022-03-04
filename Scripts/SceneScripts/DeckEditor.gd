@@ -1,4 +1,6 @@
 extends Node2D
+
+var fontTRES = preload("res://Fonts/FontNormal.tres")
 	
 var slotPageWidth = 6
 var slotPageHeight = 3
@@ -275,6 +277,7 @@ func onConfirmYesPressed():
 			var b = Button.new()
 			$FileDisplay/ButtonHolder.add_child(b)
 			b.text = str(files[i])
+			b.set("custom_fonts/font", fontTRES)
 			b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
 			$FileDisplay/ButtonHolder.move_child(b, i+1)
 		$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
@@ -360,6 +363,7 @@ func onDeleteButtonPressed():
 		var b = Button.new()
 		$FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i])
+		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
 		$FileDisplay/ButtonHolder.move_child(b, i+1)
 	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)

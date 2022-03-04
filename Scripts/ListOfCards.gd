@@ -177,9 +177,10 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	return cardNew
 
 func hasAbility(card : Card, abl) -> bool:
-	var hasAbl = false
+	return getAbility(card, abl) != null
+
+func getAbility(card : Card, abl):
 	for a in card.abilities:
 		if a is abl:
-			hasAbl = true
-			return true
-	return false
+			return a
+	return null

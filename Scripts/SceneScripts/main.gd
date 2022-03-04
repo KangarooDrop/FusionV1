@@ -2,6 +2,7 @@ extends Node
 
 var cardList_A : Array
 
+var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 var deck_A : Deck
 var hand_A : Array
@@ -56,6 +57,7 @@ func onDeckChangePressed():
 		var b = Button.new()
 		$FileSelector/ButtonHolder.add_child(b)
 		b.text = str(files[i])
+		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeckChangeButtonPressed", [files[i]])
 		$FileSelector/ButtonHolder.move_child(b, i+1)
 	$FileSelector/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)

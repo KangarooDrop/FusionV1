@@ -17,8 +17,6 @@ func _ready():
 	control.name = "MessageHolder"
 	canvas.add_child(control)
 	control.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
-	control.rect_position.x -= 128
-	control.rect_position.y -= 128
 	messageHolder = control
 	
 	var label = Label.new()
@@ -39,7 +37,7 @@ func _process(delta):
 		else:
 			moving.erase(n)
 
-func notify(text : String, textLength = 128, margin = 4):
+func notify(text : String, textLength = 200, margin = 4):
 	
 	for n in messageHolder.get_children():
 		if moving.has(n):
@@ -50,12 +48,13 @@ func notify(text : String, textLength = 128, margin = 4):
 	var n = notif.instance()
 	var nLabel = n.get_node("Label")
 	var nRect = n.get_node("Background")
+	nLabel.rect_size.x = textLength
 	nLabel.text = text
 	messageHolder.add_child(n)
+	n.rect_position.y -= 128
 	
 	nLabel.rect_position.x = margin + 6
-	nLabel.rect_size.x = textLength
 	nLabel.rect_position.y = -nLabel.rect_size.y / 2
-	nRect.rect_size = Vector2(textLength + margin * 2, nLabel.rect_size.y + margin * 2)
+	nRect.rect_size = Vector2(textLength + margin * 2, nLabel.get_size().y + margin * 2)
 	nRect.rect_position.y = -nRect.rect_size.y / 2
 	

@@ -1,19 +1,10 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DeckEditor.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=3]
 [ext_resource path="res://Art/UI/hover_arrow.png" type="Texture" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=8]
-
-[sub_resource type="StyleBoxEmpty" id=9]
-
-[sub_resource type="StyleBoxEmpty" id=10]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -24,6 +15,16 @@
 [sub_resource type="StyleBoxEmpty" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
 
 [node name="DeckEditor" type="Node2D"]
 script = ExtResource( 1 )
@@ -55,6 +56,7 @@ margin_left = 20.0
 margin_top = 20.0
 margin_right = 236.0
 margin_bottom = 44.0
+custom_fonts/font = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -64,6 +66,7 @@ margin_left = 67.0
 margin_top = 58.71
 margin_right = 108.0
 margin_bottom = 78.71
+custom_fonts/font = ExtResource( 5 )
 text = "Save"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -74,6 +77,7 @@ margin_left = 147.0
 margin_top = 58.71
 margin_right = 189.0
 margin_bottom = 78.71
+custom_fonts/font = ExtResource( 5 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -115,16 +119,18 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
-margin_top = 24.0
+margin_top = 19.0
 margin_right = 280.0
 margin_bottom = 38.0
+custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 
 [node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
 margin_top = 46.0
 margin_right = 280.0
-margin_bottom = 66.0
+margin_bottom = 71.0
+custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
 [node name="ConfirmNode" type="Node2D" parent="."]
@@ -165,21 +171,24 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="ConfirmNode/VBoxContainer"]
-margin_right = 87.0
-margin_bottom = 14.0
+margin_right = 128.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Are you sure?"
 
 [node name="ConfirmYesButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 24.0
-margin_right = 87.0
-margin_bottom = 44.0
+margin_top = 29.0
+margin_right = 128.0
+margin_bottom = 54.0
+custom_fonts/font = ExtResource( 5 )
 text = "Yes"
 
 [node name="ConfirmNoButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 54.0
-margin_right = 87.0
-margin_bottom = 74.0
+margin_top = 64.0
+margin_right = 128.0
+margin_bottom = 89.0
+custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
 [node name="ConfirmDeleteNode" type="Node2D" parent="."]
@@ -220,22 +229,25 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_right = 204.0
-margin_bottom = 31.0
+margin_right = 294.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Are you sure you want to delete
 fileName"
 
 [node name="ConfirmYesButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_top = 41.0
-margin_right = 204.0
-margin_bottom = 61.0
+margin_top = 51.0
+margin_right = 294.0
+margin_bottom = 76.0
+custom_fonts/font = ExtResource( 5 )
 text = "Yes"
 
 [node name="ConfirmNoButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_top = 71.0
-margin_right = 204.0
-margin_bottom = 91.0
+margin_top = 86.0
+margin_right = 294.0
+margin_bottom = 111.0
+custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
 [node name="SortButtons" type="Node2D" parent="."]
@@ -272,20 +284,23 @@ __meta__ = {
 }
 
 [node name="TypeButton" type="Button" parent="SortButtons/HBoxContainer"]
-margin_right = 90.0
+margin_right = 128.0
 margin_bottom = 32.0
+custom_fonts/font = ExtResource( 5 )
 text = "      Type      "
 
 [node name="PowerButton" type="Button" parent="SortButtons/HBoxContainer"]
-margin_left = 100.0
-margin_right = 187.0
+margin_left = 138.0
+margin_right = 260.0
 margin_bottom = 32.0
+custom_fonts/font = ExtResource( 5 )
 text = "    Power     "
 
 [node name="ToughnessButton" type="Button" parent="SortButtons/HBoxContainer"]
-margin_left = 197.0
-margin_right = 285.0
+margin_left = 270.0
+margin_right = 395.0
 margin_bottom = 32.0
+custom_fonts/font = ExtResource( 5 )
 text = " Toughness "
 
 [node name="Menu" type="VBoxContainer" parent="."]
@@ -299,39 +314,44 @@ __meta__ = {
 }
 
 [node name="SaveButton" type="Button" parent="Menu"]
-margin_right = 134.0
-margin_bottom = 20.0
+margin_right = 189.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 5 )
 text = "Save Deck"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LoadButton" type="Button" parent="Menu"]
-margin_top = 30.0
-margin_right = 134.0
-margin_bottom = 50.0
+margin_top = 35.0
+margin_right = 189.0
+margin_bottom = 60.0
+custom_fonts/font = ExtResource( 5 )
 text = "Load Deck"
 
 [node name="NewButton" type="Button" parent="Menu"]
-margin_top = 60.0
-margin_right = 134.0
-margin_bottom = 80.0
+margin_top = 70.0
+margin_right = 189.0
+margin_bottom = 95.0
+custom_fonts/font = ExtResource( 5 )
 text = "New Deck"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="Menu"]
-margin_top = 90.0
-margin_right = 134.0
-margin_bottom = 110.0
+[node name="DeleteButton" type="Button" parent="Menu"]
+margin_top = 105.0
+margin_right = 189.0
+margin_bottom = 130.0
+custom_fonts/font = ExtResource( 5 )
 text = "Delete Deck File"
 
-[node name="BackButton" type="Button" parent="Menu"]
-margin_top = 120.0
-margin_right = 134.0
-margin_bottom = 140.0
-text = "Back to Main Menu"
+[node name="MainMenuButton" type="Button" parent="Menu"]
+margin_top = 140.0
+margin_right = 189.0
+margin_bottom = 165.0
+custom_fonts/font = ExtResource( 5 )
+text = "Main Menu"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -366,11 +386,11 @@ margin_left = -20.0
 margin_top = -17.0
 margin_right = 10.0
 margin_bottom = 17.0
-custom_styles/hover = SubResource( 6 )
-custom_styles/pressed = SubResource( 7 )
-custom_styles/focus = SubResource( 8 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 10 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -394,11 +414,11 @@ margin_left = -20.0
 margin_top = -17.0
 margin_right = 10.0
 margin_bottom = 17.0
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/disabled = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -417,7 +437,7 @@ __meta__ = {
 [connection signal="pressed" from="Menu/SaveButton" to="." method="onSavePressed"]
 [connection signal="pressed" from="Menu/LoadButton" to="." method="onLoadPressed"]
 [connection signal="pressed" from="Menu/NewButton" to="." method="onNewPressed"]
-[connection signal="pressed" from="Menu/Button" to="." method="onDeleteButtonPressed"]
-[connection signal="pressed" from="Menu/BackButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="Menu/DeleteButton" to="." method="onDeleteButtonPressed"]
+[connection signal="pressed" from="Menu/MainMenuButton" to="." method="onExitPressed"]
 [connection signal="pressed" from="LArrow/Button" to="." method="leftArrowPressed"]
 [connection signal="pressed" from="RArrow/Button2" to="." method="rightArrowPressed"]

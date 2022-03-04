@@ -33,38 +33,6 @@ func setText(text : String, margin = 4):
 		scale.x = -1
 		$Label.rect_scale.x = -1
 		$Label.rect_position.x += $Label.rect_size.x
-		
-	"""
-	var label = Label.new()
-	label.autowrap = true
-	label.set("custom_colors/font_color", Color(1,0,0))
-	add_child(label)
-	label.rect_size = Vector2(maxTextLen, 100)
-	
-	for s in splitText("[c=$FF]|AbilitySacrifice|[/c]", "|"):
-		if s[0] != "|":
-			label.text += s
-		else:
-			s.erase(0, 1)
-			
-			var labelNew = Label.new()
-			labelNew.text = s
-			labelNew.autowrap = false
-			labelNew.set("custom_colors/font_color", Color(0,1,0))
-			add_child(labelNew)
-			var textLen = label.get_font("font").get_string_size(label.text).x
-			labelNew.rect_position.x = int(textLen) % maxTextLen
-			label.text += "  ".repeat(s.length())
-			
-			if flipped:
-				labelNew.rect_position.x = maxTextLen - labelNew.rect_position.x
-				labelNew.rect_scale.x = -1
-			
-		label.rect_position.x = maxTextLen
-			
-		if flipped:
-			label.rect_scale.x = -1
-	"""
 
 static func splitText(string, delimiter):
 	var out = []

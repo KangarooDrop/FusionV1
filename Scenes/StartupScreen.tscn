@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=4]
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=5]
 [ext_resource path="res://Scripts/UI/SettingsPage.gd" type="Script" id=6]
 
@@ -19,10 +20,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -80.0
-margin_top = -72.0
-margin_right = 5.00037
-margin_bottom = 8.0
+margin_left = -119.271
+margin_top = -167.257
+margin_right = 2.72949
+margin_bottom = -2.25702
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
@@ -30,35 +31,40 @@ __meta__ = {
 }
 
 [node name="DeckEditButton" type="Button" parent="VBoxContainer"]
-margin_right = 85.0
-margin_bottom = 20.0
+margin_right = 122.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 4 )
 text = "Deck Editor"
 
 [node name="LobbyButton" type="Button" parent="VBoxContainer"]
-margin_top = 30.0
-margin_right = 85.0
-margin_bottom = 50.0
+margin_top = 35.0
+margin_right = 122.0
+margin_bottom = 60.0
+custom_fonts/font = ExtResource( 4 )
 text = "Lobby"
 
 [node name="ReplayButton" type="Button" parent="VBoxContainer"]
-margin_top = 60.0
-margin_right = 85.0
-margin_bottom = 80.0
+margin_top = 70.0
+margin_right = 122.0
+margin_bottom = 95.0
+custom_fonts/font = ExtResource( 4 )
 text = "Replays"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 90.0
-margin_right = 85.0
-margin_bottom = 110.0
+margin_top = 105.0
+margin_right = 122.0
+margin_bottom = 130.0
+custom_fonts/font = ExtResource( 4 )
 text = "Settings"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
-margin_top = 120.0
-margin_right = 85.0
-margin_bottom = 140.0
+margin_top = 140.0
+margin_right = 122.0
+margin_bottom = 165.0
+custom_fonts/font = ExtResource( 4 )
 text = "Exit"
 
 [node name="FileDisplay" type="Control" parent="."]
@@ -95,17 +101,19 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
-margin_right = 85.0
-margin_bottom = 31.0
+margin_right = 121.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Select Replay
 "
 align = 1
 
 [node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
-margin_top = 35.0
-margin_right = 85.0
-margin_bottom = 55.0
+margin_top = 45.0
+margin_right = 121.0
+margin_bottom = 70.0
+custom_fonts/font = ExtResource( 4 )
 text = "Back"
 
 [node name="CardDisplay" parent="." instance=ExtResource( 3 )]
@@ -129,49 +137,53 @@ __meta__ = {
 }
 
 [node name="Anims" type="HBoxContainer" parent="SettingsPage"]
-margin_right = 209.0
+margin_right = 300.0
 margin_bottom = 24.0
 alignment = 1
 
 [node name="Label" type="Label" parent="SettingsPage/Anims"]
-margin_left = 35.0
-margin_top = 5.0
-margin_right = 146.0
-margin_bottom = 19.0
+margin_left = 58.0
+margin_top = 2.0
+margin_right = 214.0
+margin_bottom = 21.0
+custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Play Animations: "
 valign = 1
 
 [node name="CheckBox" type="CheckBox" parent="SettingsPage/Anims"]
-margin_left = 150.0
-margin_right = 174.0
+margin_left = 218.0
+margin_right = 242.0
 margin_bottom = 24.0
 
 [node name="NumSpectators" type="HBoxContainer" parent="SettingsPage"]
 margin_top = 34.0
-margin_right = 209.0
-margin_bottom = 58.0
+margin_right = 300.0
+margin_bottom = 63.0
 
 [node name="Label" type="Label" parent="SettingsPage/NumSpectators"]
 margin_top = 5.0
-margin_right = 147.0
-margin_bottom = 19.0
+margin_right = 214.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Number of Spectators: "
 valign = 1
 
 [node name="LineEdit" type="LineEdit" parent="SettingsPage/NumSpectators"]
-margin_left = 151.0
-margin_right = 209.0
-margin_bottom = 24.0
+margin_left = 218.0
+margin_right = 300.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 4 )
 text = "0"
 align = 1
 script = ExtResource( 5 )
 
 [node name="BackButton" type="Button" parent="SettingsPage"]
-margin_top = 68.0
-margin_right = 209.0
-margin_bottom = 88.0
+margin_top = 73.0
+margin_right = 300.0
+margin_bottom = 98.0
+custom_fonts/font = ExtResource( 4 )
 text = "Back"
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]

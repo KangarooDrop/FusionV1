@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/BoardNode.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Scenes/UI/PauseScreen.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scripts/UI/WinLose.gd" type="Script" id=5]
 [ext_resource path="res://Art/UI/win.png" type="Texture" id=6]
@@ -83,6 +84,7 @@ margin_left = -108.0
 margin_top = -28.0
 margin_right = 108.0
 margin_bottom = -4.0
+custom_fonts/font = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -92,6 +94,7 @@ margin_left = -48.0
 margin_top = 32.0
 margin_right = -7.0
 margin_bottom = 52.0
+custom_fonts/font = ExtResource( 3 )
 text = "Save"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -102,6 +105,7 @@ margin_left = 48.0
 margin_top = 32.0
 margin_right = 90.0
 margin_bottom = 52.0
+custom_fonts/font = ExtResource( 3 )
 text = "Back"
 
 [node name="FileSelector" type="Node2D" parent="."]
@@ -130,6 +134,7 @@ __meta__ = {
 [node name="Label" type="Label" parent="FileSelector/ButtonHolder"]
 margin_right = 75.0
 margin_bottom = 14.0
+custom_fonts/font = ExtResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Select Deck"
 
@@ -137,6 +142,7 @@ text = "Select Deck"
 margin_top = 18.0
 margin_right = 75.0
 margin_bottom = 38.0
+custom_fonts/font = ExtResource( 3 )
 text = "Back"
 
 [connection signal="text_entered" from="SaveNode/SaveControl/LineEdit" to="." method="onSaveEnter"]

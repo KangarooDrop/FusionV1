@@ -1,5 +1,7 @@
 extends Node
 
+var fontTRES = preload("res://Fonts/FontNormal.tres")
+
 var waitMaxTime = 0.6
 var waitTimer = waitMaxTime
 var waitNum = -1
@@ -65,10 +67,13 @@ func openFileSelector():
 		for c in $DeckSelector/VBoxContainer.get_children():
 			if c is Button and c.name != "BackButton":
 				c.queue_free()
+				c.parent.remove_child(c)
+				
 		for i in range(files.size()):
 			var b = Button.new()
 			$DeckSelector/VBoxContainer.add_child(b)
 			b.text = str(files[i])
+			b.set("custom_fonts/font", fontTRES)
 			b.connect("pressed", self, "onFileButtonClicked", [files[i]])
 			$DeckSelector/VBoxContainer.move_child(b, i+1)
 		$DeckSelector/VBoxContainer.set_anchors_and_margins_preset(Control.PRESET_CENTER)

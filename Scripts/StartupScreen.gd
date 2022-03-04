@@ -1,5 +1,7 @@
 extends Control
 
+var fontTRES = preload("res://Fonts/FontNormal.tres")
+
 func _ready():
 	pass
 
@@ -15,7 +17,7 @@ func onLobbyPressed():
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
 func onReplayPressed():
-	MessageManager.notify("Alert: This system is for debug. Proceed with caution")
+	MessageManager.notify("Alert: This system is for debug purposes. Proceed with caution")
 	$FileDisplay.visible = true
 	$VBoxContainer.visible = false
 		
@@ -34,10 +36,12 @@ func onReplayPressed():
 	for c in $FileDisplay/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
 			c.queue_free()
+			c.parent.remove_child(c)
 	for i in range(files.size()):
 		var b = Button.new()
 		$FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i])
+		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onReplayFilePressed", [files[i]])
 		$FileDisplay/ButtonHolder.move_child(b, i+1)
 	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
