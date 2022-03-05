@@ -211,94 +211,84 @@ func onSlotBeingClicked(slot : CardSlot, button_index : int):
 				viewTimer = 0
 	
 func onLoadPressed():
-	confirmType = CONFIRM_TYPES.LOAD
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmLoad", [pop]], ["Back", pop, "close", []]])
 		add_child(pop)
 	else:
-		onConfirmYesPressed()
+		onConfirmLoad()
 		
 func onSavePressed():
 	$SaveDisplay.visible = true
 	$SaveDisplay/Background/LineEdit.grab_focus()
 	
-enum CONFIRM_TYPES {NONE, NEW, EXIT, LOAD, DELETE}
-var confirmType = CONFIRM_TYPES.NONE
-	
 func onNewPressed():
-	confirmType = CONFIRM_TYPES.NEW
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmNew", [pop]], ["Back", pop, "close", []]])
 		add_child(pop)
 	else:
-		onConfirmYesPressed()
+		onConfirmNew()
 	
 func onSaveEnter(s : String):
 	onFileSaveButtonPressed()
 	
 func onExitPressed():
-	confirmType = CONFIRM_TYPES.EXIT
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmExit", [pop]], ["Back", pop, "close", []]])
 		add_child(pop)
 	else:
-		onConfirmYesPressed()
+		onConfirmExit()
 	
-func onConfirmYesPressed(popup=null):
-	if confirmType == CONFIRM_TYPES.NEW:
-		$DeckDisplay.clearData()
-		hasSaved = true
-		
-		
-	elif confirmType == CONFIRM_TYPES.EXIT:
-		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-		if error != 0:
-			print("Error loading test1.tscn. Error Code = " + str(error))
-			
-			
-	elif confirmType == CONFIRM_TYPES.LOAD:
-		$FileDisplay.visible = true
-		$FileDisplay/ButtonHolder/Label.text = "Load File"
-		
-		var files = []
-		var dir = Directory.new()
-		dir.open(Settings.path)
-		dir.list_dir_begin()
-		while true:
-			var file = dir.get_next()
-			if file == "":
-				break
-			elif not file.begins_with(".") and file.ends_with("json"):
-				files.append(file)
-		dir.list_dir_end()
-		
-		for c in $FileDisplay/ButtonHolder.get_children():
-			if c is Button and c.name != "BackButton":
-				$FileDisplay/ButtonHolder.remove_child(c)
-				c.queue_free()
-		for i in range(files.size()):
-			var b = Button.new()
-			$FileDisplay/ButtonHolder.add_child(b)
-			b.text = str(files[i])
-			b.set("custom_fonts/font", fontTRES)
-			b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
-			$FileDisplay/ButtonHolder.move_child(b, i+1)
-		$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-		$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
-		$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
-			
-	
+func onConfirmNew(popup=null):
 	if popup != null:
 		popup.close()
-	confirmType = CONFIRM_TYPES.NONE
-	
-func onConfirmNoPressed(popup=null):
+	$DeckDisplay.clearData()
+	hasSaved = true
+		
+		
+func onConfirmExit(popup=null):
 	if popup != null:
 		popup.close()
-	confirmType = CONFIRM_TYPES.NONE
+	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+			
+			
+func onConfirmLoad(popup=null):
+	if popup != null:
+		popup.close()
+		
+	$FileDisplay.visible = true
+	$FileDisplay/ButtonHolder/Label.text = "Load File"
+	
+	var files = []
+	var dir = Directory.new()
+	dir.open(Settings.path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with(".") and file.ends_with("json"):
+			files.append(file)
+	dir.list_dir_end()
+	
+	for c in $FileDisplay/ButtonHolder.get_children():
+		if c is Button and c.name != "BackButton":
+			$FileDisplay/ButtonHolder.remove_child(c)
+			c.queue_free()
+	for i in range(files.size()):
+		var b = Button.new()
+		$FileDisplay/ButtonHolder.add_child(b)
+		b.text = str(files[i])
+		b.set("custom_fonts/font", fontTRES)
+		b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
+		$FileDisplay/ButtonHolder.move_child(b, i+1)
+	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
+	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 		
 func onFileLoadBackPressed():
 	$FileDisplay.visible = false
