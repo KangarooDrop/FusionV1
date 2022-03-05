@@ -141,8 +141,8 @@
     "tier": 2
   },
   "14": {
-    "name": "Stone Serpant",
-    "tex": "res://Art/portraits/card_STONE_SERPANT.png",
+    "name": "Stone Serpent",
+    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
     "creature_type": [
       5,
       4
@@ -437,7 +437,7 @@
     ]
   },
   "41": {
-    "name": "Serpant",
+    "name": "Serpent",
     "tex": "res://Art/portraits/card_SERPENT.png",
     "power": 0,
     "toughness": 4,

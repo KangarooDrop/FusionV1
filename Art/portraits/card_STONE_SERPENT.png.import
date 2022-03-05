@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/card_STONE_SERPANT.png-e18d0a825cb43112f2762d410a27ef88.stex"
+path="res://.import/card_STONE_SERPENT.png-e191687a0a93c127d5470c4b79d98ad7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/card_STONE_SERPANT.png"
-dest_files=[ "res://.import/card_STONE_SERPANT.png-e18d0a825cb43112f2762d410a27ef88.stex" ]
+source_file="res://Art/portraits/card_STONE_SERPENT.png"
+dest_files=[ "res://.import/card_STONE_SERPENT.png-e191687a0a93c127d5470c4b79d98ad7.stex" ]
 
 [params]
 

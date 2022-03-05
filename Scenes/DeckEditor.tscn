@@ -133,123 +133,6 @@ margin_bottom = 71.0
 custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
-[node name="ConfirmNode" type="Node2D" parent="."]
-visible = false
-z_index = 2
-
-[node name="NinePatchRect" type="NinePatchRect" parent="ConfirmNode"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -64.0
-margin_top = -43.0
-margin_right = 64.0
-margin_bottom = 58.0
-texture = ExtResource( 3 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmNode"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -43.5
-margin_top = -31.0
-margin_right = 43.5
-margin_bottom = 31.0
-custom_constants/separation = 10
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="ConfirmNode/VBoxContainer"]
-margin_right = 128.0
-margin_bottom = 19.0
-custom_fonts/font = ExtResource( 5 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Are you sure?"
-
-[node name="ConfirmYesButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 29.0
-margin_right = 128.0
-margin_bottom = 54.0
-custom_fonts/font = ExtResource( 5 )
-text = "Yes"
-
-[node name="ConfirmNoButton" type="Button" parent="ConfirmNode/VBoxContainer"]
-margin_top = 64.0
-margin_right = 128.0
-margin_bottom = 89.0
-custom_fonts/font = ExtResource( 5 )
-text = "Back"
-
-[node name="ConfirmDeleteNode" type="Node2D" parent="."]
-visible = false
-z_index = 2
-
-[node name="NinePatchRect" type="NinePatchRect" parent="ConfirmDeleteNode"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -128.0
-margin_top = -64.0
-margin_right = 128.0
-margin_bottom = 64.0
-texture = ExtResource( 3 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmDeleteNode"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -102.0
-margin_top = -45.5
-margin_right = 102.0
-margin_bottom = 45.5
-custom_constants/separation = 10
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_right = 294.0
-margin_bottom = 41.0
-custom_fonts/font = ExtResource( 5 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Are you sure you want to delete
-fileName"
-
-[node name="ConfirmYesButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_top = 51.0
-margin_right = 294.0
-margin_bottom = 76.0
-custom_fonts/font = ExtResource( 5 )
-text = "Yes"
-
-[node name="ConfirmNoButton" type="Button" parent="ConfirmDeleteNode/VBoxContainer"]
-margin_top = 86.0
-margin_right = 294.0
-margin_bottom = 111.0
-custom_fonts/font = ExtResource( 5 )
-text = "Back"
-
 [node name="SortButtons" type="Node2D" parent="."]
 position = Vector2( 0, -192 )
 
@@ -314,7 +197,7 @@ __meta__ = {
 }
 
 [node name="SaveButton" type="Button" parent="Menu"]
-margin_right = 189.0
+margin_right = 162.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 5 )
 text = "Save Deck"
@@ -324,14 +207,14 @@ __meta__ = {
 
 [node name="LoadButton" type="Button" parent="Menu"]
 margin_top = 35.0
-margin_right = 189.0
+margin_right = 162.0
 margin_bottom = 60.0
 custom_fonts/font = ExtResource( 5 )
 text = "Load Deck"
 
 [node name="NewButton" type="Button" parent="Menu"]
 margin_top = 70.0
-margin_right = 189.0
+margin_right = 162.0
 margin_bottom = 95.0
 custom_fonts/font = ExtResource( 5 )
 text = "New Deck"
@@ -341,14 +224,14 @@ __meta__ = {
 
 [node name="DeleteButton" type="Button" parent="Menu"]
 margin_top = 105.0
-margin_right = 189.0
+margin_right = 162.0
 margin_bottom = 130.0
 custom_fonts/font = ExtResource( 5 )
 text = "Delete Deck File"
 
 [node name="MainMenuButton" type="Button" parent="Menu"]
 margin_top = 140.0
-margin_right = 189.0
+margin_right = 162.0
 margin_bottom = 165.0
 custom_fonts/font = ExtResource( 5 )
 text = "Main Menu"
@@ -427,10 +310,6 @@ __meta__ = {
 [connection signal="pressed" from="SaveDisplay/Background/SaveButton" to="." method="onFileSaveButtonPressed"]
 [connection signal="pressed" from="SaveDisplay/Background/BackButton" to="." method="onFileSaveBackPressed"]
 [connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
-[connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmYesButton" to="." method="onConfirmYesPressed"]
-[connection signal="pressed" from="ConfirmNode/VBoxContainer/ConfirmNoButton" to="." method="onConfirmNoPressed"]
-[connection signal="pressed" from="ConfirmDeleteNode/VBoxContainer/ConfirmYesButton" to="." method="onDeleteConfirmed"]
-[connection signal="pressed" from="ConfirmDeleteNode/VBoxContainer/ConfirmNoButton" to="." method="onDeleteBackPressed"]
 [connection signal="pressed" from="SortButtons/HBoxContainer/TypeButton" to="." method="setSortOrder" binds= [ 0 ]]
 [connection signal="pressed" from="SortButtons/HBoxContainer/PowerButton" to="." method="setSortOrder" binds= [ 1 ]]
 [connection signal="pressed" from="SortButtons/HBoxContainer/ToughnessButton" to="." method="setSortOrder" binds= [ 2 ]]

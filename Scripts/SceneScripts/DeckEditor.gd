@@ -1,5 +1,6 @@
 extends Node2D
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 	
 var slotPageWidth = 6
@@ -198,7 +199,7 @@ func createHoverNode(position : Vector2, text : String):
 	infoWindow = hoverInst
 	
 func onSlotBeingClicked(slot : CardSlot, button_index : int):
-	if not $SaveDisplay.visible and not $FileDisplay.visible and not $ConfirmNode.visible and not $ConfirmDeleteNode.visible:
+	if not $SaveDisplay.visible and not $FileDisplay.visible:
 		if button_index == 1:
 			if slot.cardNode != null and slotViewing == null:
 				$DeckDisplay.addCard(slot.cardNode.card.UUID)
@@ -212,7 +213,9 @@ func onSlotBeingClicked(slot : CardSlot, button_index : int):
 func onLoadPressed():
 	confirmType = CONFIRM_TYPES.LOAD
 	if not hasSaved:
-		$ConfirmNode.visible = true
+		var pop = popupUI.instance()
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		add_child(pop)
 	else:
 		onConfirmYesPressed()
 		
@@ -226,7 +229,9 @@ var confirmType = CONFIRM_TYPES.NONE
 func onNewPressed():
 	confirmType = CONFIRM_TYPES.NEW
 	if not hasSaved:
-		$ConfirmNode.visible = true
+		var pop = popupUI.instance()
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		add_child(pop)
 	else:
 		onConfirmYesPressed()
 	
@@ -236,12 +241,13 @@ func onSaveEnter(s : String):
 func onExitPressed():
 	confirmType = CONFIRM_TYPES.EXIT
 	if not hasSaved:
-		$ConfirmNode.visible = true
+		var pop = popupUI.instance()
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmYesPressed", [pop]], ["Back", self, "onConfirmNoPressed", [pop]]])
+		add_child(pop)
 	else:
 		onConfirmYesPressed()
 	
-func onConfirmYesPressed():
-	
+func onConfirmYesPressed(popup=null):
 	if confirmType == CONFIRM_TYPES.NEW:
 		$DeckDisplay.clearData()
 		hasSaved = true
@@ -284,12 +290,14 @@ func onConfirmYesPressed():
 		$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
 		$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 			
-			
-	$ConfirmNode.visible = false
+	
+	if popup != null:
+		popup.close()
 	confirmType = CONFIRM_TYPES.NONE
 	
-func onConfirmNoPressed():
-	$ConfirmNode.visible = false
+func onConfirmNoPressed(popup=null):
+	if popup != null:
+		popup.close()
 	confirmType = CONFIRM_TYPES.NONE
 		
 func onFileLoadBackPressed():
@@ -310,7 +318,10 @@ func onFileLoadButtonPressed(fileName : String):
 		hasSaved = true
 	else:
 		print("Deck file is not valid")
-		MessageManager.notify("Error loading deck\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		
+		var pop = popupUI.instance()
+		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		add_child(pop)
 		
 	onFileLoadBackPressed()
 		
@@ -326,14 +337,20 @@ func onFileSaveButtonPressed():
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
 		var fileError = FileIO.writeToJSON(Settings.path, fileName, $DeckDisplay.getDeckData())
 		if fileError != 0:
-			MessageManager.notify("Error: File could not be saved")
 			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
+			var pop = popupUI.instance()
+			pop.init("Error", "File could not be saved")
+			add_child(pop)
 		else:
 			print("Deck successfully saved")
-			MessageManager.notify("Deck successfully saved")
+			var pop = popupUI.instance()
+			pop.init("Deck Saved")
+			add_child(pop)
 			hasSaved = true
 	else:
-		MessageManager.notify("Error verifying deck\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		var pop = popupUI.instance()
+		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		add_child(pop)
 	
 	onFileSaveBackPressed()
 		
@@ -373,17 +390,19 @@ func onDeleteButtonPressed():
 func onDeleteFileButtonPressed(fileName : String):
 	fileToDelete = fileName
 	$FileDisplay.visible = false
-	$ConfirmDeleteNode.visible = true
-	$ConfirmDeleteNode/VBoxContainer/Label.text = "Are you sure you want to delete \n" + fileName
+	var pop = popupUI.instance()
+	pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onDeleteBackPressed", [pop]]])
+	add_child(pop)
 	
-func onDeleteConfirmed():
+func onDeleteConfirmed(popup=null):
 	var dir = Directory.new()
 	var error = dir.remove(Settings.path + "/" + fileToDelete)
 	print(error)
-	onDeleteBackPressed()
+	onDeleteBackPressed(popup)
 	
-func onDeleteBackPressed():
-	$ConfirmDeleteNode.visible = false
+func onDeleteBackPressed(popup=null):
+	if popup != null:
+		popup.close()
 	fileToDelete = ""
 	
 func deckModified():
@@ -402,7 +421,7 @@ func getCurrentPage() -> int:
 	return currentPage
 	
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($SaveDisplay.visible or $FileDisplay.visible or $ConfirmNode.visible or $ConfirmDeleteNode.visible):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($SaveDisplay.visible or $FileDisplay.visible):
 		if event.scancode == KEY_A or event.scancode == KEY_LEFT:
 			setCurrentPage(getCurrentPage() - 1)
 		elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:

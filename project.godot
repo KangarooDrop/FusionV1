@@ -184,6 +184,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Classes/Player.gd"
 }, {
+"base": "Node2D",
+"class": "PopupUI",
+"language": "GDScript",
+"path": "res://Scripts/UI/PopupUI.gd"
+}, {
 "base": "Ability",
 "class": "TextArmor",
 "language": "GDScript",
@@ -225,6 +230,7 @@ _global_script_class_icons={
 "GitAPI": "",
 "HandNode": "",
 "Player": "",
+"PopupUI": "",
 "TextArmor": ""
 }
 
