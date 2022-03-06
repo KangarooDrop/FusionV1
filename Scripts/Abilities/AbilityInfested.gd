@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityInfested
 
-func _init(card : Card).("Infested", "When this creature dies, creates a 1/1 Necro with no abilities", card, Color.black, false):
+func _init(card : Card).("Infested", "When this creature dies, creates a 1/1 Necro with no abilities", card, Color.black, false, Vector2(32, 96)):
 	pass
 
 func onDeath(board):

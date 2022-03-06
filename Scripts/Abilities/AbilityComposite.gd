@@ -4,7 +4,7 @@ class_name AbilityComposite
 
 var buffsApplied = 0
 
-func _init(card : Card).("Composite", "Gains +1/+0 for each other creature you control", card, Color.gray, true):
+func _init(card : Card).("Composite", "Gains +1/+0 for each other creature you control", card, Color.gray, true, Vector2(0, 80)):
 	pass
 
 func onEnter(board, slot):

@@ -2,6 +2,8 @@ extends Node2D
 
 class_name CardNode
 
+var abilityIcon = preload("res://Scripts/UI/AbilityIcon.tscn")
+
 var slot
 var card
 var playerID = -1
@@ -46,6 +48,7 @@ func setCardVisible(isVis : bool):
 				$CardType2.visible = false
 				
 			$CardPortrait.texture = card.texture
+			
 		else:
 			$CardPortrait.texture = ListOfCards.noneCardTex
 			$Label.visible = false
@@ -151,7 +154,7 @@ func fight(slot, board, damageSelf = true):
 	if venomA > 0:
 		card.power += venomA
 	if is_instance_valid(slot.cardNode):
-		ListOfCards.getAbility(slot.cardNode.card, AbilityVenemous).count * 2 if ListOfCards.hasAbility(slot.cardNode.card, AbilityVenemous) and is_instance_valid(slot.cardNode) else 0
+		venomB = ListOfCards.getAbility(slot.cardNode.card, AbilityVenemous).count * 2 if ListOfCards.hasAbility(slot.cardNode.card, AbilityVenemous) and is_instance_valid(slot.cardNode) else 0
 		if venomB > 0:
 			slot.cardNode.card.power += venomB
 	
@@ -187,3 +190,15 @@ func fight(slot, board, damageSelf = true):
 func _exit_tree():
 	if is_instance_valid(slot) and is_instance_valid(slot.board):
 		slot.board.onSlotExit(slot)
+
+func addIcons():
+	for abl in card.abilities:
+		var ico = abilityIcon.instance()
+		ico.texture = ico.texture.duplicate()
+		ico.texture.region.position = abl.iconPos
+		$VBoxContainer.add_child(ico)
+
+func removeIcons():
+	for c in $VBoxContainer.get_children():
+		$VBoxContainer.remove_child(c)
+		c.queue_free()

@@ -45,6 +45,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityDegenerate.gd"
 }, {
 "base": "Ability",
+"class": "AbilityEssenceDrain",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityEssenceDrain.gd"
+}, {
+"base": "Ability",
 "class": "AbilityEvolution",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityEvolution.gd"
@@ -68,11 +73,6 @@ _global_script_classes=[ {
 "class": "AbilityInfested",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityInfested.gd"
-}, {
-"base": "Ability",
-"class": "AbilityLifedrain",
-"language": "GDScript",
-"path": "res://Scripts/Abilities/AbilityLifedrain.gd"
 }, {
 "base": "Ability",
 "class": "AbilityMindrot",
@@ -202,12 +202,12 @@ _global_script_class_icons={
 "AbilityConfigure": "",
 "AbilityDash": "",
 "AbilityDegenerate": "",
+"AbilityEssenceDrain": "",
 "AbilityEvolution": "",
 "AbilityFrostbite": "",
 "AbilityFrozen": "",
 "AbilityIcecage": "",
 "AbilityInfested": "",
-"AbilityLifedrain": "",
 "AbilityMindrot": "",
 "AbilityPhalanx": "",
 "AbilityProduction": "",

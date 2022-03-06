@@ -5,16 +5,18 @@ var name
 var desc
 var card
 var c : Color
+var iconPos : Vector2
 
 var showCount = false
 var count = 1
 
-func _init(name : String, desc : String, card : Card, c : Color, showCount : bool):
+func _init(name : String, desc : String, card : Card, c : Color, showCount : bool, iconPos : Vector2):
 	self.name = name
 	self.desc = desc
 	self.card = card
 	self.c = c
 	self.showCount = showCount
+	self.iconPos = iconPos
 
 func onEnter(board, slot):
 	pass

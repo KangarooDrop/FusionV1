@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityShieldUp
 
-func _init(card : Card).("Shield Up", "When this creature is played, gain 5 " + str(TextArmor.new(null)) + ". Removes this ability", card, Color.darkgray, true):
+func _init(card : Card).("Shield Up", "When this creature is played, gain 5 " + str(TextArmor.new(null)) + ". Removes this ability", card, Color.darkgray, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

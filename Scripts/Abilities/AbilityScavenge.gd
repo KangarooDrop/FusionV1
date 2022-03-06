@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityScavenge
 
-func _init(card : Card).("Scavenge", "Gain +1/+1 when another friendly creature dies", card, Color.black, false):
+func _init(card : Card).("Scavenge", "Gain +1/+1 when another friendly creature dies", card, Color.black, false, Vector2(16, 96)):
 	pass
 
 func onOtherDeath(board, slot):

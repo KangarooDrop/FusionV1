@@ -628,6 +628,9 @@ var hoveringWindowSlot = null
 var hoveringWindow = null
 		
 func onSlotEnter(slot : CardSlot):
+	if is_instance_valid(slot.cardNode) and slot.cardNode.getCardVisible():
+		slot.cardNode.addIcons()
+	
 	if hoveringOn != null:
 		onSlotExit(hoveringOn)
 		
@@ -639,6 +642,9 @@ func onSlotEnter(slot : CardSlot):
 				hoveringOn.cardNode.position.y -= 5
 		
 func onSlotExit(slot : CardSlot):
+	if is_instance_valid(slot.cardNode):
+		slot.cardNode.removeIcons()
+		
 	if slot == hoveringOn:
 		if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
 			if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:

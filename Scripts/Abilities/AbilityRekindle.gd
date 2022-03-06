@@ -4,7 +4,7 @@ class_name AbilityRekindle
 
 var buff = 1
 
-func _init(card : Card).("Rekindle", "When this creature is played, discard your hand and draw three cards. Removes this ability", card, Color.red, false):
+func _init(card : Card).("Rekindle", "When this creature is played, discard your hand and draw three cards. Removes this ability", card, Color.red, false, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityConfigure
 
-func _init(card : Card).("Configure", "When this creature is played, all other creatures you control gain +2 power. Removes this ability", card, Color.blue, true):
+func _init(card : Card).("Configure", "When this creature is played, all other creatures you control gain +2 power. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

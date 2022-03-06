@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityProduction
 
-func _init(card : Card).("Production", "When this creature is played, create a mech with no abilities. Removes this ability", card, Color.gray, true):
+func _init(card : Card).("Production", "When this creature is played, create a mech with no abilities. Removes this ability", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

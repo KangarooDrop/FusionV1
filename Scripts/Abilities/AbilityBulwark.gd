@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityBulwark
 
-func _init(card : Card).("Bulwark", "Deals damage when attacked equal to the damage taken", card, Color.darkgray, false):
+func _init(card : Card).("Bulwark", "Deals damage when attacked equal to the damage taken", card, Color.darkgray, false, Vector2(32, 48)):
 	pass
 	
 func onBeingAttacked(attacker, board):

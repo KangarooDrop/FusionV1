@@ -537,7 +537,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityLifedrain"
+      "AbilityEssenceDrain"
     ]
   }
 }

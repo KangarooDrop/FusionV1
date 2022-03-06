@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityWisdom
 
-func _init(card : Card).("Wisedom", "When this creature is played, draw a card. Removes this ability", card, Color.blue, true):
+func _init(card : Card).("Wisedom", "When this creature is played, draw a card. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

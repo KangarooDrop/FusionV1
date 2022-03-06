@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityIcecage
 
-func _init(card : Card).("Icecage", "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures. Removes this ability", card, Color.blue, true):
+func _init(card : Card).("Icecage", "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

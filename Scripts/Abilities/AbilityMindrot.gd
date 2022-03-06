@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityMindrot
 
-func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 cards of your opponent's deck from the game. Removes this ability", card, Color.blue, true):
+func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 cards of your opponent's deck from the game. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

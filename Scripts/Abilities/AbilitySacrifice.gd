@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilitySacrifice
 
-func _init(card : Card).("Sacrifice", "This creature gives your other creatures on board +1/+1 when it dies", card, Color.black, true):
+func _init(card : Card).("Sacrifice", "This creature gives your other creatures on board +1/+1 when it dies", card, Color.black, true, Vector2(0, 96)):
 	pass
 
 func onDeath(board):

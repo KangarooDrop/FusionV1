@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityDash
 
-func _init(card : Card).("Dash", "This creature can attack the turn it is played", card, Color.red, false):
+func _init(card : Card).("Dash", "This creature can attack the turn it is played", card, Color.red, false, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):

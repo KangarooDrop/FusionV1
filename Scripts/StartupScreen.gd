@@ -36,7 +36,7 @@ func onReplayPressed():
 	for c in $FileDisplay/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
 			c.queue_free()
-			c.parent.remove_child(c)
+			c.get_parent().remove_child(c)
 	for i in range(files.size()):
 		var b = Button.new()
 		$FileDisplay/ButtonHolder.add_child(b)

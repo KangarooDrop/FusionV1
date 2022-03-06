@@ -4,7 +4,7 @@ class_name AbilityPhalanx
 
 var buffsApplied = 0
 
-func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card, Color.darkgray, true):
+func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card, Color.darkgray, true, Vector2(16, 48)):
 	pass
 
 func onEnter(board, slot):

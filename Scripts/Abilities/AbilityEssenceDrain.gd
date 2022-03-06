@@ -1,8 +1,8 @@
 extends Ability
 
-class_name AbilityLifedrain
+class_name AbilityEssenceDrain
 
-func _init(card : Card).("Lifedrain", "When this creature is played, all creatures gain -1/-1. Gain +1/+1 for each creature affected. Removes this ability", card, Color.black, true):
+func _init(card : Card).("Essence Drain", "When this creature is played, all creatures gain -1/-1. Gain +1/+1 for each creature affected. Removes this ability", card, Color.black, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
