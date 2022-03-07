@@ -642,19 +642,20 @@ func onSlotEnter(slot : CardSlot):
 				hoveringOn.cardNode.position.y -= 5
 		
 func onSlotExit(slot : CardSlot):
-	if is_instance_valid(slot.cardNode):
-		slot.cardNode.removeIcons()
-		
-	if slot == hoveringOn:
-		if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
-			if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
-				if cardsPlayed < cardsPerTurn:
-					hoveringOn.cardNode.position.y += 5
-		hoveringOn = null
+	if is_instance_valid(slot):
+		if is_instance_valid(slot.cardNode):
+			slot.cardNode.removeIcons()
+			
+		if slot == hoveringOn:
+			if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+				if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
+					if cardsPlayed < cardsPerTurn:
+						hoveringOn.cardNode.position.y += 5
+			hoveringOn = null
 		
 func onSlotBeingClicked(slot : CardSlot, button_index : int):
 	actionQueue.append([slot, button_index])
-		
+
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	
 	if not Server.online and Settings.gameMode != GAME_MODE.REPLAY:
