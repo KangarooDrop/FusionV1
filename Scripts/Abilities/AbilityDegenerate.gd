@@ -7,4 +7,4 @@ func _init(card : Card).("Degenerate", "On fusion, the card loses all creature t
 
 func onFusion(card):
 	card.creatureType = [Card.CREATURE_TYPE.Null]
-	card.abilities.erase(self)
+	card.removeAbility(self)

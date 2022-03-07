@@ -20,5 +20,5 @@ func onEffect(board):
 			c.abilities = []
 			card.addCreatureToBoard(c, board)
 			
-	card.abilities.erase(self)
+	card.removeAbility(self)
 	

@@ -71,7 +71,7 @@ func setArmour(armourNew : int, showChange = true):
 			makeFallingText(str(armourNew - armour), Color.black, armourNode.position)
 			
 	armour = armourNew
-	armourNode.get_node("Label").text = "Armour: " + str(armour)
+	armourNode.get_node("Label").text = ("Armour: " + str(armour) if armour > 0 else "")
 
 func makeFallingText(text : String, color : Color, position : Vector2):
 	var ft = fallingTextScene.instance()

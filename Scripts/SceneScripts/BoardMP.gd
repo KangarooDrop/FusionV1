@@ -628,7 +628,7 @@ var hoveringWindowSlot = null
 var hoveringWindow = null
 		
 func onSlotEnter(slot : CardSlot):
-	if is_instance_valid(slot.cardNode) and slot.cardNode.getCardVisible():
+	if is_instance_valid(slot.cardNode) and slot.cardNode.getCardVisible() and slot.currentZone == CardSlot.ZONES.CREATURE:
 		slot.cardNode.addIcons()
 	
 	if hoveringOn != null:

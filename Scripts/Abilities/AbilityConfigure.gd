@@ -18,7 +18,7 @@ func onEffect(board, slot):
 		if is_instance_valid(s.cardNode) and s != slot:
 			s.cardNode.card.power += 2 * count
 			
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 func combine(abl : Ability):
 	.combine(abl)

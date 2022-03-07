@@ -20,7 +20,7 @@ func onDrawEffect(board):
 				p.takeDamage(5, card.cardNode)
 			break
 			
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 
 func combine(abl : Ability):

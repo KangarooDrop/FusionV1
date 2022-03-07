@@ -17,7 +17,7 @@ func onEffect(board):
 	for p in board.players:
 		if p.UUID == card.playerID:
 			p.addArmour(count * 5)
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 func combine(abl : Ability):
 	.combine(abl)

@@ -15,7 +15,7 @@ func onEnterFromFusion(board, slot):
 
 func onEffect(board, slot):
 	board.abilityStack.append([get_script(), "onMill", [board, card.playerID, count * 3]])
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 static func onMill(params):
 	for p in params[0].players:

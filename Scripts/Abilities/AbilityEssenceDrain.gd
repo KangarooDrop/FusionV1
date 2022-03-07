@@ -23,7 +23,7 @@ func onEffect(board):
 	card.power += count * n
 	card.toughness += count * n
 			
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 func combine(abl : Ability):
 	.combine(abl)

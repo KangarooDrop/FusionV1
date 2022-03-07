@@ -11,6 +11,7 @@ var name : String
 var texture : Texture
 var tier : int
 var abilities := []
+var removedAbilities := []
 var creatureType := []
 var power : int
 var toughness : int
@@ -208,6 +209,11 @@ func getHoverData() -> String:
 		string += "\n"
 	for abl in abilities:
 		string += "\n" + str(abl)
+	
+	if removedAbilities.size() > 0:
+		string += "\n----------"
+	for abl in removedAbilities:
+		string += "\n[s]" + str(abl) + "[/s]"
 		
 	return string
 
@@ -227,3 +233,7 @@ func trimAbilities():
 			newAbilities.append(abilities[0])
 			abilities.remove(0)
 	abilities = newAbilities
+
+func removeAbility(ability):
+	abilities.erase(ability)
+	removedAbilities.append(ability)

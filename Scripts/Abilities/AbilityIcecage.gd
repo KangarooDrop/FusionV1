@@ -20,4 +20,4 @@ func onEffect(board):
 			frozen.onEffect()
 			s.cardNode.card.abilities.append(frozen)
 			
-	card.abilities.erase(self)
+	card.removeAbility(self)

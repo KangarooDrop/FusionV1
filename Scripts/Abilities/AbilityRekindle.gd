@@ -19,7 +19,7 @@ func onEffect(board):
 	board.abilityStack.append([get_script(), "onDiscard", [board, card.playerID]])
 	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, buff * 3]])
 	
-	card.abilities.erase(self)
+	card.removeAbility(self)
 
 
 func combine(abl : Ability):

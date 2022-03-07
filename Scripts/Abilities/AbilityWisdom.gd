@@ -15,7 +15,7 @@ func onEnterFromFusion(board, slot):
 
 func onDrawEffect(board):
 	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, count]])
-	card.abilities.erase(self)
+	card.removeAbility(self)
 			
 static func onDraw(params : Array):
 	for p in params[0].players:

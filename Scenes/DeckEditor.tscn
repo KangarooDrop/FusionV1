@@ -141,13 +141,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -67.0
-margin_top = -55.0
-margin_right = 3.0
-margin_bottom = -41.0
+margin_left = -144.297
+margin_top = -59.1622
+margin_right = 54.7027
+margin_bottom = -40.1622
 rect_scale = Vector2( 2, 2 )
+custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Sort Order:"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
