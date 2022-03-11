@@ -3,7 +3,7 @@ extends Control
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 func _ready():
-	pass
+	Settings.gameMode = Settings.GAME_MODE.NONE
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")
@@ -11,11 +11,17 @@ func onDeckEditPressed():
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
 func onLobbyPressed():
-	Settings.gameMode = BoardMP.GAME_MODE.PLAYING
+	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
 	var error = get_tree().change_scene("res://Scenes/Networking/Lobby.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
-	
+
+func onDraftPressed():
+	Settings.gameMode = Settings.GAME_MODE.LOBBY_DRAFT
+	var error = get_tree().change_scene("res://Scenes/Networking/DraftLobby.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+
 func onReplayPressed():
 	MessageManager.notify("Alert: This system is for debug purposes. Proceed with caution")
 	$FileDisplay.visible = true
@@ -50,7 +56,7 @@ func onReplayPressed():
 	
 func onReplayFilePressed(fileName : String):
 	Settings.dumpFile = fileName
-	Settings.gameMode = BoardMP.GAME_MODE.REPLAY
+	Settings.gameMode = Settings.GAME_MODE.REPLAY
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))

@@ -2,5 +2,17 @@
 
 [ext_resource path="res://Scripts/UI/CardDisplay.gd" type="Script" id=1]
 
-[node name="CardDisplay" type="Node2D"]
+[node name="CardDisplay" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_filter = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

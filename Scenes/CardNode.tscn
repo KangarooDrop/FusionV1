@@ -53,6 +53,7 @@ margin_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_min_size = Vector2( 16, 16 )
+mouse_filter = 2
 custom_constants/separation = 3
 alignment = 1
 __meta__ = {

@@ -30,14 +30,19 @@ func readJSON(path : String) -> Dictionary:
 	var dict : Dictionary
 	var text
 	if file.file_exists(path):
-		file.open(path, file.READ)
-		text = file.get_as_text()
-		var par = parse_json(text)
-		if par != null:
-			dict = par
+		var error = file.open(path, file.READ)
+		if error != 0:
+			MessageManager.notify("Error opening json save file")
 		else:
-			MessageManager.notify("Error parsing json save file")
-		file.close()
+			text = file.get_as_text()
+			var par = parse_json(text)
+			if par != null:
+				dict = par
+			else:
+				MessageManager.notify("Error parsing json save file")
+	else:
+		MessageManager.notify("Error finding json save file")
+	file.close()
 	return dict
 
 func getDataLog(path : String) -> Array:

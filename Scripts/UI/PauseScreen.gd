@@ -26,7 +26,6 @@ func onBackPressed():
 func onMainMenuPressed():
 	if Server.online:
 		Server.closeServer()
-		Server.otherPlayerData = null
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))

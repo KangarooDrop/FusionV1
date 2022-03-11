@@ -53,12 +53,10 @@ func clearData():
 func addCard(id : int) -> bool:
 	for i in range(data.size()):
 		if data[i].card.UUID == id:
-			if data[i].count <= 3:
-				data[i].count += 1
-				data[i].updateDisplay()
-				setTotal(getTotal() + 1)
-				return true
-			return false
+			data[i].count += 1
+			data[i].updateDisplay()
+			setTotal(getTotal() + 1)
+			return true
 			
 	var d = deckDisplayData.instance()
 	d.card = ListOfCards.getCard(id)
@@ -92,17 +90,19 @@ func onDeckDataMouseExit(button):
 	
 func removeCard(index : int) -> bool:
 	if index >= 0 and index < data.size():
-		if data[index].count > 1:
-			data[index].count -= 1
+		
+		data[index].count -= 1
+		get_parent().removeCard(data[index].card.UUID)
+			
+		if data[index].count > 0:
 			data[index].updateDisplay()
 		else:
 			if hoveringOn == data[index]:
 				onDeckDataMouseExit(data[index])
 			data[index].queue_free()
 			data.remove(index)
-			#$VBoxContainer.rect_position.y = 0
-			#$VBoxContainer.rect_size.y = 0
 		setTotal(getTotal() - 1)
+		
 		return true
 	return false
 

@@ -23,18 +23,10 @@ func hostButtonPressed():
 func joinButtonPressed():
 	$MultiplayerUI.visible = false
 	openFileSelector()
-		
-func spectateButtonPressed():
-	$MultiplayerUI.visible = false
-	$IPSet.visible = true
-	Settings.gameMode = BoardMP.GAME_MODE.SPECTATE
 	
 func ipBackButtonPressed():
 	$IPSet.visible = false
-	if Settings.gameMode == BoardMP.GAME_MODE.SPECTATE:
-		onBackButtonClicked()
-	else:
-		openFileSelector()
+	openFileSelector()
 	
 		
 func backButtonPressed():
@@ -88,7 +80,6 @@ func openFileSelector():
 func onFileButtonClicked(fileName : String):
 	$DeckSelector.visible = false
 		
-	Settings.gameMode = BoardMP.GAME_MODE.PLAYING
 	Settings.selectedDeck = fileName
 	if Server.host:
 		Server.online = true
@@ -114,10 +105,11 @@ func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_ESCAPE:
 			if Server.online:
-				Server.closeServer()
-				Server.host = false
-				Server.online = false
-				
-				$MultiplayerUI.visible = true
-				$WaitLabel.visible = false
+				disconnected()
+
+func disconnected():
+	Server.closeServer()
+	
+	$MultiplayerUI.visible = true
+	$WaitLabel.visible = false
 				

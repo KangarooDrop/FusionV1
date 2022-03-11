@@ -68,7 +68,7 @@ enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_IND
 #deckData [%id%] : %count%
 static func verifyDeck(deckData) -> int:
 	var numCards = 20
-	var numSameCards = 4
+	#var numSameCards = 4
 	var maxTier = 1
 	var maxID = ListOfCards.cardList.size()
 	
@@ -94,7 +94,7 @@ static func verifyDeck(deckData) -> int:
 			return DECK_VALIDITY_TYPE.UNKNOWN_INDEX
 			
 		#CHECKS IF THERE ARE TOO MANY OF SAME CARD or LESS THAN ONE CARD
-		if count < 1 or count > numSameCards:
+		if count < 1:# or count > numSameCards:
 			return DECK_VALIDITY_TYPE.BAD_COUNT
 			
 		#CHECKS IF THE DECK ONLY USES TIER 1 CARDS

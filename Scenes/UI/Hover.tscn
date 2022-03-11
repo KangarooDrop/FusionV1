@@ -9,15 +9,15 @@
 font_data = ExtResource( 2 )
 
 [node name="Hover" type="Node2D"]
-z_index = 3
+z_index = 99
 script = ExtResource( 3 )
 
 [node name="HoverBack" type="NinePatchRect" parent="."]
 anchor_top = 0.5
 anchor_bottom = 0.5
 margin_top = -50.0
-margin_right = 100.0
-margin_bottom = 50.0
+margin_right = 10.0
+margin_bottom = -40.0
 grow_vertical = 2
 mouse_filter = 0
 texture = ExtResource( 1 )
@@ -34,7 +34,7 @@ __meta__ = {
 
 [node name="Label" type="RichTextLabel" parent="."]
 margin_right = 70.0
-margin_bottom = 40.0
+margin_bottom = 20.0
 custom_fonts/mono_font = SubResource( 1 )
 custom_fonts/normal_font = ExtResource( 4 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )

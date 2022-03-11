@@ -154,7 +154,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/SceneScripts/CardNode.gd"
 }, {
-"base": "Node",
+"base": "Node2D",
 "class": "CardSlot",
 "language": "GDScript",
 "path": "res://Scripts/SceneScripts/CardSlot.gd"
@@ -168,6 +168,11 @@ _global_script_classes=[ {
 "class": "Deck",
 "language": "GDScript",
 "path": "res://Scripts/Classes/Deck.gd"
+}, {
+"base": "Node",
+"class": "DraftClass",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/DraftClass.gd"
 }, {
 "base": "",
 "class": "GitAPI",
@@ -227,6 +232,7 @@ _global_script_class_icons={
 "CardSlot": "",
 "CardsLeftIndicator": "",
 "Deck": "",
+"DraftClass": "",
 "GitAPI": "",
 "HandNode": "",
 "Player": "",

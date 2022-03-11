@@ -12,4 +12,4 @@ func onDeath(board):
 		card.abilities.clear()
 		card.power = 1
 		card.toughness = 1
-		self.card.addCreatureToBoard(card, board, self.card.cardNode.slot if i == 0 else null)
+		self.card.addCreatureToBoard(card, board, null)

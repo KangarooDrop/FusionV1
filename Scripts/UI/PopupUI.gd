@@ -31,4 +31,3 @@ func setBackgroundSize():
 
 func close():
 	queue_free()
-

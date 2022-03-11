@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.0.20"
+var versionID = "0.0.0.21"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -10,7 +10,8 @@ var path = "user://decks/"
 var dumpPath = "user://dumps/"
 var dumpFile = "x_.txt"
 
-var gameMode : int
+enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, REPLAY, DRAFTING}
+var gameMode : int = 0
 
 var cardSlotScale = 1.5
 
@@ -23,19 +24,41 @@ func _ready():
 		FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
 		
 	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
-		
-	Settings.playAnimations = settings["play_anims"]
-	Server.MAX_PEERS = settings["num_peers"]
+	var ok = verifySettings(settings)
 	
+	Settings.playAnimations = settings["play_anims"]
+	Server.MAX_PEERS = settings["num_draft"] - 1
+	Server.username = settings["username"]
+	
+	if not ok:
+		writeToSettings()
+
+func verifySettings(settings : Dictionary) -> bool:
+	var ok = true
+	if not settings.has("play_anims"):
+		settings["play_anims"] = true
+		ok = false
+	if not settings.has("num_draft"):
+		settings["num_draft"] = 8
+		ok = false
+	if not settings.has("username"):
+		settings["username"] = "NO_NAME"
+		ok = false
+		
+	return ok
+	
+
 func writeToSettings():
 	print("Saving user settings")
+	print(getSettingsDict())
 	FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
 	
 func getSettingsDict() -> Dictionary:
 	var rtn := \
 	{
-		"num_peers":Server.MAX_PEERS, 
-		"play_anims":playAnimations
+		"num_draft":Server.MAX_PEERS + 1,
+		"play_anims":playAnimations,
+		"username":Server.username
 	}
 	return rtn
 	

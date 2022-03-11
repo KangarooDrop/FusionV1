@@ -61,9 +61,6 @@ var fuseWaitMaxTime = 0.3
 var gameStarted = false
 var gameOver = false
 
-enum GAME_MODE {PLAYING, SPECTATE, REPLAY}
-var settingSpectateData = false
-
 #Abilities on creatures added to stack in reverse order,
 # Abilities that trigger others are added to front
 # Read FI/LO
@@ -83,7 +80,7 @@ func _ready():
 	print("current game seed is ", gameSeed)
 	seed(gameSeed)
 	
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		var cardList = getDeckFromFile()
 		cardList.shuffle()
 		setOwnCardList(cardList)
@@ -100,11 +97,10 @@ func _ready():
 		Server.fetchDeck(get_instance_id())
 		Server.fetchVersion(get_instance_id())
 		
-	elif Settings.gameMode == GAME_MODE.REPLAY:
-		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
+		setOwnUsername()
 		
-	elif Settings.gameMode == GAME_MODE.SPECTATE:
-		print("SPECTATING STARTED")
+	elif Settings.gameMode == Settings.GAME_MODE.REPLAY:
+		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
 
 func getDeckFromFile() -> Array:
 	var fileName = Settings.selectedDeck
@@ -139,7 +135,7 @@ func setOwnCardList(cardList : Array):
 	for i in player_A.deck.serialize():
 		logDeck += str(i) + " "
 		
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		dataLog.append(logDeck)
 
 var deckDataSet = false
@@ -161,7 +157,7 @@ func setOpponentCardList(cardList : Array):
 	for i in players[1].deck.serialize():
 		logDeck += str(i) + " "
 		
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		dataLog.append(logDeck)
 
 func setDeckData(data, order):
@@ -220,14 +216,17 @@ func verifyDeckData(data, order) -> bool:
 			
 
 func compareVersion(version):
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		dataLog.append("VERSION " + version)
 	var error = Settings.compareVersion(Settings.versionID, version)
 	if error == 0:
 		versionConfirmed = true
 	else:
-		MessageManager.notify("Error: Incompatable game versions")
-		Server.disconnectMessage("Error: Incompatable game versions")
+		if Server.online:
+			MessageManager.notify("Error: Incompatable game versions")
+			Server.disconnectMessage("Error: Incompatable game versions")
+		else:
+			MessageManager.notify("Error: Incompatible versions")
 		print("INVALID VERSIONS")
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -240,7 +239,7 @@ func onGameStart():
 
 func setStartingPlayer(playerIndex : int):
 	print("Receive: Starting player")
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		dataLog.append("SET_PLAYER " + str(playerIndex))
 	activePlayer = playerIndex
 	hasStartingPlayer = true
@@ -266,12 +265,21 @@ func startGame():
 	print("Notice: Players ready, starting game")
 	dataLog.append("GAME_START")
 	
+	setTurnText()
+
+func setTurnText():
 	if activePlayer == 0:
-		$TurnIndicator.startTurn()
+		$TI/Label.text = "Your\nTurn"
+	else:
+		$TI/Label.text = "Opponent\nTurn"
+
+var rotTimer = 0
+var rotAngle = PI / 2
+var rotFreq = 1
 
 func _physics_process(delta):
 	
-	if Settings.gameMode == GAME_MODE.REPLAY and not replayWaiting and not gameOver:
+	if Settings.gameMode == Settings.GAME_MODE.REPLAY and not replayWaiting and not gameOver:
 		replayTimer += delta
 		if replayTimer >= 0.3:
 			nextReplayAction()
@@ -280,16 +288,22 @@ func _physics_process(delta):
 		startGame()
 		
 	if playerRestart and opponentRestart:
-		if Server.host:
-			Server.spectatorRestart()
-		
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
 		
 		
 	
-		
+	
+	if gameStarted:
+		rotAngle = PI / 32
+		rotFreq = 0.2
+		if isMyTurn():
+			rotTimer += delta
+		else:
+			rotTimer = 0
+		$TI.rotation = sin(2 * PI * rotTimer * rotFreq) * rotAngle
+	
 	if is_instance_valid(selectedCard):
 		selectRotTimer += delta
 		selectedCard.cardNode.rotation = sin(selectRotTimer * 1.5) * PI / 32
@@ -421,8 +435,9 @@ func _physics_process(delta):
 		if fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
 				print("Stack: ", abilityStack)
-				abilityStack[0][0].call(abilityStack[0][1], abilityStack[0][2])
-				abilityStack.remove(0)
+				var abl = abilityStack[0]
+				abl[0].call(abl[1], abl[2])
+				abilityStack.erase(abl)
 				checkState()
 				
 			elif actionQueue.size() > 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
@@ -449,22 +464,21 @@ func nextReplayAction():
 				
 		yield(get_tree().create_timer(0.1), "timeout")
 	
-	var nextCommand = dataLog[replayIndex]
-	processReplayCommand(nextCommand)
-	
-	replayIndex += 1
-	if replayIndex >= dataLog.size():
-		gameOver = true
-	replayWaiting = false
-	replayTimer = 0
+	if replayIndex < dataLog.size():
+		var nextCommand = dataLog[replayIndex]
+		processReplayCommand(nextCommand)
+		
+		replayIndex += 1
+		if replayIndex >= dataLog.size():
+			gameOver = true
+		replayWaiting = false
+		replayTimer = 0
 	
 func processReplayCommand(command : String):
 	var coms = command.split(" ")
 	match coms[0]:
 		"GAME_START":
 			pass
-#			if Settings.gameMode == GAME_MODE.SPECTATE:
-#				startGame()
 		"NEXT_TURN":
 			nextTurn()
 		"OWN_DECK":
@@ -611,7 +625,6 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = creatures_B_Holder
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
-	#while settingSpectateData:
 	#	yield(get_tree().create_timer(0.02), "timeout")
 		
 	if serverQueue.size() == 0:
@@ -636,7 +649,7 @@ func onSlotEnter(slot : CardSlot):
 		
 	hoveringOn = slot
 	
-	if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
 		if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
 			if cardsPlayed < cardsPerTurn:
 				hoveringOn.cardNode.position.y -= 5
@@ -647,7 +660,7 @@ func onSlotExit(slot : CardSlot):
 			slot.cardNode.removeIcons()
 			
 		if slot == hoveringOn:
-			if Settings.gameMode == GAME_MODE.PLAYING and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+			if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
 				if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
 					if cardsPlayed < cardsPerTurn:
 						hoveringOn.cardNode.position.y += 5
@@ -658,7 +671,7 @@ func onSlotBeingClicked(slot : CardSlot, button_index : int):
 
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	
-	if not Server.online and Settings.gameMode != GAME_MODE.REPLAY:
+	if not Server.online and Settings.gameMode != Settings.GAME_MODE.REPLAY:
 		return false
 	
 	if not is_instance_valid(slot):
@@ -668,9 +681,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 		return false
 		
 	if activePlayer == -1:
-		return false
-		
-	if Settings.gameMode == GAME_MODE.SPECTATE and not fromServer:
 		return false
 		
 	if button_index == 1:
@@ -872,46 +882,49 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							selectRotTimer = 0
 						selectedCard = null
 							
-	#CODE IS ONLY REACHABLE IF NOT RETURNED
-	if Settings.gameMode == GAME_MODE.PLAYING:
-		dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
-	if not fromServer:
-		Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
+		#CODE IS ONLY REACHABLE IF NOT RETURNED
+		if Settings.gameMode == Settings.GAME_MODE.PLAY:
+			dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
+		if not fromServer:
+			Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 		
-	return true
+		return true
+	
+	return false
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer
 
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo():
-		if event.scancode == KEY_Q:
-			if isMyTurn():
-				var waiting = true
-				while waiting:
-					var attacking = false
-					for slot in creatures[players[activePlayer].UUID]:
-						if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-							attacking = true
-					if not attacking:
-						waiting = false
-							
-					for p in players:
-						if p.hand.drawQueue.size() > 0:
+	if not gameOver:
+		if event is InputEventKey and event.is_pressed() and not event.is_echo():
+			if event.scancode == KEY_Q:
+				if isMyTurn():
+					var waiting = true
+					while waiting:
+						var attacking = false
+						for slot in creatures[players[activePlayer].UUID]:
+							if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
+								attacking = true
+						if not attacking:
+							waiting = false
+								
+						for p in players:
+							if p.hand.drawQueue.size() > 0:
+								waiting = true
+								
+						if fuseQueue.size() > 0:
 							waiting = true
-							
-					if fuseQueue.size() > 0:
-						waiting = true
-							
-					if millQueue.size() > 0:
-						waiting = true
-							
-					if actionQueue.size() > 0:
-						waiting = true
-							
-					yield(get_tree().create_timer(0.1), "timeout")
-				nextTurn()
-				Server.onNextTurn()
+								
+						if millQueue.size() > 0:
+							waiting = true
+								
+						if actionQueue.size() > 0:
+							waiting = true
+								
+						yield(get_tree().create_timer(0.1), "timeout")
+					nextTurn()
+					Server.onNextTurn()
 
 	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
 		if is_instance_valid(hoveringWindow):
@@ -934,7 +947,7 @@ func nextTurn():
 	if gameOver:
 		return
 	#Engine.time_scale = 0.1
-	if Settings.gameMode == GAME_MODE.PLAYING:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		dataLog.append("NEXT_TURN")
 	
 	while cardsHolding.size() > 0:
@@ -955,8 +968,7 @@ func nextTurn():
 		
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
-	if activePlayer == 0:
-		$TurnIndicator.startTurn()
+	setTurnText()
 	players[activePlayer].hand.drawCard()
 		
 	if activePlayer == 0:
@@ -1018,10 +1030,21 @@ func checkState():
 			checkState()
 
 func onLoss(player : Player):
-	if saveReplayOnClose:
-		saveReplay()
-	gameOver = true
-	get_node("/root/main/WinLose").showWinLose(player != players[0])
+	if not gameOver:
+		if saveReplayOnClose:
+			saveReplay()
+		gameOver = true
+		get_node("/root/main/WinLose").showWinLose(player != players[0])
+
+func setOwnUsername():
+	print("Settings own username")
+	$UsernameLabel.text = Server.username
+	dataLog.append("SET_OWN_USERNAME " + Server.username)
+
+func setOpponentUsername(username : String):
+	print("Settings opponent username")
+	$UsernameLabel2.text = username
+	dataLog.append("SET_OPPONENT_USERNAME " + username)
 
 var dataLog := []
 var saveReplayOnClose = false
@@ -1039,29 +1062,3 @@ func saveReplay():
 	if not hasSavedReplay:
 		FileIO.dumpDataLog(dataLog)
 		hasSavedReplay = true
-
-func setSpectatorData(data):
-	visible = false
-	settingSpectateData = true
-	var anims = Settings.playAnimations
-	Settings.playAnimations = false
-	for i in range(data.size()):
-		processReplayCommand(data[i])
-		yield(get_tree().create_timer(0.02), "timeout")
-		
-	Settings.playAnimations = anims
-	settingSpectateData = false
-	visible = true
-
-func serialize() -> Array:
-	var rtn = []
-	
-	#Version ID, current player, health
-	#Cards selected, cards held, millQueue size, creatures attacking
-	#Decks, 
-	#Hands, 
-	#Creatures
-	return rtn
-	
-func deserialize(data : Array):
-	pass

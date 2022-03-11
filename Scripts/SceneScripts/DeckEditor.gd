@@ -1,9 +1,13 @@
 extends Node2D
 
+var availableCardCount : Dictionary = {}
+
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var fontTRES = preload("res://Fonts/FontNormal.tres")
-	
-var slotPageWidth = 6
+
+var nums := []
+
+var slotPageWidth = 5
 var slotPageHeight = 3
 var slotPageNum = slotPageWidth * slotPageHeight
 
@@ -23,6 +27,17 @@ enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
 var sortOrder : int = SORT_ORDER.TYPE
 
 func _ready():
+	setCards()
+
+func setCards():
+	if Settings.gameMode == Settings.GAME_MODE.NONE:
+		for i in range(ListOfCards.cardList.size()):
+			if ListOfCards.cardList[i].tier == 1:
+				availableCardCount[i] = 4
+	else:
+		$Menu/DeleteButton.hide()
+		$Menu/NewButton.hide()
+		$Menu/LoadButton.hide()
 	sort()
 
 func clearPages():
@@ -43,10 +58,9 @@ func sort():
 	clearPages()
 	
 	var listOfCards := []
-	for i in range(ListOfCards.cardList.size()):
-		var c = ListOfCards.getCard(i)
-		if c.tier <= 1:
-			listOfCards.append(c)
+	for k in availableCardCount.keys():
+		var c = ListOfCards.getCard(k)
+		listOfCards.append(c)
 	
 	var cardsToAdd = []
 	if sortOrder == SORT_ORDER.TYPE or sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
@@ -120,7 +134,7 @@ func sort():
 			var x = j % slotPageWidth
 			var y = j / slotPageWidth
 			var offX = (x - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
-			var offY = (y - (slotPageHeight - 1) / 2.0) * (cardHeight + cardDists)
+			var offY = (y - (slotPageHeight - 1) / 2.0) * (cardHeight + cardDists*2)
 			
 			var slot = cardSlot.instance()
 			slot.currentZone = CardSlot.ZONES.NONE
@@ -136,10 +150,15 @@ func sort():
 				cardPlacing.global_position = slot.global_position
 				slot.cardNode = cardPlacing
 				cardPlacing.slot = slot
+			
+			
+						
+			if card != null:
+				updateSlotCount(slot)
 				
-	var offL = (-2.5 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	var offL = (-2 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
 	$LArrow.position = Vector2(offL, 30)
-	var offR = (slotPageWidth + 1.5 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
 	$RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
@@ -153,6 +172,8 @@ func rightArrowPressed():
 	setCurrentPage(getCurrentPage() + 1)
 
 func _physics_process(delta):
+	slotClicked = false
+	
 	if slotViewing != null:
 		if viewTimer < viewMaxTime:
 			viewTimer += delta
@@ -197,19 +218,49 @@ func createHoverNode(position : Vector2, text : String):
 	hoverInst.global_position = position
 	hoverInst.setText(text)
 	infoWindow = hoverInst
+
+func removeCard(id : int):
+	var slot = null
+	for p in pages:
+		for s in p.get_children():
+			if s is CardSlot and is_instance_valid(s.cardNode):
+				if s.cardNode.card.UUID == id:
+					slot = s
+	updateSlotCount(slot)
 	
+
+var slotClicked = false
 func onSlotBeingClicked(slot : CardSlot, button_index : int):
-	if not $SaveDisplay.visible and not $FileDisplay.visible:
+	if not $SaveDisplay.visible and not $FileDisplay.visible and is_instance_valid(slot.cardNode):
 		if button_index == 1:
-			if slot.cardNode != null and slotViewing == null:
+			var countCheck = true
+			for i in $DeckDisplay.data.size():
+				if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
+					countCheck = $DeckDisplay.data[i].count < availableCardCount[slot.cardNode.card.UUID]
+					break
+			
+			if slot.cardNode != null and slotViewing == null and countCheck:
 				$DeckDisplay.addCard(slot.cardNode.card.UUID)
-				return
+				updateSlotCount(slot)
+				
 		elif button_index == 2:
 			if slotViewing == null and slot.cardNode != null:
 				slotViewing = slot
 				slotViewing.cardNode.z_index += 2
 				viewTimer = 0
-	
+				slotClicked = true
+
+func updateSlotCount(slot : CardSlot):
+	var index = -1
+	for i in range($DeckDisplay.data.size()):
+		if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
+			index = i
+			break
+	if index >= 0:
+		slot.get_node("Label").text = str($DeckDisplay.data[index].count) + "/" + str(availableCardCount[slot.cardNode.card.UUID])
+	else:
+		slot.get_node("Label").text = "0/" + str(availableCardCount[slot.cardNode.card.UUID])
+
 func onLoadPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
@@ -246,11 +297,11 @@ func onConfirmNew(popup=null):
 		popup.close()
 	$DeckDisplay.clearData()
 	hasSaved = true
-		
-		
+	
 func onConfirmExit(popup=null):
 	if popup != null:
 		popup.close()
+	
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
@@ -416,14 +467,15 @@ func _input(event):
 			setCurrentPage(getCurrentPage() - 1)
 		elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
 			setCurrentPage(getCurrentPage() + 1)
-			
-	if event is InputEventMouseButton:
-		if event.pressed and (event.button_index == 2):
-			if slotViewing != null and slotReturning == null:
-				yield(get_tree().create_timer(0.02), "timeout")
-				if is_instance_valid(infoWindow):
-					infoWindow.close()
-				slotReturning = slotViewing
-				slotViewing.cardNode.z_index -= 1
-				slotViewing = null
-				returnTimer = 0
+	
+	if not slotClicked:
+		if event is InputEventMouseButton:
+			if event.pressed and (event.button_index == 2):
+				if slotViewing != null and slotReturning == null:
+					yield(get_tree().create_timer(0.02), "timeout")
+					if is_instance_valid(infoWindow):
+						infoWindow.close()
+					slotReturning = slotViewing
+					slotViewing.cardNode.z_index -= 1
+					slotViewing = null
+					returnTimer = 0

@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=1]
+
+[node name="PlayerLabel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 354.0
+margin_bottom = 32.0
+custom_constants/separation = 16
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_right = 300.0
+margin_bottom = 20.0
+grow_vertical = 2
+rect_min_size = Vector2( 300, 20 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Test AAA AAA AAA"
+valign = 1
+autowrap = true
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+visible = false
+margin_left = 316.0
+margin_right = 354.0
+margin_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Kick"

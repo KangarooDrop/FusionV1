@@ -16,7 +16,6 @@ func _ready():
 var textA = "\n[color=aqua][url=AbilityFrostbite]Frostbite[/url][/color]"
 
 func setText(text : String, margin = 4):
-	
 	self.text = text
 	$Label.bbcode_text = text
 	
@@ -33,6 +32,9 @@ func setText(text : String, margin = 4):
 		scale.x = -1
 		$Label.rect_scale.x = -1
 		$Label.rect_position.x += $Label.rect_size.x
+	
+	yield(get_tree().create_timer(0.02), "timeout")
+	$Label.rect_size.y = 0
 
 static func splitText(string, delimiter):
 	var out = []
@@ -82,7 +84,6 @@ func close():
 			spawnedWindows.erase(w)
 	
 func _physics_process(delta):
-			
 	if closeOnMouseExit and not isMouseOn(true):
 		close()
 
