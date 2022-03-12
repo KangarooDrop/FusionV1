@@ -31,6 +31,7 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 func _ready():
 	$CardDisplay.board = self
+	$CardDisplay.canReorder = true
 	
 	for i in range(numStacks):
 		var cardInst = cardSlot.instance()
@@ -355,7 +356,7 @@ func quitButtonPressed():
 	pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 	$CardHolder.add_child(pop)
 
-func onSlotBeingClicked(slot : CardSlot, buttonIndex):
+func onMouseDown(slot : CardSlot, buttonIndex):
 	if buttonIndex == 2:
 		slotClickedQueue.append(slot)
 

@@ -666,8 +666,12 @@ func onSlotExit(slot : CardSlot):
 						hoveringOn.cardNode.position.y += 5
 			hoveringOn = null
 		
-func onSlotBeingClicked(slot : CardSlot, button_index : int):
+
+func onMouseDown(slot : CardSlot, button_index : int):
 	actionQueue.append([slot, button_index])
+	
+func onMouseUp(Slot : CardSlot, button_index : int):
+	pass
 
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
 	

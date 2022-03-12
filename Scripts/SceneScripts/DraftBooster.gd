@@ -26,6 +26,7 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 func _ready():
 	$BoosterDisplay.board = self
 	$CardDisplay.board = self
+	$CardDisplay.canReorder = true
 	genNewBooster()
 		
 	if Server.host:
@@ -100,7 +101,7 @@ func _physics_process(delta):
 	
 	if slotClickedQueue2.size() > 0:
 		var highestZ = slotClickedQueue2[0]
-		for i in range(1, slotClickedQueue1.size()):
+		for i in range(1, slotClickedQueue2.size()):
 			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue2[i].cardNode) and slotClickedQueue2[i].cardNode.z_index > highestZ.cardNode.z_index):
 				highestZ = slotClickedQueue2[i]
 		
@@ -123,7 +124,7 @@ func _physics_process(delta):
 	
 	clickedOff = false
 		
-func onSlotBeingClicked(slot : CardSlot, buttonIndex):
+func onMouseDown(slot : CardSlot, buttonIndex):
 	if not closing:
 		if buttonIndex == 1:
 			if $BoosterDisplay.slots.has(slot):

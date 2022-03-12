@@ -12,6 +12,8 @@ enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK}
 var currentZone = ZONES.NONE
 var isOpponent = false
 
+var boundsMouse = false
+
 func _ready():
 	if currentZone == ZONES.HAND:
 		$SpotSprite.visible = false
@@ -19,7 +21,15 @@ func _ready():
 		$SpotSprite.visible = true
 
 func _input(event):
-	pass
+	if event is InputEventMouseButton:
+		if board != null and not disabled:
+			if boundsMouse:
+				if event.is_pressed():
+					board.onMouseDown(self, event.button_index)
+				elif not event.is_pressed():
+					board.onMouseUp(self, event.button_index)
+	
+	
 	"""
 	var globallyVis = true
 	
@@ -42,20 +52,16 @@ func _input(event):
 			if not get_tree().is_input_handled():
 				board.onSlotBeingClicked(self, event.button_index)
 	"""
-
-func _on_Area2D_input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.pressed:
-		if board != null and not disabled:
-			if event is InputEventMouseButton and event.pressed:
-				board.onSlotBeingClicked(self, event.button_index)
 	
 func mouseEnter():
 	if board != null and not disabled:
 		board.onSlotEnter(self)
+	boundsMouse = true
 	
 func mouseExit():
 	if board != null:
 		board.onSlotExit(self)
+	boundsMouse = false
 
 func getNeighbors() -> Array:
 	var neighbors = []

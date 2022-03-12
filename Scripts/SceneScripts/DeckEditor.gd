@@ -230,7 +230,7 @@ func removeCard(id : int):
 	
 
 var slotClicked = false
-func onSlotBeingClicked(slot : CardSlot, button_index : int):
+func onMouseDown(slot : CardSlot, button_index : int):
 	if not $SaveDisplay.visible and not $FileDisplay.visible and is_instance_valid(slot.cardNode):
 		if button_index == 1:
 			var countCheck = true
@@ -249,6 +249,9 @@ func onSlotBeingClicked(slot : CardSlot, button_index : int):
 				slotViewing.cardNode.z_index += 2
 				viewTimer = 0
 				slotClicked = true
+				
+func onMouseUp(slot : CardSlot, button_index : int):
+	pass
 
 func updateSlotCount(slot : CardSlot):
 	var index = -1

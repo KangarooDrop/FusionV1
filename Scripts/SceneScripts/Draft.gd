@@ -90,10 +90,13 @@ func centerCards():
 	BoardMP.centerNodes(cardSlotList, Vector2(), cardWidth, cardDists)
 	BoardMP.centerNodes(cardNodeList, Vector2(), cardWidth, cardDists)
 
-func onSlotBeingClicked(slot, button_index):
+func onMouseDown(slot, button_index):
 	if button_index == 1:
 		if not grabbing:
 			addCard(slot)
+	
+func onMouseUp(slot : CardSlot, button_index : int):
+	pass
 	
 func onSlotEnter(slot):
 	pass

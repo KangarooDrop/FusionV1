@@ -12,6 +12,11 @@ var totalWidth = -1
 
 var board
 
+var canReorder = false
+var cardHolding = null
+
+var lastOff = -1
+
 func _ready():
 	myfunc()
 	get_tree().get_root().connect("size_changed", self, "myfunc")
@@ -22,7 +27,8 @@ func myfunc():
 		centerCards()
 
 func centerCards():
-	var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)#cardWidth#
+	var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)
+	lastOff = dist
 	BoardMP.centerNodes(slots, Vector2(), 0, dist)
 	BoardMP.centerNodes(nodes, Vector2(), 0, dist)
 
@@ -30,7 +36,7 @@ func addCard(card : Card):
 	var cardSlot = cardSlotScene.instance()
 	var cardNode = cardNodeScene.instance()
 	
-	cardSlot.board = board
+	cardSlot.board = self
 	cardNode.card = card
 	
 	cardSlot.cardNode = cardNode
@@ -58,6 +64,19 @@ func clear():
 		nodes.remove(0)
 
 func _physics_process(delta):
+	if mouseDownQueue.size() > 0:
+		var highestZ = mouseDownQueue[0]
+		for i in range(1, mouseDownQueue.size()):
+			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(mouseDownQueue[i].cardNode) and mouseDownQueue[i].cardNode.z_index > highestZ.cardNode.z_index):
+				highestZ = mouseDownQueue[i]
+		cardHolding = highestZ
+		mouseDownQueue.clear()
+		
+	
+	if is_instance_valid(cardHolding):
+		cardHolding.cardNode.global_position = get_global_mouse_position()
+		cardHolding.global_position = get_global_mouse_position()
+	
 	if slots.size() > 0:
 		var mousePos = get_global_mouse_position()
 		
@@ -88,3 +107,46 @@ func _physics_process(delta):
 		
 		for i in range(indexes.size()):
 			nodes[indexes[i]].z_index = i + 2
+
+func onSlotEnter(slot : CardSlot):
+	if board != null:
+		board.onSlotEnter(slot)
+	
+func onSlotExit(slot : CardSlot):
+	if board != null:
+		board.onSlotExit(slot)
+
+var mouseDownQueue := []
+
+func onMouseDown(slot : CardSlot, button_index : int):
+	if canReorder and button_index == 1:
+		mouseDownQueue.append(slot)
+	else:
+		board.onMouseDown(slot, button_index)
+	
+func onMouseUp(slot : CardSlot, button_index : int):
+	if button_index == 1:
+		if is_instance_valid(cardHolding) and slot == cardHolding:
+			var oldIndex = slots.find(slot)
+			
+			var newIndex = int(int(cardHolding.position.x + (slots.size() / 2.0 * lastOff)) / lastOff)
+			newIndex = min(newIndex, slots.size() - 1)
+			newIndex = max(newIndex, 0)
+			
+			if newIndex > oldIndex:
+				pass
+			elif oldIndex > newIndex:
+				pass
+			else:
+				pass
+			
+			var tmp1 = slots[newIndex]
+			var tmp2 = nodes[newIndex]
+			slots[newIndex] = slots[oldIndex]
+			nodes[newIndex] = nodes[oldIndex]
+			slots[oldIndex] = tmp1
+			nodes[oldIndex] = tmp2
+			
+		
+			cardHolding = null
+			centerCards()
