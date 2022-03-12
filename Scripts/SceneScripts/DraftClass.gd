@@ -16,3 +16,6 @@ func closeDraft():
 
 func playerDisconnected(player_id):
 	pass
+
+func setDraftData(data : Array):
+	pass

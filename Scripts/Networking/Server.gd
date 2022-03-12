@@ -173,25 +173,26 @@ remote func sendMessage(message : String):
 
 ####################################################################
 
-remote func startDraft():
+remote func startDraft(index : int):
 	if Server.host:
 		for id in Server.playerIDs:
-			Server.rpc_id(id, "startDraft")
+			Server.rpc_id(id, "startDraft", index)
 	
 	Settings.gameMode = Settings.GAME_MODE.DRAFTING
-	var error = get_tree().change_scene("res://Scenes/DraftWinston.tscn")
+	var error = get_tree().change_scene(DraftLobby.getDraftTypes()[index][1])
+	#var error = get_tree().change_scene("res://Scenes/DraftWinston.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 
 remote func joinedDraftLobby(numMaxPlayers):
 	get_node("/root/DraftLobby").joinedLobby(numMaxPlayers)
 
-func sendDraftData(cardIDs : Array, draftOrder : Array):
+func sendDraftData(data : Array):
 	for id in playerIDs:
-		rpc_id(id, "receiveDraftData", cardIDs, draftOrder)
+		rpc_id(id, "receiveDraftData", data)
 
-remote func receiveDraftData(cardIDs : Array, draftOrder : Array):
-	get_node("/root/Draft").setDraftData(cardIDs, draftOrder)
+remote func receiveDraftData(data : Array):
+	get_node("/root/Draft").setDraftData(data)
 
 func addCardToStack(index):
 	for id in playerIDs:
@@ -262,9 +263,28 @@ func setCurrentPlayerDisplay(currentPlayer):
 remote func receiveSetCurrentPlayerDisplay(currentPlayer):
 	get_node("/root/Draft").setCurrentPlayerDisplay(currentPlayer)
 
+#######################################################################################
 
+func sendBooster(player_id : int, boosterData : Array):
+	if player_id == get_tree().get_network_unique_id():
+		receiveSendBooster(boosterData)
+	else:
+		rpc_id(player_id, "receiveSendBooster", boosterData)
 
+remote func receiveSendBooster(boosterData : Array):
+	get_node("/root/Draft").boosterQueue.append(boosterData)
 
+func doneBoosterDraft():
+	rpc_id(1, "receiveDoneBoosterDraft")
+
+remote func receiveDoneBoosterDraft():
+	get_node("/root/Draft").playerDoneDrafting(get_tree().get_rpc_sender_id())
+
+func sendAllBoosters(player_id : int, boostersData : Array):
+	rpc_id(player_id, "receiveSendAllBoosters", boostersData)
+
+remote func receiveSendAllBoosters(boostersData : Array):
+	get_node("/root/Draft").boosterQueue += boostersData
 
 
 

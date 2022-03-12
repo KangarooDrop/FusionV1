@@ -78,7 +78,7 @@ func _ready():
 		for c in mainStack:
 			cardIDs.append(c.UUID)
 		
-		Server.sendDraftData(cardIDs, playerIDs)
+		Server.sendDraftData([cardIDs, playerIDs])
 		
 		for i in range(slots.size()):
 			addCardToStack(i)
@@ -94,10 +94,10 @@ func closeDraft():
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
 
-func setDraftData(cardIDs : Array, draftOrder : Array):
-	for i in cardIDs:
+func setDraftData(data : Array):
+	for i in data[0]:
 		mainStack.append(ListOfCards.getCard(i))
-	playerIDs = draftOrder
+	playerIDs = data[1]
 	
 	addAllPlayerDisplay()
 
@@ -162,8 +162,9 @@ func returnCards():
 		stacks[currentIndex][i].position = slots[currentIndex].position
 
 func closeHoverNode():
-	hoveringSlot = null
-	hoveringWindow.close()
+	if is_instance_valid(hoveringWindow):
+		hoveringSlot = null
+		hoveringWindow.close()
 
 func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
@@ -306,6 +307,7 @@ func setCurrentPlayerDisplay(currentPlayer):
 	$OrderDisplay/ReferenceRect.rect_size = idToDisplayLabel[player_id].rect_size + extra * 2
 
 var slotClickedQueue := []
+var clickedOff = false
 
 func _physics_process(delta):
 	if slotClickedQueue.size() > 0:
@@ -343,6 +345,10 @@ func _physics_process(delta):
 					hoveringSlot = highestZ
 					
 		slotClickedQueue.clear()
+	elif clickedOff:
+		closeHoverNode()
+	
+	clickedOff = false
 
 func quitButtonPressed():
 	var pop = popupUI.instance()
@@ -359,3 +365,6 @@ func onSlotEnter(slot : CardSlot):
 func onSlotExit(slot : CardSlot):
 	pass
 
+func _input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
+		clickedOff = true

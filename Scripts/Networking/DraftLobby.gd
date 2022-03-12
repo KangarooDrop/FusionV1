@@ -7,9 +7,18 @@ var ids := []
 
 var numMaxPlayers = -1
 
+class_name DraftLobby
+
+static func getDraftTypes():
+	return \
+		[["Winston", "res://Scenes/DraftWinston.tscn"], 
+		["Booster", "res://Scenes/DraftBooster.tscn"]
+	]
+
 func _ready():
 	numMaxPlayers = Server.MAX_PEERS + 1
-	$DraftTypeButton.add_item("Winston Draft")
+	for s in getDraftTypes():
+		$DraftTypeButton.add_item(s[0] + " Draft")
 	$DraftTypeButton.select(0)
 
 ###############################################
@@ -100,5 +109,5 @@ func setPlayerLabel():
 ###############################################
 
 func startDraftButtonPressed():
-	Server.startDraft()
+	Server.startDraft($DraftTypeButton.get_selected_id())
 	

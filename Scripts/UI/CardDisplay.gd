@@ -49,6 +49,14 @@ func addCard(card : Card):
 	
 	centerCards()
 
+func clear():
+	while slots.size() > 0:
+		slots[0].queue_free()
+		slots.remove(0)
+	while nodes.size() > 0:
+		nodes[0].queue_free()
+		nodes.remove(0)
+
 func _physics_process(delta):
 	if slots.size() > 0:
 		var mousePos = get_global_mouse_position()
