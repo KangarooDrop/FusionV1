@@ -196,9 +196,9 @@ func addIcons():
 		var ico = abilityIcon.instance()
 		ico.texture = ico.texture.duplicate()
 		ico.texture.region.position = abl.iconPos
-		$VBoxContainer.add_child(ico)
+		$IconZIndex/VBoxContainer.add_child(ico)
 
 func removeIcons():
-	for c in $VBoxContainer.get_children():
-		$VBoxContainer.remove_child(c)
+	for c in $IconZIndex/VBoxContainer.get_children():
+		$IconZIndex/VBoxContainer.remove_child(c)
 		c.queue_free()

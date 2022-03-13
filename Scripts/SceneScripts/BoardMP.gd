@@ -30,8 +30,8 @@ var cardsShaking := {}
 onready var creatures_A_Holder = $Creatures_A
 onready var creatures_B_Holder = $Creatures_B
 onready var deckHolder = $DeckHolder
-onready var card_A_Holder = $Card_A_Holder
-onready var card_B_Holder = $Card_B_Holder
+onready var card_A_Holder = $Hand_A
+onready var card_B_Holder = $Hand_B
 
 var cardsHolding : Array
 var selectedCard : CardSlot
@@ -503,9 +503,9 @@ func processReplayCommand(command : String):
 			print("ERROR: Unknown replay command " + coms[0])
 	
 
-func createHoverNode(position : Vector2, text : String):
+func createHoverNode(position : Vector2, parent : Node, text : String):
 	var hoverInst = hoverScene.instance()
-	add_child(hoverInst)
+	parent.add_child(hoverInst)
 	hoverInst.global_position = position
 	hoverInst.setText(text)
 	hoveringWindow = hoverInst
@@ -644,10 +644,10 @@ func onSlotEnter(slot : CardSlot):
 		
 	hoveringOn = slot
 	
-	if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
-		if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
-			if cardsPlayed < cardsPerTurn:
-				hoveringOn.cardNode.position.y -= 5
+#	if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+#		if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
+#			if cardsPlayed < cardsPerTurn:
+#				hoveringOn.cardNode.position.y -= 5
 		
 func onSlotExit(slot : CardSlot):
 	if is_instance_valid(slot):
@@ -655,10 +655,10 @@ func onSlotExit(slot : CardSlot):
 			slot.cardNode.removeIcons()
 			
 		if slot == hoveringOn:
-			if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
-				if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
-					if cardsPlayed < cardsPerTurn:
-						hoveringOn.cardNode.position.y += 5
+#			if Settings.gameMode == Settings.GAME_MODE.PLAY and slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == players[0].UUID and activePlayer == 0:
+#				if hoveringOn.cardNode != null and not cardsHolding.has(slot) and cardsHolding.size() < 2:
+#					if cardsPlayed < cardsPerTurn:
+#						hoveringOn.cardNode.position.y += 5
 			hoveringOn = null
 		
 
@@ -768,15 +768,16 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						cardNode.setCardVisible(true)
 						cardsHolding.erase(c)
 						fuseQueue.append(cardNode)
+						cardNode.z_index = 1
 						cardNode.get_parent().remove_child(cardNode)
 						$Fusion_Holder.add_child(cardNode)
 						cardNode.position = Vector2()
 						c.cardNode = null
-						card_A_Holder.cardNodes.erase(cardNode)
-						card_B_Holder.cardNodes.erase(cardNode)
+						card_A_Holder.nodes.erase(cardNode)
+						card_B_Holder.nodes.erase(cardNode)
 						if c.currentZone == CardSlot.ZONES.HAND:
-							card_A_Holder.cardSlotNodes.erase(c)
-							card_B_Holder.cardSlotNodes.erase(c)
+							card_A_Holder.slots.erase(c)
+							card_B_Holder.slots.erase(c)
 							c.queue_free()
 					
 					fuseStartPos = fuseQueue[0].global_position
@@ -785,8 +786,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					fuseReturnTimer = 0
 					
 					
-					card_A_Holder.centerCards(cardWidth, cardDists)
-					card_B_Holder.centerCards(cardWidth, cardDists)
+					card_A_Holder.centerCards()
+					card_B_Holder.centerCards()
 					centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
 					
 					fuseWaiting = true
@@ -805,11 +806,11 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						cardsHolding.remove(0)
 						var cardNode = c.cardNode
 						cardNode.get_parent().remove_child(cardNode)
-						card_A_Holder.cardNodes.erase(cardNode)
-						card_B_Holder.cardNodes.erase(cardNode)
+						card_A_Holder.nodes.erase(cardNode)
+						card_B_Holder.nodes.erase(cardNode)
 						if c.currentZone == CardSlot.ZONES.HAND:
-							card_A_Holder.cardSlotNodes.erase(c)
-							card_B_Holder.cardSlotNodes.erase(c)
+							card_A_Holder.slots.erase(c)
+							card_B_Holder.slots.erase(c)
 							c.queue_free()
 					
 					var newCard = ListOfCards.fuseCards(cardList)
@@ -838,8 +839,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					
 					checkState()
 					
-					card_A_Holder.centerCards(cardWidth, cardDists)
-					card_B_Holder.centerCards(cardWidth, cardDists)
+					card_A_Holder.centerCards()
+					card_B_Holder.centerCards()
 						
 
 				if activePlayer == 0:
@@ -931,17 +932,18 @@ func _input(event):
 			hoveringWindowSlot = null
 		else:
 			if is_instance_valid(hoveringOn):
+				var string = ""
 				if hoveringOn.currentZone == CardSlot.ZONES.DECK:
 					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
-					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5, 0)
-					createHoverNode(pos, str(numCards))
-					hoveringWindowSlot = hoveringOn
-					
+					string = str(numCards)
 				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
-					var pos = hoveringOn.global_position + Vector2(cardWidth * 3.0/5 * Settings.cardSlotScale, 0)
-					createHoverNode(pos, hoveringOn.cardNode.card.getHoverData())
-					hoveringWindowSlot = hoveringOn
-			
+					string = hoveringOn.cardNode.card.getHoverData()
+				
+				var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
+				createHoverNode(pos, hoveringOn, string)
+				hoveringWindow.scale = Vector2(.5, .5)
+				hoveringWindowSlot = hoveringOn
+				
 func nextTurn():
 	if gameOver:
 		return

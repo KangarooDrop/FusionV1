@@ -149,6 +149,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Cards/Card.gd"
 }, {
+"base": "Control",
+"class": "CardDisplay",
+"language": "GDScript",
+"path": "res://Scripts/UI/CardDisplay.gd"
+}, {
 "base": "Node2D",
 "class": "CardNode",
 "language": "GDScript",
@@ -184,7 +189,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://git_api.gdns"
 }, {
-"base": "Node2D",
+"base": "CardDisplay",
 "class": "HandNode",
 "language": "GDScript",
 "path": "res://Scripts/Classes/Hand.gd"
@@ -233,6 +238,7 @@ _global_script_class_icons={
 "AbilityWisdom": "",
 "BoardMP": "",
 "Card": "",
+"CardDisplay": "",
 "CardNode": "",
 "CardSlot": "",
 "CardsLeftIndicator": "",

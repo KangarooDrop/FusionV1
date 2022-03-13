@@ -1,13 +1,10 @@
-extends Node2D
+extends CardDisplay
 
 class_name HandNode
 
-var cardSlot = preload("res://Scenes/CardSlot.tscn")
-var cardNode = preload("res://Scenes/CardNode.tscn")
 var fadingNode = preload("res://Scenes/UI/FadingNode.tscn")
 
 var player
-var board
 
 var deck
 
@@ -22,14 +19,14 @@ var discardQueue := []
 var discardTimers := []
 var discardPositions := []
 
-var cardNodes : Array
-var cardSlotNodes : Array
-
 export var handSize := 5
 export var isOpponent = false
 export var handVisible := true
 
 var drawDamage = 1
+
+func _ready():
+	maxVal = 1.1
 
 func initHand(board, player):
 	self.board = board
@@ -39,13 +36,8 @@ func initHand(board, player):
 		handVisible = false
 	for i in range(handSize + (0 if board.players[board.activePlayer] == player else 1)):
 		drawCard()
-	
-func centerCards(cardWidth, cardDists):
-	BoardMP.centerNodes(cardNodes, Vector2(), cardWidth, cardDists)
-	BoardMP.centerNodes(cardSlotNodes, Vector2(), cardWidth, cardDists)
 
 func _physics_process(delta):
-	
 	if discardQueue.size() > 0:
 		var toRemove = []
 		for i in range(discardQueue.size()):
@@ -58,8 +50,8 @@ func _physics_process(delta):
 			for i in range(toRemove.size()):
 				var index = toRemove[i]
 				
-				cardNodes.erase(discardQueue[index].cardNode)
-				cardSlotNodes.erase(discardQueue[index])
+				nodes.erase(discardQueue[index].cardNode)
+				slots.erase(discardQueue[index])
 				
 				discardQueue[index].cardNode.queue_free()
 				discardQueue[index].queue_free()
@@ -70,29 +62,29 @@ func _physics_process(delta):
 				
 				for j in range(i+1, toRemove.size()):
 					toRemove[j] -= 1
-			centerCards(board.cardWidth, board.cardDists)
+			centerCards()
 			
 	elif drawQueue.size() > 0:
 		if drawingNode == null:
-			var slotInst = cardSlot.instance()
+			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
-			slotInst.board = board
+			slotInst.board = self
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
 			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-			cardSlotNodes.append(slotInst)
+			slots.append(slotInst)
 			
-			var cardInst = cardNode.instance()
+			var cardInst = cardNodeScene.instance()
 			cardInst.card = drawQueue[0][0]
 			cardInst.playerID = player.UUID
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			add_child(cardInst)
-			cardNodes.append(cardInst)
+			nodes.append(cardInst)
 			
 			slotInst.cardNode = cardInst
 			
-			centerCards(board.cardWidth, board.cardDists)
+			centerCards()
 			if drawQueue[0][1]:
 				cardInst.global_position = slotInst.global_position
 				cardInst.setCardVisible(handVisible or Settings.gameMode == Settings.GAME_MODE.REPLAY)
@@ -136,44 +128,44 @@ func drawCard():
 		deck.cardNode.queue_free()
 		deck.cardNode = null
 	if card != null:
-		addCard([card, false])
+		addCardToHand([card, false])
 	else:
-		addCard([ListOfCards.getCard(0), true])
+		addCardToHand([ListOfCards.getCard(0), true])
 
 func discardIndex(index : int):
-	if index >= 0 and index < cardSlotNodes.size():
-		cardSlotNodes[index].disabled = true
+	if index >= 0 and index < nodes.size():
+		nodes[index].disabled = true
 		
-		cardSlotNodes[index].cardNode.setCardVisible(true)
-		discardQueue.append(cardSlotNodes[index])
-		discardPositions.append(cardSlotNodes[index].position)
+		nodes[index].cardNode.setCardVisible(true)
+		discardQueue.append(nodes[index])
+		discardPositions.append(nodes[index].position)
 		discardTimers.append(0)
 
-func addCard(data : Array):
+func addCardToHand(data : Array):
 	if data[0] != null:
 		if Settings.playAnimations:
 			drawQueue.append(data)
 		else:
-			var slotInst = cardSlot.instance()
+			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
-			slotInst.board = board
+			slotInst.board = self
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
-			cardSlotNodes.append(slotInst)
+			nodes.append(slotInst)
 			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
-			var cardInst = cardNode.instance()
+			var cardInst = cardNodeScene.instance()
 			cardInst.card = data[0]
 			cardInst.setCardVisible(handVisible or Settings.gameMode == Settings.GAME_MODE.REPLAY)
 			cardInst.playerID = player.UUID
 			add_child(cardInst)
-			cardNodes.append(cardInst)
+			nodes.append(cardInst)
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
 			slotInst.cardNode = cardInst
 			
-			centerCards(board.cardWidth, board.cardDists)
+			centerCards()
 			
 			if data[1]:
 				player.takeDamage(drawDamage, null)

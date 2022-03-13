@@ -1,5 +1,7 @@
 extends Control
 
+class_name CardDisplay
+
 var cardSlotScene = preload("res://Scenes/CardSlot.tscn")
 var cardNodeScene = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
@@ -10,12 +12,22 @@ var nodes := []
 
 var totalWidth = -1
 
+var maxVal = 1.5
+var minVal = 1
+			
 var board
 
-var canReorder = false
+export(bool) var canReorder := false
 var cardHolding = null
 
 var lastOff = -1
+
+var clickedSlot : CardSlot = null
+var mouseDown = false
+var clickTimer = 0
+var clickMaxTime = 0.18
+
+var oldY = [-1]
 
 func _ready():
 	myfunc()
@@ -23,14 +35,26 @@ func _ready():
 
 func myfunc():
 	totalWidth = get_viewport_rect().size.x * 0.75
-	if slots.size() > 0:
-		centerCards()
+	centerCards()
 
 func centerCards():
-	var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)
-	lastOff = dist
-	BoardMP.centerNodes(slots, Vector2(), 0, dist)
-	BoardMP.centerNodes(nodes, Vector2(), 0, dist)
+	if slots.size() > 0:
+		var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)
+		lastOff = dist
+		var ySlots := []
+		var yNodes := []
+		for s in slots:
+			ySlots.append(s.global_position.y)
+		for n in nodes:
+			yNodes.append(n.global_position.y)
+		
+		BoardMP.centerNodes(slots, Vector2(), 0, dist)
+		BoardMP.centerNodes(nodes, Vector2(), 0, dist)
+		
+		for i in range(slots.size()):
+			slots[i].global_position.y = ySlots[i]
+		for i in range(nodes.size()):
+			nodes[i].global_position.y = yNodes[i]
 
 func addCard(card : Card):
 	var cardSlot = cardSlotScene.instance()
@@ -64,13 +88,23 @@ func clear():
 		nodes.remove(0)
 
 func _physics_process(delta):
+	
 	if mouseDownQueue.size() > 0:
 		var highestZ = mouseDownQueue[0]
 		for i in range(1, mouseDownQueue.size()):
 			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(mouseDownQueue[i].cardNode) and mouseDownQueue[i].cardNode.z_index > highestZ.cardNode.z_index):
 				highestZ = mouseDownQueue[i]
-		cardHolding = highestZ
+		clickedSlot = highestZ
 		mouseDownQueue.clear()
+	
+	if mouseDown:
+		clickTimer += delta
+		if clickTimer >= clickMaxTime:
+			mouseDown = false
+			if is_instance_valid(clickedSlot):
+				oldY = [clickedSlot.global_position.y, clickedSlot.cardNode.global_position.y]
+			cardHolding = clickedSlot
+			clickedSlot = null
 		
 	
 	if is_instance_valid(cardHolding):
@@ -86,9 +120,9 @@ func _physics_process(delta):
 		for i in range(slots.size()):
 			var dist = (mousePos - slots[i].global_position).length()
 			var dRatio = dist / totalWidth
-			var maxVal = Settings.cardSlotScale * 1.5
-			var minVal = Settings.cardSlotScale
-			var val = lerp(minVal, maxVal, pow(1 - dRatio, 5))
+			var maxValScaled = Settings.cardSlotScale * 1.5
+			var minValScaled = Settings.cardSlotScale
+			var val = lerp(minValScaled, maxValScaled, pow(1 - dRatio, 5))
 			#val = stepify(val, 0.05)
 			
 			slots[i].scale = Vector2(val, val)
@@ -121,11 +155,17 @@ var mouseDownQueue := []
 func onMouseDown(slot : CardSlot, button_index : int):
 	if canReorder and button_index == 1:
 		mouseDownQueue.append(slot)
+		mouseDown = true
+		clickTimer = 0
 	else:
 		board.onMouseDown(slot, button_index)
 	
 func onMouseUp(slot : CardSlot, button_index : int):
 	if button_index == 1:
+		if mouseDown and is_instance_valid(clickedSlot) and slot == clickedSlot:
+			board.onMouseDown(slot, button_index)
+			clickedSlot = null
+		
 		if is_instance_valid(cardHolding) and slot == cardHolding:
 			var oldIndex = slots.find(slot)
 			
@@ -148,5 +188,7 @@ func onMouseUp(slot : CardSlot, button_index : int):
 			nodes[oldIndex] = tmp2
 			
 		
-			cardHolding = null
+			cardHolding.global_position.y = oldY[0]
+			cardHolding.cardNode.global_position.y = oldY[1]
 			centerCards()
+			cardHolding = null
