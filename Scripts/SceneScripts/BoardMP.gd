@@ -61,17 +61,9 @@ var fuseWaitMaxTime = 0.3
 var gameStarted = false
 var gameOver = false
 
-#Abilities on creatures added to stack in reverse order,
-# Abilities that trigger others are added to front
-# Read FI/LO
-#OF FORM:
-#	[class=Ability.get_script(), functionName="onActivate", params=[slotNum, etc.]]
-#IN CLASS:
-#	static func onActive(slotNum): etc.
 var abilityStack : Array = []
 
-### Only process action queue if abilityStack is empty
-#Only process abilityStack if both players' draw and discard queues are empty
+var opponentID = -1
 
 
 
@@ -81,6 +73,9 @@ func _ready():
 	seed(gameSeed)
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
+		if opponentID == -1:
+			opponentID = Server.playerIDs[0]
+		
 		var cardList = getDeckFromFile()
 		cardList.shuffle()
 		setOwnCardList(cardList)
@@ -90,12 +85,12 @@ func _ready():
 			activePlayer = (startingPlayerIndex + 1) % 2
 			print("Send: Starting player")
 			dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
-			Server.setActivePlayer(startingPlayerIndex)
+			Server.setActivePlayer(opponentID, startingPlayerIndex)
 			hasStartingPlayer = true
 	
 		print("Fetch: Opponent's deck list")
-		Server.fetchDeck(get_instance_id())
-		Server.fetchVersion(get_instance_id())
+		Server.fetchDeck(opponentID)
+		Server.fetchVersion(opponentID)
 		
 		setOwnUsername()
 		
@@ -117,7 +112,7 @@ func getDeckFromFile() -> Array:
 				cardList.append(ListOfCards.getCard(id))
 	else:
 		MessageManager.notify("Invalid Deck:\nverify deck file contents")
-		Server.disconnectMessage("Error: Opponent's deck is invalid")
+		Server.disconnectMessage(opponentID, "Error: Opponent's deck is invalid")
 		print("INVALID DECK : ", error, " : ", Deck.DECK_VALIDITY_TYPE.keys()[error])
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -168,7 +163,7 @@ func setDeckData(data, order):
 		setOpponentCardList(order)
 	else:
 		MessageManager.notify("Opponent's deck is invalid")
-		Server.disconnectMessage("Error: Your deck has been flagged by the opponent as invalid")
+		Server.disconnectMessage(opponentID, "Error: Your deck has been flagged by the opponent as invalid")
 		print("INVALID DECK OPPONENT")
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -176,7 +171,7 @@ func setDeckData(data, order):
 			print("Error loading test1.tscn. Error Code = " + str(sceneError))
 	
 	print("Send: Game start signal")
-	Server.onGameStart()
+	Server.onGameStart(opponentID)
 	deckDataSet = true
 
 func verifyDeckData(data, order) -> bool:
@@ -224,7 +219,7 @@ func compareVersion(version):
 	else:
 		if Server.online:
 			MessageManager.notify("Error: Incompatable game versions")
-			Server.disconnectMessage("Error: Incompatable game versions")
+			Server.disconnectMessage(opponentID, "Error: Incompatable game versions")
 		else:
 			MessageManager.notify("Error: Incompatible versions")
 		print("INVALID VERSIONS")
@@ -890,7 +885,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 		if Settings.gameMode == Settings.GAME_MODE.PLAY:
 			dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
 		if not fromServer:
-			Server.slotClicked(slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
+			Server.slotClicked(opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 		
 		return true
 	
@@ -928,7 +923,7 @@ func _input(event):
 								
 						yield(get_tree().create_timer(0.1), "timeout")
 					nextTurn()
-					Server.onNextTurn()
+					Server.onNextTurn(opponentID)
 
 	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
 		if is_instance_valid(hoveringWindow):

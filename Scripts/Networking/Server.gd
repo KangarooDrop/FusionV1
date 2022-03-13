@@ -83,29 +83,37 @@ func getPlayerData(player_id : int):
 
 remote func receiveGetPlayerData():
 	print("Fetching player data")
-	rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username, Settings.gameMode)
+	rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username, Settings.gameMode, Settings.versionID)
 
-remote func receiveSetPlayerData(username : String, gameMode : int):
+remote func receiveSetPlayerData(username : String, gameMode : int, versionID : String):
 	print("Player data received")
 	var player_id = get_tree().get_rpc_sender_id()
-	if gameMode == Settings.gameMode:
-		for id in playerIDs:
-			rpc_id(id, "addUser", player_id, username)
-			rpc_id(player_id, "addUser", id, playerNames[id])
-		addUser(player_id, username)
-		rpc_id(player_id, "addUser", 1, self.username)
-		rpc_id(player_id, "receiveConfirmJoin")
-			
-		if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-			Settings.gameMode = Settings.GAME_MODE.PLAY
-			get_node("/root/Lobby").startGame()
-			rpc_id(player_id, "serverSetUsername", username)
-		else:
-			rpc_id(player_id, "joinedDraftLobby", Server.MAX_PEERS + 1)
-	else:
+	
+	if Settings.compareVersion(versionID, Settings.versionID) != 0:
+		print("User attempted to connect with wrong version")
+		rpc_id(player_id, "sendMessage", "Notice: Your game versions are not the same; Consider updating")
+		network.disconnect_peer(player_id)
+		return
+	if gameMode != Settings.gameMode:
 		print("User attempted to connect with wrong game mode")
 		rpc_id(player_id, "sendMessage", "Notice: Wrong game modes")
 		network.disconnect_peer(player_id)
+		return
+		
+	
+	for id in playerIDs:
+		rpc_id(id, "addUser", player_id, username)
+		rpc_id(player_id, "addUser", id, playerNames[id])
+	addUser(player_id, username)
+	rpc_id(player_id, "addUser", 1, self.username)
+	rpc_id(player_id, "receiveConfirmJoin")
+		
+	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
+		Settings.gameMode = Settings.GAME_MODE.PLAY
+		get_node("/root/Lobby").startGame()
+		rpc_id(player_id, "serverSetUsername", username)
+	else:
+		rpc_id(player_id, "joinedDraftLobby", Server.MAX_PEERS + 1)
 
 remote func receiveConfirmJoin():
 	print("Successfully joined the server")
@@ -301,11 +309,11 @@ remote func serverSetUsername(username : String):
 			
 	board.setOpponentUsername(username)
 
-remote func fetchDeck(requester):
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverFetchDeck", requester)
+remote func fetchDeck(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverFetchDeck")
 	
-remote func serverFetchDeck(requester):
+remote func serverFetchDeck():
 	var player_id = get_tree().get_rpc_sender_id()
 	
 	var board = get_node_or_null("/root/main/Board")
@@ -319,20 +327,16 @@ remote func serverFetchDeck(requester):
 	var data = board.players[0].deck.getJSONData()
 	var order = board.players[0].deck.serialize()
 		
-	rpc_id(player_id, "returnDeck", data, order, requester)
+	rpc_id(player_id, "returnDeck", data, order)
 
-remote func returnDeck(data, order, requester):
-	var inst = instance_from_id(requester)
-	if inst:
-		inst.setDeckData(data, order)
-	else:
-		print("AAAAAAAAAAAAAAAAAAAAAAAAAAA! NO REQ")
+remote func returnDeck(data, order):
+	get_node("/root/main/Board").setDeckData(data, order)
 
 ####################################################################
 
-remote func onGameStart():
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverOnGameStart")
+remote func onGameStart(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverOnGameStart")
 	
 remote func serverOnGameStart():
 	var player_id = get_tree().get_rpc_sender_id()
@@ -342,9 +346,9 @@ remote func serverOnGameStart():
 
 ####################################################################
 
-remote func slotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
+remote func slotClicked(player_id : int, isOpponent : bool, slotZone : int, slotID : int, button_index : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverSlotClicked", isOpponent, slotZone, slotID, button_index)
 	
 remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var player_id = get_tree().get_rpc_sender_id()
@@ -356,9 +360,9 @@ remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, b
 	
 ####################################################################
 
-remote func onNextTurn():
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverOnNextTurn")
+remote func onNextTurn(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverOnNextTurn")
 	
 remote func serverOnNextTurn():
 	var player_id = get_tree().get_rpc_sender_id()
@@ -370,9 +374,9 @@ remote func serverOnNextTurn():
 
 ####################################################################
 
-remote func onRestart():
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverOnRestart")
+remote func onRestart(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverOnRestart")
 	
 remote func serverOnRestart():
 	var player_id = get_tree().get_rpc_sender_id()
@@ -383,9 +387,9 @@ remote func serverOnRestart():
 
 ####################################################################
 
-remote func setActivePlayer(index : int):
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverSetActivePlayer", index)
+remote func setActivePlayer(player_id : int, index : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverSetActivePlayer", index)
 	
 remote func serverSetActivePlayer(index : int):
 	var player_id = get_tree().get_rpc_sender_id()
@@ -403,9 +407,9 @@ remote func serverSetActivePlayer(index : int):
 
 ####################################################################
 
-remote func disconnectMessage(message : String):
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverDisconnectMessage", message)
+remote func disconnectMessage(player_id : int, message : String):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverDisconnectMessage", message)
 	
 remote func serverDisconnectMessage(message : String):
 	Server.closeServer()
@@ -420,18 +424,14 @@ remote func serverDisconnectMessage(message : String):
 
 ####################################################################
 
-remote func fetchVersion(requester):
-	if playerIDs.size() > 0:
-		rpc_id(playerIDs[0], "serverFetchVersion", requester)
+remote func fetchVersion(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverFetchVersion")
 	
-remote func serverFetchVersion(requester):
+remote func serverFetchVersion():
 	var player_id = get_tree().get_rpc_sender_id()
-	rpc_id(player_id, "returnVersion", Settings.versionID, requester)
+	rpc_id(player_id, "returnVersion", Settings.versionID)
 
-remote func returnVersion(version, requester):
-	var inst = instance_from_id(requester)
-	if inst:
-		inst.compareVersion(version)
-	else:
-		print("AAAAAAAAAAAAAAAAAAAAAAAAAAA! NO REQ")
+remote func returnVersion(version):
+	get_node("/root/main/Board").compareVersion(version)
 		

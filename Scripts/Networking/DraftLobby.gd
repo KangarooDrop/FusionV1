@@ -12,7 +12,8 @@ class_name DraftLobby
 static func getDraftTypes():
 	return \
 		[["Winston", "res://Scenes/DraftWinston.tscn"], 
-		["Booster", "res://Scenes/DraftBooster.tscn"]
+		["Booster", "res://Scenes/DraftBooster.tscn"],
+#		["Test", "res://Scenes/main.tscn"]
 	]
 
 func _ready():
@@ -110,4 +111,4 @@ func setPlayerLabel():
 
 func startDraftButtonPressed():
 	Server.startDraft($DraftTypeButton.get_selected_id())
-	
+

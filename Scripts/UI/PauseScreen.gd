@@ -6,7 +6,7 @@ func onRestartPressed():
 			if not get_node("/root/main/Board").opponentRestart:
 				MessageManager.notify("Restart request sent to opponent")
 			get_node("/root/main/Board").playerRestart = true
-			Server.onRestart()
+			Server.onRestart(get_node("/root/main/Board").opponentID)
 	else:
 		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()

@@ -40,6 +40,11 @@ func _init(params):
 			for data in ProjectSettings.get_setting("_global_script_classes"):
 				if data["class"] == abl:
 					abilities.append(load(data["path"]).new(self))
+	if params.has("removed_abilities"):
+		for abl in params["removed_abilities"]:
+			for data in ProjectSettings.get_setting("_global_script_classes"):
+				if data["class"] == abl:
+					removedAbilities.append(load(data["path"]).new(self))
 			
 	if params.has("creature_type"):
 		for c in params["creature_type"]:
@@ -90,15 +95,15 @@ func onEndOfTurn(board):
 		abl.onEndOfTurn(board)
 				
 func onFusion(card):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onFusion(card)
 	
 func onEnterFromFusion(board, slot):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onEnterFromFusion(board, slot)
 	
 func onOtherEnterFromFusion(board, slot):
-	for abl in abilities:
+	for abl in abilities.duplicate():
 		abl.onOtherEnterFromFusion(board, slot)
 	
 func onAttack(blocker, board):
@@ -156,8 +161,11 @@ func serialize() -> Dictionary:
 	rtn["has_attacked"] = hasAttacked
 	rtn["can_attack"] = canAttackThisTurn
 	rtn["abilities"] = []
+	rtn["removed_abilities"] = []
 	for abl in abilities:
 		rtn["abilities"].append(abl.get_script())
+	for abl in removedAbilities:
+		rtn["removed_abilities"].append(abl.get_script())
 	rtn["creature_type"] = creatureType
 	
 	return rtn
@@ -222,7 +230,7 @@ func trimAbilities():
 	var foundAbilities = []
 	while abilities.size() > 0:
 		var foundAbility = false
-		for abl in abilities:
+		for abl in abilities.duplicate():
 			if abl != abilities[0] and abl is abilities[0].get_script() and not foundAbilities.has(abl) and not foundAbilities.has(abilities[0]):
 				abilities[0].combine(abl)
 				abilities.erase(abl)

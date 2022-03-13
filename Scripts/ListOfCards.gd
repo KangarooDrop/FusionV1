@@ -108,7 +108,7 @@ func getCard(index : int) -> Card:
 	return card
 
 static func deserialize(data : Dictionary) -> Card:
-	var card : Card = ListOfCards.getCard(data["id"])
+	var card : Card = Card.new(data)
 	card.playerID = data["player_id"]
 	return card
 	
@@ -168,6 +168,8 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	cardNew.abilities.clear()
 	for abl in (cardA.abilities + cardB.abilities):
 		cardNew.abilities.append(abl.clone(cardNew))
+	for abl in (cardA.removedAbilities + cardB.removedAbilities):
+		cardNew.removedAbilities.append(abl.clone(cardNew))
 	cardNew.trimAbilities()
 	cardNew.hasAttacked = cardA.hasAttacked
 	cardNew.canAttackThisTurn = cardA.canAttackThisTurn
