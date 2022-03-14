@@ -13,3 +13,7 @@ func onDeath(board):
 		card.power = 1
 		card.toughness = 1
 		self.card.addCreatureToBoard(card, board, null)
+
+func combine(abl : Ability):
+	.combine(abl)
+	desc = "When this creature dies, creates " + str(count) + " 1/1 Necro with no abilities"

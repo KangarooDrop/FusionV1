@@ -29,6 +29,7 @@ func _ready():
 	Settings.playAnimations = settings["play_anims"]
 	Server.MAX_PEERS = settings["num_draft"] - 1
 	Server.username = settings["username"]
+	Server.ip = settings["ip_saved"]
 	
 	if not ok:
 		writeToSettings()
@@ -44,6 +45,9 @@ func verifySettings(settings : Dictionary) -> bool:
 	if not settings.has("username"):
 		settings["username"] = "NO_NAME"
 		ok = false
+	if not settings.has("ip_saved"):
+		settings["ip_saved"] = "127.0.0.1"
+		ok = false
 		
 	return ok
 	
@@ -58,7 +62,8 @@ func getSettingsDict() -> Dictionary:
 	{
 		"num_draft":Server.MAX_PEERS + 1,
 		"play_anims":playAnimations,
-		"username":Server.username
+		"username":Server.username,
+		"ip_saved":Server.ip
 	}
 	return rtn
 	

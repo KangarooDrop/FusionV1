@@ -5,6 +5,7 @@ var text := ""
 var maxTextLen = 150
 var flipped = false
 
+var parentWindow = null
 var spawnedWindows = []
 
 var closeOnMouseExit = false
@@ -55,14 +56,20 @@ static func splitText(string, delimiter):
 		out.append(text)
 	return out
 
-func handle(meta):
+func handle(meta : String):
+	var spl = meta.split("||")
+	var fileName = spl[0]
+	var count = int(spl[1])
+	
 	var abl = null
 	for data in ProjectSettings.get_setting("_global_script_classes"):
-		if data["class"] == meta:
+		if data["class"] == fileName:
 			abl = load(data["path"])
 			break
 	if abl != null:
 		var ability = abl.new(null)
+		for i in range(count - 1):
+			ability.combine(abl.new(null))
 		
 		var hoverInst = load("res://Scenes/UI/Hover.tscn").instance()
 		hoverInst.closeOnMouseExit = true
@@ -73,6 +80,7 @@ func handle(meta):
 		hoverInst.global_position = get_global_mouse_position() + Vector2(3, 0) * (1 if flipped else -1)# * Vector2(0, hoverInst.get_node("HoverBack").rect_size.y / 2)
 		
 		spawnedWindows.append(hoverInst)
+		hoverInst.parentWindow = self
 	
 func close():
 	#fadingOut = true
@@ -82,8 +90,12 @@ func close():
 		if is_instance_valid(w):
 			w.close()
 			spawnedWindows.erase(w)
+	if is_instance_valid(parentWindow):
+		parentWindow.spawnedWindows.erase(self)
 	
 func _physics_process(delta):
+	for c in spawnedWindows:
+		c.scale = scale
 	if closeOnMouseExit and not isMouseOn(true):
 		close()
 

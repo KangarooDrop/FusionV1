@@ -108,8 +108,26 @@ func _physics_process(delta):
 		
 	
 	if is_instance_valid(cardHolding):
+		var oldIndex = slots.find(cardHolding)
+		
+		var newIndex = int(int(cardHolding.position.x + (slots.size() / 2.0 * lastOff)) / lastOff)
+		newIndex = min(newIndex, slots.size() - 1)
+		newIndex = max(newIndex, 0)
+		newIndex = max(newIndex, oldIndex-1)
+		newIndex = min(newIndex, oldIndex+1)
+		
+		if newIndex != oldIndex:
+			var tmp1 = slots[newIndex]
+			var tmp2 = nodes[newIndex]
+			slots[newIndex] = slots[oldIndex]
+			nodes[newIndex] = nodes[oldIndex]
+			slots[oldIndex] = tmp1
+			nodes[oldIndex] = tmp2
+			centerCards()
+		
 		cardHolding.cardNode.global_position = get_global_mouse_position()
 		cardHolding.global_position = get_global_mouse_position()
+			
 	
 	if slots.size() > 0:
 		var mousePos = get_global_mouse_position()
@@ -167,28 +185,8 @@ func onMouseUp(slot : CardSlot, button_index : int):
 			clickedSlot = null
 		
 		if is_instance_valid(cardHolding) and slot == cardHolding:
-			var oldIndex = slots.find(slot)
 			
-			var newIndex = int(int(cardHolding.position.x + (slots.size() / 2.0 * lastOff)) / lastOff)
-			newIndex = min(newIndex, slots.size() - 1)
-			newIndex = max(newIndex, 0)
-			
-			if newIndex > oldIndex:
-				pass
-			elif oldIndex > newIndex:
-				pass
-			else:
-				pass
-			
-			var tmp1 = slots[newIndex]
-			var tmp2 = nodes[newIndex]
-			slots[newIndex] = slots[oldIndex]
-			nodes[newIndex] = nodes[oldIndex]
-			slots[oldIndex] = tmp1
-			nodes[oldIndex] = tmp2
-			
-		
+			centerCards()
 			cardHolding.global_position.y = oldY[0]
 			cardHolding.cardNode.global_position.y = oldY[1]
-			centerCards()
 			cardHolding = null

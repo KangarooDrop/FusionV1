@@ -126,6 +126,8 @@ func addCardToStack(index : int, fromServer = false):
 	
 	if hoveringSlot == slots[index]:
 		hoveringWindow.get_node("Label").text = str(stacks[index].size())
+	elif hoveringSlot == mainSlot:
+		hoveringWindow.get_node("Label").text = str(mainStack.size())
 
 func revealCards(index : int):
 	if stacks[index].size() == 0:

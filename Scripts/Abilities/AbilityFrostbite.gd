@@ -9,10 +9,10 @@ func onAttack(blocker, board):
 	if is_instance_valid(blocker.cardNode):
 		var frozen = AbilityFrozen.new(blocker.cardNode.card)
 		frozen.onEffect()
-		blocker.cardNode.card.abilities.append(frozen)
+		blocker.cardNode.card.addAbility(frozen)
 	
 func onBeingAttacked(attacker, board):
 	if is_instance_valid(attacker.cardNode):
 		var frozen = AbilityFrozen.new(attacker.cardNode.card)
 		frozen.onEffect()
-		attacker.cardNode.card.abilities.append(frozen)
+		attacker.cardNode.card.addAbility(frozen)

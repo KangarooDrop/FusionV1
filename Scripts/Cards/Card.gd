@@ -242,6 +242,14 @@ func trimAbilities():
 			abilities.remove(0)
 	abilities = newAbilities
 
+func addAbility(ability):
+	abilities.append(ability)
+	print("E", "  ", is_instance_valid(cardNode), " ", cardNode.iconsShowing)
+	if is_instance_valid(cardNode) and cardNode.iconsShowing:
+		cardNode.removeIcons()
+		cardNode.addIcons()
+		print("A")
+
 func removeAbility(ability):
 	abilities.erase(ability)
 	removedAbilities.append(ability)

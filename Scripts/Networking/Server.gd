@@ -71,8 +71,6 @@ func _Server_Disconnected():
 	
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
 		get_node("/root/DraftLobby").lobbyBackPressed()
-	elif Settings.gameMode == Settings.GAME_MODE.DRAFTING:
-		get_node("/root/Draft").closeDraft()
 	elif Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
 		get_node("/root/Lobby").disconnected()
 	
@@ -238,6 +236,7 @@ remote func receiveNextPlayer():
 func startBuilding():
 	for id in playerIDs:
 		rpc_id(id, "receivedStartBuilding")
+	yield(get_tree().create_timer(1), "timeout")
 	receivedStartBuilding()
 
 remote func receivedStartBuilding():

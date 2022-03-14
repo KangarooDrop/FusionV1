@@ -114,7 +114,6 @@ func _physics_process(delta):
 					drawingNode.global_position = drawingSlot.global_position
 					drawingNode = null
 					drawQueue.remove(0)
-		
 
 func cardFadeInFinish():
 	drawingNode.get_node("FadingNode").queue_free()

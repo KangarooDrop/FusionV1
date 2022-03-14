@@ -14,6 +14,9 @@ var isOpponent = false
 
 var boundsMouse = false
 
+var highlightOnSprite = preload("res://Art/card_slot_active.png")
+var highlightOffSprite = preload("res://Art/card_slot.png")
+
 func _ready():
 	if currentZone == ZONES.HAND:
 		$SpotSprite.visible = false
@@ -75,3 +78,9 @@ func getNeighbors() -> Array:
 		if c is get_script():
 			neighbors.append(c)
 	return neighbors
+
+func setHighlight(isHighlighted : bool):
+	if isHighlighted:
+		$SpotSprite.texture = highlightOnSprite
+	else:
+		$SpotSprite.texture = highlightOffSprite

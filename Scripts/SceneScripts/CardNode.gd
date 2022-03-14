@@ -31,6 +31,8 @@ var originalScale = 1
 
 var cardVisible = true setget setCardVisible, getCardVisible
 
+var iconsShowing = false
+
 func _ready():
 	setCardVisible(cardVisible)
 			

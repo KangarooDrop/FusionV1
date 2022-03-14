@@ -52,6 +52,7 @@ func ipBackButtonPressed():
 	
 func ipJoinButtonPressed():
 	Server.ip = $IPSet/HBoxContainer/LineEdit.text
+	Settings.writeToSettings()
 	print(Server.ip)
 	Server.online = true
 	Server.connectToServer()
