@@ -133,12 +133,12 @@ func drawCard():
 		addCardToHand([ListOfCards.getCard(0), true])
 
 func discardIndex(index : int):
-	if index >= 0 and index < nodes.size():
-		nodes[index].disabled = true
+	if index >= 0 and index < slots.size():
+		slots[index].disabled = true
 		
-		nodes[index].cardNode.setCardVisible(true)
-		discardQueue.append(nodes[index])
-		discardPositions.append(nodes[index].position)
+		slots[index].cardNode.setCardVisible(true)
+		discardQueue.append(slots[index])
+		discardPositions.append(slots[index].position)
 		discardTimers.append(0)
 
 func addCardToHand(data : Array):
@@ -152,7 +152,7 @@ func addCardToHand(data : Array):
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
-			nodes.append(slotInst)
+			slots.append(slotInst)
 			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
 			var cardInst = cardNodeScene.instance()
