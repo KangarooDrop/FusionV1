@@ -93,13 +93,15 @@ func _physics_process(delta):
 				fn.connect("onFadeIn", self, "cardFadeInFinish")
 				cardInst.add_child(fn)
 				fn.fadeIn()
-				player.takeDamage(drawDamage, null)
-				drawDamage += 1
 			else:
 				cardInst.setCardVisible(false)
 				if handVisible or Settings.gameMode == Settings.GAME_MODE.REPLAY:
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
+				
+			if drawQueue[0][2]:
+				player.takeDamage(drawDamage, null)
+				drawDamage += 1
 			
 			drawingSlot = slotInst
 			drawingNode = cardInst
@@ -127,10 +129,11 @@ func drawCard():
 		deck.cardNode.queue_free()
 		deck.cardNode = null
 	if card != null:
-		addCardToHand([card, false])
+		addCardToHand([card, false, false])
 	else:
-		addCardToHand([ListOfCards.getCard(0), true])
+		addCardToHand([ListOfCards.getCard(0), true, true])
 
+#[Card, drawFromDeck, takeDamage]
 func discardIndex(index : int):
 	if index >= 0 and index < slots.size():
 		slots[index].disabled = true

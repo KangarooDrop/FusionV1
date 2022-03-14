@@ -15,6 +15,7 @@ var removedAbilities := []
 var creatureType := []
 var power : int
 var toughness : int
+var maxToughness : int
 
 var hasAttacked = true
 var canAttackThisTurn = true
@@ -57,6 +58,11 @@ func _init(params):
 		hasAttacked = params["has_attacked"]
 	if params.has("can_attack"):
 		canAttackThisTurn = params["can_attack"]
+	
+	if params.has("max_toughness"):
+		maxToughness = params["max_toughness"]
+	else:
+		maxToughness = toughness
 	
 func onEnter(board, slot):
 	for abl in abilities.duplicate():
@@ -244,12 +250,20 @@ func trimAbilities():
 
 func addAbility(ability):
 	abilities.append(ability)
-	print("E", "  ", is_instance_valid(cardNode), " ", cardNode.iconsShowing)
+	trimAbilities()
 	if is_instance_valid(cardNode) and cardNode.iconsShowing:
 		cardNode.removeIcons()
 		cardNode.addIcons()
-		print("A")
 
 func removeAbility(ability):
 	abilities.erase(ability)
 	removedAbilities.append(ability)
+
+func heal(amount : int) -> bool:
+	amount = min(amount, maxToughness - toughness)
+	amount = max(amount, 0)
+	if amount > 0:
+		toughness += amount
+		return true
+	else:
+		return false

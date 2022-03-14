@@ -64,7 +64,7 @@ func openFileSelector():
 		for i in range(files.size()):
 			var b = Button.new()
 			$DeckSelector/VBoxContainer.add_child(b)
-			b.text = str(files[i])
+			b.text = str(files[i].get_basename())
 			b.set("custom_fonts/font", fontTRES)
 			b.connect("pressed", self, "onFileButtonClicked", [files[i]])
 			$DeckSelector/VBoxContainer.move_child(b, i+1)

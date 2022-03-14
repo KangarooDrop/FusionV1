@@ -56,7 +56,7 @@ func onDeckChangePressed():
 	for i in range(files.size()):
 		var b = Button.new()
 		$FileSelector/ButtonHolder.add_child(b)
-		b.text = str(files[i])
+		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeckChangeButtonPressed", [files[i]])
 		$FileSelector/ButtonHolder.move_child(b, i+1)

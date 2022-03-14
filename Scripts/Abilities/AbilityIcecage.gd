@@ -18,6 +18,6 @@ func onEffect(board):
 		if is_instance_valid(s.cardNode) and s.cardNode.card != null:
 			var frozen = AbilityFrozen.new(s.cardNode.card)
 			frozen.onEffect()
-			s.cardNode.card.abilities.append(frozen)
+			s.cardNode.card.addAbility(frozen)
 			
 	card.removeAbility(self)

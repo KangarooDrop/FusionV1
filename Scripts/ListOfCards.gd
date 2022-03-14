@@ -165,6 +165,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	var cardNew = ListOfCards.getCard(newIndex)
 	cardNew.power = cardA.power + cardB.power
 	cardNew.toughness = cardA.toughness + cardB.toughness
+	cardNew.maxToughness = cardA.maxToughness + cardB.maxToughness
 	cardNew.abilities.clear()
 	for abl in (cardA.abilities + cardB.abilities):
 		cardNew.abilities.append(abl.clone(cardNew))
@@ -176,6 +177,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
 	cardA.onFusion(cardNew)
 	cardB.onFusion(cardNew)
+	
 	return cardNew
 
 func hasAbility(card : Card, abl) -> bool:

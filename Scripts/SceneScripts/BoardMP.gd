@@ -671,7 +671,7 @@ func onSlotEnter(slot : CardSlot):
 		if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
 			canFuse = false
 		
-		if is_instance_valid(slot.cardNode):
+		if is_instance_valid(slot.cardNode) and slot.currentZone == CardSlot.ZONES.CREATURE:
 			var cardA = slot.cardNode.card
 			for c in cardsHolding:
 				var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
@@ -686,14 +686,21 @@ func onSlotEnter(slot : CardSlot):
 		
 	
 	if is_instance_valid(selectedCard):
-		if slot.playerID != selectedCard.playerID:
-			if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
-				for s in slot.getNeighbors():
-					s.setHighlight(true)
-					highlightedSlots.append(s)
-			else:
-				slot.setHighlight(true)
-				highlightedSlots.append(slot)
+		
+		var opponentHasTaunt = false
+		for s in creatures[slot.playerID]:
+			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt):
+				opponentHasTaunt = true
+		
+		if not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
+			if slot.playerID != selectedCard.playerID:
+				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+					for s in slot.getNeighbors():
+						s.setHighlight(true)
+						highlightedSlots.append(s)
+				else:
+					slot.setHighlight(true)
+					highlightedSlots.append(slot)
 
 
 func onSlotExit(slot : CardSlot):
@@ -924,17 +931,29 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							return false
 				else:
 					if is_instance_valid(selectedCard):
-						var slots = []
-						if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
-							slots = slot.getNeighbors()
+						var opponentHasTaunt = false
+						for s in creatures[slot.playerID]:
+							if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt):
+								opponentHasTaunt = true
+						
+						if not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
+							var slots = []
+							if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+								slots = slot.getNeighbors()
+							else:
+								slots = [slot]
+								
+							selectedCard.cardNode.attack(self, slots)
+							if is_instance_valid(selectedCard.cardNode):
+								selectedCard.cardNode.rotation = 0
+								selectRotTimer = 0
+							selectedCard = null
 						else:
-							slots = [slot]
+							if cardsShaking.has(slot):
+								MessageManager.notify("A creature with taunt must be attacked first")
+							cardsShaking[slot] = shakeMaxTime
+							return false
 							
-						selectedCard.cardNode.attack(self, slots)
-						if is_instance_valid(selectedCard.cardNode):
-							selectedCard.cardNode.rotation = 0
-							selectRotTimer = 0
-						selectedCard = null
 							
 		#CODE IS ONLY REACHABLE IF NOT RETURNED
 		if Settings.gameMode == Settings.GAME_MODE.PLAY:
@@ -995,8 +1014,8 @@ func _input(event):
 				
 				if string != "":
 					var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
-					createHoverNode(pos, hoveringOn, string)
-					hoveringWindow.scale = Vector2(.5, .5)
+					createHoverNode(pos, self, string)
+					#hoveringWindow.scale = Vector2(.5, .5)
 					hoveringWindowSlot = hoveringOn
 				
 func nextTurn():

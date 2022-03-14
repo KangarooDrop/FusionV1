@@ -3,7 +3,7 @@ class_name Ability
 
 var name
 var desc
-var card
+var card : Card
 var c : Color
 var iconPos : Vector2
 

@@ -308,8 +308,7 @@ func onConfirmExit(popup=null):
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
-			
-			
+
 func onConfirmLoad(popup=null):
 	if popup != null:
 		popup.close()
@@ -336,7 +335,7 @@ func onConfirmLoad(popup=null):
 	for i in range(files.size()):
 		var b = Button.new()
 		$FileDisplay/ButtonHolder.add_child(b)
-		b.text = str(files[i])
+		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
 		$FileDisplay/ButtonHolder.move_child(b, i+1)
@@ -423,7 +422,7 @@ func onDeleteButtonPressed():
 	for i in range(files.size()):
 		var b = Button.new()
 		$FileDisplay/ButtonHolder.add_child(b)
-		b.text = str(files[i])
+		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
 		$FileDisplay/ButtonHolder.move_child(b, i+1)

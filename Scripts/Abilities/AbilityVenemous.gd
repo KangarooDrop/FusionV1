@@ -9,6 +9,3 @@ func combine(abl : Ability):
 	.combine(abl)
 	print(count)
 	desc = "Deals +" + str(count * 2) + " damage to creatures"
-	
-func onAttack(blocker, board):
-	print(desc)
