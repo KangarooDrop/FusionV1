@@ -203,7 +203,6 @@ func sendAllBoosters():
 		
 		boostersData += boosterQueue
 		
-		print("SENDING BOOSTERS ", boostersData)
 		Server.sendAllBoosters(getNextPlayerID(), boostersData)
 
 func _notification(what):

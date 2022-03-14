@@ -34,7 +34,7 @@ func clone(card : Card) -> Ability:
 static func onDiscard(params : Array):
 	for p in params[0].players:
 		if p.UUID == params[1]:
-			for i in range(p.hand.cardSlotNodes.size()):
+			for i in range(p.hand.nodes.size()):
 				p.hand.discardIndex(i)
 			break
 
