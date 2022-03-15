@@ -7,13 +7,19 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 var data := []
 var total := -1 setget setTotal, getTotal
-var deckMax = 20
+export var deckMax = -1
+
+var parent
 
 func setTotal(newTotal : int):
 	if newTotal != total:
 		total = newTotal
-		$Label.text = str(newTotal) + " / " + str(deckMax)
-		get_parent().deckModified()
+		if deckMax != -1:
+			$Label.text = str(newTotal) + " / " + str(deckMax)
+		else:
+			$Label.text = ""
+		if parent != null and parent.has_method("deckModified"):
+			parent.deckModified()
 		
 		if total != deckMax:
 			$Label.set("custom_colors/font_color", Color.black)
@@ -57,7 +63,7 @@ func addCard(id : int) -> bool:
 			data[i].updateDisplay()
 			setTotal(getTotal() + 1)
 			return true
-			
+	
 	var d = deckDisplayData.instance()
 	d.card = ListOfCards.getCard(id)
 	d.count = 1
@@ -92,7 +98,7 @@ func removeCard(index : int) -> bool:
 	if index >= 0 and index < data.size():
 		
 		data[index].count -= 1
-		get_parent().removeCard(data[index].card.UUID)
+		parent.removeCard(data[index].card.UUID)
 			
 		if data[index].count > 0:
 			data[index].updateDisplay()
@@ -108,11 +114,10 @@ func removeCard(index : int) -> bool:
 
 func onDeckDataClicked(d) -> bool:
 	var index = -1
-	if not get_parent().get_node("SaveDisplay").visible and not get_parent().get_node("FileDisplay").visible:
-		for i in range(data.size()):
-			if data[i] == d:
-				index = i
-				break
+	for i in range(data.size()):
+		if data[i] == d:
+			index = i
+			break
 	if index != -1:
 		return removeCard(index)
 	else:

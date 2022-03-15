@@ -65,38 +65,148 @@ var gameOver = false
 var abilityStack : Array = []
 
 var opponentID = -1
+var gameSeed = -1
 
+var deckDataSet = false
+var readyToStart = false
+var hasStartingPlayer = false
+var versionConfirmed = false
 
+var mulliganDone = false
+var mulliganDoneOpponent = false
+var oldHandPos = 0
+var handMoveTimer = 0
+var handMoveMaxTime = 0.5
+var handMoving = false
 
 func _ready():
-	var gameSeed = OS.get_system_time_msecs()
-	print("current game seed is ", gameSeed)
-	seed(gameSeed)
+	print("-".repeat(30))
+	
+	if not Server.online:
+		deckDataSet = true
+		readyToStart = true
+		hasStartingPlayer = true
+		versionConfirmed = true
+		mulliganDoneOpponent = true
+		mulliganDone = false
+		oldHandPos = 0
+	
+	
+	players.append(Player.new(self, $HealthNode, $ArmourNode))
+	creatures[players[0].UUID] = []
+	players.append(Player.new(self, $HealthNode2, $ArmourNode2))
+	players[1].isOpponent = true
+	creatures[players[1].UUID] = []
+	
+	initZones()
+	initHands()
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		if opponentID == -1:
 			opponentID = Server.playerIDs[0]
 		
-		var cardList = getDeckFromFile()
-		cardList.shuffle()
-		setOwnCardList(cardList)
+		if Server.online and Server.host:
+			setGameSeed(OS.get_system_time_msecs())
+			Server.setGameSeed(opponentID, gameSeed)
 		
 		if Server.online and Server.host:
 			var startingPlayerIndex = randi() % 2
-			activePlayer = (startingPlayerIndex + 1) % 2
+			setStartingPlayer((startingPlayerIndex + 1) % 2)
 			print("Send: Starting player")
 			dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
 			Server.setActivePlayer(opponentID, startingPlayerIndex)
 			hasStartingPlayer = true
 	
-		print("Fetch: Opponent's deck list")
-		Server.fetchDeck(opponentID)
 		Server.fetchVersion(opponentID)
 		
 		setOwnUsername()
 		
 	elif Settings.gameMode == Settings.GAME_MODE.REPLAY:
 		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
+	
+	initCardsLeftIndicator()
+
+func initCardsLeftIndicator():
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+		$CardsLeftIndicator_B.setCardData(0, 0, cardsPerTurn)
+	else:
+		$CardsLeftIndicator_A.setCardData(0, 0, cardsPerTurn)
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
+	
+
+func setGameSeed(gameSeed : int):
+	self.gameSeed = gameSeed
+	print("current game seed is ", gameSeed)
+	seed(gameSeed)
+	dataLog.append("SET_SEED " + str(gameSeed))
+	
+	var cardList = getDeckFromFile()
+	cardList.shuffle()
+	setOwnCardList(cardList)
+		
+	print("Fetch: Opponent's deck list")
+	Server.sendDeck(opponentID)
+
+func startMulligan():
+	if not Server.host:
+		while gameSeed == -1:
+			yield(get_tree().create_timer(0.1), "timeout")
+			print("waiting for seed")
+	print("Starting mulligan")
+	oldHandPos = card_A_Holder.rect_position.y
+	card_A_Holder.rect_position.y = 0
+	players[0].hand.drawHand()
+
+func onMulliganButtonPressed():
+	if players[0].hand.drawQueue.size() == 0:
+		var handCards = []
+		if Server.host:
+			for i in range(players[0].hand.nodes.size()):
+				handCards.append(players[0].hand.nodes[i].card)
+			while players[0].hand.nodes.size() > 0:
+				players[0].hand.nodes[0].queue_free()
+				players[0].hand.nodes.remove(0)
+				players[0].hand.slots[0].queue_free()
+				players[0].hand.slots.remove(0)
+			
+			for i in range(players[0].deck.cards.size()):
+				handCards.append(players[0].deck.cards[i])
+			
+			handCards.shuffle()
+			players[0].deck.setCards(handCards)
+			
+			Server.sendDeck(opponentID)
+			
+			players[0].hand.drawHand()
+			mulliganDone = true
+			handMoving = true
+			
+		else:
+			while players[0].hand.nodes.size() > 0:
+				players[0].hand.nodes[0].queue_free()
+				players[0].hand.nodes.remove(0)
+				players[0].hand.slots[0].queue_free()
+				players[0].hand.slots.remove(0)
+			Server.requestMulligan(opponentID)
+		
+		$KeepButton.visible = false
+		$MulliganButton.visible = false
+		Server.mulliganDone(opponentID)
+
+func mulliganOpponent():
+	players[1].deck.shuffle()
+	Server.sendMulliganDeck(opponentID)
+
+func mulliganOpponentDone():
+	mulliganDoneOpponent = true
+
+func onKeepButtonPressed():
+	$KeepButton.visible = false
+	$MulliganButton.visible = false
+	Server.mulliganDone(opponentID)
+	mulliganDone = true
+	handMoving = true
 
 func getDeckFromFile() -> Array:
 	var fileName = Settings.selectedDeck
@@ -123,40 +233,29 @@ func getDeckFromFile() -> Array:
 	return cardList
 
 func setOwnCardList(cardList : Array):
-	var player_A = Player.new(cardList, self, $HealthNode, $ArmourNode)
-	players.insert(0, player_A)
-	creatures[player_A.UUID] = []
-	
-	var logDeck = "OWN_DECK "
-	for i in player_A.deck.serialize():
-		logDeck += str(i) + " "
-		
+	players[0].deck.setCards(cardList)
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
+		var logDeck = "OWN_DECK "
+		for i in players[0].deck.serialize():
+			logDeck += str(i) + " "
+			
 		dataLog.append(logDeck)
-
-var deckDataSet = false
-var readyToStart = false
-var hasStartingPlayer = false
-var versionConfirmed = false
 
 func setOpponentCardList(cardList : Array):
 	var cards = []
-	for id in cardList:
-		cards.append(ListOfCards.getCard(id))
-				
-	var player_B = Player.new(cards, self, $HealthNode2, $ArmourNode2)
-	player_B.isOpponent = true
-	players.insert(1, player_B)
-	creatures[player_B.UUID] = []
-	
-	var logDeck = "OPPONENT_DECK "
-	for i in players[1].deck.serialize():
-		logDeck += str(i) + " "
+	for c in cardList:
+		cards.append(ListOfCards.getCard(c))
+	players[1].deck.setCards(cards)
 		
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
+		var logDeck = "OPPONENT_DECK "
+		for i in players[players.size()-1].deck.serialize():
+			logDeck += str(i) + " "
+		
 		dataLog.append(logDeck)
 
 func setDeckData(data, order):
+	
 	print("Receive: Opponent deck data")
 	
 	var good = verifyDeckData(data, order)
@@ -239,6 +338,12 @@ func setStartingPlayer(playerIndex : int):
 		dataLog.append("SET_PLAYER " + str(playerIndex))
 	activePlayer = playerIndex
 	hasStartingPlayer = true
+	
+	startMulligan()
+	
+	initCardsLeftIndicator()
+	
+	setTurnText()
 
 var playerRestart = false
 var opponentRestart = false
@@ -248,20 +353,15 @@ func onRestartPressed():
 	opponentRestart = true
 
 func startGame():
-	initZones()
-	initHands()
+	players[1].hand.drawHand()
 	
 	readyToStart = false
 	deckDataSet = false
 	versionConfirmed = false
 	hasStartingPlayer = false
 	gameStarted = true
-	players[0].initHand(self)
-	players[1].initHand(self)
 	print("Notice: Players ready, starting game")
 	dataLog.append("GAME_START")
-	
-	setTurnText()
 
 func setTurnText():
 	if activePlayer == 0:
@@ -280,16 +380,24 @@ func _physics_process(delta):
 		if replayTimer >= 0.3:
 			nextReplayAction()
 	
-	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed:
+	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed and gameSeed != -1 and mulliganDone and mulliganDoneOpponent:
 		startGame()
 		
 	if playerRestart and opponentRestart:
+		print("REEEEEEEEEESPAWN!")
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
 		
 		
 	
+	if handMoving and players[0].hand.drawQueue.size() == 0:
+		handMoveTimer += delta
+		if handMoveTimer < handMoveMaxTime:
+			card_A_Holder.rect_position.y = lerp(0, oldHandPos, handMoveTimer / handMoveMaxTime)
+		else:
+			handMoving = false
+			card_A_Holder.rect_position.y = oldHandPos
 	
 	if gameStarted:
 		rotAngle = PI / 32
@@ -309,6 +417,7 @@ func _physics_process(delta):
 				var numCards = players[1].deck.cards.size()
 				if hoveringWindow.text != str(numCards):
 					hoveringWindow.setText(str(numCards))
+		
 	
 	if is_instance_valid(selectedCard):
 		selectRotTimer += delta
@@ -436,7 +545,7 @@ func _physics_process(delta):
 			serverQueue.remove(0)
 			serverWait = 0
 			serverCheckTimer = 0
-			
+	
 	if gameStarted:
 		if fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
@@ -510,6 +619,8 @@ func processReplayCommand(command : String):
 			slotClickedServer(coms[1] != "True", int(coms[2]), int(coms[3]), 1)
 		"VERSION":
 			compareVersion(coms[1])
+		"SET_SEED":
+			setGameSeed(coms[1])
 		_:
 			print("ERROR: Unknown replay command " + coms[0])
 	
@@ -592,18 +703,11 @@ func initZones():
 		
 func initHands():
 	players[0].hand = card_A_Holder
-	#players[0].initHand(self)
+	players[0].initHand(self)
 	players[1].hand = card_B_Holder
-	#players[1].initHand(self)
+	players[1].initHand(self)
 	players[0].hand.deck = decks[players[0].UUID]
 	players[1].hand.deck = decks[players[1].UUID]
-	
-	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
-		$CardsLeftIndicator_B.setCardData(0, 0, cardsPerTurn)
-	else:
-		$CardsLeftIndicator_A.setCardData(0, 0, cardsPerTurn)
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
 				
 static func centerNodes(nodes : Array, position : Vector2, cardWidth : int, cardDists : int):
 	for i in range(nodes.size()):
@@ -719,7 +823,8 @@ func onSlotExit(slot : CardSlot):
 		
 
 func onMouseDown(slot : CardSlot, button_index : int):
-	actionQueue.append([slot, button_index])
+	if gameStarted and not gameOver:
+		actionQueue.append([slot, button_index])
 	
 func onMouseUp(Slot : CardSlot, button_index : int):
 	pass
@@ -969,7 +1074,7 @@ func isMyTurn() -> bool:
 	return 0 == activePlayer
 
 func _input(event):
-	if not gameOver:
+	if not gameOver and gameStarted:
 		if event is InputEventKey and event.is_pressed() and not event.is_echo():
 			if event.scancode == KEY_Q:
 				if isMyTurn():

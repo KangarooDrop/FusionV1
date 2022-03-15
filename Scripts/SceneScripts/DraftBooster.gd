@@ -24,6 +24,7 @@ onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 func _ready():
+	$DeckDisplayControl/DeckDisplay.parent = self
 	$BoosterDisplay.board = self
 	$CardDisplay.board = self
 	$CardDisplay.canReorder = true
@@ -73,29 +74,50 @@ var slotClickedQueue1 := []
 var slotClickedQueue2 := []
 var clickedOff = false
 
+var doubleClickSlot = null
+var doubleClickTimer = 0
+var doubleClickMaxTime = 0.2
+
 func _physics_process(delta):
 	#print(boosterQueue)
-
+	
+	if doubleClickSlot != null:
+		doubleClickTimer += delta
+		if doubleClickTimer >= doubleClickMaxTime:
+			doubleClickSlot = null
+			doubleClickTimer = 0
+	
 	if slotClickedQueue1.size() > 0:
 		var highestZ = slotClickedQueue1[0]
 		for i in range(1, slotClickedQueue1.size()):
 			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue1[i].cardNode) and slotClickedQueue1[i].cardNode.z_index > highestZ.cardNode.z_index):
 				highestZ = slotClickedQueue1[i]
 		
-		$CardDisplay.addCard(highestZ.cardNode.card)
-		
-		$BoosterDisplay.slots.erase(highestZ)
-		$BoosterDisplay.nodes.erase(highestZ.cardNode)
-		
-		var cardIDs = []
-		for c in $BoosterDisplay.nodes:
-			cardIDs.append(c.card.UUID)
-		var nextID = getNextPlayerID()
-		Server.sendBooster(nextID, cardIDs)
-		
-		$BoosterDisplay.clear()
-		highestZ.cardNode.queue_free()
-		highestZ.queue_free()
+		if $BoosterDisplay.slots.has(highestZ):
+			$CardDisplay.addCard(highestZ.cardNode.card)
+			
+			$BoosterDisplay.slots.erase(highestZ)
+			$BoosterDisplay.nodes.erase(highestZ.cardNode)
+			
+			var cardIDs = []
+			for c in $BoosterDisplay.nodes:
+				cardIDs.append(c.card.UUID)
+			var nextID = getNextPlayerID()
+			Server.sendBooster(nextID, cardIDs)
+			
+			$BoosterDisplay.clear()
+			highestZ.cardNode.queue_free()
+			highestZ.queue_free()
+		elif $CardDisplay.slots.has(highestZ):
+			if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:
+				$DeckDisplayControl/DeckDisplay.addCard(highestZ.cardNode.card.UUID)
+				$CardDisplay.slots.erase(highestZ)
+				$CardDisplay.nodes.erase(highestZ.cardNode)
+				highestZ.cardNode.queue_free()
+				highestZ.queue_free()
+				$CardDisplay.centerCards()
+			else:
+				doubleClickSlot = highestZ
 		
 		slotClickedQueue1.clear()
 	
@@ -127,8 +149,7 @@ func _physics_process(delta):
 func onMouseDown(slot : CardSlot, buttonIndex):
 	if not closing:
 		if buttonIndex == 1:
-			if $BoosterDisplay.slots.has(slot):
-				slotClickedQueue1.append(slot)
+			slotClickedQueue1.append(slot)
 			
 		if buttonIndex == 2:
 			slotClickedQueue2.append(slot)
@@ -138,7 +159,10 @@ func playerDoneDrafting(player_id):
 	
 	if compDones():
 		Server.startBuilding()
-	
+
+func removeCard(cardUUID : int):
+	$CardDisplay.addCard(ListOfCards.getCard(cardUUID))
+
 func compDones() -> bool:
 	if playersDone.size() != playerIDs.size():
 		return false

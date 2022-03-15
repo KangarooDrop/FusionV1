@@ -29,7 +29,12 @@ var cardDists = 16
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 
+var doubleClickSlot = null
+var doubleClickTimer = 0
+var doubleClickMaxTime = 0.2
+
 func _ready():
+	$DeckDisplayControl/DeckDisplay.parent = self
 	$CardDisplay.board = self
 	$CardDisplay.canReorder = true
 	
@@ -309,15 +314,42 @@ func setCurrentPlayerDisplay(currentPlayer):
 	$OrderDisplay/ReferenceRect.rect_global_position = idToDisplayLabel[player_id].rect_global_position - extra
 	$OrderDisplay/ReferenceRect.rect_size = idToDisplayLabel[player_id].rect_size + extra * 2
 
-var slotClickedQueue := []
+var slotClickedQueue1 := []
+var slotClickedQueue2 := []
 var clickedOff = false
 
 func _physics_process(delta):
-	if slotClickedQueue.size() > 0:
-		var highestZ = slotClickedQueue[0]
-		for i in range(1, slotClickedQueue.size()):
-			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue[i].cardNode) and slotClickedQueue[i].cardNode.z_index > highestZ.cardNode.z_index):
-				highestZ = slotClickedQueue[i]
+	
+	if doubleClickSlot != null:
+		doubleClickTimer += delta
+		if doubleClickTimer >= doubleClickMaxTime:
+			doubleClickSlot = null
+			doubleClickTimer = 0
+	
+	if slotClickedQueue1.size() > 0:
+		var highestZ = slotClickedQueue1[0]
+		for i in range(1, slotClickedQueue1.size()):
+			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue1[i].cardNode) and slotClickedQueue1[i].cardNode.z_index > highestZ.cardNode.z_index):
+				highestZ = slotClickedQueue1[i]
+		
+		if $CardDisplay.slots.has(highestZ):
+			if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:
+				$DeckDisplayControl/DeckDisplay.addCard(highestZ.cardNode.card.UUID)
+				$CardDisplay.slots.erase(highestZ)
+				$CardDisplay.nodes.erase(highestZ.cardNode)
+				highestZ.cardNode.queue_free()
+				highestZ.queue_free()
+				$CardDisplay.centerCards()
+			else:
+				doubleClickSlot = highestZ
+		
+		slotClickedQueue1.clear()
+	
+	if slotClickedQueue2.size() > 0:
+		var highestZ = slotClickedQueue2[0]
+		for i in range(1, slotClickedQueue2.size()):
+			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue2[i].cardNode) and slotClickedQueue2[i].cardNode.z_index > highestZ.cardNode.z_index):
+				highestZ = slotClickedQueue2[i]
 		
 		#CHECK FOR STACKS
 		
@@ -347,20 +379,25 @@ func _physics_process(delta):
 					createHoverNode(pos, highestZ.cardNode.card.getHoverData())
 					hoveringSlot = highestZ
 					
-		slotClickedQueue.clear()
+		slotClickedQueue2.clear()
 	elif clickedOff:
 		closeHoverNode()
 	
 	clickedOff = false
 
+func removeCard(cardUUID : int):
+	$CardDisplay.addCard(ListOfCards.getCard(cardUUID))
+	
 func quitButtonPressed():
 	var pop = popupUI.instance()
 	pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 	$CardHolder.add_child(pop)
 
 func onMouseDown(slot : CardSlot, buttonIndex):
-	if buttonIndex == 2:
-		slotClickedQueue.append(slot)
+	if buttonIndex == 1:
+		slotClickedQueue1.append(slot)
+	elif buttonIndex == 2:
+		slotClickedQueue2.append(slot)
 
 func onSlotEnter(slot : CardSlot):
 	pass

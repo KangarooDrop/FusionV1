@@ -280,6 +280,7 @@ position = Vector2( 0, 192 )
 
 [node name="DeckDisplay" parent="." instance=ExtResource( 2 )]
 position = Vector2( 300, -200 )
+deckMax = 20
 
 [node name="LArrow" type="Node2D" parent="."]
 visible = false

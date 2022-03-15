@@ -3,7 +3,10 @@ class_name Deck
 
 var cards : Array
 
-func _init(cards):
+func _init():
+	pass
+
+func setCards(cards : Array):
 	self.cards = cards
 
 func shuffle():

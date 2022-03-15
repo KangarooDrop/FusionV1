@@ -29,12 +29,14 @@ var clickMaxTime = 0.18
 
 var oldY = [-1]
 
+export var viewMul = 0.75
+
 func _ready():
 	myfunc()
 	get_tree().get_root().connect("size_changed", self, "myfunc")
 
 func myfunc():
-	totalWidth = get_viewport_rect().size.x * 0.75
+	totalWidth = get_viewport_rect().size.x * viewMul
 	centerCards()
 
 func centerCards():
@@ -171,6 +173,7 @@ func onSlotExit(slot : CardSlot):
 var mouseDownQueue := []
 
 func onMouseDown(slot : CardSlot, button_index : int):
+	
 	if canReorder and button_index == 1:
 		mouseDownQueue.append(slot)
 		mouseDown = true

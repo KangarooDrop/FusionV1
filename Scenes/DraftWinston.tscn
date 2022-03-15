@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DraftWinston.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=4]
 
 [node name="Draft" type="Control"]
 anchor_right = 1.0
@@ -124,6 +125,18 @@ margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="DeckDisplayControl" type="Control" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 4 )]
+position = Vector2( -120, 75 )
 
 [connection signal="pressed" from="QuitButton" to="." method="quitButtonPressed"]
 [connection signal="pressed" from="TakeButton" to="." method="onTakeButtonPressed"]

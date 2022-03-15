@@ -22,6 +22,7 @@ var discardPositions := []
 export var handSize := 5
 export var isOpponent = false
 export var handVisible := true
+var mulliganCount = 0
 
 var drawDamage = 1
 
@@ -32,9 +33,11 @@ func initHand(board, player):
 	self.board = board
 	self.player = player
 	isOpponent = player.isOpponent
-	if isOpponent:
-		handVisible = false
-	for i in range(handSize + (0 if board.players[board.activePlayer] == player else 1)):
+	
+	
+func drawHand():
+	var actualHandSize = handSize - mulliganCount + (0 if board.players[board.activePlayer] == player else 1)
+	for i in range(actualHandSize):
 		drawCard()
 
 func _physics_process(delta):

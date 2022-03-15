@@ -109,7 +109,7 @@ remote func receiveSetPlayerData(username : String, gameMode : int, versionID : 
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
 		Settings.gameMode = Settings.GAME_MODE.PLAY
 		get_node("/root/Lobby").startGame()
-		rpc_id(player_id, "serverSetUsername", username)
+		rpc_id(player_id, "serverSetUsername", self.username)
 	else:
 		rpc_id(player_id, "joinedDraftLobby", Server.MAX_PEERS + 1)
 
@@ -251,6 +251,13 @@ remote func receivedStartBuilding():
 			availableCardCount[cardNode.card.UUID] += 1
 		else:
 			availableCardCount[cardNode.card.UUID] = 1
+	var dd = draft.get_node_or_null("DeckDisplayControl/DeckDisplay")
+	if dd != null:
+		for d in dd.data:
+			if availableCardCount.has(d.card.UUID):
+				availableCardCount[d.card.UUID] += d.count
+			else:
+				availableCardCount[d.card.UUID] = d.count
 
 	var editor = load("res://Scenes/DeckEditor.tscn").instance()
 	editor.availableCardCount = availableCardCount
@@ -299,37 +306,30 @@ remote func receiveSendAllBoosters(boostersData : Array):
 
 remote func serverSetUsername(username : String):
 	var board = get_node_or_null("/root/main/Board")
-	while not is_instance_valid(board) or board.gameStarted:
-		print("Board not ready yet, waiting; fetch")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
 			return
-			
 	board.setOpponentUsername(username)
 
-remote func fetchDeck(player_id : int):
+remote func sendDeck(player_id : int):
 	if playerIDs.has(player_id):
-		rpc_id(player_id, "serverFetchDeck")
-	
-remote func serverFetchDeck():
-	var player_id = get_tree().get_rpc_sender_id()
-	
+		var board = get_node("/root/main/Board")
+		var data = board.players[0].deck.getJSONData()
+		var order = board.players[0].deck.serialize()
+		rpc_id(player_id, "serverSendDeck", data, order)
+
+remote func serverSendDeck(data, order):
 	var board = get_node_or_null("/root/main/Board")
-	while not is_instance_valid(board) or board.gameStarted:
-		print("Board not ready yet, waiting; fetch")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
 			return
-			
-	var data = board.players[0].deck.getJSONData()
-	var order = board.players[0].deck.serialize()
-		
-	rpc_id(player_id, "returnDeck", data, order)
-
-remote func returnDeck(data, order):
-	get_node("/root/main/Board").setDeckData(data, order)
+	board.setDeckData(data, order)
 
 ####################################################################
 
@@ -386,22 +386,28 @@ remote func serverOnRestart():
 
 ####################################################################
 
+#func waitForBoard():
+#	var board = get_node_or_null("/root/main/Board")
+#	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+#		print("Board not ready yet, waiting; active")
+#		yield(get_tree().create_timer(0.1), "timeout")
+#		board = get_node_or_null("/root/main/Board")
+#		if not Server.online:
+#			return
+
 remote func setActivePlayer(player_id : int, index : int):
 	if playerIDs.has(player_id):
 		rpc_id(player_id, "serverSetActivePlayer", index)
 	
 remote func serverSetActivePlayer(index : int):
 	var player_id = get_tree().get_rpc_sender_id()
-	
 	var board = get_node_or_null("/root/main/Board")
-	while not is_instance_valid(board) or board.gameStarted:
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/Board")
 		if not Server.online:
 			return
-#		if otherPlayerData != null and player_id != otherPlayerData:
-#			return
 	board.setStartingPlayer(index)
 
 ####################################################################
@@ -420,6 +426,74 @@ remote func serverDisconnectMessage(message : String):
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
+		
+####################################################################
+
+func setGameSeed(player_id : int, gameSeed : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSetGameSeed", gameSeed)
+
+remote func receiveSetGameSeed(gameSeed):
+	var board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
+	board.setGameSeed(gameSeed)
+
+func mulliganDone(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveMulliganDone")
+
+remote func receiveMulliganDone():
+	var board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
+	board.mulliganOpponentDone()
+
+func requestMulligan(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveRequestMulligan")
+	
+remote func receiveRequestMulligan():
+	var board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
+	board.mulliganOpponent()
+
+func sendMulliganDeck(player_id : int):
+	if playerIDs.has(player_id):
+		var board = get_node("/root/main/Board")
+		var order = board.players[1].deck.serialize()
+		rpc_id(player_id, "receiveSendMulliganDeck", order)
+
+remote func receiveSendMulliganDeck(order : Array):
+	var cards := []
+	for c in order:
+		cards.append(ListOfCards.getCard(c))
+		
+	var board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
+			
+	board.players[0].deck.setCards(cards)
+	board.players[0].hand.drawHand()
+	board.mulliganDone = true
+	board.handMoving = true
 
 ####################################################################
 
@@ -432,5 +506,12 @@ remote func serverFetchVersion():
 	rpc_id(player_id, "returnVersion", Settings.versionID)
 
 remote func returnVersion(version):
-	get_node("/root/main/Board").compareVersion(version)
-		
+	var board = get_node_or_null("/root/main/Board")
+	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/Board")
+		if not Server.online:
+			return
+	board.compareVersion(version)
+

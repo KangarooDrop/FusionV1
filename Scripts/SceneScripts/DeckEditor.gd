@@ -27,6 +27,7 @@ enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
 var sortOrder : int = SORT_ORDER.TYPE
 
 func _ready():
+	$DeckDisplay.parent = self 
 	setCards()
 
 func setCards():

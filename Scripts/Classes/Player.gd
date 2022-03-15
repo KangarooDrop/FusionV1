@@ -18,8 +18,8 @@ var creatureNum := 5
 
 var isOpponent = false
 
-func _init(cardList, board, lifeNode, armourNode):
-	deck = Deck.new(cardList)
+func _init(board, lifeNode, armourNode):
+	deck = Deck.new()
 	self.board = board
 	self.lifeNode = lifeNode
 	self.armourNode = armourNode
