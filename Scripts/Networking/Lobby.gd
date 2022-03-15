@@ -7,6 +7,9 @@ var waitTimer = waitMaxTime
 var waitNum = -1
 var waitNumMax = 4
 
+func _ready():
+	$IPSet/HBoxContainer/LineEdit.text = str(Server.ip)
+
 func _physics_process(delta):
 	if $WaitLabel.visible:
 		waitTimer += delta

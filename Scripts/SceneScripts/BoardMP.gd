@@ -784,7 +784,7 @@ func onSlotEnter(slot : CardSlot):
 				else:
 					cardA = cardB
 		
-		if canFuse:
+		if canFuse and isMyTurn():
 			slot.setHighlight(true)
 			highlightedSlots.append(slot)
 		
@@ -796,7 +796,7 @@ func onSlotEnter(slot : CardSlot):
 			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt):
 				opponentHasTaunt = true
 		
-		if not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
+		if isMyTurn() and not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
 			if slot.playerID != selectedCard.playerID:
 				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 					for s in slot.getNeighbors():
@@ -884,6 +884,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 		elif slot.currentZone == CardSlot.ZONES.CREATURE:
 			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
 				#PUTTING A CREATURE ONTO THE FIELD
+				
+				if not isMyTurn() and not fromServer:
+					return false
 				
 				if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
 					if cardsShaking.has(slot):
@@ -1015,7 +1018,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 					
 			else:
-				if activePlayer != 0 and not fromServer:
+				if not isMyTurn() and not fromServer:
 					return false
 				if slot.playerID == players[activePlayer].UUID:
 					#ATTACKING

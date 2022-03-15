@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityEssenceDrain
 
-func _init(card : Card).("Essence Drain", "When this creature is played, all other creatures get -1/-1. Gain +1/+1 for each creature affected. Removes this ability", card, Color.black, true, Vector2(0, 0)):
+func _init(card : Card).("Essence Drain", "When this creature is played, all other creatures get -1/-1. Gain +1 power for each creature affected. Removes this ability", card, Color.black, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -12,7 +12,7 @@ func onEnter(board, slot):
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
 	onEffect(board)
-			
+
 func onEffect(board):
 	var n = 0
 	for s in board.boardSlots:

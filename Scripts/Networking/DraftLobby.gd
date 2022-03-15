@@ -22,6 +22,7 @@ func _ready():
 	for s in getDraftTypes():
 		$DraftTypeButton.add_item(s[0] + " Draft")
 	
+	$IPSet/HBoxContainer/LineEdit.text = str(Server.ip)
 	$DraftTypeOptions/BoosterOptions/LineEdit.text = "3"
 	$DraftTypeOptions/BoosterOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/BoosterOptions/LineEdit.text)
 

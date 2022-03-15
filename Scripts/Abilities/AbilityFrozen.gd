@@ -10,7 +10,7 @@ func _init(card : Card).("Frozen", "This creature cannot attack or be fused unti
 func onEnter(board, slot):
 	.onEnter(board, slot)
 	onEffect()
-	
+
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
 	onEffect()
@@ -25,7 +25,7 @@ func onEffect():
 	card.canAttackThisTurn = false
 	card.canFuseThisTurn = false
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
-	
+
 func onEndOfTurn(board):
 	if frozenThisTurn:
 		card.canFuseThisTurn = true
