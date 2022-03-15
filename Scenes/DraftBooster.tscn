@@ -62,4 +62,21 @@ __meta__ = {
 [node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 4 )]
 position = Vector2( -120, 75 )
 
+[node name="BoosterNum" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -27.5
+margin_top = 140.0
+margin_right = 27.5
+margin_bottom = 164.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Pack: "
+align = 1
+valign = 1
+
 [connection signal="pressed" from="QuitButton" to="." method="onQuitButtonPressed"]

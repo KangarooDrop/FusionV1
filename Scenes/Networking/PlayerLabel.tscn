@@ -28,7 +28,7 @@ custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Test AAA AAA AAA"
 valign = 1
-autowrap = true
+clip_text = true
 
 [node name="Button" type="Button" parent="HBoxContainer"]
 visible = false

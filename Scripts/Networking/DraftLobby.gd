@@ -1,5 +1,6 @@
 extends Control
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var playerLabel = preload("res://Scenes/Networking/PlayerLabel.tscn")
 
 var pLabels := []
@@ -11,8 +12,8 @@ class_name DraftLobby
 
 static func getDraftTypes():
 	return \
-		[["Winston", "res://Scenes/DraftWinston.tscn"], 
-		["Booster", "res://Scenes/DraftBooster.tscn"],
+		[["Winston", "res://Scenes/DraftWinston.tscn", "DraftTypeOptions/WinstonOptions"], 
+		["Booster", "res://Scenes/DraftBooster.tscn", "DraftTypeOptions/BoosterOptions"],
 #		["Test", "res://Scenes/main.tscn"]
 	]
 
@@ -20,7 +21,9 @@ func _ready():
 	numMaxPlayers = Server.MAX_PEERS + 1
 	for s in getDraftTypes():
 		$DraftTypeButton.add_item(s[0] + " Draft")
-	$DraftTypeButton.select(0)
+	
+	$DraftTypeOptions/BoosterOptions/LineEdit.text = "3"
+	$DraftTypeOptions/BoosterOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/BoosterOptions/LineEdit.text)
 
 ###############################################
 
@@ -34,6 +37,15 @@ func hostButtonPressed():
 	$StartButton.visible = true
 	$DraftTypeButton.visible = true
 	addPlayer(-1, Server.username)
+	
+	$DraftTypeOptions.visible = true
+	$DraftTypeButton.disabled = false
+	$DraftTypeOptions/WinstonOptions/Label.visible = true
+	$DraftTypeOptions/BoosterOptions/Label.visible = true
+	$DraftTypeOptions/BoosterOptions/Label2.visible = true
+	$DraftTypeOptions/BoosterOptions/LineEdit.visible = true
+	$DraftTypeButton.select(0)
+	draftTypeSelected(0)
 	
 func joinButtonPressed():
 	$MultiplayerUI.visible = false
@@ -60,6 +72,14 @@ func ipJoinButtonPressed():
 	
 	$Menu.visible = true
 	addPlayer(-1, Server.username)
+	
+	$DraftTypeButton.visible = true
+	$DraftTypeOptions.visible = true
+	$DraftTypeButton.disabled = true
+	$DraftTypeOptions/WinstonOptions/Label.visible = false
+	$DraftTypeOptions/BoosterOptions/Label.visible = false
+	$DraftTypeOptions/BoosterOptions/Label2.visible = false
+	$DraftTypeOptions/BoosterOptions/LineEdit.visible = false
 
 ###############################################
 
@@ -70,6 +90,9 @@ func lobbyBackPressed():
 	$MultiplayerUI.visible = true
 	$StartButton.visible = false
 	$DraftTypeButton.visible = false
+	$DraftTypeOptions.visible = false
+	for c in $DraftTypeOptions.get_children():
+		c.visible = false
 	
 	while ids.size() > 0:
 		removePlayer(ids[0])
@@ -94,6 +117,9 @@ func addPlayer(id, name):
 	ids.append(id)
 	
 	setPlayerLabel()
+	
+	if Server.host:
+		Server.setDraftType($DraftTypeButton.selected)
 
 func removePlayer(id):
 	var index = ids.find(id)
@@ -111,5 +137,45 @@ func setPlayerLabel():
 ###############################################
 
 func startDraftButtonPressed():
-	Server.startDraft($DraftTypeButton.get_selected_id())
+	var params = {}
+	if $DraftTypeButton.selected == 1:
+		params["num_boosters"] = $DraftTypeOptions/BoosterOptions/LineEdit.get_value()
+	Server.startDraft($DraftTypeButton.get_selected_id(), params)
 
+func howToPlayWinstonPressed():
+	var pop = popupUI.instance()
+	var text = """Each players takes turns picking from the 3 available piles.
+	
+The piles are viewed one at a time and the player decides if they want to add that pile to their collection. 
+
+If not, they add a card from the main stack to that pile and inspect the next one.
+
+If none of the 3 piles are taken, add the top card of the main stack to your collection."""
+
+	pop.init("Winston Draft", text, [["Back", pop, "close", []]])
+	$PopupCenter.add_child(pop)
+
+func howToPlayBoosterPressed():
+	var pop = popupUI.instance()
+	var text = """Each players is given 10 random cards (a booster).
+
+Players choose 1 card from among them to add to their collection and pass the remaining cards to the next player.
+
+This continues until all cards from that booster have been picked. 
+
+Another booster is then opened (10 random cards) and the process repeats until all booster have been opened."""
+
+	pop.init("Booster Draft", text, [["Back", pop, "close", []]])
+	$PopupCenter.add_child(pop)
+
+var lastDraftType = -1
+func draftTypeSelected(index):
+	if lastDraftType != -1:
+		get_node(getDraftTypes()[lastDraftType][2]).visible = false
+	get_node(getDraftTypes()[index][2]).visible = true
+	lastDraftType = index
+	
+	if Server.host:
+		Server.setDraftType(index)
+	else:
+		$DraftTypeButton.select(index)

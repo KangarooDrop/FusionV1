@@ -2,6 +2,9 @@ extends Node
 
 class_name DraftClass
 
+func setParams(params : Dictionary):
+	pass
+
 func onSlotEnter(slot : CardSlot):
 	pass
 	

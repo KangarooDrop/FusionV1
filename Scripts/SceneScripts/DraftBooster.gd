@@ -43,6 +43,10 @@ func _ready():
 	
 	get_tree().set_auto_accept_quit(false)
 
+func setParams(params : Dictionary):
+	if params.has("num_boosters"):
+		numBoosters = params["num_boosters"]
+
 func genNewBooster(cards = null):
 	if cards == []:
 		genNewBooster()
@@ -59,6 +63,7 @@ func genNewBooster(cards = null):
 			return
 		else:
 			boosterCount += 1
+			$BoosterNum.text = "Booster: (" + str(boosterCount) + "/" + str(numBoosters) + ")"
 			
 			cards = []
 			while cards.size() != cardsPerBooster:

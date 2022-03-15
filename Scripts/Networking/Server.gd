@@ -179,16 +179,30 @@ remote func sendMessage(message : String):
 
 ####################################################################
 
-remote func startDraft(index : int):
+func setDraftType(index : int):
+	for id in Server.playerIDs:
+		rpc_id(id, "receiveSetDraftType", index)
+
+remote func receiveSetDraftType(index : int):
+	get_node("/root/DraftLobby").draftTypeSelected(index)
+
+remote func startDraft(index : int, params : Dictionary = {}):
 	if Server.host:
 		for id in Server.playerIDs:
-			Server.rpc_id(id, "startDraft", index)
+			Server.rpc_id(id, "startDraft", index, params)
 	
 	Settings.gameMode = Settings.GAME_MODE.DRAFTING
-	var error = get_tree().change_scene(DraftLobby.getDraftTypes()[index][1])
-	#var error = get_tree().change_scene("res://Scenes/DraftWinston.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+	
+	var root = get_node("/root")
+	var lobby = root.get_node("DraftLobby")
+	var draft = load(DraftLobby.getDraftTypes()[index][1]).instance()
+	
+	draft.setParams(params)
+	root.add_child(draft)
+	get_tree().current_scene = draft
+	
+	root.remove_child(lobby)
+	lobby.queue_free()
 
 remote func joinedDraftLobby(numMaxPlayers):
 	get_node("/root/DraftLobby").joinedLobby(numMaxPlayers)

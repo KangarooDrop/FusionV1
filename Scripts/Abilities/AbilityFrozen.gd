@@ -35,3 +35,7 @@ func onEndOfTurn(board):
 				if abl is scr:
 					card.abilities.erase(abl)
 					break
+
+func combine(abl : Ability):
+	.combine(abl)
+	frozenThisTurn = frozenThisTurn and abl.frozenThisTurn
