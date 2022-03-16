@@ -269,7 +269,7 @@
   },
   "28": {
     "name": "Spitfire",
-    "tex": "res://Art/portraits/FireBob.png",
+    "tex": "res://Art/portraits/card_SPITFIRE.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -373,7 +373,7 @@
   },
   "36": {
     "name": "Chipper",
-    "tex": "res://Art/portraits/ToasterToilet.png",
+    "tex": "res://Art/portraits/card_CHIPPER.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -412,7 +412,7 @@
   },
   "39": {
     "name": "Torchling",
-    "tex": "res://Art/portraits/ToasterToilet.png",
+    "tex": "res://Art/portraits/card_TORCHLING.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -464,7 +464,7 @@
   },
   "43": {
     "name": "Phoenix",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_PHOENIX.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -477,7 +477,7 @@
   },
   "44": {
     "name": "Ice King",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_ICE_KING.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -503,7 +503,7 @@
   },
   "46": {
     "name": "Pupa",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_PUPA.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -516,7 +516,7 @@
   },
   "47": {
     "name": "Processor",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_PROCESSOR.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -529,7 +529,7 @@
   },
   "48": {
     "name": "Devourer",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_DEVOURER.png",
     "power": 0,
     "toughness": 1,
     "creature_type": [

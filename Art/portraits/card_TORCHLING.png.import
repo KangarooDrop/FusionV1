@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FireBob.png-24f1586c905a660798e4a71cb023c738.stex"
+path="res://.import/card_TORCHLING.png-056b4b9607b3094e60be3189a8d383c3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/FireBob.png"
-dest_files=[ "res://.import/FireBob.png-24f1586c905a660798e4a71cb023c738.stex" ]
+source_file="res://Art/portraits/card_TORCHLING.png"
+dest_files=[ "res://.import/card_TORCHLING.png-056b4b9607b3094e60be3189a8d383c3.stex" ]
 
 [params]
 

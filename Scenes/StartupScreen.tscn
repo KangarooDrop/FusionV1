@@ -140,28 +140,28 @@ __meta__ = {
 }
 
 [node name="Username" type="HBoxContainer" parent="SettingsPage"]
-margin_right = 330.0
+margin_right = 327.0
 margin_bottom = 24.0
 alignment = 1
 
 [node name="Label" type="Label" parent="SettingsPage/Username"]
-margin_left = 36.0
+margin_left = 35.0
 margin_top = 2.0
-margin_right = 139.0
+margin_right = 138.0
 margin_bottom = 21.0
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Username: "
 
 [node name="LineEdit" type="LineEdit" parent="SettingsPage/Username"]
-margin_left = 143.0
-margin_right = 293.0
+margin_left = 142.0
+margin_right = 292.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 150, 0 )
 
 [node name="NumDraft" type="HBoxContainer" parent="SettingsPage"]
 margin_top = 34.0
-margin_right = 330.0
+margin_right = 327.0
 margin_bottom = 58.0
 
 [node name="Label" type="Label" parent="SettingsPage/NumDraft"]
@@ -180,14 +180,14 @@ script = ExtResource( 5 )
 
 [node name="Anims" type="HBoxContainer" parent="SettingsPage"]
 margin_top = 68.0
-margin_right = 330.0
+margin_right = 327.0
 margin_bottom = 92.0
 alignment = 1
 
 [node name="Label" type="Label" parent="SettingsPage/Anims"]
-margin_left = 73.0
+margin_left = 71.0
 margin_top = 2.0
-margin_right = 229.0
+margin_right = 227.0
 margin_bottom = 21.0
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -195,33 +195,33 @@ text = "Play Animations: "
 valign = 1
 
 [node name="CheckBox" type="CheckBox" parent="SettingsPage/Anims"]
-margin_left = 233.0
-margin_right = 257.0
+margin_left = 231.0
+margin_right = 255.0
 margin_bottom = 24.0
 
 [node name="Shaders" type="HBoxContainer" parent="SettingsPage"]
 margin_top = 102.0
-margin_right = 330.0
+margin_right = 327.0
 margin_bottom = 122.0
 alignment = 1
 
 [node name="Label" type="Label" parent="SettingsPage/Shaders"]
-margin_left = 61.0
-margin_right = 137.0
+margin_left = 59.0
+margin_right = 135.0
 margin_bottom = 19.0
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Shader: "
 
 [node name="OptionButton" type="OptionButton" parent="SettingsPage/Shaders"]
-margin_left = 141.0
-margin_right = 269.0
+margin_left = 139.0
+margin_right = 267.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 128, 0 )
 
 [node name="BackButton" type="Button" parent="SettingsPage"]
 margin_top = 132.0
-margin_right = 330.0
+margin_right = 327.0
 margin_bottom = 157.0
 custom_fonts/font = ExtResource( 4 )
 text = "Back"
