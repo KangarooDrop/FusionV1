@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="ShaderMaterial" id=1]
+
+[node name="ColorRect" type="ColorRect"]
+material = SubResource( 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -2048.0
+margin_top = -2048.0
+margin_right = 2048.0
+margin_bottom = 2048.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

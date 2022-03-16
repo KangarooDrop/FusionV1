@@ -4,6 +4,9 @@ var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 func _ready():
 	Settings.gameMode = Settings.GAME_MODE.NONE
+	for string in ShaderHandler.getShaderData():
+		$SettingsPage/Shaders/OptionButton.add_item(string)
+	$SettingsPage/Shaders/OptionButton.select(ShaderHandler.currentShader)
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")
@@ -72,3 +75,6 @@ func onSettingsPressed():
 	
 func onExitPressed():
 	get_tree().quit()
+
+func shaderButtonPressed(index):
+	ShaderHandler.setShader(index)

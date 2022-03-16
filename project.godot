@@ -266,6 +266,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+ShaderHandler="*res://Scripts/ShaderHandler.gd"
 MessageManager="*res://Scripts/UI/MessageManager.gd"
 ListOfCards="*res://Scripts/ListOfCards.gd"
 Settings="*res://Scripts/Settings.gd"
