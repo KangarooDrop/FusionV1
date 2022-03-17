@@ -161,7 +161,7 @@ func sort():
 				
 	var offL = (-2 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
 	$LArrow.position = Vector2(offL, 30)
-	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists) + 8
 	$RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
@@ -251,6 +251,7 @@ func onMouseDown(slot : CardSlot, button_index : int):
 				slotViewing.cardNode.z_index += 2
 				viewTimer = 0
 				slotClicked = true
+				$DeckDisplay.closeDeckDisplayHover(true)
 				
 func onMouseUp(slot : CardSlot, button_index : int):
 	pass
@@ -484,7 +485,7 @@ func _input(event):
 				if slotViewing != null and slotReturning == null:
 					yield(get_tree().create_timer(0.02), "timeout")
 					if is_instance_valid(infoWindow):
-						infoWindow.close()
+						infoWindow.close(true)
 					slotReturning = slotViewing
 					slotViewing.cardNode.z_index -= 1
 					slotViewing = null

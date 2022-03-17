@@ -160,7 +160,7 @@ func revealCards(index : int):
 func returnCards():
 	while cardDisplaySlots.size() > 0:
 		if hoveringSlot == cardDisplaySlots[0]:
-			closeHoverNode()
+			closeHoverWindow(true)
 		
 		cardDisplaySlots[0].queue_free()
 		cardDisplaySlots.remove(0)
@@ -169,17 +169,17 @@ func returnCards():
 		stacks[currentIndex][i].setCardVisible(false)
 		stacks[currentIndex][i].position = slots[currentIndex].position
 
-func closeHoverNode():
-	if is_instance_valid(hoveringWindow):
-		hoveringSlot = null
-		hoveringWindow.close()
-
 func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
 	$CardHolder.add_child(hoverInst)
 	hoverInst.global_position = position
 	hoverInst.setText(text)
 	hoveringWindow = hoverInst
+
+func closeHoverWindow(forceClose = false):
+	if is_instance_valid(hoveringWindow):
+		if hoveringWindow.close(forceClose):
+			hoveringSlot = null
 
 func onTakeButtonPressed():
 	$TakeButton.visible = false
@@ -190,7 +190,7 @@ func onTakeButtonPressed():
 	
 	while cardDisplaySlots.size() > 0:
 		if hoveringSlot == cardDisplaySlots[0]:
-			closeHoverNode()
+			closeHoverWindow(true)
 			
 		cardDisplaySlots[0].queue_free()
 		cardDisplaySlots.remove(0)
@@ -199,6 +199,9 @@ func onTakeButtonPressed():
 	checkEnded()
 
 func showHideButtonPressed():
+	if $CardDisplay.slots.has(hoveringSlot):
+		closeHoverWindow(true)
+	
 	$CardDisplay.visible = !$CardDisplay.visible
 	if $ShowHideButton.text == "Show Cards":
 		$ShowHideButton.text = "Hide Cards"
@@ -352,8 +355,7 @@ func _physics_process(delta):
 		#CHECK FOR STACKS
 		
 		var isSame = hoveringSlot == highestZ
-		if is_instance_valid(hoveringWindow):
-			closeHoverNode()
+		closeHoverWindow(true)
 		
 		if highestZ == mainSlot:
 			#DISPLAY THE SIZE OF THE MAIN STACK
@@ -379,7 +381,7 @@ func _physics_process(delta):
 					
 		slotClickedQueue2.clear()
 	elif clickedOff:
-		closeHoverNode()
+		closeHoverWindow()
 	
 	clickedOff = false
 

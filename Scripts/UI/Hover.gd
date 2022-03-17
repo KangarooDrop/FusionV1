@@ -9,6 +9,7 @@ var parentWindow = null
 var spawnedWindows = []
 
 var closeOnMouseExit = false
+var closeChildrenFirst = false
 
 func _ready():
 	pass
@@ -71,8 +72,9 @@ func handle(meta : String):
 		for i in range(count - 1):
 			ability.combine(abl.new(null))
 		
+		closeChildrenFirst = true
+		
 		var hoverInst = load("res://Scenes/UI/Hover.tscn").instance()
-		hoverInst.closeOnMouseExit = true
 		hoverInst.z_index = z_index + 1
 		get_parent().add_child(hoverInst)
 		hoverInst.flipped = flipped
@@ -82,17 +84,33 @@ func handle(meta : String):
 		spawnedWindows.append(hoverInst)
 		hoverInst.parentWindow = self
 	
-func close():
-	#fadingOut = true
-	queue_free()
-	var windows = spawnedWindows.duplicate()
-	for w in windows:
-		if is_instance_valid(w):
-			w.close()
+func close(closeAll = false) -> bool:
+	if closeChildrenFirst and not closeAll:
+		if spawnedWindows.size() == 0:
+			queue_free()
+			return true
+		
+		var toRemove := []
+		for w in spawnedWindows:
+			if w.close():
+				toRemove.append(w)
+		for w in toRemove.duplicate():
 			spawnedWindows.erase(w)
-	if is_instance_valid(parentWindow):
-		parentWindow.spawnedWindows.erase(self)
+		
+		return false
 	
+	else:
+		queue_free()
+		var windows = spawnedWindows.duplicate()
+		for w in windows:
+			if is_instance_valid(w):
+				w.close(closeAll)
+				spawnedWindows.erase(w)
+		if is_instance_valid(parentWindow):
+			parentWindow.spawnedWindows.erase(self)
+			
+		return true
+		
 func _physics_process(delta):
 	for c in spawnedWindows:
 		c.scale = scale

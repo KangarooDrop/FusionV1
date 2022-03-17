@@ -930,7 +930,12 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							selectRotTimer = 0
 							selectedCard = null
 						cardsHolding.insert(0, slot)
-						
+					
+					if cardsHolding.has(hoveringWindowSlot):
+						if is_instance_valid(hoveringWindow):
+							if hoveringWindow.close(true):
+								hoveringWindowSlot = null
+					
 					while cardsHolding.size() > 0:
 						var c = cardsHolding[0]
 						var cardNode = c.cardNode
@@ -1116,10 +1121,13 @@ func _input(event):
 						Server.onNextTurn(opponentID)
 
 		if event is InputEventMouseButton and event.pressed and event.button_index == 2:
-			if is_instance_valid(hoveringWindow):
-				hoveringWindow.close()
-				hoveringWindowSlot = null
-			else:
+			var isSame = hoveringWindowSlot == hoveringOn
+			
+			if is_instance_valid(hoveringOn) and not isSame:
+				if is_instance_valid(hoveringWindow):
+					if hoveringWindow.close(true):
+						hoveringWindowSlot = null
+				
 				if is_instance_valid(hoveringOn):
 					var string = ""
 					if hoveringOn.currentZone == CardSlot.ZONES.DECK:
@@ -1131,8 +1139,12 @@ func _input(event):
 					if string != "":
 						var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
 						createHoverNode(pos, self, string)
-						#hoveringWindow.scale = Vector2(.5, .5)
 						hoveringWindowSlot = hoveringOn
+				
+			elif is_instance_valid(hoveringWindowSlot):
+				if is_instance_valid(hoveringWindow):
+					if hoveringWindow.close():
+						hoveringWindowSlot = null
 				
 func nextTurn():
 	if gameOver:
@@ -1195,7 +1207,7 @@ func checkState():
 				
 	for cardNode in creaturesDying:
 		if hoveringWindowSlot == cardNode.slot:
-			hoveringWindow.close()
+			hoveringWindow.close(true)
 			hoveringWindowSlot = null
 					
 		cardNode.card.onLeave(self)

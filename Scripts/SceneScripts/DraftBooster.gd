@@ -97,6 +97,9 @@ func _physics_process(delta):
 				highestZ = slotClickedQueue1[i]
 		
 		if $BoosterDisplay.slots.has(highestZ):
+			if highestZ == hoveringSlot:
+				closeHoverWindow(true)
+			
 			$CardDisplay.addCard(highestZ.cardNode.card)
 			
 			$BoosterDisplay.slots.erase(highestZ)
@@ -131,8 +134,7 @@ func _physics_process(delta):
 				highestZ = slotClickedQueue2[i]
 		
 		var isSame = highestZ == hoveringSlot
-		if is_instance_valid(hoveringWindow):
-			closeHoverNode()
+		closeHoverWindow(true)
 			
 		if not isSame:
 			var pos = highestZ.global_position + Vector2(cardWidth * 3.0/5 * Settings.cardSlotScale, 0)
@@ -141,7 +143,7 @@ func _physics_process(delta):
 		
 		slotClickedQueue2.clear()
 	elif clickedOff:
-		closeHoverNode()
+		closeHoverWindow()
 	
 	if $BoosterDisplay.get_child_count() == 0 and boosterQueue.size() > 0:
 		genNewBooster(boosterQueue[0])
@@ -254,11 +256,11 @@ func createHoverNode(position : Vector2, text : String):
 	hoverInst.global_position = position
 	hoverInst.setText(text)
 	hoveringWindow = hoverInst
-	
-func closeHoverNode():
+
+func closeHoverWindow(forceClose = false):
 	if is_instance_valid(hoveringWindow):
-		hoveringSlot = null
-		hoveringWindow.close()
+		if hoveringWindow.close(forceClose):
+			hoveringSlot = null
 
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
