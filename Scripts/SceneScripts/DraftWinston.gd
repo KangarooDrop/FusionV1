@@ -269,8 +269,6 @@ func addPlayerDisplay(username : String, player_id : int):
 
 func playerDisconnected(player_id):
 	if idToDisplayLabel.has(player_id):
-		MessageManager.notify("User " + str(player_id) + " disconnected")
-		
 		var c = idToDisplayLabel[player_id]
 		idToDisplayLabel.erase(player_id)
 		$OrderDisplay/VBoxContainer.remove_child(c)
@@ -390,7 +388,10 @@ func removeCard(cardUUID : int):
 	
 func quitButtonPressed():
 	var pop = popupUI.instance()
-	pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
+	if Input.is_key_pressed(KEY_CONTROL):
+		pop.init("DEBUG_QUIT", "Go to Deck Editor?", [["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
+	else:
+		pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 	$CardHolder.add_child(pop)
 
 func onMouseDown(slot : CardSlot, buttonIndex):

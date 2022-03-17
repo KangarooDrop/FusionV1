@@ -26,6 +26,8 @@ var hasSaved = true
 enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
 var sortOrder : int = SORT_ORDER.TYPE
 
+var loadedDeckName = ""
+
 func _ready():
 	$DeckDisplay.parent = self 
 	setCards()
@@ -163,7 +165,6 @@ func sort():
 	$RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
-	hasSaved = true
 	
 
 func leftArrowPressed():
@@ -276,6 +277,8 @@ func onLoadPressed():
 func onSavePressed():
 	$SaveDisplay.visible = true
 	$SaveDisplay/Background/LineEdit.grab_focus()
+	$SaveDisplay/Background/LineEdit.text = loadedDeckName.get_basename()
+	$SaveDisplay/Background/LineEdit.caret_position = loadedDeckName.get_basename().length()
 	
 func onNewPressed():
 	if not hasSaved:
@@ -301,6 +304,7 @@ func onConfirmNew(popup=null):
 		popup.close()
 	$DeckDisplay.clearData()
 	hasSaved = true
+	loadedDeckName = ""
 	
 func onConfirmExit(popup=null):
 	if popup != null:
@@ -360,6 +364,8 @@ func onFileLoadButtonPressed(fileName : String):
 			for i in range(int(dataRead[k])):
 				$DeckDisplay.addCard(id)
 		hasSaved = true
+		
+		loadedDeckName = fileName
 	else:
 		print("Deck file is not valid")
 		
@@ -391,6 +397,7 @@ func onFileSaveButtonPressed():
 			pop.init("Deck Saved")
 			add_child(pop)
 			hasSaved = true
+			loadedDeckName = fileName
 	else:
 		var pop = popupUI.instance()
 		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])

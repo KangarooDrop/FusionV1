@@ -155,8 +155,8 @@ remote func removeUser(player_id : int):
 		get_node("/root/DraftLobby").removePlayer(player_id)
 	
 	if playerIDs.has(player_id):
-		print("User "+ str(player_id) + " Disconnected")
-		MessageManager.notify("User "+ str(player_id) + " Disconnected")
+		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
+		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
 	playerIDs.erase(player_id)
 	playerNames.erase(player_id)
 	
@@ -254,6 +254,8 @@ func startBuilding():
 	receivedStartBuilding()
 
 remote func receivedStartBuilding():
+	
+	print("Starting draft deck build")
 	
 	var root = get_node("/root")
 	var draft = root.get_node("Draft")

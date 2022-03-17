@@ -50,8 +50,6 @@ func setParams(params : Dictionary):
 func genNewBooster(cards = null):
 	if cards == []:
 		genNewBooster()
-		while boosterQueue.find([]) != -1:
-			boosterQueue.erase([])
 		return
 	
 	if cards == null:
@@ -160,9 +158,14 @@ func onMouseDown(slot : CardSlot, buttonIndex):
 			slotClickedQueue2.append(slot)
 
 func playerDoneDrafting(player_id):
+	if player_id == 1:
+		print("Server done drafting")
+	else:
+		print("Player ", player_id, " done drafting")
 	playersDone.append(player_id)
 	
 	if compDones():
+		print("All players done drafting")
 		Server.startBuilding()
 
 func removeCard(cardUUID : int):
@@ -198,7 +201,6 @@ func closeDraft():
 
 func playerDisconnected(player_id):
 	playerIDs.has(player_id)
-	MessageManager.notify("User " + str(player_id) + " disconnected")
 	playerIDs.erase(player_id)
 
 func setDraftData(data : Array):
@@ -208,7 +210,10 @@ func setDraftData(data : Array):
 func onQuitButtonPressed():
 	if not closing:
 		var pop = popupUI.instance()
-		pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
+		if Input.is_key_pressed(KEY_CONTROL):
+			pop.init("DEBUG_QUIT", "Go to Deck Editor?", [["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
+		else:
+			pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 		$CenterControl.add_child(pop)
 
 func _exit_tree():

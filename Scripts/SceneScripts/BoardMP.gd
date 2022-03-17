@@ -1056,6 +1056,13 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 								selectedCard.cardNode.rotation = 0
 								selectRotTimer = 0
 							selectedCard = null
+							
+							if highlightedSlots.size() > 0:
+								for s in highlightedSlots:
+									if is_instance_valid(s):
+										s.setHighlight(false)
+								highlightedSlots.clear()
+		
 						else:
 							if cardsShaking.has(slot):
 								MessageManager.notify("A creature with taunt must be attacked first")
@@ -1077,54 +1084,55 @@ func isMyTurn() -> bool:
 	return 0 == activePlayer
 
 func _input(event):
-	if not gameOver and gameStarted:
-		if event is InputEventKey and event.is_pressed() and not event.is_echo():
-			if event.scancode == KEY_Q:
-				if isMyTurn():
-					var waiting = true
-					while waiting:
-						var attacking = false
-						for slot in creatures[players[activePlayer].UUID]:
-							if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-								attacking = true
-						if not attacking:
-							waiting = false
-								
-						for p in players:
-							if p.hand.drawQueue.size() > 0:
+	if Settings.gameMode == Settings.GAME_MODE.PLAY and not get_node("/root/main/PauseNode/PauseMenu").visible and not get_node("/root/main/SaveNode").visible and not get_node("/root/main/FileSelector").visible:	
+		if not gameOver and gameStarted:
+			if event is InputEventKey and event.is_pressed() and not event.is_echo():
+				if event.scancode == KEY_SPACE:
+					if isMyTurn():
+						var waiting = true
+						while waiting:
+							var attacking = false
+							for slot in creatures[players[activePlayer].UUID]:
+								if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
+									attacking = true
+							if not attacking:
+								waiting = false
+									
+							for p in players:
+								if p.hand.drawQueue.size() > 0:
+									waiting = true
+									
+							if fuseQueue.size() > 0:
 								waiting = true
-								
-						if fuseQueue.size() > 0:
-							waiting = true
-								
-						if millQueue.size() > 0:
-							waiting = true
-								
-						if actionQueue.size() > 0:
-							waiting = true
-								
-						yield(get_tree().create_timer(0.1), "timeout")
-					nextTurn()
-					Server.onNextTurn(opponentID)
+									
+							if millQueue.size() > 0:
+								waiting = true
+									
+							if actionQueue.size() > 0:
+								waiting = true
+									
+							yield(get_tree().create_timer(0.1), "timeout")
+						nextTurn()
+						Server.onNextTurn(opponentID)
 
-	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
-		if is_instance_valid(hoveringWindow):
-			hoveringWindow.close()
-			hoveringWindowSlot = null
-		else:
-			if is_instance_valid(hoveringOn):
-				var string = ""
-				if hoveringOn.currentZone == CardSlot.ZONES.DECK:
-					var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
-					string = str(numCards)
-				elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
-					string = hoveringOn.cardNode.card.getHoverData()
-				
-				if string != "":
-					var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
-					createHoverNode(pos, self, string)
-					#hoveringWindow.scale = Vector2(.5, .5)
-					hoveringWindowSlot = hoveringOn
+		if event is InputEventMouseButton and event.pressed and event.button_index == 2:
+			if is_instance_valid(hoveringWindow):
+				hoveringWindow.close()
+				hoveringWindowSlot = null
+			else:
+				if is_instance_valid(hoveringOn):
+					var string = ""
+					if hoveringOn.currentZone == CardSlot.ZONES.DECK:
+						var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
+						string = str(numCards)
+					elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
+						string = hoveringOn.cardNode.card.getHoverData()
+					
+					if string != "":
+						var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
+						createHoverNode(pos, self, string)
+						#hoveringWindow.scale = Vector2(.5, .5)
+						hoveringWindowSlot = hoveringOn
 				
 func nextTurn():
 	if gameOver:

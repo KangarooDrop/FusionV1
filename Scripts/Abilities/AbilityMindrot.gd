@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityMindrot
 
-func _init(card : Card).("Mindrot", "When this card is played, remove the top 3 cards of your opponent's deck from the game. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Mindrot", "When this card is played, remove the top 2 cards of your opponent's deck from the game. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -14,7 +14,7 @@ func onEnterFromFusion(board, slot):
 	onEffect(board, slot)
 
 func onEffect(board, slot):
-	board.abilityStack.append([get_script(), "onMill", [board, card.playerID, count * 3]])
+	board.abilityStack.append([get_script(), "onMill", [board, card.playerID, count * 2]])
 	card.removeAbility(self)
 
 static func onMill(params):
@@ -25,4 +25,4 @@ static func onMill(params):
 
 func combine(abl : Ability):
 	.combine(abl)
-	desc = "When this creature enters the board, remove the top " + str(count * 3) + "  cards of your opponent's deck from the game"
+	desc = "When this creature enters the board, remove the top " + str(count * 2) + "  cards of your opponent's deck from the game"
