@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityTough
 
-func _init(card : Card).("Tough", "This creature gains +1/+1 when attacked", card, Color.darkgray, true, Vector2(0, 48)):
+func _init(card : Card).("Tough", card, Color.darkgray, true, Vector2(0, 48)):
 	pass
 
 func onBeingAttacked(attacker, board):
@@ -10,6 +10,5 @@ func onBeingAttacked(attacker, board):
 	card.power += count
 	card.toughness += count
 
-func combine(abl : Ability):
-	.combine(abl)
-	desc = "This creature gains +" + str(count) + "/+" + str(count) + " when attacked"
+func genDescription() -> String:
+	return "This creature gains +" + str(count) + "/+" + str(count) + " when attacked"

@@ -2,9 +2,7 @@ extends Ability
 
 class_name AbilityRekindle
 
-var buff = 1
-
-func _init(card : Card).("Rekindle", "When this creature is played, discard your hand and draw three cards. Removes this ability", card, Color.red, false, Vector2(0, 0)):
+func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -17,19 +15,9 @@ func onEnterFromFusion(board, slot):
 	
 func onEffect(board):
 	board.abilityStack.append([get_script(), "onDiscard", [board, card.playerID]])
-	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, buff * 3]])
+	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, count]])
 	
 	card.removeAbility(self)
-
-
-func combine(abl : Ability):
-	.combine(abl)
-	buff += abl.buff
-	
-func clone(card : Card) -> Ability:
-	var abl = get_script().new(card)
-	abl.buff = buff
-	return abl
 
 static func onDiscard(params : Array):
 	for p in params[0].players:
@@ -45,3 +33,5 @@ static func onDraw(params : Array):
 				p.hand.drawCard()
 			break
 	
+func genDescription() -> String:
+	return "When this creature is played, discard your hand and draw " + str(count) + " cards. Removes this ability"

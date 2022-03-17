@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityPyroclast
 
-func _init(card : Card).("Pyroclast", "When this creature is played, it deals 5 damage to you. Removes this ability", card, Color.red, true, Vector2(0, 0)):
+func _init(card : Card).("Pyroclast", card, Color.red, true, Vector2(0, 0)):
 	pass
 	
 func onEnter(board, slot):
@@ -22,7 +22,5 @@ func onDrawEffect(board):
 			
 	card.removeAbility(self)
 
-
-func combine(abl : Ability):
-	.combine(abl)
-	desc = "When this creature is played, it deals " + str(count * 5) + " damage to you"
+func genDescription() -> String:
+	return "When this creature is played, it deals " + str(count * 5) + " damage to you"

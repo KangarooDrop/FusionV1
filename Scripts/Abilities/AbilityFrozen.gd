@@ -4,7 +4,7 @@ class_name AbilityFrozen
 
 var frozenThisTurn = false
 
-func _init(card : Card).("Frozen", "This creature cannot attack or be fused until the end of its owners next turn", card, Color.lightblue, false, Vector2(16, 0)):
+func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -39,3 +39,6 @@ func onEndOfTurn(board):
 func combine(abl : Ability):
 	.combine(abl)
 	frozenThisTurn = frozenThisTurn and abl.frozenThisTurn
+
+func genDescription() -> String:
+	return "This creature cannot attack or be fused until the end of its owners next turn"

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityProduction
 
-func _init(card : Card).("Production", "When this creature is played, add a mech to your hand. Removes this ability", card, Color.gray, true, Vector2(0, 0)):
+func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -23,3 +23,8 @@ func onEffect(board):
 	
 	card.removeAbility(self)
 	
+func genDescription() -> String:
+	var string = "a mech"
+	if count > 1:
+		string = str(count) + " mechs"
+	return "When this creature is played, add " + string + " to your hand. Removes this ability"

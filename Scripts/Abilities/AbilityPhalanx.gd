@@ -4,7 +4,7 @@ class_name AbilityPhalanx
 
 var buffsApplied = 0
 
-func _init(card : Card).("Phalanx", "Adjacent creatures get +1/+1", card, Color.darkgray, true, Vector2(16, 48)):
+func _init(card : Card).("Phalanx", card, Color.darkgray, true, Vector2(16, 48)):
 	pass
 
 func onEnter(board, slot):
@@ -50,5 +50,7 @@ func clone(card : Card) -> Ability:
 
 func combine(abl : Ability):
 	.combine(abl)
-	desc = "Adjacent creatures get +" + str(count) + "/+" + str(count)
 	abl.buffsApplied += buffsApplied
+
+func genDescription() -> String:
+	return "Adjacent creatures get +" + str(count) + "/+" + str(count)

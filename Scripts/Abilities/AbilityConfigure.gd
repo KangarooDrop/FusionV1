@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityConfigure
 
-func _init(card : Card).("Configure", "When this creature is played, all other creatures you control gain +2 power. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Configure", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -16,11 +16,9 @@ func onEnterFromFusion(board, slot):
 func onEffect(board, slot):
 	for s in board.creatures[card.cardNode.slot.playerID]:
 		if is_instance_valid(s.cardNode) and s != slot:
-			s.cardNode.card.power += 2 * count
+			s.cardNode.card.power += count
 			
 	card.removeAbility(self)
 
-func combine(abl : Ability):
-	.combine(abl)
-	desc = "When this creature is played, all other creatures you control gain +" + str(count * 2) + " power. Removes this ability"
-
+func genDescription() -> String:
+	return "When this creature is played, all other creatures you control gain +" + str(count) + " power. Removes this ability"

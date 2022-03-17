@@ -409,14 +409,15 @@ func _physics_process(delta):
 		$TI.rotation = sin(2 * PI * rotTimer * rotFreq) * rotAngle
 		
 		if is_instance_valid(hoveringWindowSlot):
-			if hoveringWindowSlot == decks[players[0].UUID]:
-				var numCards = players[0].deck.cards.size()
-				if hoveringWindow.text != str(numCards):
-					hoveringWindow.setText(str(numCards))
-			elif hoveringWindowSlot == decks[players[1].UUID]:
-				var numCards = players[1].deck.cards.size()
-				if hoveringWindow.text != str(numCards):
-					hoveringWindow.setText(str(numCards))
+			if hoveringWindowSlot.currentZone == CardSlot.ZONES.DECK:
+				var string = ""
+				var numCards = players[1 if hoveringWindowSlot.isOpponent else 0].deck.cards.size()
+				if numCards == 0:
+					string = "Take " + str(players[1 if hoveringWindowSlot.isOpponent else 0].drawDamage) + " damage on draw"
+				else:
+					string = str(numCards)
+				if hoveringWindow.text != string:
+					hoveringWindow.setText(string)
 		
 	
 	if is_instance_valid(selectedCard):
@@ -625,8 +626,9 @@ func processReplayCommand(command : String):
 			print("ERROR: Unknown replay command " + coms[0])
 	
 
-func createHoverNode(position : Vector2, parent : Node, text : String):
+func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
 	var hoverInst = hoverScene.instance()
+	hoverInst.flipped = flipped
 	parent.add_child(hoverInst)
 	hoverInst.global_position = position
 	hoverInst.setText(text)
@@ -1137,8 +1139,8 @@ func _input(event):
 						string = hoveringOn.cardNode.card.getHoverData()
 					
 					if string != "":
-						var pos = hoveringOn.global_position + Vector2(cardWidth*hoveringOn.scale.x/2, 0)
-						createHoverNode(pos, self, string)
+						var pos = hoveringOn.global_position - Vector2(cardWidth*hoveringOn.scale.x/2, 0)
+						createHoverNode(pos, self, string, true)
 						hoveringWindowSlot = hoveringOn
 				
 			elif is_instance_valid(hoveringWindowSlot):

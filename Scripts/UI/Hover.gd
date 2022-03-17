@@ -2,7 +2,7 @@ extends Node2D
 
 var text := ""
 
-var maxTextLen = 150
+var maxTextLen = 175
 var flipped = false
 
 var parentWindow = null
@@ -12,7 +12,7 @@ var closeOnMouseExit = false
 var closeChildrenFirst = false
 
 func _ready():
-	pass
+	$Label.connect("meta_clicked", self, "handle")
 		
 
 var textA = "\n[color=aqua][url=AbilityFrostbite]Frostbite[/url][/color]"
@@ -21,13 +21,15 @@ func setText(text : String, margin = 4):
 	self.text = text
 	$Label.bbcode_text = text
 	
-	#$Label.bbcode_text += textA
-	$Label.connect("meta_clicked", self, "handle")
-	
 	$Label.rect_position.x = margin
-	$Label.rect_size.x = maxTextLen
+	
+	var textLength = $Label.get_font("normal_font").get_string_size(text).x
+	textLength = min(maxTextLen, textLength)
+	
+	$Label.rect_size.x = textLength
+	
 	$Label.rect_position.y = -$Label.get_minimum_size().y / 2
-	$HoverBack.rect_size = Vector2(maxTextLen + margin * 2, $Label.get_minimum_size().y + margin * 2)
+	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.get_minimum_size().y + margin * 2)
 	$HoverBack.rect_position.y = -$HoverBack.rect_size.y / 2
 	
 	if flipped:

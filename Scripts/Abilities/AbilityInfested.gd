@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityInfested
 
-func _init(card : Card).("Infested", "When this creature dies, creates a 1/1 Necro with no abilities", card, Color.black, true, Vector2(32, 96)):
+func _init(card : Card).("Infested", card, Color.black, true, Vector2(32, 96)):
 	pass
 
 func onDeath(board):
@@ -14,6 +14,5 @@ func onDeath(board):
 		card.toughness = 1
 		self.card.addCreatureToBoard(card, board, null)
 
-func combine(abl : Ability):
-	.combine(abl)
-	desc = "When this creature dies, creates " + str(count) + " 1/1 Necro with no abilities"
+func genDescription() -> String:
+	return "When this creature dies, creates " + str(count) + " 1/1 Necro with no abilities"

@@ -394,7 +394,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityMindrot"
+      "AbilityMindrot 2"
     ]
   },
   "38": {
@@ -446,7 +446,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityVenemous"
+      "AbilityVenomous 2"
     ]
   },
   "42": {
@@ -472,7 +472,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityRekindle"
+      "AbilityRekindle 3"
     ]
   },
   "44": {
@@ -498,7 +498,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityShieldUp"
+      "AbilityShieldUp 5"
     ]
   },
   "46": {
@@ -524,7 +524,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityConfigure"
+      "AbilityConfigure 2"
     ]
   },
   "48": {

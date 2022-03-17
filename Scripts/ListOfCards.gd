@@ -96,7 +96,7 @@ func _ready():
 	cardList.append(Card.new({"name":"Rust Crawler", "tex":"res://Art/portraits/card_RUST_CRAWLER.png", "power":5, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Mech], "tier":1, "abilities":[AbilityBrittle]}))
 	cardList.append(Card.new({"name":"Torchling", "tex":"res://Art/portraits/ToasterToilet.png", "power":1, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Fire], "tier":1, "abilities":[AbilityPyroclast]}))
 	cardList.append(Card.new({"name":"The Boulder", "tex":"res://Art/portraits/card_BOULDER.png", "power":0, "toughness":5, "creature_type":[Card.CREATURE_TYPE.Earth], "tier":1, "abilities":[AbilityBulwark]}))
-	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/card_SERPENT.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenemous]}))
+	cardList.append(Card.new({"name":"Serpant", "tex":"res://Art/portraits/card_SERPENT.png", "power":0, "toughness":2, "creature_type":[Card.CREATURE_TYPE.Beast], "tier":1, "abilities":[AbilityVenomous]}))
 	cardList.append(Card.new({"name":"Carrion", "tex":"res://Art/portraits/card_CARRION.png", "power":2, "toughness":1, "creature_type":[Card.CREATURE_TYPE.Necro], "tier":1, "abilities":[AbilityInfested]}))
 	"""
 

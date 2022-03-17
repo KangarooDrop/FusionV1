@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityFrostbite
 
-func _init(card : Card).("Frostbite", "Inflicts " + str(AbilityFrozen.new(null)) + " on the enemy creature when this creature attacks or is attacked", card, Color.blue, false, Vector2(0, 32)):
+func _init(card : Card).("Frostbite", card, Color.blue, false, Vector2(0, 32)):
 	pass
 	
 func onAttack(blocker, board):
@@ -16,3 +16,6 @@ func onBeingAttacked(attacker, board):
 		var frozen = AbilityFrozen.new(attacker.cardNode.card)
 		frozen.onEffect()
 		attacker.cardNode.card.addAbility(frozen)
+
+func genDescription() -> String:
+	return "Inflicts " + str(AbilityFrozen.new(null)) + " on the enemy creature when this creature attacks or is attacked"

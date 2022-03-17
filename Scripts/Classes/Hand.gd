@@ -24,8 +24,6 @@ export var isOpponent = false
 export var handVisible := true
 var mulliganCount = 0
 
-var drawDamage = 1
-
 func _ready():
 	maxVal = 1.1
 
@@ -103,8 +101,8 @@ func _physics_process(delta):
 				cardInst.global_position = deck.global_position
 				
 			if drawQueue[0][2]:
-				player.takeDamage(drawDamage, null)
-				drawDamage += 1
+				player.takeDamage(player.drawDamage, null)
+				player.drawDamage += 1
 			
 			drawingSlot = slotInst
 			drawingNode = cardInst
@@ -173,5 +171,5 @@ func addCardToHand(data : Array):
 			centerCards()
 			
 			if data[1]:
-				player.takeDamage(drawDamage, null)
-				drawDamage += 1
+				player.takeDamage(player.drawDamage, null)
+				player.drawDamage += 1

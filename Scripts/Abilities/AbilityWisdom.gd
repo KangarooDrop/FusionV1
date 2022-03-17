@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityWisdom
 
-func _init(card : Card).("Wisedom", "When this creature is played, draw a card. Removes this ability", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Wisedom", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onEnter(board, slot):
@@ -24,7 +24,5 @@ static func onDraw(params : Array):
 				p.hand.drawCard()
 			break
 
-
-func combine(abl : Ability):
-	.combine(abl)
-	desc = "This creature draws " + str(count) + " cards when entering the board"
+func genDescription() -> String:
+	return "When this creature is played, draw " + str(count) + (" cards" if count > 1 else " card") + ". Removes this ability"

@@ -151,15 +151,14 @@ func flip():
 	originalScale = scale.x
 	
 func fight(slot, board, damageSelf = true):
-	var venomA = ListOfCards.getAbility(card, AbilityVenemous).count * 2 if ListOfCards.hasAbility(card, AbilityVenemous) and is_instance_valid(slot.cardNode) else 0
+	var venomA = ListOfCards.getAbility(card, AbilityVenomous).count if ListOfCards.hasAbility(card, AbilityVenomous) and is_instance_valid(slot.cardNode) else 0
 	var venomB = 0
 	if venomA > 0:
 		card.power += venomA
 	if is_instance_valid(slot.cardNode):
-		venomB = ListOfCards.getAbility(slot.cardNode.card, AbilityVenemous).count * 2 if ListOfCards.hasAbility(slot.cardNode.card, AbilityVenemous) and is_instance_valid(slot.cardNode) else 0
+		venomB = ListOfCards.getAbility(slot.cardNode.card, AbilityVenomous).count if ListOfCards.hasAbility(slot.cardNode.card, AbilityVenomous) and is_instance_valid(slot.cardNode) else 0
 		if venomB > 0:
 			slot.cardNode.card.power += venomB
-	
 	
 	card.onAttack(slot, board)
 	if is_instance_valid(slot.cardNode):

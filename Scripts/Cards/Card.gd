@@ -38,9 +38,14 @@ func _init(params):
 		playerID = params["player_id"]
 	if params.has("abilities"):
 		for abl in params["abilities"]:
+			var ablData = abl.rsplit(" ")
+			
 			for data in ProjectSettings.get_setting("_global_script_classes"):
-				if data["class"] == abl:
-					abilities.append(load(data["path"]).new(self))
+				if data["class"] == ablData[0]:
+					var abilityLoaded = load(data["path"]).new(self)
+					if ablData.size() > 1:
+						abilityLoaded.setCount(int(ablData[1]))
+					abilities.append(abilityLoaded)
 	if params.has("removed_abilities"):
 		for abl in params["removed_abilities"]:
 			for data in ProjectSettings.get_setting("_global_script_classes"):

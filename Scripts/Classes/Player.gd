@@ -18,6 +18,8 @@ var creatureNum := 5
 
 var isOpponent = false
 
+var drawDamage = 1
+
 func _init(board, lifeNode, armourNode):
 	deck = Deck.new()
 	self.board = board

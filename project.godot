@@ -135,9 +135,9 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityTough.gd"
 }, {
 "base": "Ability",
-"class": "AbilityVenemous",
+"class": "AbilityVenomous",
 "language": "GDScript",
-"path": "res://Scripts/Abilities/AbilityVenemous.gd"
+"path": "res://Scripts/Abilities/AbilityVenomous.gd"
 }, {
 "base": "Ability",
 "class": "AbilityWisdom",
@@ -240,7 +240,7 @@ _global_script_class_icons={
 "AbilityShieldUp": "",
 "AbilityTaunt": "",
 "AbilityTough": "",
-"AbilityVenemous": "",
+"AbilityVenomous": "",
 "AbilityWisdom": "",
 "BoardMP": "",
 "Card": "",
