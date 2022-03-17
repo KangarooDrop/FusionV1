@@ -10,7 +10,7 @@ var path = "user://decks/"
 var dumpPath = "user://dumps/"
 var dumpFile = "x_.txt"
 
-enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, REPLAY, DRAFTING}
+enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, LOBBY_PRACTICE, PLAY, REPLAY, PRACTICE, DRAFTING}
 var gameMode : int = 0
 
 var cardSlotScale = 1.5

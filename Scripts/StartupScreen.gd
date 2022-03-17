@@ -13,6 +13,12 @@ func onDeckEditPressed():
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
+func onPracticePressed():
+	Settings.gameMode = Settings.GAME_MODE.LOBBY_PRACTICE
+	var error = get_tree().change_scene("res://Scenes/Networking/LobbyPractice.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+	
 func onLobbyPressed():
 	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
 	var error = get_tree().change_scene("res://Scenes/Networking/Lobby.tscn")

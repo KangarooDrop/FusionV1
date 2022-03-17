@@ -36,6 +36,14 @@ margin_bottom = 25.0
 custom_fonts/font = ExtResource( 4 )
 text = "Deck Editor"
 
+[node name="PracticeButton" type="Button" parent="VBoxContainer"]
+visible = false
+margin_top = 35.0
+margin_right = 122.0
+margin_bottom = 60.0
+custom_fonts/font = ExtResource( 4 )
+text = "Practice"
+
 [node name="LobbyButton" type="Button" parent="VBoxContainer"]
 margin_top = 35.0
 margin_right = 122.0
@@ -227,6 +235,7 @@ custom_fonts/font = ExtResource( 4 )
 text = "Back"
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
+[connection signal="pressed" from="VBoxContainer/PracticeButton" to="." method="onPracticePressed"]
 [connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
 [connection signal="pressed" from="VBoxContainer/DraftButton" to="." method="onDraftPressed"]
 [connection signal="pressed" from="VBoxContainer/ReplayButton" to="." method="onReplayPressed"]
