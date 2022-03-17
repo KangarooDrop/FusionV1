@@ -79,50 +79,48 @@ var handMoveTimer = 0
 var handMoveMaxTime = 0.5
 var handMoving = false
 
+var rightClickQueue := []
+
 func _ready():
 	print("-".repeat(30))
 	
 	if not Server.online:
-		deckDataSet = true
-		readyToStart = true
-		hasStartingPlayer = true
-		versionConfirmed = true
 		mulliganDoneOpponent = true
-		mulliganDone = false
-		oldHandPos = 0
-	
+		versionConfirmed = true
+		readyToStart = true
+		opponentRestart = true
+		
+		#print(readyToStart, " and ", deckDataSet, " and ", hasStartingPlayer, " and ", versionConfirmed, " and ", (gameSeed != -1), " and ", mulliganDone, " and ", mulliganDoneOpponent)
 	
 	players.append(Player.new(self, $HealthNode, $ArmourNode))
 	creatures[players[0].UUID] = []
 	players.append(Player.new(self, $HealthNode2, $ArmourNode2))
 	players[1].isOpponent = true
+	players[1].isPractice = Settings.gameMode == Settings.GAME_MODE.PRACTICE
 	creatures[players[1].UUID] = []
 	
 	initZones()
 	initHands()
 	
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		if opponentID == -1:
+	if opponentID == -1:
+		if Server.playerIDs.size() > 0:
 			opponentID = Server.playerIDs[0]
-		
-		if Server.online and Server.host:
-			setGameSeed(OS.get_system_time_msecs())
-			Server.setGameSeed(opponentID, gameSeed)
-		
-		if Server.online and Server.host:
-			var startingPlayerIndex = randi() % 2
-			setStartingPlayer((startingPlayerIndex + 1) % 2)
-			print("Send: Starting player")
-			dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
-			Server.setActivePlayer(opponentID, startingPlayerIndex)
-			hasStartingPlayer = true
 	
-		Server.fetchVersion(opponentID)
-		
-		setOwnUsername()
-		
-	elif Settings.gameMode == Settings.GAME_MODE.REPLAY:
-		dataLog = FileIO.getDataLog(Settings.dumpPath + Settings.dumpFile)
+	if not Server.online or Server.host:
+		setGameSeed(OS.get_system_time_msecs())
+		Server.setGameSeed(opponentID, gameSeed)
+	
+	if not Server.online or Server.host:
+		var startingPlayerIndex = randi() % 2
+		setStartingPlayer((startingPlayerIndex + 1) % 2)
+		print("Send: Starting player")
+		dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
+		Server.setActivePlayer(opponentID, startingPlayerIndex)
+		hasStartingPlayer = true
+
+	Server.fetchVersion(opponentID)
+	
+	setOwnUsername()
 	
 	initCardsLeftIndicator()
 
@@ -161,7 +159,7 @@ func startMulligan():
 func onMulliganButtonPressed():
 	if players[0].hand.drawQueue.size() == 0:
 		var handCards = []
-		if Server.host:
+		if not Server.online or Server.host:
 			for i in range(players[0].hand.nodes.size()):
 				handCards.append(players[0].hand.nodes[i].card)
 			while players[0].hand.nodes.size() > 0:
@@ -234,25 +232,28 @@ func getDeckFromFile() -> Array:
 
 func setOwnCardList(cardList : Array):
 	players[0].deck.setCards(cardList)
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		var logDeck = "OWN_DECK "
-		for i in players[0].deck.serialize():
-			logDeck += str(i) + " "
-			
-		dataLog.append(logDeck)
+	var logDeck = "OWN_DECK "
+	for i in players[0].deck.serialize():
+		logDeck += str(i) + " "
+	
+	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		var data = players[0].deck.getJSONData()
+		var order = players[0].deck.serialize()
+		setDeckData(data, order)
+	
+	dataLog.append(logDeck)
 
 func setOpponentCardList(cardList : Array):
 	var cards = []
 	for c in cardList:
 		cards.append(ListOfCards.getCard(c))
 	players[1].deck.setCards(cards)
-		
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		var logDeck = "OPPONENT_DECK "
-		for i in players[players.size()-1].deck.serialize():
-			logDeck += str(i) + " "
-		
-		dataLog.append(logDeck)
+	
+	var logDeck = "OPPONENT_DECK "
+	for i in players[players.size()-1].deck.serialize():
+		logDeck += str(i) + " "
+	
+	dataLog.append(logDeck)
 
 func setDeckData(data, order):
 	
@@ -311,17 +312,13 @@ func verifyDeckData(data, order) -> bool:
 			
 
 func compareVersion(version):
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		dataLog.append("VERSION " + version)
+	dataLog.append("VERSION " + version)
 	var error = Settings.compareVersion(Settings.versionID, version)
 	if error == 0:
 		versionConfirmed = true
 	else:
-		if Server.online:
-			MessageManager.notify("Error: Incompatable game versions")
-			Server.disconnectMessage(opponentID, "Error: Incompatable game versions")
-		else:
-			MessageManager.notify("Error: Incompatible versions")
+		MessageManager.notify("Error: Incompatable game versions")
+		Server.disconnectMessage(opponentID, "Error: Incompatable game versions")
 		print("INVALID VERSIONS")
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -334,8 +331,7 @@ func onGameStart():
 
 func setStartingPlayer(playerIndex : int):
 	print("Receive: Starting player")
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		dataLog.append("SET_PLAYER " + str(playerIndex))
+	dataLog.append("SET_PLAYER " + str(playerIndex))
 	activePlayer = playerIndex
 	hasStartingPlayer = true
 	
@@ -373,16 +369,20 @@ var rotTimer = 0
 var rotAngle = PI / 2
 var rotFreq = 1
 
+var practiceWaiting = false
+
 func _physics_process(delta):
 	
-	if Settings.gameMode == Settings.GAME_MODE.REPLAY and not replayWaiting and not gameOver:
-		replayTimer += delta
-		if replayTimer >= 0.3:
-			nextReplayAction()
+	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		if not practiceWaiting and activePlayer != 0:
+			practiceWaiting = true
+			yield(get_tree().create_timer(1), "timeout")
+			practiceWaiting = false
+			nextTurn()
 	
 	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed and gameSeed != -1 and mulliganDone and mulliganDoneOpponent:
 		startGame()
-		
+	
 	if playerRestart and opponentRestart:
 		print("REEEEEEEEEESPAWN!")
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
@@ -559,72 +559,48 @@ func _physics_process(delta):
 			elif actionQueue.size() > 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
 				slotClicked(actionQueue[0][0], actionQueue[0][1], false)
 				actionQueue.remove(0)
-
-func nextReplayAction():
-	replayWaiting = true
-	var waiting = true
-	while waiting and gameStarted:
-		var attacking = false
-		for slot in creatures[players[activePlayer].UUID]:
-			if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-				attacking = true
-		if not attacking:
-			waiting = false
-				
-		for p in players:
-			if p.hand.drawQueue.size() > 0:
-				waiting = true
-				
-		if fuseQueue.size() > 0:
-			waiting = true
-				
-		yield(get_tree().create_timer(0.1), "timeout")
 	
-	if replayIndex < dataLog.size():
-		var nextCommand = dataLog[replayIndex]
-		processReplayCommand(nextCommand)
+	if rightClickQueue.size() > 0:
+		clickedOff = false
+		var selectedSlot = rightClickQueue[0]
 		
-		replayIndex += 1
-		if replayIndex >= dataLog.size():
-			gameOver = true
-		replayWaiting = false
-		replayTimer = 0
-	
-func processReplayCommand(command : String):
-	var coms = command.split(" ")
-	match coms[0]:
-		"GAME_START":
-			pass
-		"NEXT_TURN":
-			nextTurn()
-		"OWN_DECK":
-			print("Notice: Setting own deck from replay")
-			var cards = []
-			for i in range(coms.size() - 1):
-				cards.append(ListOfCards.getCard(int(coms[i+1])))
-			setOwnCardList(cards)
-			deckDataSet = true
-		"OPPONENT_DECK":
-			print("Notice: Setting opponent deck from replay")
-			var cardsIDs = []
-			for i in range(coms.size() - 1):
-				cardsIDs.append(int(coms[i+1]))
-			setOpponentCardList(cardsIDs)
-			readyToStart = true
-		"SET_PLAYER":
-			print("Notice: Setting starting player from replay")
-			setStartingPlayer(int(coms[1]))
-		"OWN_SLOT":
-			slotClickedServer(coms[1] != "True", int(coms[2]), int(coms[3]), 1)
-		"OPPONENT_SLOT":
-			slotClickedServer(coms[1] != "True", int(coms[2]), int(coms[3]), 1)
-		"VERSION":
-			compareVersion(coms[1])
-		"SET_SEED":
-			setGameSeed(coms[1])
-		_:
-			print("ERROR: Unknown replay command " + coms[0])
-	
+		for i in range(1, rightClickQueue.size()):
+			if not is_instance_valid(selectedSlot.cardNode) or (is_instance_valid(rightClickQueue[i].cardNode) and rightClickQueue[i].cardNode.z_index > selectedSlot.cardNode.z_index):
+				selectedSlot = rightClickQueue[i]
+		rightClickQueue.clear()
+		
+		var isSame = hoveringWindowSlot == selectedSlot
+		
+		if is_instance_valid(selectedSlot) and not isSame:
+			if is_instance_valid(hoveringWindow):
+				if hoveringWindow.close(true):
+					hoveringWindowSlot = null
+			if is_instance_valid(selectedSlot):
+				var string := ""
+				var pos := Vector2()
+				var flipped := false
+				if selectedSlot.currentZone == CardSlot.ZONES.DECK:
+					var numCards = players[1 if selectedSlot.isOpponent else 0].deck.cards.size()
+					string = str(numCards)
+					pos = selectedSlot.global_position - Vector2(cardWidth*selectedSlot.scale.x/2, 0)
+					flipped = true
+				elif is_instance_valid(selectedSlot.cardNode) and selectedSlot.cardNode.cardVisible and selectedSlot.cardNode.card != null:
+					string = selectedSlot.cardNode.card.getHoverData()
+					pos = selectedSlot.global_position + Vector2(cardWidth*selectedSlot.scale.x/2, 0)
+				
+				if string != "":
+					createHoverNode(pos, self, string, flipped)
+					hoveringWindowSlot = selectedSlot
+			
+		elif is_instance_valid(hoveringWindowSlot):
+			if is_instance_valid(hoveringWindow):
+				if hoveringWindow.close():
+					hoveringWindowSlot = null
+	elif clickedOff:
+		clickedOff = false
+		if is_instance_valid(hoveringWindow):
+			if hoveringWindow.close():
+				hoveringWindowSlot = null
 
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
 	var hoverInst = hoverScene.instance()
@@ -759,7 +735,7 @@ func onSlotEnter(slot : CardSlot):
 	
 	if hoveringOn != null:
 		onSlotExit(hoveringOn)
-		
+	
 	hoveringOn = slot
 	
 	if highlightedSlots.size() > 0:
@@ -825,16 +801,15 @@ func onSlotExit(slot : CardSlot):
 		
 
 func onMouseDown(slot : CardSlot, button_index : int):
-	if gameStarted and not gameOver:
+	if gameStarted and not gameOver and button_index == 1:
 		actionQueue.append([slot, button_index])
+	elif button_index == 2:
+		rightClickQueue.append(slot)
 	
 func onMouseUp(Slot : CardSlot, button_index : int):
 	pass
 
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
-	
-	if not Server.online and Settings.gameMode != Settings.GAME_MODE.REPLAY:
-		return false
 	
 	if not is_instance_valid(slot):
 		return false
@@ -844,7 +819,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 		
 	if activePlayer == -1:
 		return false
-		
+	
 	if button_index == 1:
 		if slot.currentZone == CardSlot.ZONES.HAND:
 			if slot.playerID == players[activePlayer].UUID:
@@ -1078,8 +1053,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							
 							
 		#CODE IS ONLY REACHABLE IF NOT RETURNED
-		if Settings.gameMode == Settings.GAME_MODE.PLAY:
-			dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
+		dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
 		if not fromServer:
 			Server.slotClicked(opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 		
@@ -1090,8 +1064,13 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 func isMyTurn() -> bool:
 	return 0 == activePlayer
 
+var clickedOff = false
 func _input(event):
-	if Settings.gameMode == Settings.GAME_MODE.PLAY and not get_node("/root/main/PauseNode/PauseMenu").visible and not get_node("/root/main/SaveNode").visible and not get_node("/root/main/FileSelector").visible:	
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.scancode == KEY_F1:
+			saveReplay()
+	
+	if not get_node("/root/main/PauseNode/PauseMenu").visible and not get_node("/root/main/FileSelector").visible:
 		if not gameOver and gameStarted:
 			if event is InputEventKey and event.is_pressed() and not event.is_echo():
 				if event.scancode == KEY_SPACE:
@@ -1117,43 +1096,21 @@ func _input(event):
 									
 							if actionQueue.size() > 0:
 								waiting = true
+								
+							if abilityStack.size() > 0:
+								waiting = true
 									
 							yield(get_tree().create_timer(0.1), "timeout")
 						nextTurn()
 						Server.onNextTurn(opponentID)
-
-		if event is InputEventMouseButton and event.pressed and event.button_index == 2:
-			var isSame = hoveringWindowSlot == hoveringOn
-			
-			if is_instance_valid(hoveringOn) and not isSame:
-				if is_instance_valid(hoveringWindow):
-					if hoveringWindow.close(true):
-						hoveringWindowSlot = null
-				
-				if is_instance_valid(hoveringOn):
-					var string = ""
-					if hoveringOn.currentZone == CardSlot.ZONES.DECK:
-						var numCards = players[1 if hoveringOn.isOpponent else 0].deck.cards.size()
-						string = str(numCards)
-					elif is_instance_valid(hoveringOn.cardNode) and hoveringOn.cardNode.cardVisible and hoveringOn.cardNode.card != null:
-						string = hoveringOn.cardNode.card.getHoverData()
-					
-					if string != "":
-						var pos = hoveringOn.global_position - Vector2(cardWidth*hoveringOn.scale.x/2, 0)
-						createHoverNode(pos, self, string, true)
-						hoveringWindowSlot = hoveringOn
-				
-			elif is_instance_valid(hoveringWindowSlot):
-				if is_instance_valid(hoveringWindow):
-					if hoveringWindow.close():
-						hoveringWindowSlot = null
-				
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
+		clickedOff = true
+	
+	
 func nextTurn():
 	if gameOver:
 		return
-	#Engine.time_scale = 0.1
-	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		dataLog.append("NEXT_TURN")
+	dataLog.append("NEXT_TURN")
 	
 	while cardsHolding.size() > 0:
 		cardsHolding[0].position.y += cardDists
@@ -1236,8 +1193,6 @@ func checkState():
 
 func onLoss(player : Player):
 	if not gameOver:
-		if saveReplayOnClose:
-			saveReplay()
 		gameOver = true
 		get_node("/root/main/WinLose").showWinLose(player != players[0])
 
@@ -1252,18 +1207,6 @@ func setOpponentUsername(username : String):
 	dataLog.append("SET_OPPONENT_USERNAME " + username)
 
 var dataLog := []
-var saveReplayOnClose = false
-var hasSavedReplay = false
-
-var replayIndex = 0
-var replayTimer = 0
-var replayWaiting = false
-
-func _exit_tree():
-	if saveReplayOnClose:
-		saveReplay()
 
 func saveReplay():
-	if not hasSavedReplay:
-		FileIO.dumpDataLog(dataLog)
-		hasSavedReplay = true
+	FileIO.dumpDataLog(dataLog)

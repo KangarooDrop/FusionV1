@@ -37,7 +37,6 @@ custom_fonts/font = ExtResource( 4 )
 text = "Deck Editor"
 
 [node name="PracticeButton" type="Button" parent="VBoxContainer"]
-visible = false
 margin_top = 35.0
 margin_right = 122.0
 margin_bottom = 60.0
@@ -45,28 +44,18 @@ custom_fonts/font = ExtResource( 4 )
 text = "Practice"
 
 [node name="LobbyButton" type="Button" parent="VBoxContainer"]
-margin_top = 35.0
-margin_right = 122.0
-margin_bottom = 60.0
-custom_fonts/font = ExtResource( 4 )
-text = "Lobby"
-
-[node name="DraftButton" type="Button" parent="VBoxContainer"]
 margin_top = 70.0
 margin_right = 122.0
 margin_bottom = 95.0
 custom_fonts/font = ExtResource( 4 )
-text = "Draft"
+text = "Lobby"
 
-[node name="ReplayButton" type="Button" parent="VBoxContainer"]
+[node name="DraftButton" type="Button" parent="VBoxContainer"]
 margin_top = 105.0
 margin_right = 122.0
 margin_bottom = 130.0
 custom_fonts/font = ExtResource( 4 )
-text = "Replays"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+text = "Draft"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
 margin_top = 140.0
@@ -81,55 +70,6 @@ margin_right = 122.0
 margin_bottom = 200.0
 custom_fonts/font = ExtResource( 4 )
 text = "Exit"
-
-[node name="FileDisplay" type="Control" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="NinePatchRect" parent="FileDisplay"]
-margin_right = 40.0
-margin_bottom = 40.0
-texture = ExtResource( 2 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonHolder" type="VBoxContainer" parent="FileDisplay"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
-margin_right = 121.0
-margin_bottom = 41.0
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Select Replay
-"
-align = 1
-
-[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
-margin_top = 45.0
-margin_right = 121.0
-margin_bottom = 70.0
-custom_fonts/font = ExtResource( 4 )
-text = "Back"
 
 [node name="SettingsPage" type="VBoxContainer" parent="."]
 visible = false
@@ -221,11 +161,11 @@ custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Shader: "
 
-[node name="OptionButton" type="OptionButton" parent="SettingsPage/Shaders"]
-margin_left = 139.0
-margin_right = 267.0
+[node name="Button" type="Button" parent="SettingsPage/Shaders"]
+margin_right = 12.0
 margin_bottom = 20.0
-rect_min_size = Vector2( 128, 0 )
+custom_fonts/font = ExtResource( 4 )
+text = "Select Shader"
 
 [node name="BackButton" type="Button" parent="SettingsPage"]
 margin_top = 132.0
@@ -234,15 +174,87 @@ margin_bottom = 157.0
 custom_fonts/font = ExtResource( 4 )
 text = "Back"
 
+[node name="FileDisplay" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MouseDisable" type="ColorRect" parent="FileDisplay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1024.0
+margin_top = -1024.0
+margin_right = 1024.0
+margin_bottom = 1024.0
+rect_min_size = Vector2( 2048, 2048 )
+color = Color( 0.313726, 0.0509804, 0.698039, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="NinePatchRect" parent="FileDisplay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -150.0
+margin_top = -50.0
+margin_right = -14.0
+margin_bottom = 3.0
+texture = ExtResource( 2 )
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonHolder" type="VBoxContainer" parent="FileDisplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.0
+margin_top = -65.0
+margin_right = 120.0
+margin_bottom = 25.0
+custom_constants/separation = 8
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
+margin_top = 19.0
+margin_right = 280.0
+margin_bottom = 38.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+
+[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
+margin_top = 46.0
+margin_right = 280.0
+margin_bottom = 71.0
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PracticeButton" to="." method="onPracticePressed"]
 [connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
 [connection signal="pressed" from="VBoxContainer/DraftButton" to="." method="onDraftPressed"]
-[connection signal="pressed" from="VBoxContainer/ReplayButton" to="." method="onReplayPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
-[connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onReplayBackPressed"]
 [connection signal="text_changed" from="SettingsPage/NumDraft/LineEdit" to="SettingsPage/NumDraft/LineEdit" method="_on_LineEdit_text_changed"]
 [connection signal="toggled" from="SettingsPage/Anims/CheckBox" to="SettingsPage" method="setPlayAnims"]
-[connection signal="item_selected" from="SettingsPage/Shaders/OptionButton" to="." method="shaderButtonPressed"]
+[connection signal="pressed" from="SettingsPage/Shaders/Button" to="." method="shaderButtonPressed"]
 [connection signal="pressed" from="SettingsPage/BackButton" to="SettingsPage" method="onBackPressed"]
+[connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onShaderBackButtonPressed"]

@@ -8,15 +8,16 @@ var selectedDeck = ""
 var path = "user://decks/"
 
 var dumpPath = "user://dumps/"
-var dumpFile = "x_.txt"
 
-enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, LOBBY_PRACTICE, PLAY, REPLAY, PRACTICE, DRAFTING}
+enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, PRACTICE, DRAFTING}
 var gameMode : int = 0
 
 var cardSlotScale = 1.5
 
 var settingsPath = "user:/"
 var settingsName = "settings"
+
+var shaderPath = "user://shaders/"
 
 func _ready():
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
@@ -49,8 +50,8 @@ func verifySettings(settings : Dictionary) -> bool:
 	if not settings.has("ip_saved"):
 		settings["ip_saved"] = "127.0.0.1"
 		ok = false
-	if not settings.has("shader"):
-		settings["shader"] = 0
+	if not settings.has("shader") or typeof(settings["shader"]) != TYPE_STRING:
+		settings["shader"] = shaderPath + "default.shader"
 		ok = false
 		
 	return ok

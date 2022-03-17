@@ -1,7 +1,7 @@
 extends Control
 	
 func onRestartPressed():
-	if Server.online:
+	if Server.online or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		if not get_node("/root/main/Board").playerRestart:
 			if not get_node("/root/main/Board").opponentRestart:
 				MessageManager.notify("Restart request sent to opponent")

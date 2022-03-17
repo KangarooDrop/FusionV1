@@ -58,3 +58,5 @@ margin_right = 107.0
 margin_bottom = 48.0
 custom_fonts/font = ExtResource( 3 )
 text = "Back"
+
+[connection signal="pressed" from="DeckSelector/VBoxContainer/BackButton" to="." method="onBackButtonClicked"]

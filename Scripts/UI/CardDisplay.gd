@@ -173,7 +173,6 @@ func onSlotExit(slot : CardSlot):
 var mouseDownQueue := []
 
 func onMouseDown(slot : CardSlot, button_index : int):
-	
 	if canReorder and button_index == 1:
 		mouseDownQueue.append(slot)
 		mouseDown = true

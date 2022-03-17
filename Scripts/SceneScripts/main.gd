@@ -20,19 +20,6 @@ func _input(event):
 			else:
 				onDeckChangeBackPressed()
 
-func onSaveReplayPressed():
-	Settings.dumpFile = $SaveNode/SaveControl/LineEdit.text + ".txt"
-	get_node("Board").saveReplayOnClose = true
-	$SaveNode/SaveControl/LineEdit.text = ""
-	MessageManager.notify("Replay will be saved at the end of the match")
-	onSaveBackPressed()
-	
-func onSaveBackPressed():
-	$SaveNode.visible = false
-	
-func onSaveEnter(s : String):
-	onSaveReplayPressed()
-
 func onDeckChangePressed():
 	$PauseNode/PauseMenu.visible = false
 	$FileSelector.visible = true

@@ -40,9 +40,13 @@ func _ready():
 	
 func onFileButtonClicked(fileName : String):
 	Settings.selectedDeck = fileName
+	Settings.gameMode = Settings.GAME_MODE.PRACTICE
 	
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
-	
-	
+
+func onBackButtonClicked():
+	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))

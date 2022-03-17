@@ -67,7 +67,8 @@ func dumpDataLog(gameLog : Array, makeFolders = false) -> int:
 		directory.make_dir_recursive(Settings.dumpPath)
 	
 	var file = File.new()
-	var error = file.open(Settings.dumpPath + Settings.dumpFile, File.WRITE)
+	var dumpFile = str(randi()) + ".txt"
+	var error = file.open(Settings.dumpPath + dumpFile, File.WRITE)
 	if error != 0:
 		if not makeFolders:
 			return dumpDataLog(gameLog, true)
@@ -85,3 +86,20 @@ func dumpDataLog(gameLog : Array, makeFolders = false) -> int:
 	file.close()
 	
 	return 0
+
+func getAllFiles(path):
+	var files = []
+	var dir = Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(file)
+	
+	dir.list_dir_end()
+	
+	return files

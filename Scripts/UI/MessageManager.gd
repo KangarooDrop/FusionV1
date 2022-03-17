@@ -10,18 +10,20 @@ var canvas
 var messageHolder
 
 func _ready():
-	canvas = CanvasLayer.new()
-	add_child(canvas)
+#	canvas = CanvasLayer.new()
+#	add_child(canvas)
 	
 	var control = Control.new()
 	control.name = "MessageHolder"
-	canvas.add_child(control)
+	add_child(control)
+#	canvas.add_child(control)
 	control.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
 	messageHolder = control
 	
 	var label = Label.new()
 	label.text = "Version: " + str(Settings.versionID)
-	canvas.add_child(label)
+	add_child(label)
+#	canvas.add_child(label)
 	label.rect_position += Vector2(8, 8)
 	label.set("custom_colors/font_color", Color(0,0,0))
 	

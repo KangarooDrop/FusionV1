@@ -17,6 +17,7 @@ var hand
 var creatureNum := 5
 
 var isOpponent = false
+var isPractice = false
 
 var drawDamage = 1
 
