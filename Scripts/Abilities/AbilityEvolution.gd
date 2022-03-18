@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityEvolution
 
-func _init(card : Card).("Evolution", card, Color.purple, true, Vector2(32, 64)):
+func _init(card : Card).("Evolution", card, Color.brown, true, Vector2(32, 64)):
 	pass
 
 func onEndOfTurn(board):

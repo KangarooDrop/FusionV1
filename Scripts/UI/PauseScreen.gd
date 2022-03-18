@@ -2,11 +2,11 @@ extends Control
 	
 func onRestartPressed():
 	if Server.online or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
-		if not get_node("/root/main/Board").playerRestart:
-			if not get_node("/root/main/Board").opponentRestart:
+		if not get_node("/root/main/CenterControl/Board").playerRestart:
+			if not get_node("/root/main/CenterControl/Board").opponentRestart:
 				MessageManager.notify("Restart request sent to opponent")
-			get_node("/root/main/Board").playerRestart = true
-			Server.onRestart(get_node("/root/main/Board").opponentID)
+			get_node("/root/main/CenterControl/Board").playerRestart = true
+			Server.onRestart(get_node("/root/main/CenterControl/Board").opponentID)
 	else:
 		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()
@@ -16,8 +16,8 @@ func onChangeDeckPressed():
 	onBackPressed()
 
 func onSaveReplayPressed():
-	get_node("/root/main/SaveNode").visible = true
-	get_node("/root/main/SaveNode/SaveControl/LineEdit").grab_focus()
+	get_node("/root/main/CenterControl/SaveNode").visible = true
+	get_node("/root/main/CenterControl/SaveNode/SaveControl/LineEdit").grab_focus()
 	onBackPressed()
 	
 func onBackPressed():

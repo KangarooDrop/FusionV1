@@ -1070,27 +1070,25 @@ func _input(event):
 		if event.scancode == KEY_F1:
 			saveReplay()
 	
-	if not get_node("/root/main/PauseNode/PauseMenu").visible and not get_node("/root/main/FileSelector").visible:
+	if not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible:
 		if not gameOver and gameStarted:
 			if event is InputEventKey and event.is_pressed() and not event.is_echo():
 				if event.scancode == KEY_SPACE:
 					if isMyTurn():
 						var waiting = true
 						while waiting:
-							var attacking = false
+							waiting = false
 							for slot in creatures[players[activePlayer].UUID]:
 								if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-									attacking = true
-							if not attacking:
-								waiting = false
+									waiting = true
 									
 							for p in players:
 								if p.hand.drawQueue.size() > 0:
 									waiting = true
-									
+							
 							if fuseQueue.size() > 0:
 								waiting = true
-									
+										
 							if millQueue.size() > 0:
 								waiting = true
 									
@@ -1194,7 +1192,7 @@ func checkState():
 func onLoss(player : Player):
 	if not gameOver:
 		gameOver = true
-		get_node("/root/main/WinLose").showWinLose(player != players[0])
+		get_node("/root/main/CenterControl/WinLose").showWinLose(player != players[0])
 
 func setOwnUsername():
 	print("Settings own username")

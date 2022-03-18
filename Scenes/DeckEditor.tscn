@@ -26,13 +26,35 @@
 
 [sub_resource type="StyleBoxEmpty" id=10]
 
-[node name="DeckEditor" type="Node2D"]
+[node name="DeckEditor" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+mouse_filter = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="SortButtons" type="Node2D" parent="."]
-position = Vector2( 0, -192 )
+[node name="CenterControl" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Sort Order" type="Label" parent="SortButtons"]
+[node name="SortButtons" type="Node2D" parent="CenterControl"]
+position = Vector2( 0, -204 )
+
+[node name="Sort Order" type="Label" parent="CenterControl/SortButtons"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -51,7 +73,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SortButtons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterControl/SortButtons"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -65,37 +87,37 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TypeButton" type="Button" parent="SortButtons/HBoxContainer"]
+[node name="TypeButton" type="Button" parent="CenterControl/SortButtons/HBoxContainer"]
 margin_right = 128.0
 margin_bottom = 32.0
 custom_fonts/font = ExtResource( 5 )
 text = "      Type      "
 
-[node name="PowerButton" type="Button" parent="SortButtons/HBoxContainer"]
+[node name="PowerButton" type="Button" parent="CenterControl/SortButtons/HBoxContainer"]
 margin_left = 138.0
 margin_right = 260.0
 margin_bottom = 32.0
 custom_fonts/font = ExtResource( 5 )
 text = "    Power     "
 
-[node name="ToughnessButton" type="Button" parent="SortButtons/HBoxContainer"]
+[node name="ToughnessButton" type="Button" parent="CenterControl/SortButtons/HBoxContainer"]
 margin_left = 270.0
 margin_right = 395.0
 margin_bottom = 32.0
 custom_fonts/font = ExtResource( 5 )
 text = " Toughness "
 
-[node name="Menu" type="VBoxContainer" parent="."]
-margin_left = -482.0
-margin_top = -250.0
-margin_right = -406.0
-margin_bottom = -182.0
+[node name="Menu" type="VBoxContainer" parent="CenterControl"]
+margin_left = -462.0
+margin_top = -230.0
+margin_right = -300.0
+margin_bottom = -65.0
 custom_constants/separation = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SaveButton" type="Button" parent="Menu"]
+[node name="SaveButton" type="Button" parent="CenterControl/Menu"]
 margin_right = 162.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 5 )
@@ -104,14 +126,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadButton" type="Button" parent="Menu"]
+[node name="LoadButton" type="Button" parent="CenterControl/Menu"]
 margin_top = 35.0
 margin_right = 162.0
 margin_bottom = 60.0
 custom_fonts/font = ExtResource( 5 )
 text = "Load Deck"
 
-[node name="NewButton" type="Button" parent="Menu"]
+[node name="NewButton" type="Button" parent="CenterControl/Menu"]
 margin_top = 70.0
 margin_right = 162.0
 margin_bottom = 95.0
@@ -121,14 +143,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeleteButton" type="Button" parent="Menu"]
+[node name="DeleteButton" type="Button" parent="CenterControl/Menu"]
 margin_top = 105.0
 margin_right = 162.0
 margin_bottom = 130.0
 custom_fonts/font = ExtResource( 5 )
 text = "Delete Deck File"
 
-[node name="MainMenuButton" type="Button" parent="Menu"]
+[node name="MainMenuButton" type="Button" parent="CenterControl/Menu"]
 margin_top = 140.0
 margin_right = 162.0
 margin_bottom = 165.0
@@ -138,11 +160,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SaveDisplay" type="Node2D" parent="."]
+[node name="SaveDisplay" type="Node2D" parent="CenterControl"]
 visible = false
+position = Vector2( 20, 20 )
 z_index = 2
 
-[node name="MouseDisable" type="ColorRect" parent="SaveDisplay"]
+[node name="MouseDisable" type="ColorRect" parent="CenterControl/SaveDisplay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -1024.0
@@ -155,7 +178,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Background" type="NinePatchRect" parent="SaveDisplay"]
+[node name="Background" type="NinePatchRect" parent="CenterControl/SaveDisplay"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -173,7 +196,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEdit" type="LineEdit" parent="SaveDisplay/Background"]
+[node name="LineEdit" type="LineEdit" parent="CenterControl/SaveDisplay/Background"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 236.0
@@ -183,7 +206,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SaveButton" type="Button" parent="SaveDisplay/Background"]
+[node name="SaveButton" type="Button" parent="CenterControl/SaveDisplay/Background"]
 margin_left = 67.0
 margin_top = 58.71
 margin_right = 108.0
@@ -194,7 +217,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackButton" type="Button" parent="SaveDisplay/Background"]
+[node name="BackButton" type="Button" parent="CenterControl/SaveDisplay/Background"]
 margin_left = 147.0
 margin_top = 58.71
 margin_right = 189.0
@@ -205,11 +228,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDisplay" type="Node2D" parent="."]
+[node name="FileDisplay" type="Node2D" parent="CenterControl"]
 visible = false
+position = Vector2( 20, 20 )
 z_index = 2
 
-[node name="MouseDisable" type="ColorRect" parent="FileDisplay"]
+[node name="MouseDisable" type="ColorRect" parent="CenterControl/FileDisplay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -1024.0
@@ -222,7 +246,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Background" type="NinePatchRect" parent="FileDisplay"]
+[node name="Background" type="NinePatchRect" parent="CenterControl/FileDisplay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -150.0
@@ -238,7 +262,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonHolder" type="VBoxContainer" parent="FileDisplay"]
+[node name="ButtonHolder" type="VBoxContainer" parent="CenterControl/FileDisplay"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -253,7 +277,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
+[node name="Label" type="Label" parent="CenterControl/FileDisplay/ButtonHolder"]
 margin_top = 19.0
 margin_right = 280.0
 margin_bottom = 38.0
@@ -261,40 +285,38 @@ custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 
-[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
+[node name="BackButton" type="Button" parent="CenterControl/FileDisplay/ButtonHolder"]
 margin_top = 46.0
 margin_right = 280.0
 margin_bottom = 71.0
 custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
-
-[node name="PageHolder" type="Node2D" parent="."]
+[node name="PageHolder" type="Node2D" parent="CenterControl"]
 position = Vector2( 0, 32 )
 scale = Vector2( 1.5, 1.5 )
 
-[node name="FusionPreview" type="Node2D" parent="."]
-position = Vector2( 0, 192 )
+[node name="FusionPreview" type="Node2D" parent="CenterControl"]
+position = Vector2( 20, 212 )
 
-[node name="DeckDisplay" parent="." instance=ExtResource( 2 )]
-position = Vector2( 300, -152 )
+[node name="DeckDisplay" parent="CenterControl" instance=ExtResource( 2 )]
+position = Vector2( 320, -132 )
 deckMax = 20
 
-[node name="LArrow" type="Node2D" parent="."]
+[node name="LArrow" type="Node2D" parent="CenterControl"]
 visible = false
+position = Vector2( 20, 20 )
 
-[node name="Arrow1" type="Sprite" parent="LArrow"]
+[node name="Arrow1" type="Sprite" parent="CenterControl/LArrow"]
 position = Vector2( -10, 0 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 4 )
 
-[node name="Arrow2" type="Sprite" parent="LArrow"]
+[node name="Arrow2" type="Sprite" parent="CenterControl/LArrow"]
 scale = Vector2( 3, 3 )
 texture = ExtResource( 4 )
 
-[node name="Button" type="Button" parent="LArrow"]
+[node name="Button" type="Button" parent="CenterControl/LArrow"]
 margin_left = -20.0
 margin_top = -17.0
 margin_right = 10.0
@@ -308,21 +330,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RArrow" type="Node2D" parent="."]
+[node name="RArrow" type="Node2D" parent="CenterControl"]
 visible = false
+position = Vector2( 20, 20 )
 
-[node name="Arrow2" type="Sprite" parent="RArrow"]
+[node name="Arrow2" type="Sprite" parent="CenterControl/RArrow"]
 scale = Vector2( 3, 3 )
 texture = ExtResource( 4 )
 flip_h = true
 
-[node name="Arrow1" type="Sprite" parent="RArrow"]
+[node name="Arrow1" type="Sprite" parent="CenterControl/RArrow"]
 position = Vector2( -10, 0 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 4 )
 flip_h = true
 
-[node name="Button2" type="Button" parent="RArrow"]
+[node name="Button2" type="Button" parent="CenterControl/RArrow"]
 margin_left = -20.0
 margin_top = -17.0
 margin_right = 10.0
@@ -336,17 +359,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="SortButtons/HBoxContainer/TypeButton" to="." method="setSortOrder" binds= [ 0 ]]
-[connection signal="pressed" from="SortButtons/HBoxContainer/PowerButton" to="." method="setSortOrder" binds= [ 1 ]]
-[connection signal="pressed" from="SortButtons/HBoxContainer/ToughnessButton" to="." method="setSortOrder" binds= [ 2 ]]
-[connection signal="pressed" from="Menu/SaveButton" to="." method="onSavePressed"]
-[connection signal="pressed" from="Menu/LoadButton" to="." method="onLoadPressed"]
-[connection signal="pressed" from="Menu/NewButton" to="." method="onNewPressed"]
-[connection signal="pressed" from="Menu/DeleteButton" to="." method="onDeleteButtonPressed"]
-[connection signal="pressed" from="Menu/MainMenuButton" to="." method="onExitPressed"]
-[connection signal="text_entered" from="SaveDisplay/Background/LineEdit" to="." method="onSaveEnter"]
-[connection signal="pressed" from="SaveDisplay/Background/SaveButton" to="." method="onFileSaveButtonPressed"]
-[connection signal="pressed" from="SaveDisplay/Background/BackButton" to="." method="onFileSaveBackPressed"]
-[connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
-[connection signal="pressed" from="LArrow/Button" to="." method="leftArrowPressed"]
-[connection signal="pressed" from="RArrow/Button2" to="." method="rightArrowPressed"]
+[connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/TypeButton" to="." method="setSortOrder" binds= [ 0 ]]
+[connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/PowerButton" to="." method="setSortOrder" binds= [ 1 ]]
+[connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/ToughnessButton" to="." method="setSortOrder" binds= [ 2 ]]
+[connection signal="pressed" from="CenterControl/Menu/SaveButton" to="." method="onSavePressed"]
+[connection signal="pressed" from="CenterControl/Menu/LoadButton" to="." method="onLoadPressed"]
+[connection signal="pressed" from="CenterControl/Menu/NewButton" to="." method="onNewPressed"]
+[connection signal="pressed" from="CenterControl/Menu/DeleteButton" to="." method="onDeleteButtonPressed"]
+[connection signal="pressed" from="CenterControl/Menu/MainMenuButton" to="." method="onExitPressed"]
+[connection signal="text_entered" from="CenterControl/SaveDisplay/Background/LineEdit" to="." method="onSaveEnter"]
+[connection signal="pressed" from="CenterControl/SaveDisplay/Background/SaveButton" to="." method="onFileSaveButtonPressed"]
+[connection signal="pressed" from="CenterControl/SaveDisplay/Background/BackButton" to="." method="onFileSaveBackPressed"]
+[connection signal="pressed" from="CenterControl/FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
+[connection signal="pressed" from="CenterControl/LArrow/Button" to="." method="leftArrowPressed"]
+[connection signal="pressed" from="CenterControl/RArrow/Button2" to="." method="rightArrowPressed"]

@@ -10,4 +10,4 @@ func onFusion(card):
 	card.removeAbility(self)
 
 func genDescription() -> String:
-	return "On fusion, the card loses all creature types and becomes a null. Removes this ability"
+	return "On fusion, the card loses all creature types. Removes this ability"

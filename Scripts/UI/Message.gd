@@ -13,9 +13,9 @@ var endPos = null
 
 func _process(delta):
 	if startPos == null:
-		startPos = -$Background.rect_size.x * rect_scale.x - offset
+		startPos = -$NodeZ/Background.rect_size.x * rect_scale.x * 1.5 - offset
 	if endPos == null:
-		endPos = offset
+		endPos = offset - $NodeZ/Background.rect_size.x * rect_scale.x / 2
 	
 	timer += delta
 	if timer < inTime:
@@ -23,6 +23,6 @@ func _process(delta):
 	elif timer < inTime + hangTime:
 		rect_position.x = endPos
 	elif timer < inTime + hangTime + inTime:
-		rect_position.x -= delta * ($Background.rect_size.x * rect_scale.x + offset) / inTime
+		rect_position.x -= delta * ($NodeZ/Background.rect_size.x * rect_scale.x + offset) / inTime
 	else:
 		queue_free()

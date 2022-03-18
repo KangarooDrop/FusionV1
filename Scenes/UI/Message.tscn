@@ -15,7 +15,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Background" type="NinePatchRect" parent="."]
+[node name="NodeZ" type="Node2D" parent="."]
+z_index = 999
+
+[node name="Background" type="NinePatchRect" parent="NodeZ"]
 margin_right = 128.0
 margin_bottom = 32.0
 texture = ExtResource( 1 )
@@ -27,7 +30,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="NodeZ"]
 margin_left = 2.0
 margin_top = 2.0
 margin_right = 126.0

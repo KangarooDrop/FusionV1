@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 var availableCardCount : Dictionary = {}
 
@@ -29,7 +29,7 @@ var sortOrder : int = SORT_ORDER.TYPE
 var loadedDeckName = ""
 
 func _ready():
-	$DeckDisplay.parent = self 
+	$CenterControl/DeckDisplay.parent = self 
 	setCards()
 
 func setCards():
@@ -38,9 +38,9 @@ func setCards():
 			if ListOfCards.cardList[i].tier == 1:
 				availableCardCount[i] = 4
 	else:
-		$Menu/DeleteButton.hide()
-		$Menu/NewButton.hide()
-		$Menu/LoadButton.hide()
+		$CenterControl/Menu/DeleteButton.hide()
+		$CenterControl/Menu/NewButton.hide()
+		$CenterControl/Menu/LoadButton.hide()
 	sort()
 
 func clearPages():
@@ -130,7 +130,7 @@ func sort():
 	for i in range(cardsToAdd.size() / slotPageNum):
 		var page = Node2D.new()
 		page.name = "page_" + str(i)
-		$PageHolder.add_child(page)
+		$CenterControl/PageHolder.add_child(page)
 		page.visible = false
 		pages.append(page)
 		for j in range(slotPageNum):
@@ -160,9 +160,9 @@ func sort():
 				updateSlotCount(slot)
 				
 	var offL = (-2 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
-	$LArrow.position = Vector2(offL, 30)
+	$CenterControl/LArrow.position = Vector2(offL, 30)
 	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists) + 8
-	$RArrow.position = Vector2(offR, 30)
+	$CenterControl/RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
 	
@@ -179,7 +179,7 @@ func _physics_process(delta):
 	if slotViewing != null:
 		if viewTimer < viewMaxTime:
 			viewTimer += delta
-			slotViewing.cardNode.global_position = lerp(slotViewing.global_position, $PageHolder.position, viewTimer / viewMaxTime)
+			slotViewing.cardNode.global_position = lerp(slotViewing.global_position, $CenterControl.rect_global_position, viewTimer / viewMaxTime)
 			#slotViewing.cardNode.scale.x = cos(abs(2 * PI * viewTimer / viewMaxTime))
 			slotViewing.cardNode.scale = lerp(Vector2(1, 1), Vector2(viewScale, viewScale), viewTimer / viewMaxTime)
 		else:
@@ -194,7 +194,7 @@ func _physics_process(delta):
 				slotReturning.cardNode.z_index -= 1
 				slotReturning = null
 			else:
-				slotReturning.cardNode.global_position = lerp($PageHolder.position, slotReturning.global_position, returnTimer / returnMaxTime)
+				slotReturning.cardNode.global_position = lerp($CenterControl.rect_global_position, slotReturning.global_position, returnTimer / returnMaxTime)
 				slotReturning.cardNode.scale = lerp(Vector2(viewScale, viewScale), Vector2(1, 1), returnTimer / returnMaxTime)
 
 func onSlotEnter(slot : CardSlot):
@@ -216,8 +216,8 @@ func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
 	hoverInst.z_index = 3
 	hoverInst.flipped = true
-	add_child(hoverInst)
-	hoverInst.global_position = position
+	$CenterControl.add_child(hoverInst)
+	hoverInst.position = position
 	hoverInst.setText(text)
 	infoWindow = hoverInst
 
@@ -233,16 +233,16 @@ func removeCard(id : int):
 
 var slotClicked = false
 func onMouseDown(slot : CardSlot, button_index : int):
-	if not $SaveDisplay.visible and not $FileDisplay.visible and is_instance_valid(slot.cardNode):
+	if not $CenterControl/SaveDisplay.visible and not $CenterControl/FileDisplay.visible and is_instance_valid(slot.cardNode):
 		if button_index == 1:
 			var countCheck = true
-			for i in $DeckDisplay.data.size():
-				if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
-					countCheck = $DeckDisplay.data[i].count < availableCardCount[slot.cardNode.card.UUID]
+			for i in $CenterControl/DeckDisplay.data.size():
+				if $CenterControl/DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
+					countCheck = $CenterControl/DeckDisplay.data[i].count < availableCardCount[slot.cardNode.card.UUID]
 					break
 			
 			if slot.cardNode != null and slotViewing == null and countCheck:
-				$DeckDisplay.addCard(slot.cardNode.card.UUID)
+				$CenterControl/DeckDisplay.addCard(slot.cardNode.card.UUID)
 				updateSlotCount(slot)
 				
 		elif button_index == 2:
@@ -251,19 +251,19 @@ func onMouseDown(slot : CardSlot, button_index : int):
 				slotViewing.cardNode.z_index += 2
 				viewTimer = 0
 				slotClicked = true
-				$DeckDisplay.closeDeckDisplayHover(true)
+				$CenterControl/DeckDisplay.closeDeckDisplayHover(true)
 				
 func onMouseUp(slot : CardSlot, button_index : int):
 	pass
 
 func updateSlotCount(slot : CardSlot):
 	var index = -1
-	for i in range($DeckDisplay.data.size()):
-		if $DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
+	for i in range($CenterControl/DeckDisplay.data.size()):
+		if $CenterControl/DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
 			index = i
 			break
 	if index >= 0:
-		slot.get_node("Label").text = str($DeckDisplay.data[index].count) + "/" + str(availableCardCount[slot.cardNode.card.UUID])
+		slot.get_node("Label").text = str($CenterControl/DeckDisplay.data[index].count) + "/" + str(availableCardCount[slot.cardNode.card.UUID])
 	else:
 		slot.get_node("Label").text = "0/" + str(availableCardCount[slot.cardNode.card.UUID])
 
@@ -271,21 +271,21 @@ func onLoadPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
 		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmLoad", [pop]], ["Back", pop, "close", []]])
-		add_child(pop)
+		$CenterControl.add_child(pop)
 	else:
 		onConfirmLoad()
 		
 func onSavePressed():
-	$SaveDisplay.visible = true
-	$SaveDisplay/Background/LineEdit.grab_focus()
-	$SaveDisplay/Background/LineEdit.text = loadedDeckName.get_basename()
-	$SaveDisplay/Background/LineEdit.caret_position = loadedDeckName.get_basename().length()
+	$CenterControl/SaveDisplay.visible = true
+	$CenterControl/SaveDisplay/Background/LineEdit.grab_focus()
+	$CenterControl/SaveDisplay/Background/LineEdit.text = loadedDeckName.get_basename()
+	$CenterControl/SaveDisplay/Background/LineEdit.caret_position = loadedDeckName.get_basename().length()
 	
 func onNewPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
 		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmNew", [pop]], ["Back", pop, "close", []]])
-		add_child(pop)
+		$CenterControl.add_child(pop)
 	else:
 		onConfirmNew()
 	
@@ -296,14 +296,14 @@ func onExitPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
 		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmExit", [pop]], ["Back", pop, "close", []]])
-		add_child(pop)
+		$CenterControl.add_child(pop)
 	else:
 		onConfirmExit()
 	
 func onConfirmNew(popup=null):
 	if popup != null:
 		popup.close()
-	$DeckDisplay.clearData()
+	$CenterControl/DeckDisplay.clearData()
 	hasSaved = true
 	loadedDeckName = ""
 	
@@ -319,8 +319,8 @@ func onConfirmLoad(popup=null):
 	if popup != null:
 		popup.close()
 		
-	$FileDisplay.visible = true
-	$FileDisplay/ButtonHolder/Label.text = "Load File"
+	$CenterControl/FileDisplay.visible = true
+	$CenterControl/FileDisplay/ButtonHolder/Label.text = "Load File"
 	
 	var files = []
 	var dir = Directory.new()
@@ -334,23 +334,23 @@ func onConfirmLoad(popup=null):
 			files.append(file)
 	dir.list_dir_end()
 	
-	for c in $FileDisplay/ButtonHolder.get_children():
+	for c in $CenterControl/FileDisplay/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
-			$FileDisplay/ButtonHolder.remove_child(c)
+			$CenterControl/FileDisplay/ButtonHolder.remove_child(c)
 			c.queue_free()
 	for i in range(files.size()):
 		var b = Button.new()
-		$FileDisplay/ButtonHolder.add_child(b)
+		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
-		$FileDisplay/ButtonHolder.move_child(b, i+1)
-	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
-	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
+		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
+	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
+	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 		
 func onFileLoadBackPressed():
-	$FileDisplay.visible = false
+	$CenterControl/FileDisplay.visible = false
 	
 func onFileLoadButtonPressed(fileName : String):
 	print("File ", fileName, " selected")
@@ -359,11 +359,11 @@ func onFileLoadButtonPressed(fileName : String):
 	var error = Deck.verifyDeck(dataRead)
 	print("Deck validity: " + str(error))
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		$DeckDisplay.clearData()
+		$CenterControl/DeckDisplay.clearData()
 		for k in dataRead.keys():
 			var id = int(k)
 			for i in range(int(dataRead[k])):
-				$DeckDisplay.addCard(id)
+				$CenterControl/DeckDisplay.addCard(id)
 		hasSaved = true
 		
 		loadedDeckName = fileName
@@ -372,45 +372,45 @@ func onFileLoadButtonPressed(fileName : String):
 		
 		var pop = popupUI.instance()
 		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
-		add_child(pop)
+		$CenterControl.add_child(pop)
 		
 	onFileLoadBackPressed()
 		
 func onFileSaveBackPressed():
-	$SaveDisplay/Background/LineEdit.text = ""
-	$SaveDisplay.visible = false
+	$CenterControl/SaveDisplay/Background/LineEdit.text = ""
+	$CenterControl/SaveDisplay.visible = false
 	
 func onFileSaveButtonPressed():
 	
-	var fileName = $SaveDisplay/Background/LineEdit.text
+	var fileName = $CenterControl/SaveDisplay/Background/LineEdit.text
 	
-	var error = Deck.verifyDeck($DeckDisplay.getDeckDataAsJSON())
+	var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		var fileError = FileIO.writeToJSON(Settings.path, fileName, $DeckDisplay.getDeckData())
+		var fileError = FileIO.writeToJSON(Settings.path, fileName, $CenterControl/DeckDisplay.getDeckData())
 		if fileError != 0:
 			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
 			var pop = popupUI.instance()
 			pop.init("Error", "File could not be saved")
-			add_child(pop)
+			$CenterControl.add_child(pop)
 		else:
 			print("Deck successfully saved")
 			var pop = popupUI.instance()
 			pop.init("Deck Saved")
-			add_child(pop)
+			$CenterControl.add_child(pop)
 			hasSaved = true
 			loadedDeckName = fileName
 	else:
 		var pop = popupUI.instance()
 		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
-		add_child(pop)
+		$CenterControl.add_child(pop)
 	
 	onFileSaveBackPressed()
 		
 var fileToDelete = ""
 		
 func onDeleteButtonPressed():
-	$FileDisplay.visible = true
-	$FileDisplay/ButtonHolder/Label.text = "Delete File"
+	$CenterControl/FileDisplay.visible = true
+	$CenterControl/FileDisplay/ButtonHolder/Label.text = "Delete File"
 		
 	var files = []
 	var dir = Directory.new()
@@ -424,27 +424,27 @@ func onDeleteButtonPressed():
 			files.append(file)
 	dir.list_dir_end()
 	
-	for c in $FileDisplay/ButtonHolder.get_children():
+	for c in $CenterControl/FileDisplay/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
-			$FileDisplay/ButtonHolder.remove_child(c)
+			$CenterControl/FileDisplay/ButtonHolder.remove_child(c)
 			c.queue_free()
 	for i in range(files.size()):
 		var b = Button.new()
-		$FileDisplay/ButtonHolder.add_child(b)
+		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
-		$FileDisplay/ButtonHolder.move_child(b, i+1)
-	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
-	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
+		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
+	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
+	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 	
 func onDeleteFileButtonPressed(fileName : String):
 	fileToDelete = fileName
-	$FileDisplay.visible = false
+	$CenterControl/FileDisplay.visible = false
 	var pop = popupUI.instance()
 	pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onDeleteBackPressed", [pop]]])
-	add_child(pop)
+	$CenterControl.add_child(pop)
 	
 func onDeleteConfirmed(popup=null):
 	var dir = Directory.new()
@@ -466,14 +466,14 @@ func setCurrentPage(newPage : int):
 	currentPage = newPage
 	pages[newPage].visible = true
 	
-	$LArrow.visible = currentPage != 0
-	$RArrow.visible = currentPage != pages.size() - 1
+	$CenterControl/LArrow.visible = currentPage != 0
+	$CenterControl/RArrow.visible = currentPage != pages.size() - 1
 
 func getCurrentPage() -> int:
 	return currentPage
 	
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($SaveDisplay.visible or $FileDisplay.visible):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or $CenterControl/FileDisplay.visible):
 		if event.scancode == KEY_A or event.scancode == KEY_LEFT:
 			setCurrentPage(getCurrentPage() - 1)
 		elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:

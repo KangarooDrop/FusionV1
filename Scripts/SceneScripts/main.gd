@@ -15,14 +15,14 @@ func _ready():
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_ESCAPE:
-			if not $FileSelector.visible:
-				$PauseNode/PauseMenu.visible = !$PauseNode/PauseMenu.visible
+			if not $CenterControl/FileSelector.visible:
+				$CenterControl/PauseNode/PauseMenu.visible = !$CenterControl/PauseNode/PauseMenu.visible
 			else:
 				onDeckChangeBackPressed()
 
 func onDeckChangePressed():
-	$PauseNode/PauseMenu.visible = false
-	$FileSelector.visible = true
+	$CenterControl/PauseNode/PauseMenu.visible = false
+	$CenterControl/FileSelector.visible = true
 	
 	var files = []
 	var dir = Directory.new()
@@ -36,20 +36,20 @@ func onDeckChangePressed():
 			files.append(file)
 	dir.list_dir_end()
 	
-	for c in $FileSelector/ButtonHolder.get_children():
+	for c in $CenterControl/FileSelector/ButtonHolder.get_children():
 		if c is Button and c.name != "BackButton":
-			$FileSelector/ButtonHolder.remove_child(c)
+			$CenterControl/FileSelector/ButtonHolder.remove_child(c)
 			c.queue_free()
 	for i in range(files.size()):
 		var b = Button.new()
-		$FileSelector/ButtonHolder.add_child(b)
+		$CenterControl/FileSelector/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
 		b.set("custom_fonts/font", fontTRES)
 		b.connect("pressed", self, "onDeckChangeButtonPressed", [files[i]])
-		$FileSelector/ButtonHolder.move_child(b, i+1)
-	$FileSelector/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$FileSelector/Background.rect_size = $FileSelector/ButtonHolder.rect_size + Vector2(60, 20)
-	$FileSelector/Background.rect_position = $FileSelector/ButtonHolder.rect_position - Vector2(30, 10)
+		$CenterControl/FileSelector/ButtonHolder.move_child(b, i+1)
+	$CenterControl/FileSelector/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	$CenterControl/FileSelector/Background.rect_size = $CenterControl/FileSelector/ButtonHolder.rect_size + Vector2(60, 20)
+	$CenterControl/FileSelector/Background.rect_position = $CenterControl/FileSelector/ButtonHolder.rect_position - Vector2(30, 10)
 
 func onDeckChangeButtonPressed(fileName : String):
 	onDeckChangeBackPressed()
@@ -57,5 +57,5 @@ func onDeckChangeButtonPressed(fileName : String):
 	MessageManager.notify("Deck selected for next game")
 
 func onDeckChangeBackPressed():
-	$FileSelector.visible = false
-	$PauseNode/PauseMenu.visible = true
+	$CenterControl/FileSelector.visible = false
+	$CenterControl/PauseNode/PauseMenu.visible = true

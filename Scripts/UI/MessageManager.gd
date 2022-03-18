@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 var notif = preload("res://Scenes/UI/Message.tscn")
 
@@ -8,24 +8,26 @@ var moving := {}
 
 var canvas
 var messageHolder
+var versionLabel
 
 func _ready():
-#	canvas = CanvasLayer.new()
-#	add_child(canvas)
+	yield(get_tree(), "idle_frame")
 	
-	var control = Control.new()
-	control.name = "MessageHolder"
-	add_child(control)
-#	canvas.add_child(control)
-	control.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
-	messageHolder = control
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	set_anchors_and_margins_preset(Control.PRESET_WIDE)
 	
-	var label = Label.new()
-	label.text = "Version: " + str(Settings.versionID)
-	add_child(label)
-#	canvas.add_child(label)
-	label.rect_position += Vector2(8, 8)
-	label.set("custom_colors/font_color", Color(0,0,0))
+	messageHolder = Control.new()
+	messageHolder.name = "MessageHolder"
+	add_child(messageHolder)
+	messageHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
+	
+	versionLabel = Label.new()
+	versionLabel.name = "VersionLabel"
+	versionLabel.text = "Version: " + str(Settings.versionID)
+	add_child(versionLabel)
+	versionLabel.set_anchors_and_margins_preset(Control.PRESET_TOP_LEFT)
+	versionLabel.rect_position += Vector2(8, 8)
+	versionLabel.set("custom_colors/font_color", Color(0,0,0))
 	
 
 func _process(delta):
@@ -48,8 +50,8 @@ func notify(text : String, textLength = 200, margin = 4):
 			moving[n] = yOff
 	
 	var n = notif.instance()
-	var nLabel = n.get_node("Label")
-	var nRect = n.get_node("Background")
+	var nLabel = n.get_node("NodeZ/Label")
+	var nRect = n.get_node("NodeZ/Background")
 	nLabel.rect_size.x = textLength
 	nLabel.text = text
 	messageHolder.add_child(n)
@@ -59,4 +61,3 @@ func notify(text : String, textLength = 200, margin = 4):
 	nLabel.rect_position.y = -nLabel.rect_size.y / 2
 	nRect.rect_size = Vector2(textLength + margin * 2, nLabel.get_size().y + margin * 2)
 	nRect.rect_position.y = -nRect.rect_size.y / 2
-	

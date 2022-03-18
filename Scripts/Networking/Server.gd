@@ -162,7 +162,7 @@ remote func removeUser(player_id : int):
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		if playerIDs.size() == 0:
-			get_node("/root/main/Board").gameOver = true
+			get_node("/root/main/CenterControl/Board").gameOver = true
 #			closeServer()
 
 remote func kickUser(player_id):
@@ -321,28 +321,28 @@ remote func receiveSendAllBoosters(boostersData : Array):
 
 
 remote func serverSetUsername(username : String):
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.setOpponentUsername(username)
 
 remote func sendDeck(player_id : int):
 	if playerIDs.has(player_id):
-		var board = get_node("/root/main/Board")
+		var board = get_node("/root/main/CenterControl/Board")
 		var data = board.players[0].deck.getJSONData()
 		var order = board.players[0].deck.serialize()
 		rpc_id(player_id, "serverSendDeck", data, order)
 
 remote func serverSendDeck(data, order):
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.setDeckData(data, order)
@@ -356,7 +356,7 @@ remote func onGameStart(player_id : int):
 remote func serverOnGameStart():
 	var player_id = get_tree().get_rpc_sender_id()
 	
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	board.onGameStart()
 
 ####################################################################
@@ -368,7 +368,7 @@ remote func slotClicked(player_id : int, isOpponent : bool, slotZone : int, slot
 remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var player_id = get_tree().get_rpc_sender_id()
 	
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	if board.activePlayer == 0 and Settings.gameMode == Settings.GAME_MODE.PLAY:
 		return
 	board.slotClickedServer(isOpponent, slotZone, slotID, button_index)
@@ -382,7 +382,7 @@ remote func onNextTurn(player_id : int):
 remote func serverOnNextTurn():
 	var player_id = get_tree().get_rpc_sender_id()
 	
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	if board.activePlayer == 0 and Settings.gameMode == Settings.GAME_MODE.PLAY:
 		return
 	board.nextTurn()
@@ -396,18 +396,18 @@ remote func onRestart(player_id : int):
 remote func serverOnRestart():
 	var player_id = get_tree().get_rpc_sender_id()
 	
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	board.onRestartPressed()
 		
 
 ####################################################################
 
 #func waitForBoard():
-#	var board = get_node_or_null("/root/main/Board")
+#	var board = get_node_or_null("/root/main/CenterControl/Board")
 #	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 #		print("Board not ready yet, waiting; active")
 #		yield(get_tree().create_timer(0.1), "timeout")
-#		board = get_node_or_null("/root/main/Board")
+#		board = get_node_or_null("/root/main/CenterControl/Board")
 #		if not Server.online:
 #			return
 
@@ -417,11 +417,11 @@ remote func setActivePlayer(player_id : int, index : int):
 	
 remote func serverSetActivePlayer(index : int):
 	var player_id = get_tree().get_rpc_sender_id()
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.setStartingPlayer(index)
@@ -450,11 +450,11 @@ func setGameSeed(player_id : int, gameSeed : int):
 		rpc_id(player_id, "receiveSetGameSeed", gameSeed)
 
 remote func receiveSetGameSeed(gameSeed):
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.setGameSeed(gameSeed)
@@ -464,11 +464,11 @@ func mulliganDone(player_id : int):
 		rpc_id(player_id, "receiveMulliganDone")
 
 remote func receiveMulliganDone():
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.mulliganOpponentDone()
@@ -478,18 +478,18 @@ func requestMulligan(player_id : int):
 		rpc_id(player_id, "receiveRequestMulligan")
 	
 remote func receiveRequestMulligan():
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.mulliganOpponent()
 
 func sendMulliganDeck(player_id : int):
 	if playerIDs.has(player_id):
-		var board = get_node("/root/main/Board")
+		var board = get_node("/root/main/CenterControl/Board")
 		var order = board.players[1].deck.serialize()
 		rpc_id(player_id, "receiveSendMulliganDeck", order)
 
@@ -498,11 +498,11 @@ remote func receiveSendMulliganDeck(order : Array):
 	for c in order:
 		cards.append(ListOfCards.getCard(c))
 		
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 			
@@ -522,11 +522,11 @@ remote func serverFetchVersion():
 	rpc_id(player_id, "returnVersion", Settings.versionID)
 
 remote func returnVersion(version):
-	var board = get_node_or_null("/root/main/Board")
+	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
 		print("Board not ready yet, waiting; active")
 		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/Board")
+		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
 			return
 	board.compareVersion(version)
