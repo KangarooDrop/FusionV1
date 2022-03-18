@@ -31,6 +31,11 @@ var oldY = [-1]
 
 export var viewMul = 0.75
 
+var movingCards := []
+var moveSpeed = 800
+
+export var z_index = 0
+
 func _ready():
 	myfunc()
 	get_tree().get_root().connect("size_changed", self, "myfunc")
@@ -43,20 +48,25 @@ func centerCards():
 	if slots.size() > 0:
 		var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)
 		lastOff = dist
-		var ySlots := []
-		var yNodes := []
-		for s in slots:
-			ySlots.append(s.global_position.y)
-		for n in nodes:
-			yNodes.append(n.global_position.y)
+		var lastPosSlots := []
+		var lastPosNodes := []
+		
+		for i in range(slots.size()):
+			lastPosSlots.append(slots[i].global_position)
+			lastPosNodes.append(nodes[i].global_position)
 		
 		BoardMP.centerNodes(slots, Vector2(), 0, dist)
 		BoardMP.centerNodes(nodes, Vector2(), 0, dist)
 		
 		for i in range(slots.size()):
-			slots[i].global_position.y = ySlots[i]
-		for i in range(nodes.size()):
-			nodes[i].global_position.y = yNodes[i]
+			slots[i].global_position.y = lastPosSlots[i].y
+			nodes[i].global_position.y = lastPosNodes[i].y
+			for d in movingCards:
+				if d[0] == slots[i]:
+					d[1].x = slots[i].global_position.x
+					slots[i].global_position.x = lastPosSlots[i].x
+					nodes[i].global_position.x = lastPosNodes[i].x
+					
 
 func addCard(card : Card):
 	var cardSlot = cardSlotScene.instance()
@@ -81,6 +91,33 @@ func addCard(card : Card):
 	
 	centerCards()
 
+func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
+	var lastPos = cardNode.global_position
+	var cardSlot = cardSlotScene.instance()
+	
+	cardSlot.board = self
+	
+	add_child(cardSlot)
+	if is_instance_valid(cardNode.get_parent()):
+		cardNode.get_parent().remove_child(cardNode)
+	add_child(cardNode)
+	
+	cardSlot.cardNode = cardNode
+	cardNode.slot = cardSlot
+	
+	cardSlot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	
+	slots.append(cardSlot)
+	nodes.append(cardNode)
+	
+	cardSlot.get_node("SpotSprite").visible = false
+	
+	centerCards()
+	if moveIntoDisplay:
+		movingCards.append([cardSlot, cardSlot.global_position])
+		cardNode.global_position = lastPos
+		cardSlot.global_position = lastPos
+
 func clear():
 	while slots.size() > 0:
 		slots[0].queue_free()
@@ -91,12 +128,32 @@ func clear():
 
 func _physics_process(delta):
 	
+	if movingCards.size() > 0:
+		var toRemove := []
+		for data in movingCards:
+			if (data[1] - data[0].global_position).length() <= moveSpeed / 50.0:
+				data[0].global_position = data[1]
+				data[0].cardNode.global_position = data[0].global_position
+				toRemove.append(data)
+			else:
+				data[0].global_position += (data[1] - data[0].global_position).normalized() * moveSpeed * delta
+				data[0].cardNode.global_position = data[0].global_position
+				
+		for data in toRemove:
+			movingCards.erase(data)
+	
 	if mouseDownQueue.size() > 0:
-		var highestZ = mouseDownQueue[0]
-		for i in range(1, mouseDownQueue.size()):
-			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(mouseDownQueue[i].cardNode) and mouseDownQueue[i].cardNode.z_index > highestZ.cardNode.z_index):
-				highestZ = mouseDownQueue[i]
-		clickedSlot = highestZ
+		var highestZ = null
+		for i in range(0, mouseDownQueue.size()):
+			if (highestZ == null and is_instance_valid(mouseDownQueue[i].cardNode)) or (highestZ != null and is_instance_valid(highestZ.cardNode) and is_instance_valid(mouseDownQueue[i].cardNode) and mouseDownQueue[i].cardNode.z_index > highestZ.cardNode.z_index):
+				var found = false
+				for d in movingCards:
+					if d[0] == mouseDownQueue[i]:
+						found = true
+				if not found:
+					highestZ = mouseDownQueue[i]
+		if highestZ != null:
+			clickedSlot = highestZ
 		mouseDownQueue.clear()
 	
 	if mouseDown:
@@ -160,7 +217,7 @@ func _physics_process(delta):
 				indexes.append(i)
 		
 		for i in range(indexes.size()):
-			nodes[indexes[i]].z_index = i + 2
+			nodes[indexes[i]].z_index = i + z_index
 
 func onSlotEnter(slot : CardSlot):
 	if board != null:

@@ -23,11 +23,13 @@ __meta__ = {
 [node name="BoosterDisplay" parent="." instance=ExtResource( 1 )]
 margin_top = 44.0
 margin_bottom = 84.0
+z_index = 2
 
 [node name="CardDisplay" parent="." instance=ExtResource( 1 )]
 margin_top = -148.0
 margin_bottom = -108.0
 viewMul = 0.6
+z_index = 20
 
 [node name="QuitButton" type="Button" parent="."]
 margin_left = 64.0

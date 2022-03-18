@@ -100,7 +100,7 @@ func _physics_process(delta):
 			if highestZ == hoveringSlot:
 				closeHoverWindow(true)
 			
-			$CardDisplay.addCard(highestZ.cardNode.card)
+			$CardDisplay.addCardNode(highestZ.cardNode, true)
 			
 			$BoosterDisplay.slots.erase(highestZ)
 			$BoosterDisplay.nodes.erase(highestZ.cardNode)
@@ -112,7 +112,7 @@ func _physics_process(delta):
 			Server.sendBooster(nextID, cardIDs)
 			
 			$BoosterDisplay.clear()
-			highestZ.cardNode.queue_free()
+			#highestZ.cardNode.queue_free()
 			highestZ.queue_free()
 		elif $CardDisplay.slots.has(highestZ):
 			if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:

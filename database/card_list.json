@@ -400,8 +400,8 @@
   "38": {
     "name": "Rust Crawler",
     "tex": "res://Art/portraits/card_RUST_CRAWLER.png",
-    "power": 5,
-    "toughness": 1,
+    "power": 6,
+    "toughness": 0,
     "creature_type": [
       6
     ],

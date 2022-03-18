@@ -1099,8 +1099,10 @@ func _input(event):
 								waiting = true
 									
 							yield(get_tree().create_timer(0.1), "timeout")
-						nextTurn()
-						Server.onNextTurn(opponentID)
+						
+						if isMyTurn():
+							nextTurn()
+							Server.onNextTurn(opponentID)
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
 		clickedOff = true
 	

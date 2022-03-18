@@ -33,6 +33,15 @@ var doubleClickSlot = null
 var doubleClickTimer = 0
 var doubleClickMaxTime = 0.2
 
+var activePlayer = false
+
+#[Node, timer, start pos, end pos, remove when done, timescale]
+var movingData := []
+var movingMaxTime = 0.2
+
+var processQueue := []
+
+
 func _ready():
 	$DeckDisplayControl/DeckDisplay.parent = self
 	$CardDisplay.board = self
@@ -45,13 +54,13 @@ func _ready():
 		$CardHolder.add_child(cardInst)
 		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		
-	BoardMP.centerNodes(slots, Vector2(-cardWidth - cardDists, cardHeight * Settings.cardSlotScale * 0.75), cardWidth, cardDists)
+	BoardMP.centerNodes(slots, Vector2(0, cardHeight * Settings.cardSlotScale * 0.75), cardWidth, cardDists)
 	
 	mainSlot = cardSlot.instance()
 	mainSlot.board = self
 	$CardHolder.add_child(mainSlot)
 	mainSlot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	mainSlot.position = slots[slots.size() - 1].position + Vector2(cardWidth * 2 * Settings.cardSlotScale, 0)
+	mainSlot.position = Vector2(0, -cardHeight)
 		
 	var mainNode = cardNode.instance()
 	mainNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -108,6 +117,7 @@ func setDraftData(data : Array):
 	addAllPlayerDisplay()
 
 func startPick():
+	activePlayer = true
 	currentIndex = 0
 	revealCards(currentIndex)
 
@@ -119,7 +129,8 @@ func addCardToStack(index : int, fromServer = false):
 		node.card = card
 		node.setCardVisible(false)
 		$CardHolder.add_child(node)
-		node.position = slots[index].position
+		node.position = mainSlot.position
+		movingData.append([node, 0, mainSlot.global_position, slots[index].global_position, false, 1])
 		stacks[index].append(node)
 	else:
 		if is_instance_valid(mainSlot.cardNode):
@@ -138,8 +149,8 @@ func revealCards(index : int):
 	if stacks[index].size() == 0:
 		onLeaveButtonPressed()
 	
-	$TakeButton.visible = true
-	$LeaveButton.visible = true
+	$ButtonZ/TakeButton.visible = true
+	$ButtonZ/LeaveButton.visible = true
 	
 	for i in range(stacks[index].size()):
 		var slot = cardSlot.instance()
@@ -154,8 +165,24 @@ func revealCards(index : int):
 		slot.cardNode = stacks[index][i]
 		stacks[index][i].slot = slot
 		
-	BoardMP.centerNodes(cardDisplaySlots, Vector2(0, -cardHeight * Settings.cardSlotScale * 0.75), cardWidth, cardDists)
-	BoardMP.centerNodes(stacks[index], Vector2(0, -cardHeight * Settings.cardSlotScale * 0.75), cardWidth, cardDists)
+		stacks[index][i].z_index += 2
+	
+	var y = -cardHeight * Settings.cardSlotScale
+	BoardMP.centerNodes(cardDisplaySlots, Vector2(0, y), cardWidth, cardDists)
+	BoardMP.centerNodes(stacks[index], Vector2(0, y), cardWidth, cardDists)
+	
+	for i in range(stacks[index].size()):
+		var positionOld = slots[index].global_position
+		var toRemove := []
+		for j in range(movingData.size()):
+			if movingData[j][0] == stacks[index][i]:
+				positionOld = movingData[j][0].global_position
+				toRemove.append(movingData[j])
+		for d in toRemove:
+			movingData.erase(d)
+				
+		movingData.append([stacks[index][i], 0, positionOld, stacks[index][i].global_position, false, 1])
+		stacks[index][i].global_position = positionOld
 
 func returnCards():
 	while cardDisplaySlots.size() > 0:
@@ -166,6 +193,7 @@ func returnCards():
 		cardDisplaySlots.remove(0)
 	
 	for i in range(stacks[currentIndex].size()):
+		stacks[currentIndex][i].z_index -= 2
 		stacks[currentIndex][i].setCardVisible(false)
 		stacks[currentIndex][i].position = slots[currentIndex].position
 
@@ -182,21 +210,25 @@ func closeHoverWindow(forceClose = false):
 			hoveringSlot = null
 
 func onTakeButtonPressed():
-	$TakeButton.visible = false
-	$LeaveButton.visible = false
-	
-	for i in range(stacks[currentIndex].size()):
-		$CardDisplay.addCard(stacks[currentIndex][i].card)
-	
-	while cardDisplaySlots.size() > 0:
-		if hoveringSlot == cardDisplaySlots[0]:
-			closeHoverWindow(true)
+	if movingData.size() == 0:
+		$ButtonZ/TakeButton.visible = false
+		$ButtonZ/LeaveButton.visible = false
+		
+		for i in range(stacks[currentIndex].size()):
+			var nodeNew = cardNode.instance()
+			nodeNew.card = stacks[currentIndex][i].card
+			$CardHolder.add_child(nodeNew)
+			nodeNew.position = stacks[currentIndex][i].position
+			nodeNew.scale = stacks[currentIndex][i].scale
+			$CardDisplay.addCardNode(nodeNew, true)
 			
-		cardDisplaySlots[0].queue_free()
-		cardDisplaySlots.remove(0)
-	clearStack(currentIndex)
-	addCardToStack(currentIndex)
-	checkEnded()
+			if hoveringSlot == stacks[currentIndex][i]:
+				closeHoverWindow(true)
+			cardDisplaySlots.erase(stacks[currentIndex][i])
+		
+		clearStack(currentIndex)
+		addCardToStack(currentIndex)
+		checkEnded()
 
 func showHideButtonPressed():
 	if $CardDisplay.slots.has(hoveringSlot):
@@ -209,6 +241,17 @@ func showHideButtonPressed():
 		$ShowHideButton.text = "Show Cards"
 
 func clearStack(index : int, fromServer = false):
+	
+	if not activePlayer:
+		for i in range(stacks[index].size()):
+			var node = cardNode.instance()
+			node.setCardVisible(false)
+			$CardHolder.add_child(node)
+			node.position = slots[index].position
+			node.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+			
+			movingData.append([node, (i-stacks[index].size()) / 30.0, node.global_position, node.global_position - Vector2(0, 500), true, 0.3])
+	
 	if not fromServer:
 		Server.clearStack(index)
 	while stacks[index].size() > 0:
@@ -219,25 +262,26 @@ func clearStack(index : int, fromServer = false):
 		hoveringWindow.get_node("Label").text = str(stacks[index].size())
 
 func onLeaveButtonPressed():
-	$TakeButton.visible = false
-	$LeaveButton.visible = false
-	
-	returnCards()
-	addCardToStack(currentIndex)
+	if movingData.size() == 0:
+		$ButtonZ/TakeButton.visible = false
+		$ButtonZ/LeaveButton.visible = false
 		
-	if currentIndex < numStacks - 1:
-		currentIndex += 1
-		revealCards(currentIndex)
-	else:
-		var card = mainStack.pop_front()
-		if card != null:
-			Server.popMainStack()
-			$CardDisplay.addCard(card)
+		returnCards()
+		addCardToStack(currentIndex)
+			
+		if currentIndex < numStacks - 1:
+			currentIndex += 1
+			revealCards(currentIndex)
 		else:
-			if is_instance_valid(mainSlot.cardNode):
-				mainSlot.cardNode.queue_free()
-				mainSlot.cardNode = null
-		checkEnded()
+			var card = mainStack.pop_front()
+			if card != null:
+				Server.popMainStack()
+				$CardDisplay.addCard(card)
+			else:
+				if is_instance_valid(mainSlot.cardNode):
+					mainSlot.cardNode.queue_free()
+					mainSlot.cardNode = null
+			checkEnded()
 
 func checkEnded():
 	var isEnd = true
@@ -290,6 +334,8 @@ func playerDisconnected(player_id):
 		
 
 func nextPlayer():
+	activePlayer = false
+	
 	if Server.host:
 		var nextPlayerIndex = (currentPlayer + 1) % playerIDs.size()
 		
@@ -320,6 +366,29 @@ var slotClickedQueue2 := []
 var clickedOff = false
 
 func _physics_process(delta):
+	
+	if movingData.size() > 0:
+		var toRemove = []
+		for data in movingData:
+		#if true:
+		#	var data = movingData[0]
+			if is_instance_valid(data[0]):
+				var t = min(max(data[1] / movingMaxTime, 0), 1)
+				var pos = lerp(data[2], data[3], t)
+				data[0].global_position = pos
+				data[1] += delta * data[5]
+				if data[1] >= movingMaxTime:
+					toRemove.append(data)
+			else:
+				toRemove.append(data)
+				
+		if toRemove.size() > 0:
+			for data in toRemove:
+				if is_instance_valid(data[0]):
+					data[0].global_position = data[3]
+					if data[4]:
+						data[0].queue_free()
+				movingData.erase(data)
 	
 	if doubleClickSlot != null:
 		doubleClickTimer += delta

@@ -14,6 +14,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CardHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="QuitButton" type="Button" parent="."]
 margin_left = 32.0
 margin_top = 64.0
@@ -25,16 +39,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TakeButton" type="Button" parent="."]
+[node name="ButtonZ" type="Node2D" parent="."]
+z_index = 99
+
+[node name="TakeButton" type="Button" parent="ButtonZ"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -185.5
-margin_top = -204.5
-margin_right = -70.5
-margin_bottom = -179.5
+margin_left = 326.5
+margin_top = 63.5
+margin_right = 441.5
+margin_bottom = 88.5
 grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = ExtResource( 2 )
@@ -43,16 +60,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeaveButton" type="Button" parent="."]
+[node name="LeaveButton" type="Button" parent="ButtonZ"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 68.0
-margin_top = -204.5
-margin_right = 188.0
-margin_bottom = -179.5
+margin_left = 580.0
+margin_top = 63.5
+margin_right = 700.0
+margin_bottom = 88.5
 grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = ExtResource( 2 )
@@ -64,29 +81,22 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -160.0
-margin_top = -84.0
+margin_top = -212.0
 margin_right = -76.0
-margin_bottom = -64.0
+margin_bottom = -192.0
 grow_horizontal = 2
 text = "Show Cards"
-
-[node name="CardHolder" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
-mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CardDisplay" parent="." instance=ExtResource( 3 )]
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -168.0
-margin_bottom = -128.0
+margin_top = -104.0
+margin_bottom = -64.0
+z_index = 2
 
 [node name="OrderDisplay" type="Control" parent="."]
 margin_left = 32.0
@@ -139,6 +149,6 @@ __meta__ = {
 position = Vector2( -120, 75 )
 
 [connection signal="pressed" from="QuitButton" to="." method="quitButtonPressed"]
-[connection signal="pressed" from="TakeButton" to="." method="onTakeButtonPressed"]
-[connection signal="pressed" from="LeaveButton" to="." method="onLeaveButtonPressed"]
+[connection signal="pressed" from="ButtonZ/TakeButton" to="." method="onTakeButtonPressed"]
+[connection signal="pressed" from="ButtonZ/LeaveButton" to="." method="onLeaveButtonPressed"]
 [connection signal="pressed" from="ShowHideButton" to="." method="showHideButtonPressed"]
