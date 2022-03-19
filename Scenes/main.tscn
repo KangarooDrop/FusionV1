@@ -92,3 +92,5 @@ margin_right = 75.0
 margin_bottom = 38.0
 custom_fonts/font = ExtResource( 3 )
 text = "Back"
+
+[connection signal="pressed" from="CenterControl/FileSelector/ButtonHolder/BackButton" to="." method="onDeckChangeBackPressed"]
