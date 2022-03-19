@@ -445,8 +445,9 @@ func _physics_process(delta):
 			else:
 				if not isSame:
 					var pos = highestZ.global_position + Vector2(cardWidth * 3.0/5 * Settings.cardSlotScale, 0)
-					createHoverNode(pos, highestZ.cardNode.card.getHoverData())
-					hoveringSlot = highestZ
+					if is_instance_valid(highestZ.cardNode):
+						createHoverNode(pos, highestZ.cardNode.card.getHoverData())
+						hoveringSlot = highestZ
 					
 		slotClickedQueue2.clear()
 	elif clickedOff:
