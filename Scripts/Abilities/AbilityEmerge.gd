@@ -8,10 +8,9 @@ func _init(card : Card).("Emerge", card, Color.black, false, Vector2(16, 96)):
 func onOtherDeath(board, slot):
 	print("Here ", card.playerID)
 	if not board.isOnBoard(card) and card.playerID == slot.playerID:
-		discardSelf(board)
 		board.abilityStack.append([get_script(), "onEffect", [board, card]])
 
-func discardSelf(board):
+static func discardSelf(board, card):
 	for i in range(board.players.size()):
 		var p = board.players[i]
 		if p.UUID == card.playerID:
@@ -24,7 +23,8 @@ func discardSelf(board):
 static func onEffect(params):
 	var card = ListOfCards.getCard(params[1].UUID)
 	card.removeAbility(card.abilities[0])
-	params[1].addCreatureToBoard(card, params[0], null)
+	if params[1].addCreatureToBoard(card, params[0], null):
+		discardSelf(params[0], params[1])
 
 func genDescription() -> String:
 	return "When a creature you control dies, this card is automatically put into play from your hand"

@@ -555,7 +555,7 @@ func _physics_process(delta):
 	if gameStarted:
 		if fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
-				print("Stack: ", abilityStack)
+				#print("Stack: ", abilityStack)
 				var abl = abilityStack[0]
 				abl[0].call(abl[1], abl[2])
 				abilityStack.erase(abl)

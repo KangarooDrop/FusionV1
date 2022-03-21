@@ -139,7 +139,7 @@ func onGraveAdd(board, card):
 	for abl in abilities.duplicate():
 		abl.onGraveAdd(board, card)
 
-func addCreatureToBoard(card, board, slot = null):
+func addCreatureToBoard(card, board, slot = null) -> bool:
 	if slot == null:
 		for s in board.creatures[playerID]:
 			if not is_instance_valid(s.cardNode):
@@ -161,6 +161,8 @@ func addCreatureToBoard(card, board, slot = null):
 		for s in board.creatures[slot.playerID]:
 			if is_instance_valid(s.cardNode) and s != slot:
 				s.cardNode.card.onOtherEnter(self, slot)
+		return true
+	return false
 
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
