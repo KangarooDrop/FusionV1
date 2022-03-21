@@ -7,17 +7,18 @@ func _init(card : Card).("Shield Up", card, Color.darkgray, true, Vector2(0, 0))
 
 func onEnter(board, slot):
 	.onEnter(board, slot)
-	onEffect(board)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
 
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
-	onEffect(board)
-	
-func onEffect(board):
-	for p in board.players:
-		if p.UUID == card.playerID:
-			p.addArmour(count)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
 	card.removeAbility(self)
+	
+static func onEffect(params):
+	for p in params[0].players:
+		if p.UUID == params[1].playerID:
+			p.addArmour(params[2])
 
 func genDescription() -> String:
 	return "When this creature is played, gain " + str(count) + " " + str(TextArmor.new(null)) + ". Removes this ability"

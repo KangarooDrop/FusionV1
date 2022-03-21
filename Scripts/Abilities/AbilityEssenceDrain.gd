@@ -7,27 +7,24 @@ func _init(card : Card).("Essence Drain", card, Color.black, true, Vector2(0, 0)
 
 func onEnter(board, slot):
 	.onEnter(board, slot)
-	onEffect(board)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
 	
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
-	onEffect(board)
-
-func onEffect(board):
-	var n = 0
-	for s in board.boardSlots:
-		if is_instance_valid(s.cardNode) and s.cardNode.card != null and s != card.cardNode.slot:
-			s.cardNode.card.power -= count
-			s.cardNode.card.toughness -= count
-			s.cardNode.card.maxToughness -= count
-			n += 1
-			
-	card.power += count * n
-	
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
 	card.removeAbility(self)
 
-func combine(abl : Ability):
-	.combine(abl)
+static func onEffect(params):
+	var n = 0
+	for s in params[0].boardSlots:
+		if is_instance_valid(s.cardNode) and s.cardNode.card != null and s != params[1].cardNode.slot:
+			s.cardNode.card.power -= params[2]
+			s.cardNode.card.toughness -= params[2]
+			s.cardNode.card.maxToughness -= params[2]
+			n += 1
+			
+	params[1].power += params[2] * n
 
 func genDescription() -> String:
 	var strCount = str(count)

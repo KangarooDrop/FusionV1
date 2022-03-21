@@ -7,21 +7,22 @@ func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 
 func onEnter(board, slot):
 	.onEnter(board, slot)
-	onEffect(board)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
 	
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
 	onEffect(board)
-			
-func onEffect(board):
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
+
+static func onEffect(params):
 	var hand = null
-	for p in board.players:
-		if p.UUID == card.cardNode.slot.playerID:
-			for i in range(count):
+	for p in params[0].players:
+		if p.UUID == params[1].cardNode.slot.playerID:
+			for i in range(params[2]):
 				p.hand.addCardToHand([ListOfCards.getCard(5), true, false])
 			break
-	
-	card.removeAbility(self)
 	
 func genDescription() -> String:
 	var string = "a mech"

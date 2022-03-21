@@ -6,8 +6,10 @@ func _init(card : Card).("Brittle", card, Color.gray, false, Vector2(16, 80)):
 	pass
 
 func onEndOfTurn(board):
-	card.toughness = -INF
-	board.checkState()
+	board.abilityStack.append([get_script(), "onEffect", [card]])
+
+static func onEffect(params):
+	params[0].toughness = -INF
 	
 func genDescription() -> String:
 	return "At the end of the turn, this creature is destroyed."

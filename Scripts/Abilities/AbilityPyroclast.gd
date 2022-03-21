@@ -7,20 +7,21 @@ func _init(card : Card).("Pyroclast", card, Color.red, true, Vector2(0, 0)):
 	
 func onEnter(board, slot):
 	.onEnter(board, slot)
-	onDrawEffect(board)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
 	
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
-	onDrawEffect(board)
-			
-func onDrawEffect(board):
-	for p in board.players:
-		if p.UUID == card.playerID:
-			for i in range(count):
-				p.takeDamage(5, card.cardNode)
+	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+	card.removeAbility(self)
+
+static func onEffect(params):
+	for p in params[0].players:
+		if p.UUID == params[1].playerID:
+			for i in range(params[2]):
+				p.takeDamage(5, params[1].cardNode)
 			break
 			
-	card.removeAbility(self)
 
 func genDescription() -> String:
 	return "When this creature is played, it deals " + str(count * 5) + " damage to you"

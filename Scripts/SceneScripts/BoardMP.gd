@@ -514,7 +514,7 @@ func _physics_process(delta):
 				if millWaitTimer >= millWaitMaxTime:
 					
 					for i in range(players.size()):
-						var p = players[activePlayer + i % players.size()]
+						var p = players[(activePlayer + i) % players.size()]
 						for s in creatures[p.UUID]:
 							if is_instance_valid(s.cardNode):
 								s.cardNode.card.onMill(self, millNode.card)
@@ -641,7 +641,7 @@ func addCardToGrave(playerID : int, card : Card):
 	
 	
 	for i in range(players.size()):
-		var p = players[activePlayer + i % players.size()]
+		var p = players[(activePlayer + i) % players.size()]
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				s.cardNode.card.onGraveAdd(self, card)
@@ -1219,11 +1219,16 @@ func nextTurn():
 	checkState()
 		
 	######################	ON END OF TURN EFFECTS
-	for slot in boardSlots:
-		if is_instance_valid(slot.cardNode):
-			slot.cardNode.card.onEndOfTurn(self)
+	for i in range(players.size()):
+		var p = players[(activePlayer + i) % players.size()]
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onEndOfTurn(self)
 	######################
-		
+	
+	while abilityStack.size() > 0:
+		yield(get_tree().create_timer(0.1), "timeout")
+	
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
 	setTurnText()
@@ -1235,12 +1240,11 @@ func nextTurn():
 		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 		
 	######################	ON START OF TURN EFFECTS
-	var slotsToCheck = []
-	for slot in boardSlots:
-		if is_instance_valid(slot.cardNode):
-			slotsToCheck.append(slot)
-	for slot in slotsToCheck:
-			slot.cardNode.card.onStartOfTurn(self)
+	for i in range(players.size()):
+		var p = players[(activePlayer + i) % players.size()]
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onStartOfTurn(self)
 	######################
 
 func checkState():
