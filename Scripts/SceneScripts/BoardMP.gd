@@ -863,10 +863,10 @@ func onSlotEnter(slot : CardSlot):
 		
 		var opponentHasTaunt = false
 		for s in creatures[slot.playerID]:
-			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt):
+			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
 				opponentHasTaunt = true
 		
-		if isMyTurn() and not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
+		if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
 			if slot.playerID != selectedCard.playerID:
 				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 					for s in slot.getNeighbors():
@@ -1119,10 +1119,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					if is_instance_valid(selectedCard):
 						var opponentHasTaunt = false
 						for s in creatures[slot.playerID]:
-							if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt):
+							if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
 								opponentHasTaunt = true
 						
-						if not opponentHasTaunt or is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt):
+						if not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
 							var slots = []
 							if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 								slots = slot.getNeighbors()
