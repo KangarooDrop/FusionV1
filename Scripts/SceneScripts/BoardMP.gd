@@ -174,7 +174,7 @@ func onMulliganButtonPressed():
 				handCards.append(players[0].deck.cards[i])
 			
 			handCards.shuffle()
-			players[0].deck.setCards(handCards)
+			players[0].deck.setCards(handCards, players[0].UUID)
 			
 			Server.sendDeck(opponentID)
 			
@@ -233,7 +233,7 @@ func getDeckFromFile() -> Array:
 	return cardList
 
 func setOwnCardList(cardList : Array):
-	players[0].deck.setCards(cardList)
+	players[0].deck.setCards(cardList, players[0].UUID)
 	var logDeck = "OWN_DECK "
 	for i in players[0].deck.serialize():
 		logDeck += str(i) + " "
@@ -249,7 +249,7 @@ func setOpponentCardList(cardList : Array):
 	var cards = []
 	for c in cardList:
 		cards.append(ListOfCards.getCard(c))
-	players[1].deck.setCards(cards)
+	players[1].deck.setCards(cards, players[1].UUID)
 	
 	var logDeck = "OPPONENT_DECK "
 	for i in players[players.size()-1].deck.serialize():
@@ -468,14 +468,13 @@ func _physics_process(delta):
 					cardNode.card.cardNode = cardNode
 					if isEntering:
 						cardNode.card.onEnter(self, fuseEndSlot)
-						for s in creatures[fuseEndSlot.playerID]:
-							if is_instance_valid(s.cardNode) and s != fuseEndSlot:
-								s.cardNode.card.onOtherEnter(self, fuseEndSlot)
+						
+						for c in getAllCards():
+							c.onOtherEnter(self, fuseEndSlot)
 					else:
 						cardNode.card.onEnterFromFusion(self, fuseEndSlot)
-						for s in creatures[fuseEndSlot.playerID]:
-							if is_instance_valid(s.cardNode) and s != fuseEndSlot:
-								s.cardNode.card.onOtherEnterFromFusion(self, fuseEndSlot)
+						for c in getAllCards():
+							c.onOtherEnterFromFusion(self, fuseEndSlot)
 					checkState()
 					
 	if millQueue.size() > 0:
@@ -513,11 +512,8 @@ func _physics_process(delta):
 				millWaitTimer += delta
 				if millWaitTimer >= millWaitMaxTime:
 					
-					for i in range(players.size()):
-						var p = players[(activePlayer + i) % players.size()]
-						for s in creatures[p.UUID]:
-							if is_instance_valid(s.cardNode):
-								s.cardNode.card.onMill(self, millNode.card)
+					for c in getAllCards():
+						c.onMill(self, millNode.card)
 					
 					addCardToGrave(millNode.playerID, ListOfCards.getCard(millNode.card.UUID))
 					millNode.queue_free()
@@ -640,11 +636,9 @@ func addCardToGrave(playerID : int, card : Card):
 		$GraveDisplay.addCard(card)
 	
 	
-	for i in range(players.size()):
-		var p = players[(activePlayer + i) % players.size()]
-		for s in creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
-				s.cardNode.card.onGraveAdd(self, card)
+	
+	for c in getAllCards():
+		c.onGraveAdd(self, card)
 
 func clearGraveDisplay():
 	graveViewing = -1
@@ -1075,15 +1069,14 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					cardPlacing.slot = slot
 					
 					if isEntering:
-						newCard.onEnter(self, slot)
-						for s in creatures[slot.playerID]:
-							if is_instance_valid(s.cardNode) and s != slot:
-								s.cardNode.card.onOtherEnter(self, slot)
+						newCard.onEnter(self, fuseEndSlot)
+						
+						for c in getAllCards():
+							c.onOtherEnter(self, fuseEndSlot)
 					else:
-						newCard.onEnterFromFusion(self, slot)
-						for s in creatures[slot.playerID]:
-							if is_instance_valid(s.cardNode) and s != slot:
-								s.cardNode.card.onOtherEnterFromFusion(self, slot)
+						newCard.onEnterFromFusion(self, fuseEndSlot)
+						for c in getAllCards():
+							c.onOtherEnterFromFusion(self, fuseEndSlot)
 					
 					checkState()
 					
@@ -1201,8 +1194,29 @@ func _input(event):
 							Server.onNextTurn(opponentID)
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
 		clickedOff = true
+
+func isOnBoard(card : Card):
+	for i in range(players.size()):
+		var p = players[(activePlayer + i) % players.size()]
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode) and s.cardNode.card == card:
+				return true
+	return false
+
+func getAllCards() -> Array:
+	var cards := []
+	for i in range(players.size()):
+		var p = players[(activePlayer + i) % players.size()]
+		
+		for s in p.hand.slots:
+			if is_instance_valid(s.cardNode):
+				cards.append(s.cardNode.card)
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				cards.append(s.cardNode.card)
 	
-	
+	return cards
+
 func nextTurn():
 	if gameOver:
 		return
@@ -1219,11 +1233,8 @@ func nextTurn():
 	checkState()
 		
 	######################	ON END OF TURN EFFECTS
-	for i in range(players.size()):
-		var p = players[(activePlayer + i) % players.size()]
-		for s in creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
-				s.cardNode.card.onEndOfTurn(self)
+	for c in getAllCards():
+		c.onEndOfTurn(self)
 	######################
 	
 	while abilityStack.size() > 0:
@@ -1240,11 +1251,8 @@ func nextTurn():
 		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 		
 	######################	ON START OF TURN EFFECTS
-	for i in range(players.size()):
-		var p = players[(activePlayer + i) % players.size()]
-		for s in creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
-				s.cardNode.card.onStartOfTurn(self)
+	for c in getAllCards():
+		c.onStartOfTurn(self)
 	######################
 
 func checkState():
@@ -1269,14 +1277,13 @@ func checkState():
 			hoveringWindow.close(true)
 			hoveringWindowSlot = null
 					
+		for c in getAllCards():
+			c.onOtherLeave(self, cardNode.slot)
+			c.onOtherDeath(self, cardNode.slot)
 		cardNode.card.onLeave(self)
 		cardNode.slot.cardNode = null
 		cardNode.card.onDeath(self)
 		cardNode.queue_free()
-		for s in creatures[cardNode.slot.playerID]:
-			if is_instance_valid(s.cardNode) and s != cardNode.slot:
-				s.cardNode.card.onOtherLeave(self, cardNode.slot)
-				s.cardNode.card.onOtherDeath(self, cardNode.slot)
 
 	var boardStateNew = []
 	for p in players:

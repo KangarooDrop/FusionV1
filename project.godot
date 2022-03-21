@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityDegenerate.gd"
 }, {
 "base": "Ability",
+"class": "AbilityEmerge",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityEmerge.gd"
+}, {
+"base": "Ability",
 "class": "AbilityEssenceDrain",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityEssenceDrain.gd"
@@ -238,6 +243,7 @@ _global_script_class_icons={
 "AbilityConjoined": "",
 "AbilityDash": "",
 "AbilityDegenerate": "",
+"AbilityEmerge": "",
 "AbilityEssenceDrain": "",
 "AbilityEvolution": "",
 "AbilityFrostbite": "",

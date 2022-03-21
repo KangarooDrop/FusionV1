@@ -12,7 +12,6 @@ func onEnter(board, slot):
 	
 func onEnterFromFusion(board, slot):
 	.onEnterFromFusion(board, slot)
-	onEffect(board)
 	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
 	card.removeAbility(self)
 

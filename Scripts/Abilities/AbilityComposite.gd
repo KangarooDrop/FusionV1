@@ -23,7 +23,8 @@ func onEffect(board, slot):
 			card.power += 1
 
 func onOtherEnter(board, slot):
-	card.power += count
+	if board.isOnBoard(card):
+		card.power += count
 	
 func onLeave(board):
 	for s in board.creatures[card.cardNode.slot.playerID]:
@@ -31,7 +32,8 @@ func onLeave(board):
 			card.power -= count
 	
 func onOtherLeave(board, slot):
-	card.power -= count
+	if board.isOnBoard(card):
+		card.power -= count
 	
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)

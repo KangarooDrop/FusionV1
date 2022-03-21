@@ -20,8 +20,9 @@ func onEnterFromFusion(board, slot):
 			onEffect(t)
 
 func onGraveAdd(board, card):
-	for t in card.creatureType:
-		onEffect(t)
+	if board.isOnBoard(card):
+		for t in card.creatureType:
+			onEffect(t)
 
 func onEffect(tribe : int):
 	if not tribes & 1 << tribe:

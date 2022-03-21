@@ -17,9 +17,10 @@ func onEnterFromFusion(board, slot):
 
 func onStartOfTurn(board):
 	.onStartOfTurn(board)
-	onEffect()
-	if board.players[board.activePlayer].UUID == card.playerID:
-		frozenThisTurn = true
+	if board.isOnBoard(card):
+		onEffect()
+		if board.players[board.activePlayer].UUID == card.playerID:
+			frozenThisTurn = true
 
 func onEffect():
 	card.canAttackThisTurn = false
@@ -27,14 +28,15 @@ func onEffect():
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
 
 func onEndOfTurn(board):
-	if frozenThisTurn:
-		card.canFuseThisTurn = true
-		if board.players[board.activePlayer].UUID == card.playerID:
-			var scr = get_script()
-			for abl in card.abilities:
-				if abl is scr:
-					card.abilities.erase(abl)
-					break
+	if board.isOnBoard(card):
+		if frozenThisTurn:
+			card.canFuseThisTurn = true
+			if board.players[board.activePlayer].UUID == card.playerID:
+				var scr = get_script()
+				for abl in card.abilities:
+					if abl is scr:
+						card.abilities.erase(abl)
+						break
 
 func combine(abl : Ability):
 	.combine(abl)

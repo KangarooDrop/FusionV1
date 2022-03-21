@@ -8,7 +8,8 @@ func _init(card : Card).("Taunt", card, Color.darkgray, false, Vector2(0, 0)):
 	pass
 
 func onStartOfTurn(board):
-	active = true
+	if board.isOnBoard(card):
+		active = true
 
 func onBeingAttacked(attacker, board):
 	active = false

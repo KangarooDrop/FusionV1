@@ -6,8 +6,10 @@ var cards : Array
 func _init():
 	pass
 
-func setCards(cards : Array):
+func setCards(cards : Array, playerID : int):
 	self.cards = cards
+	for c in cards:
+		c.playerID = playerID
 
 func shuffle():
 	cards.shuffle()

@@ -14,10 +14,12 @@ func onEnterFromFusion(board, slot):
 	onEffect(board)
 	
 func onDraw(board, card):
-	onEffect(board)
+	if board.isOnBoard(card):
+		onEffect(board)
 
 func onMill(board, card):
-	onEffect(board)
+	if board.isOnBoard(card):
+		onEffect(board)
 
 func onEffect(board):
 	var pid = card.cardNode.slot.playerID

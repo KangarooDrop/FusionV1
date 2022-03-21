@@ -553,7 +553,7 @@
       "AbilityConjoined"
     ]
   },
-  "49": {
+  "50": {
     "name": "Sinusoida",
     "tex": "res://Art/portraits/card_CARRION.png",
     "power": 8,
@@ -564,6 +564,19 @@
     "tier": 1,
     "abilities": [
       "AbilityMadness"
+    ]
+  },
+  "51": {
+    "name": "Parasite",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 2,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityEmerge"
     ]
   }
 }

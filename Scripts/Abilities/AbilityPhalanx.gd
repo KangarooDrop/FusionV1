@@ -18,10 +18,11 @@ func onEnterFromFusion(board, slot):
 		buffsApplied += 1
 
 func onOtherEnter(board, slot):
-	for s in card.cardNode.slot.getNeighbors():
-		if s == slot:
-			s.cardNode.card.power += count
-			s.cardNode.card.toughness += count
+	if board.isOnBoard(card):
+		for s in card.cardNode.slot.getNeighbors():
+			if s == slot:
+				s.cardNode.card.power += count
+				s.cardNode.card.toughness += count
 
 func onEffect():
 	for s in card.cardNode.slot.getNeighbors():
@@ -37,10 +38,11 @@ func onLeave(board):
 				s.cardNode.card.toughness -= count
 
 func onOtherLeave(board, slot):
-	if is_instance_valid(slot.cardNode):
-		if slot in card.cardNode.slot.getNeighbors():
-			slot.cardNode.card.power -= count
-			slot.cardNode.card.toughness -= count
+	if board.isOnBoard(card):
+		if is_instance_valid(slot.cardNode):
+			if slot in card.cardNode.slot.getNeighbors():
+				slot.cardNode.card.power -= count
+				slot.cardNode.card.toughness -= count
 	
 	
 func clone(card : Card) -> Ability:
