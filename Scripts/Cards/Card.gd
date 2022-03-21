@@ -94,7 +94,7 @@ func onLeave(board):
 		abl.onLeave(board)
 	
 func onStartOfTurn(board):
-	if board.players[board.activePlayer].UUID == playerID:
+	if board.isOnBoard(self) and board.players[board.activePlayer].UUID == playerID:
 		hasAttacked = false
 		canAttackThisTurn = true
 		canFuseThisTurn = true

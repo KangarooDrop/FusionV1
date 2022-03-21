@@ -376,7 +376,7 @@ var practiceWaiting = false
 func _physics_process(delta):
 	
 	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
-		if not practiceWaiting and activePlayer != 0:
+		if not practiceWaiting and activePlayer != 0 and gameStarted:
 			practiceWaiting = true
 			yield(get_tree().create_timer(1), "timeout")
 			practiceWaiting = false
@@ -854,14 +854,13 @@ func onSlotEnter(slot : CardSlot):
 		
 	
 	if is_instance_valid(selectedCard):
-		
 		var opponentHasTaunt = false
 		for s in creatures[slot.playerID]:
 			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
 				opponentHasTaunt = true
 		
 		if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
-			if slot.playerID != selectedCard.playerID:
+			if slot.playerID != selectedCard.playerID and slot.currentZone == CardSlot.ZONES.CREATURE:
 				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 					for s in slot.getNeighbors():
 						s.setHighlight(true)
@@ -983,105 +982,25 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					cardList.append(c.cardNode.card)
 					
 				cardsPlayed += cardsHolding.size()
-					
-				if Settings.playAnimations:
-					isEntering = not is_instance_valid(slot.cardNode)
-					
-					if is_instance_valid(slot.cardNode):
-						if slot == selectedCard:
-							selectedCard.cardNode.rotation = 0
-							selectRotTimer = 0
-							selectedCard = null
-						cardsHolding.insert(0, slot)
-					
-					if cardsHolding.has(hoveringWindowSlot):
-						if is_instance_valid(hoveringWindow):
-							if hoveringWindow.close(true):
-								hoveringWindowSlot = null
-					
-					for i in range(0 if isEntering else 1, cardsHolding.size()):
-						addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardsHolding[i].cardNode.card.UUID))
-					
-					while cardsHolding.size() > 0:
-						var c = cardsHolding[0]
-						var cardNode = c.cardNode
-						cardNode.setCardVisible(true)
-						cardsHolding.erase(c)
-						
-						fuseQueue.append(cardNode)
-						cardNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-						cardNode.z_index = 1
-						cardNode.get_parent().remove_child(cardNode)
-						$Fusion_Holder.add_child(cardNode)
-						cardNode.position = Vector2()
-						c.cardNode = null
-						card_A_Holder.nodes.erase(cardNode)
-						card_B_Holder.nodes.erase(cardNode)
-						if c.currentZone == CardSlot.ZONES.HAND:
-							card_A_Holder.slots.erase(c)
-							card_B_Holder.slots.erase(c)
-							c.queue_free()
-					
-					fuseStartPos = fuseQueue[0].global_position
-					fuseEndSlot = slot
-					fuseTimer = 0
-					fuseReturnTimer = 0
-					
-					
-					card_A_Holder.centerCards()
-					card_B_Holder.centerCards()
-					centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
-					
-					fuseWaiting = true
-					fuseWaitTimer = 0
-				else:
-					isEntering = not is_instance_valid(slot.cardNode)
-	
-					if is_instance_valid(slot.cardNode):
-						if not slot.cardNode.card.canFuseThisTurn:
-							return false
-						cardsHolding.insert(0, slot)
-						cardList.insert(0, slot.cardNode.card)
-						
-					while cardsHolding.size() > 0:
-						var c = cardsHolding[0]
-						cardsHolding.remove(0)
-						var cardNode = c.cardNode
-						cardNode.get_parent().remove_child(cardNode)
-						card_A_Holder.nodes.erase(cardNode)
-						card_B_Holder.nodes.erase(cardNode)
-						if c.currentZone == CardSlot.ZONES.HAND:
-							card_A_Holder.slots.erase(c)
-							card_B_Holder.slots.erase(c)
-							c.queue_free()
-					
-					var newCard = ListOfCards.fuseCards(cardList)
-					var cardPlacing = cardNode.instance()
-					newCard.playerID = slot.playerID
-					cardPlacing.card = newCard
-					newCard.cardNode = cardPlacing
-					creatures_A_Holder.add_child(cardPlacing)
-					cardPlacing.global_position = slot.global_position
-					cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-					if is_instance_valid(slot.cardNode):
-						slot.cardNode.queue_free()
-					slot.cardNode = cardPlacing
-					cardPlacing.slot = slot
-					
-					if isEntering:
-						newCard.onEnter(self, fuseEndSlot)
-						
-						for c in getAllCards():
-							c.onOtherEnter(self, fuseEndSlot)
-					else:
-						newCard.onEnterFromFusion(self, fuseEndSlot)
-						for c in getAllCards():
-							c.onOtherEnterFromFusion(self, fuseEndSlot)
-					
-					checkState()
-					
-					card_A_Holder.centerCards()
-					card_B_Holder.centerCards()
+				
+				
+				while cardsHolding.size() > 0:
+					var c = cardsHolding[0]
+					cardsHolding.remove(0)
+					var cardNode = c.cardNode
+					cardNode.get_parent().remove_child(cardNode)
+					card_A_Holder.nodes.erase(cardNode)
+					card_B_Holder.nodes.erase(cardNode)
+					if c.currentZone == CardSlot.ZONES.HAND:
+						card_A_Holder.slots.erase(c)
+						card_B_Holder.slots.erase(c)
+						c.queue_free()
+				
+				fuseToSlot(slot, cardList)
+				
+				card_A_Holder.centerCards()
+				card_B_Holder.centerCards()
+				centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
 
 				if activePlayer == 0:
 					$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
@@ -1149,6 +1068,82 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 		return true
 	
 	return false
+
+func fuseToSlot(slot : CardSlot, cards : Array):
+	
+	var isEntering = not is_instance_valid(slot.cardNode)
+	
+	if not isEntering:
+		if slot == selectedCard:
+			selectedCard.cardNode.rotation = 0
+			selectRotTimer = 0
+			selectedCard = null
+		cards.insert(0, slot.cardNode.card)
+		slot.cardNode.queue_free()
+		slot.cardNode = null
+	
+	if Settings.playAnimations:
+		if slot == hoveringWindowSlot:
+			if is_instance_valid(hoveringWindow):
+				if hoveringWindow.close(true):
+					hoveringWindowSlot = null
+		
+		for i in range(0 if isEntering else 1, cards.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cards[i].UUID))
+		
+		while cards.size() > 0:
+			var card = cards[0]
+			cards.remove(0)
+			
+			var cn = cardNode.instance()
+			cn.card = card
+		
+			fuseQueue.append(cn)
+			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+			cn.z_index = 1
+			$Fusion_Holder.add_child(cn)
+			cn.position = Vector2()
+			card_A_Holder.nodes.erase(cn)
+			card_B_Holder.nodes.erase(cn)
+		
+		fuseStartPos = fuseQueue[0].global_position
+		fuseEndSlot = slot
+		fuseTimer = 0
+		fuseReturnTimer = 0
+		
+		fuseWaiting = true
+		fuseWaitTimer = 0
+	else:
+		for i in range(0 if isEntering else 1, cards.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cards[i].UUID))
+		
+		var newCard = ListOfCards.fuseCards(cards)
+		var cardPlacing = cardNode.instance()
+		newCard.playerID = slot.playerID
+		cardPlacing.card = newCard
+		newCard.cardNode = cardPlacing
+		creatures_A_Holder.add_child(cardPlacing)
+		cardPlacing.global_position = slot.global_position
+		cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+		if is_instance_valid(slot.cardNode):
+			slot.cardNode.queue_free()
+		slot.cardNode = cardPlacing
+		cardPlacing.slot = slot
+		
+		if isEntering:
+			newCard.onEnter(self, fuseEndSlot)
+			
+			for c in getAllCards():
+				c.onOtherEnter(self, fuseEndSlot)
+		else:
+			newCard.onEnterFromFusion(self, fuseEndSlot)
+			for c in getAllCards():
+				c.onOtherEnterFromFusion(self, fuseEndSlot)
+		
+		checkState()
+		
+		card_A_Holder.centerCards()
+		card_B_Holder.centerCards()
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer
