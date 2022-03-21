@@ -539,5 +539,18 @@
     "abilities": [
       "AbilityEssenceDrain"
     ]
+  },
+  "49": {
+    "name": "Amalgam",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityConjoined"
+    ]
   }
 }
