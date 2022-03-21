@@ -127,6 +127,10 @@ func onBeingAttacked(attacker, board):
 	for abl in abilities.duplicate():
 		abl.onBeingAttacked(attacker, board)
 
+func onDraw(board, card):
+	for abl in abilities.duplicate():
+		abl.onDraw(board, card)
+
 func onMill(board, card):
 	for abl in abilities.duplicate():
 		abl.onMill(board, card)

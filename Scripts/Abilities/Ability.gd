@@ -57,6 +57,9 @@ func onEnterFromFusion(board, slot):
 func onOtherEnterFromFusion(board, slot):
 	pass
 
+func onDraw(board, card):
+	pass
+
 func onMill(board, card):
 	pass
 

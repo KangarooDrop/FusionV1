@@ -103,6 +103,13 @@ func _physics_process(delta):
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
 				
+				for i in range(board.players.size()):
+					var p = board.players[(board.activePlayer + i) % board.players.size()]
+					for s in board.creatures[p.UUID]:
+						if is_instance_valid(s.cardNode):
+							s.cardNode.card.onDraw(board, cardInst.card)
+				
+				
 			if drawQueue[0][2]:
 				player.takeDamage(player.drawDamage, null)
 				player.drawDamage += 1

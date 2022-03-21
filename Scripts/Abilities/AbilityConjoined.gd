@@ -41,4 +41,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return "This creature gets +X/+X where X is the number of creature types in your " + str(TextScrapyard.new(null))
+	return "This creature gets +1/+1 for each creature types in your " + str(TextScrapyard.new(null))

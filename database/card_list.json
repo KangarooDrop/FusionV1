@@ -552,5 +552,18 @@
     "abilities": [
       "AbilityConjoined"
     ]
+  },
+  "49": {
+    "name": "Sinusoida",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 8,
+    "toughness": 8,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityMadness"
+    ]
   }
 }

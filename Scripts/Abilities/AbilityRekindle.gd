@@ -15,7 +15,7 @@ func onEnterFromFusion(board, slot):
 	
 func onEffect(board):
 	board.abilityStack.append([get_script(), "onDiscard", [board, card.playerID]])
-	board.abilityStack.append([get_script(), "onDraw", [board, card.playerID, count]])
+	board.abilityStack.append([get_script(), "onDrawEffect", [board, card.playerID, count]])
 	
 	card.removeAbility(self)
 
@@ -26,7 +26,7 @@ static func onDiscard(params : Array):
 				p.hand.discardIndex(i)
 			break
 
-static func onDraw(params : Array):
+static func onDrawEffect(params : Array):
 	for p in params[0].players:
 		if p.UUID == params[1]:
 			for i in range(params[2]):
