@@ -126,7 +126,15 @@ func onAttack(blocker, board):
 func onBeingAttacked(attacker, board):
 	for abl in abilities.duplicate():
 		abl.onBeingAttacked(attacker, board)
-	
+
+func onMill(board, card):
+	for abl in abilities.duplicate():
+		abl.onMill(board, card)
+
+func onGraveAdd(board, card):
+	for abl in abilities.duplicate():
+		abl.onGraveAdd(board, card)
+
 func addCreatureToBoard(card, board, slot = null):
 	if slot == null:
 		for s in board.creatures[playerID]:

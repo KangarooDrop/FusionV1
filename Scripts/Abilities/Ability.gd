@@ -56,7 +56,13 @@ func onEnterFromFusion(board, slot):
 	
 func onOtherEnterFromFusion(board, slot):
 	pass
-	
+
+func onMill(board, card):
+	pass
+
+func onGraveAdd(board, card):
+	pass
+
 func combine(abl : Ability):
 	setCount(count + abl.count)
 

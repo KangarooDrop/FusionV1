@@ -125,9 +125,9 @@ func clear():
 	while nodes.size() > 0:
 		nodes[0].queue_free()
 		nodes.remove(0)
+	movingCards.clear()
 
 func _physics_process(delta):
-	
 	if movingCards.size() > 0:
 		var toRemove := []
 		for data in movingCards:

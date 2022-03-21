@@ -14,10 +14,10 @@ func onEnterFromFusion(board, slot):
 	onEffect(board, slot)
 
 func onEffect(board, slot):
-	board.abilityStack.append([get_script(), "onMill", [board, card.playerID, count]])
+	board.abilityStack.append([get_script(), "onMillEffect", [board, card.playerID, count]])
 	card.removeAbility(self)
 
-static func onMill(params):
+static func onMillEffect(params):
 	for p in params[0].players:
 		if p.UUID != params[1]:
 			for i in range(params[2]):

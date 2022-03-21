@@ -149,8 +149,8 @@ func revealCards(index : int):
 	if stacks[index].size() == 0:
 		onLeaveButtonPressed()
 	
-	$ButtonZ/TakeButton.visible = true
-	$ButtonZ/LeaveButton.visible = true
+	$TakeLeaveCenter/ButtonZ/TakeButton.visible = true
+	$TakeLeaveCenter/ButtonZ/LeaveButton.visible = true
 	
 	for i in range(stacks[index].size()):
 		var slot = cardSlot.instance()
@@ -211,8 +211,8 @@ func closeHoverWindow(forceClose = false):
 
 func onTakeButtonPressed():
 	if movingData.size() == 0:
-		$ButtonZ/TakeButton.visible = false
-		$ButtonZ/LeaveButton.visible = false
+		$TakeLeaveCenter/ButtonZ/TakeButton.visible = false
+		$TakeLeaveCenter/ButtonZ/LeaveButton.visible = false
 		
 		for i in range(stacks[currentIndex].size()):
 			var nodeNew = cardNode.instance()
@@ -263,8 +263,8 @@ func clearStack(index : int, fromServer = false):
 
 func onLeaveButtonPressed():
 	if movingData.size() == 0:
-		$ButtonZ/TakeButton.visible = false
-		$ButtonZ/LeaveButton.visible = false
+		$TakeLeaveCenter/ButtonZ/TakeButton.visible = false
+		$TakeLeaveCenter/ButtonZ/LeaveButton.visible = false
 		
 		returnCards()
 		addCardToStack(currentIndex)

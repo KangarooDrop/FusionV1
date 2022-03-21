@@ -14,6 +14,8 @@ var cardDists = 16
 
 var creatures : Dictionary
 var decks : Dictionary
+var graves : Dictionary
+var graveCards : Dictionary
 
 var boardSlots : Array
 
@@ -499,12 +501,9 @@ func _physics_process(delta):
 				var cn = cardNode.instance()
 				cn.card = card
 				add_child(cn)
-				cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+				cn.z_index += 1
 				cn.global_position = decks[players[playerNum].UUID].global_position
-				var fn = fadingScene.instance()
-				fn.maxTime = 1
-				cn.add_child(fn)
-				cn.get_node("FadingNode").setVisibility(1)
+				cn.playerID = players[playerNum].UUID
 				millNode = cn
 			else:
 				millQueue.remove(0)
@@ -513,12 +512,22 @@ func _physics_process(delta):
 			if millWaitTimer < millWaitMaxTime:
 				millWaitTimer += delta
 				if millWaitTimer >= millWaitMaxTime:
-					millNode.get_node("FadingNode").fadeOut()
+					
+					for i in range(players.size()):
+						var p = players[activePlayer + i % players.size()]
+						for s in creatures[p.UUID]:
+							if is_instance_valid(s.cardNode):
+								s.cardNode.card.onMill(self, millNode.card)
+					
+					addCardToGrave(millNode.playerID, ListOfCards.getCard(millNode.card.UUID))
+					millNode.queue_free()
 					millNode = null
 					millQueue.remove(0)
 					millWaitTimer = 0
 				else:
-					millNode.position.x -= cardWidth * Settings.cardSlotScale * 1.5 * delta / millWaitMaxTime
+					millNode.global_position = lerp(decks[millNode.playerID].global_position, graves[millNode.playerID].global_position, millWaitTimer / millWaitMaxTime)
+					millNode.get_parent().remove_child(millNode)
+					graves[millNode.playerID].add_child(millNode)
 					
 	for slot in cardsShaking.keys():
 		if not is_instance_valid(slot.cardNode):
@@ -575,7 +584,7 @@ func _physics_process(delta):
 			if is_instance_valid(hoveringWindow):
 				if hoveringWindow.close(true):
 					hoveringWindowSlot = null
-			if is_instance_valid(selectedSlot):
+			if is_instance_valid(selectedSlot) and not selectedSlot.currentZone == CardSlot.ZONES.GRAVE:
 				var string := ""
 				var pos := Vector2()
 				var flipped := false
@@ -591,6 +600,18 @@ func _physics_process(delta):
 				if string != "":
 					createHoverNode(pos, self, string, flipped)
 					hoveringWindowSlot = selectedSlot
+			elif selectedSlot.currentZone == CardSlot.ZONES.GRAVE:
+				if graveCards[selectedSlot.playerID].size() > 0:
+					if selectedSlot.playerID == graveViewing:
+						clearGraveDisplay()
+					else:
+						clearGraveDisplay()
+						graveViewing = selectedSlot.playerID
+						var gr = graveCards[selectedSlot.playerID]
+						for i in range(gr.size()):
+							$GraveDisplay.addCard(gr[i])
+				else:
+					pass
 			
 		elif is_instance_valid(hoveringWindowSlot):
 			if is_instance_valid(hoveringWindow):
@@ -601,6 +622,33 @@ func _physics_process(delta):
 		if is_instance_valid(hoveringWindow):
 			if hoveringWindow.close():
 				hoveringWindowSlot = null
+		elif graveViewing != -1:
+			clearGraveDisplay()
+
+var graveViewing := -1
+
+func addCardToGrave(playerID : int, card : Card):
+	
+	graveCards[playerID].append(card)
+	
+	var cn = graves[playerID].cardNode
+	cn.visible = true
+	cn.card = card
+	cn.setCardVisible(true)
+	
+	if graveViewing == playerID:
+		$GraveDisplay.addCard(card)
+	
+	
+	for i in range(players.size()):
+		var p = players[activePlayer + i % players.size()]
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onGraveAdd(self, card)
+
+func clearGraveDisplay():
+	graveViewing = -1
+	$GraveDisplay.clear()
 
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
 	var hoverInst = hoverScene.instance()
@@ -611,6 +659,9 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 	hoveringWindow = hoverInst
 
 func initZones():
+	$GraveDisplay.board = self
+	$GraveDisplay.moveSpeed = 1200
+	
 	var cardInst = null
 	
 	#	PLAYER 1 SLOTS  	#
@@ -645,6 +696,27 @@ func initZones():
 	decks[p.UUID] = cardInst
 	
 	
+	cardInst = cardSlot.instance()
+	cardInst.currentZone = CardSlot.ZONES.GRAVE
+	cardInst.board = self
+	cardInst.playerID = p.UUID
+	$GraveHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	cardInst.position = Vector2(0, cardHeight + cardDists)
+	graves[p.UUID] = cardInst
+	graveCards[p.UUID] = []
+	cardNodeInst = cardNode.instance()
+	cardNodeInst.card = ListOfCards.getCard(0)
+	cardNodeInst.cardVisible = true
+	cardNodeInst.visible = false
+	cardNodeInst.playerID = p.UUID
+	$GraveHolder.add_child(cardNodeInst)
+	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	cardInst.cardNode = cardNodeInst
+	cardNodeInst.position = cardInst.position
+	
+	
+	
 	#	PLAYER 2 SLOTS  	#
 	p = players[1]
 	
@@ -677,6 +749,26 @@ func initZones():
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.position = cardInst.position
 	decks[p.UUID] = cardInst
+	
+	
+	cardInst = cardSlot.instance()
+	cardInst.currentZone = CardSlot.ZONES.GRAVE
+	cardInst.board = self
+	cardInst.playerID = p.UUID
+	$GraveHolder.add_child(cardInst)
+	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	cardInst.position = Vector2(0, -cardHeight - cardDists)
+	graves[p.UUID] = cardInst
+	graveCards[p.UUID] = []
+	cardNodeInst = cardNode.instance()
+	cardNodeInst.card = ListOfCards.getCard(0)
+	cardNodeInst.cardVisible = true
+	cardNodeInst.visible = false
+	cardNodeInst.playerID = p.UUID
+	$GraveHolder.add_child(cardNodeInst)
+	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	cardInst.cardNode = cardNodeInst
+	cardNodeInst.position = cardInst.position
 	
 		
 func initHands():
@@ -913,11 +1005,15 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							if hoveringWindow.close(true):
 								hoveringWindowSlot = null
 					
+					for i in range(0 if isEntering else 1, cardsHolding.size()):
+						addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardsHolding[i].cardNode.card.UUID))
+					
 					while cardsHolding.size() > 0:
 						var c = cardsHolding[0]
 						var cardNode = c.cardNode
 						cardNode.setCardVisible(true)
 						cardsHolding.erase(c)
+						
 						fuseQueue.append(cardNode)
 						cardNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 						cardNode.z_index = 1

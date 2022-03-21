@@ -54,6 +54,9 @@ func _physics_process(delta):
 				nodes.erase(discardQueue[index].cardNode)
 				slots.erase(discardQueue[index])
 				
+				if board != null:
+					board.addCardToGrave(player.UUID, discardQueue[index].cardNode.card)
+				
 				discardQueue[index].cardNode.queue_free()
 				discardQueue[index].queue_free()
 				

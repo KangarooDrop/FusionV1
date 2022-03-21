@@ -8,7 +8,7 @@ var board
 var cardNode
 var playerID = -1
 
-enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK}
+enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK, GRAVE}
 var currentZone = ZONES.NONE
 var isOpponent = false
 
