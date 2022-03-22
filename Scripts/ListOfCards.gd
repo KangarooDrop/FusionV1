@@ -127,7 +127,15 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	for t in (cardA.creatureType + cardB.creatureType):
 		if not uniques.has(t) and t != Card.CREATURE_TYPE.Null:
 			uniques.append(t)
-			
+	
+	"""
+	uniques = cardA.creatureType.duplicate()
+	for t in cardB.creatureType:
+		if not cardA.creatureType.has(t):
+			uniques.append(t)
+	print(uniques)
+	"""
+	
 	var canFuse = (uniques.size() <= 2)
 	var types = []
 	

@@ -18,10 +18,8 @@ func onEnterFromFusion(board, slot):
 static func onEffect(params):
 	for p in params[0].players:
 		if p.UUID == params[1].playerID:
-			for i in range(params[2]):
-				p.takeDamage(5, params[1].cardNode)
+			p.takeDamage(params[2], params[1].cardNode)
 			break
-			
 
 func genDescription() -> String:
-	return "When this creature is played, it deals " + str(count * 5) + " damage to you"
+	return "When this creature is played, it deals " + str(count) + " damage to you"
