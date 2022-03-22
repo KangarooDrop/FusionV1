@@ -905,6 +905,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	if activePlayer == -1:
 		return false
 	
+	if slot.currentZone == CardSlot.ZONES.GRAVE:
+		return false
+	
 	if button_index == 1:
 		if slot.currentZone == CardSlot.ZONES.HAND:
 			if slot.playerID == players[activePlayer].UUID:
