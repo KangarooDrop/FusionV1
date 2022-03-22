@@ -625,6 +625,8 @@ var graveViewing := -1
 
 func addCardToGrave(playerID : int, card : Card):
 	
+	card.playerID = playerID
+	
 	graveCards[playerID].append(card)
 	
 	var cn = graves[playerID].cardNode
@@ -1094,9 +1096,6 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 				if hoveringWindow.close(true):
 					hoveringWindowSlot = null
 		
-		for i in range(0 if isEntering else 1, cards.size()):
-			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cards[i].UUID))
-		
 		while cards.size() > 0:
 			var card = cards[0]
 			cards.remove(0)
@@ -1111,6 +1110,9 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			cn.position = Vector2()
 			card_A_Holder.nodes.erase(cn)
 			card_B_Holder.nodes.erase(cn)
+		
+		for i in range(0 if isEntering else 1, fuseQueue.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(fuseQueue[i].card.UUID))
 		
 		fuseStartPos = fuseQueue[0].global_position
 		fuseEndSlot = slot
@@ -1219,7 +1221,9 @@ func getAllCards() -> Array:
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				cards.append(s.cardNode.card)
-	
+		for cn in fuseQueue:
+			cards.append(cn.card)
+		
 	return cards
 
 func nextTurn():

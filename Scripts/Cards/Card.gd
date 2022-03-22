@@ -46,7 +46,7 @@ func _init(params):
 					var abilityLoaded = load(data["path"]).new(self)
 					if ablData.size() > 1:
 						abilityLoaded.setCount(int(ablData[1]))
-					abilities.append(abilityLoaded)
+					addAbility(abilityLoaded)
 	if params.has("removed_abilities"):
 		for abl in params["removed_abilities"]:
 			for data in ProjectSettings.get_setting("_global_script_classes"):
@@ -71,7 +71,7 @@ func _init(params):
 		maxToughness = params["max_toughness"]
 	else:
 		maxToughness = toughness
-	
+
 func onEnter(board, slot):
 	for abl in abilities.duplicate():
 		abl.onEnter(board, slot)

@@ -81,6 +81,7 @@ func _physics_process(delta):
 			
 			var cardInst = cardNodeScene.instance()
 			cardInst.card = drawQueue[0][0]
+			cardInst.card.cardNode = cardInst
 			cardInst.playerID = player.UUID
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			add_child(cardInst)
@@ -103,12 +104,8 @@ func _physics_process(delta):
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
 				
-				for i in range(board.players.size()):
-					var p = board.players[(board.activePlayer + i) % board.players.size()]
-					for s in board.creatures[p.UUID]:
-						if is_instance_valid(s.cardNode):
-							s.cardNode.card.onDraw(board, cardInst.card)
-				
+				for c in board.getAllCards():
+					c.onDraw(board, cardInst.card)
 				
 			if drawQueue[0][2]:
 				player.takeDamage(player.drawDamage, null)
@@ -170,6 +167,7 @@ func addCardToHand(data : Array):
 			
 			var cardInst = cardNodeScene.instance()
 			cardInst.card = data[0]
+			cardInst.card.cardNode = cardInst
 			cardInst.setCardVisible(handVisible)
 			cardInst.playerID = player.UUID
 			add_child(cardInst)
@@ -179,6 +177,9 @@ func addCardToHand(data : Array):
 			slotInst.cardNode = cardInst
 			
 			centerCards()
+			
+			for c in board.getAllCards():
+				c.onDraw(board, cardInst.card)
 			
 			if data[1]:
 				player.takeDamage(player.drawDamage, null)

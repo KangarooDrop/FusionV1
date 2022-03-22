@@ -7,22 +7,14 @@ var buffsApplied := 0
 func _init(card : Card).("Madness", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	onEffect(board)
-	
-func onEnterFromFusion(board, slot):
-	onEffect(board)
-	
 func onDraw(board, card):
-	if board.isOnBoard(card):
-		onEffect(board)
+	onEffect(board)
 
 func onMill(board, card):
-	if board.isOnBoard(card):
-		onEffect(board)
+	onEffect(board)
 
 func onEffect(board):
-	var pid = card.cardNode.slot.playerID
+	var pid = card.playerID
 	for player in board.players:
 		if player.UUID == pid:
 			var num = player.deck.cards.size()
@@ -31,6 +23,7 @@ func onEffect(board):
 			card.toughness -= dif
 			card.maxToughness -= dif
 			buffsApplied += dif
+			
 			break
 
 func combine(abl : Ability):

@@ -176,7 +176,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	cardNew.maxToughness = cardA.maxToughness + cardB.maxToughness
 	cardNew.abilities.clear()
 	for abl in (cardA.abilities + cardB.abilities):
-		cardNew.abilities.append(abl.clone(cardNew))
+		cardNew.addAbility(abl.clone(cardNew))
 	for abl in (cardA.removedAbilities + cardB.removedAbilities):
 		cardNew.removedAbilities.append(abl.clone(cardNew))
 	cardNew.trimAbilities()
