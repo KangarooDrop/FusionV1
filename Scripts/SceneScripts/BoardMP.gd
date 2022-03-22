@@ -853,21 +853,22 @@ func onSlotEnter(slot : CardSlot):
 			highlightedSlots.append(slot)
 		
 	
-	if is_instance_valid(selectedCard):
-		var opponentHasTaunt = false
-		for s in creatures[slot.playerID]:
-			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
-				opponentHasTaunt = true
-		
-		if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
-			if slot.playerID != selectedCard.playerID and slot.currentZone == CardSlot.ZONES.CREATURE:
-				if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
-					for s in slot.getNeighbors():
-						s.setHighlight(true)
-						highlightedSlots.append(s)
-				else:
-					slot.setHighlight(true)
-					highlightedSlots.append(slot)
+	if slot.playerID != -1:
+		if is_instance_valid(selectedCard):
+			var opponentHasTaunt = false
+			for s in creatures[slot.playerID]:
+				if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
+					opponentHasTaunt = true
+			
+			if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
+				if slot.playerID != selectedCard.playerID and slot.currentZone == CardSlot.ZONES.CREATURE:
+					if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+						for s in slot.getNeighbors():
+							s.setHighlight(true)
+							highlightedSlots.append(s)
+					else:
+						slot.setHighlight(true)
+						highlightedSlots.append(slot)
 
 
 func onSlotExit(slot : CardSlot):
