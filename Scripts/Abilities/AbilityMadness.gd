@@ -27,7 +27,6 @@ func onEffect(board):
 		if player.UUID == pid:
 			var num = player.deck.cards.size()
 			var dif = num * count - buffsApplied
-			print(num, "  ", count, "  ", buffsApplied, "  ", dif)
 			card.power -= dif
 			card.toughness -= dif
 			card.maxToughness -= dif

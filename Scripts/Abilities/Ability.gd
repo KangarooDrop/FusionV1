@@ -42,10 +42,16 @@ func onStartOfTurn(board):
 func onEndOfTurn(board):
 	pass
 	
-func onAttack(blocker, board):
+func onAttack(board, blocker):
 	pass
 	
-func onBeingAttacked(attacker, board):
+func onBeingAttacked(board, attacker):
+	pass
+
+func onOtherAttack(board, attacker, blocker):
+	pass
+
+func onOtherBeingAttacked(board, attacker, blocker):
 	pass
 
 func onFusion(card):
@@ -68,6 +74,16 @@ func onGraveAdd(board, card):
 
 func combine(abl : Ability):
 	setCount(count + abl.count)
+
+static func discardSelf(board, card):
+	for i in range(board.players.size()):
+		var p = board.players[i]
+		if p.UUID == card.playerID:
+			for j in range(p.hand.nodes.size()):
+				if p.hand.nodes[j].card == card:
+					p.hand.discardIndex(j)
+					break
+			break
 
 func setCount(count : int):
 	self.count = count

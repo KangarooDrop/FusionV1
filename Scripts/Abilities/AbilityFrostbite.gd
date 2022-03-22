@@ -5,10 +5,10 @@ class_name AbilityFrostbite
 func _init(card : Card).("Frostbite", card, Color.blue, false, Vector2(0, 32)):
 	pass
 	
-func onAttack(blocker, board):
+func onAttack(board, blocker):
 	board.abilityStack.append([get_script(), "onEffect", [blocker]])
 	
-func onBeingAttacked(attacker, board):
+func onBeingAttacked(board, attacker):
 	board.abilityStack.append([get_script(), "onEffect", [attacker]])
 
 static func onEffect(params):

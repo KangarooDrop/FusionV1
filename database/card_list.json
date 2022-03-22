@@ -578,5 +578,18 @@
     "abilities": [
       "AbilityEmerge"
     ]
+  },
+  "52": {
+    "name": "Ghastly Presence",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPossession"
+    ]
   }
 }

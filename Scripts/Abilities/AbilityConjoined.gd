@@ -5,7 +5,7 @@ class_name AbilityConjoined
 #Binary reperesentation of creature types that have been added stats to the creature
 var tribes := 0
 
-func _init(card : Card).("Conjoined", card, Color.brown, false, Vector2(16, 48)):
+func _init(card : Card).("Conjoined", card, Color.brown, true, Vector2(16, 48)):
 	pass
 
 
@@ -20,18 +20,26 @@ func onEnterFromFusion(board, slot):
 			onEffect(t)
 
 func onGraveAdd(board, card):
-	if board.isOnBoard(card):
+	if board.isOnBoard(self.card):
 		for t in card.creatureType:
 			onEffect(t)
 
 func onEffect(tribe : int):
 	if not tribes & 1 << tribe:
 		tribes |= 1 << tribe
-		self.card.power += 1
-		self.card.toughness += 1
-		self.card.maxToughness += 1
+		self.card.power += count
+		self.card.toughness += count
+		self.card.maxToughness += count
 
 func combine(abl : Ability):
+	var t = tribes
+	while t > 0:
+		if t & 1 == 1:
+			self.card.power += abl.count
+			self.card.toughness += abl.count
+			self.card.maxToughness += abl.count
+		t = t >> 1
+	
 	.combine(abl)
 	tribes |= abl.tribes
 	abl.tribes |= tribes
@@ -42,4 +50,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return "This creature gets +1/+1 for each creature types in your " + str(TextScrapyard.new(null))
+	return "This creature gets +" + str(count) + "/+" + str(count) +" for each creature type in your " + str(TextScrapyard.new(null))

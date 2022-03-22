@@ -926,9 +926,15 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						slot.cardNode.position.y = slot.position.y
 					else:
 						if cardsPerTurn - cardsPlayed - cardsHolding.size() > 0:
-							cardsHolding.append(slot)
-							slot.position.y -= cardDists
-							slot.cardNode.position.y = slot.position.y
+							if slot.cardNode.card.canBePlayed:
+								cardsHolding.append(slot)
+								slot.position.y -= cardDists
+								slot.cardNode.position.y = slot.position.y
+							else:
+								if cardsShaking.has(slot):
+									MessageManager.notify("This card cannot be played")
+								cardsShaking[slot] = shakeMaxTime
+								return false
 						else:
 							if cardsShaking.has(slot):
 								MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
@@ -997,10 +1003,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						c.queue_free()
 				
 				fuseToSlot(slot, cardList)
-				
-				card_A_Holder.centerCards()
-				card_B_Holder.centerCards()
-				centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
 
 				if activePlayer == 0:
 					$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
@@ -1144,6 +1146,10 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		
 		card_A_Holder.centerCards()
 		card_B_Holder.centerCards()
+	
+	card_A_Holder.centerCards()
+	card_B_Holder.centerCards()
+	centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer

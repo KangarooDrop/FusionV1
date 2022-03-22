@@ -5,7 +5,7 @@ class_name AbilityBulwark
 func _init(card : Card).("Bulwark", card, Color.darkgray, false, Vector2(32, 48)):
 	pass
 	
-func onBeingAttacked(attacker, board):
+func onBeingAttacked(board, attacker):
 	board.abilityStack.append([get_script(), "onEffect", [attacker]])
 
 static func onEffect(params):

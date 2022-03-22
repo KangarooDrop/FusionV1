@@ -11,7 +11,7 @@ func onStartOfTurn(board):
 	if board.isOnBoard(card):
 		active = true
 
-func onBeingAttacked(attacker, board):
+func onBeingAttacked(board, attacker):
 	active = false
 
 func genDescription() -> String:

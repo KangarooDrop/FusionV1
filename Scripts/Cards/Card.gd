@@ -20,6 +20,7 @@ var maxToughness : int
 var hasAttacked = true
 var canAttackThisTurn = true
 var canFuseThisTurn = true
+var canBePlayed = true
 
 var params
 
@@ -63,6 +64,8 @@ func _init(params):
 		hasAttacked = params["has_attacked"]
 	if params.has("can_attack"):
 		canAttackThisTurn = params["can_attack"]
+	if params.has("can_play"):
+		canBePlayed = params["can_play"]
 	
 	if params.has("max_toughness"):
 		maxToughness = params["max_toughness"]
@@ -117,15 +120,23 @@ func onOtherEnterFromFusion(board, slot):
 	for abl in abilities.duplicate():
 		abl.onOtherEnterFromFusion(board, slot)
 	
-func onAttack(blocker, board):
+func onAttack(board, blocker):
 	hasAttacked = true
 	canAttackThisTurn = false
 	for abl in abilities.duplicate():
-		abl.onAttack(blocker, board)
+		abl.onAttack(board, blocker)
 	
-func onBeingAttacked(attacker, board):
+func onBeingAttacked(board, attacker):
 	for abl in abilities.duplicate():
-		abl.onBeingAttacked(attacker, board)
+		abl.onBeingAttacked(board, attacker)
+
+func onOtherAttack(board, attacker, blocker):
+	for abl in abilities.duplicate():
+		abl.onOtherAttack(board, attacker, blocker)
+
+func onOtherBeingAttacked(board, attacker, blocker):
+	for abl in abilities.duplicate():
+		abl.onOtherBeingAttacked(board, attacker, blocker)
 
 func onDraw(board, card):
 	for abl in abilities.duplicate():
@@ -187,6 +198,7 @@ func serialize() -> Dictionary:
 	rtn["can_attack"] = canAttackThisTurn
 	rtn["abilities"] = []
 	rtn["removed_abilities"] = []
+	rtn["can_play"] = canBePlayed
 	for abl in abilities:
 		rtn["abilities"].append(abl.get_script())
 	for abl in removedAbilities:

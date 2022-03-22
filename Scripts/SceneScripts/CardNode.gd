@@ -63,6 +63,8 @@ func setCardVisible(isVis : bool):
 func getCardVisible() -> bool:
 	return cardVisible
 
+var waitingForStackToClear = false
+
 func _physics_process(delta):
 	if card != null:
 		$Label.text = str(card.power) + " / " + str(card.toughness)
@@ -81,7 +83,7 @@ func _physics_process(delta):
 			hasFlipped = false
 			flipping = false
 			
-	if attacking:
+	if attacking and slot.board.abilityStack.size() == 0 and slot.board.fuseQueue.size() == 0:
 		if attackStartupTimer < attackStartupMaxTime:
 			attackStartupTimer += delta
 			rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
@@ -91,12 +93,15 @@ func _physics_process(delta):
 		elif attackWaitTimer < attackWaitMaxTime:
 			attackWaitTimer += delta
 		elif attackReturnTimer < attackReturnMaxTime:
-			if not dealtDamage:
-				fight(attackingSlots[0], slot.board)
-				dealtDamage = true
-			attackReturnTimer += delta
-			global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
-			rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
+			if not waitingForStackToClear:
+				if not dealtDamage:
+					waitingForStackToClear = true
+					fight(attackingSlots[0], slot.board)
+					waitingForStackToClear = false
+					dealtDamage = true
+				attackReturnTimer += delta
+				global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
+				rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
 		else:
 			global_position = attackReturnPos
 			rotation = 0
@@ -160,9 +165,21 @@ func fight(slot, board, damageSelf = true):
 		if venomB > 0:
 			slot.cardNode.card.power += venomB
 	
-	card.onAttack(slot, board)
+	card.onAttack(board, slot)
 	if is_instance_valid(slot.cardNode):
-		slot.cardNode.card.onBeingAttacked(self.slot, board)
+		slot.cardNode.card.onBeingAttacked(board, self.slot)
+		
+		for c in board.getAllCards():
+			var isAttacker = c == card
+			var isBlocker = is_instance_valid(slot.cardNode) and c == slot.cardNode.card
+			if not isAttacker:
+				c.onOtherAttack(board, self.slot, slot)
+			if not isBlocker:
+				c.onOtherBeingAttacked(board, self.slot, slot)
+	
+	while board.abilityStack.size() > 0 or board.fuseQueue.size() > 0:
+		yield(get_tree().create_timer(0.1), "timeout")
+	
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:
 			takeDamage(max(slot.cardNode.card.power, 0), board)
