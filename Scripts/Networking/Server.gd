@@ -506,7 +506,7 @@ remote func receiveSendMulliganDeck(order : Array):
 		if not Server.online:
 			return
 			
-	board.players[0].deck.setCards(cards)
+	board.players[0].deck.setCards(cards, board.players[1].UUID)
 	board.players[0].hand.drawHand()
 	board.mulliganDone = true
 	board.handMoving = true
