@@ -44,12 +44,10 @@ var processQueue := []
 
 func _ready():
 	$DeckDisplayControl/DeckDisplay.parent = self
-	$CardDisplay.board = self
 	$CardDisplay.canReorder = true
 	
 	for i in range(numStacks):
 		var cardInst = cardSlot.instance()
-		cardInst.board = self
 		slots.append(cardInst)
 		$CardHolder.add_child(cardInst)
 		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -57,7 +55,6 @@ func _ready():
 	BoardMP.centerNodes(slots, Vector2(0, cardHeight * Settings.cardSlotScale * 0.75), cardWidth, cardDists)
 	
 	mainSlot = cardSlot.instance()
-	mainSlot.board = self
 	$CardHolder.add_child(mainSlot)
 	mainSlot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	mainSlot.position = Vector2(0, -cardHeight)
@@ -154,7 +151,6 @@ func revealCards(index : int):
 	
 	for i in range(stacks[index].size()):
 		var slot = cardSlot.instance()
-		slot.board = self
 		$CardHolder.add_child(slot)
 		slot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		cardDisplaySlots.append(slot)
@@ -225,6 +221,14 @@ func onTakeButtonPressed():
 			if hoveringSlot == stacks[currentIndex][i]:
 				closeHoverWindow(true)
 			cardDisplaySlots.erase(stacks[currentIndex][i])
+		
+		
+		while cardDisplaySlots.size() > 0:
+			if hoveringSlot == cardDisplaySlots[0]:
+				closeHoverWindow(true)
+			
+			cardDisplaySlots[0].queue_free()
+			cardDisplaySlots.remove(0)
 		
 		clearStack(currentIndex)
 		addCardToStack(currentIndex)

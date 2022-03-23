@@ -25,8 +25,6 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 func _ready():
 	$DeckDisplayControl/DeckDisplay.parent = self
-	$BoosterDisplay.board = self
-	$CardDisplay.board = self
 	$CardDisplay.canReorder = true
 	genNewBooster()
 		

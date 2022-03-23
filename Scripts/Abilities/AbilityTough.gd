@@ -5,7 +5,7 @@ class_name AbilityTough
 func _init(card : Card).("Tough", card, Color.darkgray, true, Vector2(0, 48)):
 	pass
 
-func onBeingAttacked(board, attacker):
+func onBeingAttacked(attacker):
 	card.power += count
 	card.toughness += count
 	card.maxToughness += count

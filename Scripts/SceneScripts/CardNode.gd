@@ -83,7 +83,7 @@ func _physics_process(delta):
 			hasFlipped = false
 			flipping = false
 			
-	if attacking and slot.board.abilityStack.size() == 0 and slot.board.fuseQueue.size() == 0:
+	if attacking and NodeLoc.getBoard().abilityStack.size() == 0 and NodeLoc.getBoard().fuseQueue.size() == 0:
 		if attackStartupTimer < attackStartupMaxTime:
 			attackStartupTimer += delta
 			rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
@@ -96,7 +96,7 @@ func _physics_process(delta):
 			if not waitingForStackToClear:
 				if not dealtDamage:
 					waitingForStackToClear = true
-					fight(attackingSlots[0], slot.board)
+					fight(attackingSlots[0])
 					waitingForStackToClear = false
 					dealtDamage = true
 				attackReturnTimer += delta
@@ -126,10 +126,10 @@ func _physics_process(delta):
 				attackRotation -= PI / 2
 			
 
-func takeDamage(dmg : int, board):
+func takeDamage(dmg : int):
 	card.toughness -= dmg
 
-func attack(board, slots : Array):
+func attack(slots : Array):
 	if Settings.playAnimations:
 		z_index += 1
 		attacking = true
@@ -149,13 +149,13 @@ func attack(board, slots : Array):
 		
 	else:
 		for s in slots:
-			fight(s, slot.board)
+			fight(s)
 
 func flip():
 	flipping = true
 	originalScale = scale.x
 	
-func fight(slot, board, damageSelf = true):
+func fight(slot, damageSelf = true):
 	var venomA = ListOfCards.getAbility(card, AbilityVenomous).count if ListOfCards.hasAbility(card, AbilityVenomous) and is_instance_valid(slot.cardNode) else 0
 	var venomB = 0
 	if venomA > 0:
@@ -165,34 +165,34 @@ func fight(slot, board, damageSelf = true):
 		if venomB > 0:
 			slot.cardNode.card.power += venomB
 	
-	card.onAttack(board, slot)
+	card.onAttack(slot)
 	if is_instance_valid(slot.cardNode):
-		slot.cardNode.card.onBeingAttacked(board, self.slot)
+		slot.cardNode.card.onBeingAttacked(self.slot)
 		
-		for c in board.getAllCards():
+		for c in NodeLoc.getBoard().getAllCards():
 			var isAttacker = c == card
 			var isBlocker = is_instance_valid(slot.cardNode) and c == slot.cardNode.card
 			if not isAttacker:
-				c.onOtherAttack(board, self.slot, slot)
+				c.onOtherAttack(self.slot, slot)
 			if not isBlocker:
-				c.onOtherBeingAttacked(board, self.slot, slot)
+				c.onOtherBeingAttacked(self.slot, slot)
 	
-	while board.abilityStack.size() > 0 or board.fuseQueue.size() > 0:
+	while NodeLoc.getBoard().abilityStack.size() > 0 or NodeLoc.getBoard().fuseQueue.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
 	
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:
-			takeDamage(max(slot.cardNode.card.power, 0), board)
-		slot.cardNode.takeDamage(max(card.power, 0), board)
+			takeDamage(max(slot.cardNode.card.power, 0))
+		slot.cardNode.takeDamage(max(card.power, 0))
 		
 		if ListOfCards.hasAbility(card, AbilityRampage) and slot.cardNode.card.toughness < 0:
-			for p in slot.board.players:
+			for p in NodeLoc.getBoard().players:
 				if p.UUID == slot.playerID:
 					var damage = -slot.cardNode.card.toughness
 					p.takeDamage(damage, self)
 		
 	else:
-		for p in slot.board.players:
+		for p in NodeLoc.getBoard().players:
 			if p.UUID == slot.playerID:
 				var damage = max(card.power, 0)
 				p.takeDamage(damage, self)
@@ -203,11 +203,11 @@ func fight(slot, board, damageSelf = true):
 	if venomB > 0:
 		slot.cardNode.card.power -= venomB
 				
-	board.checkState()
+	NodeLoc.getBoard().checkState()
 				
 func _exit_tree():
-	if is_instance_valid(slot) and is_instance_valid(slot.board):
-		slot.board.onSlotExit(slot)
+	if is_instance_valid(slot) and get_parent().has_method("onSlotExit"):
+		NodeLoc.getBoard().onSlotExit(slot)
 
 func addIcons():
 	for abl in card.abilities:

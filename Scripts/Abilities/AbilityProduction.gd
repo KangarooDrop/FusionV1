@@ -5,21 +5,21 @@ class_name AbilityProduction
 func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+func onEnter(slot):
+	.onEnter(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
 	card.removeAbility(self)
 	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
 	card.removeAbility(self)
 
 static func onEffect(params):
 	var hand = null
-	for p in params[0].players:
-		if p.UUID == params[1].cardNode.slot.playerID:
-			for i in range(params[2]):
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == params[0].cardNode.slot.playerID:
+			for i in range(params[1]):
 				p.hand.addCardToHand([ListOfCards.getCard(5), true, false])
 			break
 	

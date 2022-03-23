@@ -7,11 +7,11 @@ var active : bool = true
 func _init(card : Card).("Taunt", card, Color.darkgray, false, Vector2(0, 0)):
 	pass
 
-func onStartOfTurn(board):
-	if board.isOnBoard(card):
+func onStartOfTurn():
+	if NodeLoc.getBoard().isOnBoard(card):
 		active = true
 
-func onBeingAttacked(board, attacker):
+func onBeingAttacked(attacker):
 	active = false
 
 func genDescription() -> String:

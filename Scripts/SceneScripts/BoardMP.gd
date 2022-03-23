@@ -84,6 +84,8 @@ var handMoving = false
 
 var rightClickQueue := []
 
+var boardReady = false
+
 func _ready():
 	print("-".repeat(30))
 	
@@ -95,9 +97,9 @@ func _ready():
 		
 		#print(readyToStart, " and ", deckDataSet, " and ", hasStartingPlayer, " and ", versionConfirmed, " and ", (gameSeed != -1), " and ", mulliganDone, " and ", mulliganDoneOpponent)
 	
-	players.append(Player.new(self, $HealthNode, $ArmourNode))
+	players.append(Player.new($HealthNode, $ArmourNode))
 	creatures[players[0].UUID] = []
-	players.append(Player.new(self, $HealthNode2, $ArmourNode2))
+	players.append(Player.new($HealthNode2, $ArmourNode2))
 	players[1].isOpponent = true
 	players[1].isPractice = Settings.gameMode == Settings.GAME_MODE.PRACTICE
 	creatures[players[1].UUID] = []
@@ -468,14 +470,17 @@ func _physics_process(delta):
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.cardNode = cardNode
 					if isEntering:
-						cardNode.card.onEnter(self, fuseEndSlot)
+						cardNode.card.onEnter(fuseEndSlot)
 						
 						for c in getAllCards():
-							c.onOtherEnter(self, fuseEndSlot)
+							if c != cardNode.card:
+								c.onOtherEnter(fuseEndSlot)
 					else:
-						cardNode.card.onEnterFromFusion(self, fuseEndSlot)
+						cardNode.card.onEnterFromFusion(fuseEndSlot)
+						
 						for c in getAllCards():
-							c.onOtherEnterFromFusion(self, fuseEndSlot)
+							if c != cardNode.card:
+								c.onOtherEnterFromFusion(fuseEndSlot)
 					checkState()
 					
 	if millQueue.size() > 0:
@@ -514,7 +519,7 @@ func _physics_process(delta):
 				if millWaitTimer >= millWaitMaxTime:
 					
 					for c in getAllCards():
-						c.onMill(self, millNode.card)
+						c.onMill(millNode.card)
 					
 					addCardToGrave(millNode.playerID, ListOfCards.getCard(millNode.card.UUID))
 					millNode.queue_free()
@@ -645,7 +650,7 @@ func addCardToGrave(playerID : int, card : Card):
 	
 	
 	for c in getAllCards():
-		c.onGraveAdd(self, card)
+		c.onGraveAdd(card)
 
 func clearGraveDisplay():
 	graveViewing = -1
@@ -660,7 +665,6 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 	hoveringWindow = hoverInst
 
 func initZones():
-	$GraveDisplay.board = self
 	$GraveDisplay.moveSpeed = 1200
 	
 	var cardInst = null
@@ -671,7 +675,6 @@ func initZones():
 	for i in range(p.creatureNum):
 		cardInst = cardSlot.instance()
 		cardInst.currentZone = CardSlot.ZONES.CREATURE
-		cardInst.board = self
 		cardInst.playerID = p.UUID
 		creatures_A_Holder.add_child(cardInst)
 		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -681,7 +684,6 @@ func initZones():
 	
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.DECK
-	cardInst.board = self
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -699,7 +701,6 @@ func initZones():
 	
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
-	cardInst.board = self
 	cardInst.playerID = p.UUID
 	$GraveHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -725,7 +726,6 @@ func initZones():
 		cardInst = cardSlot.instance()
 		cardInst.isOpponent = true
 		cardInst.currentZone = CardSlot.ZONES.CREATURE
-		cardInst.board = self
 		cardInst.playerID = p.UUID
 		creatures_B_Holder.add_child(cardInst)
 		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -736,7 +736,6 @@ func initZones():
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.DECK
 	cardInst.isOpponent = true
-	cardInst.board = self
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -754,7 +753,6 @@ func initZones():
 	
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
-	cardInst.board = self
 	cardInst.playerID = p.UUID
 	$GraveHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -774,9 +772,9 @@ func initZones():
 		
 func initHands():
 	players[0].hand = card_A_Holder
-	players[0].initHand(self)
+	players[0].initHand()
 	players[1].hand = card_B_Holder
-	players[1].initHand(self)
+	players[1].initHand()
 	players[0].hand.deck = decks[players[0].UUID]
 	players[1].hand.deck = decks[players[1].UUID]
 				
@@ -1054,7 +1052,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							else:
 								slots = [slot]
 								
-							selectedCard.cardNode.attack(self, slots)
+							selectedCard.cardNode.attack(slots)
 							if is_instance_valid(selectedCard.cardNode):
 								selectedCard.cardNode.rotation = 0
 								selectRotTimer = 0
@@ -1107,7 +1105,8 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			
 			var cn = cardNode.instance()
 			cn.card = card
-		
+			card.cardNode = cn
+			
 			fuseQueue.append(cn)
 			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			cn.z_index = 1
@@ -1144,14 +1143,16 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		cardPlacing.slot = slot
 		
 		if isEntering:
-			newCard.onEnter(self, fuseEndSlot)
+			newCard.onEnter(fuseEndSlot)
 			
 			for c in getAllCards():
-				c.onOtherEnter(self, fuseEndSlot)
+				if c != newCard:
+					c.onOtherEnter(fuseEndSlot)
 		else:
-			newCard.onEnterFromFusion(self, fuseEndSlot)
+			newCard.onEnterFromFusion(fuseEndSlot)
 			for c in getAllCards():
-				c.onOtherEnterFromFusion(self, fuseEndSlot)
+				if c != newCard:
+					c.onOtherEnterFromFusion(fuseEndSlot)
 		
 		checkState()
 		
@@ -1248,7 +1249,7 @@ func nextTurn():
 		
 	######################	ON END OF TURN EFFECTS
 	for c in getAllCards():
-		c.onEndOfTurn(self)
+		c.onEndOfTurn()
 	######################
 	
 	while abilityStack.size() > 0:
@@ -1267,7 +1268,7 @@ func nextTurn():
 		
 	######################	ON START OF TURN EFFECTS
 	for c in getAllCards():
-		c.onStartOfTurn(self)
+		c.onStartOfTurn()
 	######################
 
 func checkState():
@@ -1293,11 +1294,12 @@ func checkState():
 			hoveringWindowSlot = null
 					
 		for c in getAllCards():
-			c.onOtherLeave(self, cardNode.slot)
-			c.onOtherDeath(self, cardNode.slot)
-		cardNode.card.onLeave(self)
+			if c != cardNode.card:
+				c.onOtherLeave(cardNode.slot)
+				c.onOtherDeath(cardNode.slot)
+		cardNode.card.onLeave()
 		cardNode.slot.cardNode = null
-		cardNode.card.onDeath(self)
+		cardNode.card.onDeath()
 		cardNode.queue_free()
 
 	var boardStateNew = []

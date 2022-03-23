@@ -12,17 +12,31 @@ var statGain = 3
 func _init(card : Card).("Conjoined", card, Color.brown, false, Vector2(16, 48)):
 	pass
 
-func onDraw(board, card):
+func onDraw(card):
 	if card == self.card:
-		for c in board.graveCards[self.card.cardNode.playerID]:
+		for c in NodeLoc.getBoard().graveCards[self.card.cardNode.playerID]:
 			for t in c.creatureType:
 				onEffect(t)
 
-func onGraveAdd(board, card):
-	
+func onGraveAdd(card):
 	if card.playerID == self.card.playerID:
 		for t in card.creatureType:
 			onEffect(t)
+
+func onRemove(ability):
+	if ability == self:
+		var c = 0
+		var t = tribes
+		while t > 0:
+			if t & 1 == 1:
+				c += 1
+			t = t >> 1
+		
+		if c >= threshold:
+			buffsApplied -= 1
+			self.card.power -= statGain
+			self.card.toughness -= statGain
+			self.card.maxToughness -= statGain
 
 func onEffect(tribe : int):
 	tribes |= 1 << tribe

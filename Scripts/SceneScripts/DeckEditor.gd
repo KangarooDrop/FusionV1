@@ -141,7 +141,6 @@ func sort():
 			
 			var slot = cardSlot.instance()
 			slot.currentZone = CardSlot.ZONES.NONE
-			slot.board = self
 			page.add_child(slot)
 			slot.position = Vector2(offX, offY)
 			

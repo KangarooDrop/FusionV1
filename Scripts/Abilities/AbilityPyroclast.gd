@@ -5,20 +5,20 @@ class_name AbilityPyroclast
 func _init(card : Card).("Pyroclast", card, Color.red, true, Vector2(0, 0)):
 	pass
 	
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+func onEnter(slot):
+	.onEnter(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
 	card.removeAbility(self)
 	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card, count]])
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
 	card.removeAbility(self)
 
 static func onEffect(params):
-	for p in params[0].players:
-		if p.UUID == params[1].playerID:
-			p.takeDamage(params[2], params[1].cardNode)
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == params[0].playerID:
+			p.takeDamage(params[1], params[0].cardNode)
 			break
 
 func genDescription() -> String:

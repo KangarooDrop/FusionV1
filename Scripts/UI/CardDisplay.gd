@@ -14,8 +14,6 @@ var totalWidth = -1
 
 var maxVal = 1.5
 var minVal = 1
-			
-var board
 
 export(bool) var canReorder := false
 var cardHolding = null
@@ -72,7 +70,6 @@ func addCard(card : Card):
 	var cardSlot = cardSlotScene.instance()
 	var cardNode = cardNodeScene.instance()
 	
-	cardSlot.board = self
 	cardNode.card = card
 	
 	cardSlot.cardNode = cardNode
@@ -94,8 +91,6 @@ func addCard(card : Card):
 func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
 	var lastPos = cardNode.global_position
 	var cardSlot = cardSlotScene.instance()
-	
-	cardSlot.board = self
 	
 	add_child(cardSlot)
 	if is_instance_valid(cardNode.get_parent()):
@@ -220,12 +215,10 @@ func _physics_process(delta):
 			nodes[indexes[i]].z_index = i + z_index
 
 func onSlotEnter(slot : CardSlot):
-	if board != null:
-		board.onSlotEnter(slot)
+	get_parent().onSlotEnter(slot)
 	
 func onSlotExit(slot : CardSlot):
-	if board != null:
-		board.onSlotExit(slot)
+	get_parent().onSlotExit(slot)
 
 var mouseDownQueue := []
 
@@ -235,12 +228,12 @@ func onMouseDown(slot : CardSlot, button_index : int):
 		mouseDown = true
 		clickTimer = 0
 	else:
-		board.onMouseDown(slot, button_index)
+		get_parent().onMouseDown(slot, button_index)
 	
 func onMouseUp(slot : CardSlot, button_index : int):
 	if button_index == 1:
 		if mouseDown and is_instance_valid(clickedSlot) and slot == clickedSlot:
-			board.onMouseDown(slot, button_index)
+			get_parent().onMouseDown(slot, button_index)
 			clickedSlot = null
 		
 		if is_instance_valid(cardHolding) and slot == cardHolding:

@@ -10,7 +10,6 @@ var UUID = randi()
 
 var lifeNode
 var armourNode
-var board
 var deck
 var hand
 
@@ -21,16 +20,15 @@ var isPractice = false
 
 var drawDamage = 1
 
-func _init(board, lifeNode, armourNode):
+func _init(lifeNode, armourNode):
 	deck = Deck.new()
-	self.board = board
 	self.lifeNode = lifeNode
 	self.armourNode = armourNode
 	setLife(30, false)
 	setArmour(0, false)
 
-func initHand(board):
-	hand.initHand(board, self)
+func initHand():
+	hand.initHand(self)
 
 func heal(amt : int, source : CardNode):
 	amt = max(amt, 0)
@@ -48,7 +46,7 @@ func takeDamage(dmg : int, source : CardNode):
 		addLife(-dmg)
 	
 	if life <= 0:
-		board.onLoss(self)
+		NodeLoc.getBoard().onLoss(self)
 
 func addLife(inc : int):
 	setLife(life + inc)
@@ -78,7 +76,7 @@ func setArmour(armourNew : int, showChange = true):
 
 func makeFallingText(text : String, color : Color, position : Vector2):
 	var ft = fallingTextScene.instance()
-	board.add_child(ft)
+	NodeLoc.getBoard().add_child(ft)
 	var labelSize = lifeNode.get_node("Label").get_minimum_size()
 	ft.position = position + Vector2(labelSize.x - 4, labelSize.y / 2)
 	ft.get_node("Label").text = text

@@ -21,9 +21,9 @@ func pop() -> Card:
 		cards.remove(0)
 	return c
 
-func mill(board, playerID):
+func mill(playerID):
 	if Settings.playAnimations:
-		board.millQueue.append(playerID)
+		NodeLoc.getBoard().millQueue.append(playerID)
 	else:
 		pop()
 
@@ -103,7 +103,7 @@ static func verifyDeck(deckData) -> int:
 			return DECK_VALIDITY_TYPE.BAD_COUNT
 			
 		#CHECKS IF THE DECK ONLY USES TIER 1 CARDS
-		if ListOfCards.getCard(key).tier > 1:
+		if ListOfCards.getCard(key).tier != 1:
 			return DECK_VALIDITY_TYPE.HIGHER_TIERS
 			
 		total += count

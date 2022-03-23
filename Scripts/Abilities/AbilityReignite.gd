@@ -5,19 +5,19 @@ class_name AbilityReignite
 func _init(card : Card).("Reignite", card, Color.red, false, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card.playerID]])
+func onEnter(slot):
+	.onEnter(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID]])
 	card.removeAbility(self)
 	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board, card.playerID]])
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID]])
 	card.removeAbility(self)
 
 static func onEffect(params : Array):
-	for p in params[0].players:
-		if p.UUID == params[1]:
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == params[0]:
 			var cardsDiscarded = p.hand.nodes.size()
 			for i in range(cardsDiscarded):
 				p.hand.discardIndex(i)

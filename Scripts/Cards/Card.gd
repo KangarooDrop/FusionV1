@@ -72,87 +72,87 @@ func _init(params):
 	else:
 		maxToughness = toughness
 
-func onEnter(board, slot):
+func onEnter(slot):
 	for abl in abilities.duplicate():
-		abl.onEnter(board, slot)
+		abl.onEnter(slot)
 	
-func onOtherEnter(board, slot):
+func onOtherEnter(slot):
 	for abl in abilities.duplicate():
-		abl.onOtherEnter(board, slot)
+		abl.onOtherEnter(slot)
 	
-func onOtherDeath(board, slot):
+func onOtherDeath(slot):
 	for abl in abilities.duplicate():
-		abl.onOtherDeath(board, slot)
+		abl.onOtherDeath(slot)
 	
-func onOtherLeave(board, slot):
+func onOtherLeave(slot):
 	for abl in abilities.duplicate():
-		abl.onOtherLeave(board, slot)
+		abl.onOtherLeave(slot)
 	
-func onDeath(board):
+func onDeath():
 	for abl in abilities.duplicate():
-		abl.onDeath(board)
+		abl.onDeath()
 	
-func onLeave(board):
+func onLeave():
 	for abl in abilities.duplicate():
-		abl.onLeave(board)
+		abl.onLeave()
 	
-func onStartOfTurn(board):
-	if board.isOnBoard(self) and board.players[board.activePlayer].UUID == playerID:
+func onStartOfTurn():
+	if NodeLoc.getBoard().isOnBoard(self) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == playerID:
 		hasAttacked = false
 		canAttackThisTurn = true
 		canFuseThisTurn = true
 	for abl in abilities.duplicate():
-		abl.onStartOfTurn(board)
+		abl.onStartOfTurn()
 
-func onEndOfTurn(board):
+func onEndOfTurn():
 	for abl in abilities.duplicate():
-		abl.onEndOfTurn(board)
+		abl.onEndOfTurn()
 				
 func onFusion(card):
 	for abl in abilities.duplicate():
 		abl.onFusion(card)
 	
-func onEnterFromFusion(board, slot):
+func onEnterFromFusion(slot):
 	for abl in abilities.duplicate():
-		abl.onEnterFromFusion(board, slot)
+		abl.onEnterFromFusion(slot)
 	
-func onOtherEnterFromFusion(board, slot):
+func onOtherEnterFromFusion(slot):
 	for abl in abilities.duplicate():
-		abl.onOtherEnterFromFusion(board, slot)
+		abl.onOtherEnterFromFusion(slot)
 	
-func onAttack(board, blocker):
+func onAttack(blocker):
 	hasAttacked = true
 	canAttackThisTurn = false
 	for abl in abilities.duplicate():
-		abl.onAttack(board, blocker)
+		abl.onAttack(blocker)
 	
-func onBeingAttacked(board, attacker):
+func onBeingAttacked(attacker):
 	for abl in abilities.duplicate():
-		abl.onBeingAttacked(board, attacker)
+		abl.onBeingAttacked(attacker)
 
-func onOtherAttack(board, attacker, blocker):
+func onOtherAttack(attacker, blocker):
 	for abl in abilities.duplicate():
-		abl.onOtherAttack(board, attacker, blocker)
+		abl.onOtherAttack(attacker, blocker)
 
-func onOtherBeingAttacked(board, attacker, blocker):
+func onOtherBeingAttacked(attacker, blocker):
 	for abl in abilities.duplicate():
-		abl.onOtherBeingAttacked(board, attacker, blocker)
+		abl.onOtherBeingAttacked(attacker, blocker)
 
-func onDraw(board, card):
+func onDraw(card):
 	for abl in abilities.duplicate():
-		abl.onDraw(board, card)
+		abl.onDraw(card)
 
-func onMill(board, card):
+func onMill(card):
 	for abl in abilities.duplicate():
-		abl.onMill(board, card)
+		abl.onMill(card)
 
-func onGraveAdd(board, card):
+func onGraveAdd(card):
 	for abl in abilities.duplicate():
-		abl.onGraveAdd(board, card)
+		abl.onGraveAdd(card)
 
-func addCreatureToBoard(card, board, slot = null) -> bool:
+func addCreatureToBoard(card, slot = null) -> bool:
 	if slot == null:
-		for s in board.creatures[playerID]:
+		for s in NodeLoc.getBoard().creatures[playerID]:
 			if not is_instance_valid(s.cardNode):
 				slot = s
 				break
@@ -161,17 +161,17 @@ func addCreatureToBoard(card, board, slot = null) -> bool:
 		
 		var cardPlacing = cardNodeScene.instance()
 		cardPlacing.card = card
-		board.add_child(cardPlacing)
+		NodeLoc.getBoard().add_child(cardPlacing)
 		cardPlacing.global_position = slot.global_position
 		slot.cardNode = cardPlacing
 		cardPlacing.slot = slot
 		cardPlacing.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		card.cardNode = cardPlacing
 		
-		card.onEnter(board, slot)
-		for s in board.creatures[slot.playerID]:
+		card.onEnter(slot)
+		for s in NodeLoc.getBoard().creatures[slot.playerID]:
 			if is_instance_valid(s.cardNode) and s != slot:
-				s.cardNode.card.onOtherEnter(self, slot)
+				s.cardNode.card.onOtherEnter(slot)
 		return true
 	return false
 
@@ -287,6 +287,8 @@ func addAbility(ability):
 		cardNode.addIcons()
 
 func removeAbility(ability):
+	for abl in abilities.duplicate():
+		abl.onRemove(ability)
 	abilities.erase(ability)
 	removedAbilities.append(ability)
 

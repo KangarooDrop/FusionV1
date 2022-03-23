@@ -587,9 +587,22 @@
     "creature_type": [
       1
     ],
-    "tier": 1,
+    "tier": -1,
     "abilities": [
       "AbilityPossession"
+    ]
+  },
+  "53": {
+    "name": "Sanctifier",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPurify"
     ]
   }
 }

@@ -5,8 +5,8 @@ class_name AbilityEvolution
 func _init(card : Card).("Evolution", card, Color.brown, true, Vector2(32, 64)):
 	pass
 
-func onEndOfTurn(board):
-	if board.isOnBoard(card) and board.players[board.activePlayer].UUID == card.cardNode.playerID:
+func onEndOfTurn():
+	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
 		card.power += count
 		card.toughness += count
 

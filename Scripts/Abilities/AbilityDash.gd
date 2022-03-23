@@ -5,13 +5,13 @@ class_name AbilityDash
 func _init(card : Card).("Dash", card, Color.red, false, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
+func onEnter(slot):
+	.onEnter(slot)
 	card.hasAttacked = false
 	card.removeAbility(self)
 
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
 	card.hasAttacked = false
 	card.removeAbility(self)
 

@@ -183,6 +183,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	cardNew.hasAttacked = cardA.hasAttacked
 	cardNew.canAttackThisTurn = cardA.canAttackThisTurn
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
+	
 	cardA.onFusion(cardNew)
 	cardB.onFusion(cardNew)
 	

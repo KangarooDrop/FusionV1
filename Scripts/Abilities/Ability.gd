@@ -18,66 +18,69 @@ func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Ve
 	self.showCount = showCount
 	self.iconPos = iconPos
 
-func onEnter(board, slot):
+func onEnter(slot):
 	pass
 	
-func onOtherEnter(board, slot):
+func onOtherEnter(slot):
 	pass
 	
-func onOtherDeath(board, slot):
+func onOtherDeath(slot):
 	pass
 	
-func onOtherLeave(board, slot):
+func onOtherLeave(slot):
 	pass
 	
-func onDeath(board):
+func onDeath():
 	pass
 	
-func onLeave(board):
+func onLeave():
 	pass
 	
-func onStartOfTurn(board):
+func onStartOfTurn():
 	pass
 
-func onEndOfTurn(board):
+func onEndOfTurn():
 	pass
 	
-func onAttack(board, blocker):
+func onAttack(blocker):
 	pass
 	
-func onBeingAttacked(board, attacker):
+func onBeingAttacked(attacker):
 	pass
 
-func onOtherAttack(board, attacker, blocker):
+func onOtherAttack(attacker, blocker):
 	pass
 
-func onOtherBeingAttacked(board, attacker, blocker):
+func onOtherBeingAttacked(attacker, blocker):
 	pass
 
 func onFusion(card):
 	pass
 	
-func onEnterFromFusion(board, slot):
+func onEnterFromFusion(slot):
 	pass
 	
-func onOtherEnterFromFusion(board, slot):
+func onOtherEnterFromFusion(slot):
 	pass
 
-func onDraw(board, card):
+func onDraw(card):
 	pass
 
-func onMill(board, card):
+func onMill(card):
 	pass
 
-func onGraveAdd(board, card):
+func onGraveAdd(card):
+	pass
+
+func onRemove(ability):
 	pass
 
 func combine(abl : Ability):
 	setCount(count + abl.count)
 
-static func discardSelf(board, card):
-	for i in range(board.players.size()):
-		var p = board.players[i]
+static func discardSelf(card):
+	for i in range(NodeLoc.getBoard().players.size()):
+		var p = NodeLoc.getBoard().players[i]
 		if p.UUID == card.playerID:
 			for j in range(p.hand.nodes.size()):
 				if p.hand.nodes[j].card == card:

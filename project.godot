@@ -115,6 +115,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityPronged.gd"
 }, {
 "base": "Ability",
+"class": "AbilityPurify",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityPurify.gd"
+}, {
+"base": "Ability",
 "class": "AbilityPyroclast",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityPyroclast.gd"
@@ -266,6 +271,7 @@ _global_script_class_icons={
 "AbilityPossession": "",
 "AbilityProduction": "",
 "AbilityPronged": "",
+"AbilityPurify": "",
 "AbilityPyroclast": "",
 "AbilityRampage": "",
 "AbilityReignite": "",
@@ -308,6 +314,7 @@ ListOfCards="*res://Scripts/ListOfCards.gd"
 Settings="*res://Scripts/Settings.gd"
 Server="*res://Scripts/Networking/Server.gd"
 FileIO="*res://Scripts/FileIO.gd"
+NodeLoc="*res://Scripts/NodeLoc.gd"
 
 [display]
 

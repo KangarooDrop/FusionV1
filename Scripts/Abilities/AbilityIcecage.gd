@@ -5,18 +5,18 @@ class_name AbilityIcecage
 func _init(card : Card).("Icecage", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board]])
+func onEnter(slot):
+	.onEnter(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", []])
 	card.removeAbility(self)
 	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
-	board.abilityStack.append([get_script(), "onEffect", [board]])
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", []])
 	card.removeAbility(self)
 			
 static func onEffect(params):
-	for s in params[0].boardSlots:
+	for s in NodeLoc.getBoard().boardSlots:
 		if is_instance_valid(s.cardNode) and s.cardNode.card != null:
 			var frozen = AbilityFrozen.new(s.cardNode.card)
 			frozen.onEffect()

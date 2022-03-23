@@ -4,7 +4,6 @@ class_name CardSlot
 
 var disabled = false
 
-var board
 var cardNode
 var playerID = -1
 
@@ -17,6 +16,8 @@ var boundsMouse = false
 var highlightOnSprite = preload("res://Art/card_slot_active.png")
 var highlightOffSprite = preload("res://Art/card_slot.png")
 
+onready var cardDisplay = load("res://Scripts/UI/CardDisplay.gd")
+
 func _ready():
 	if currentZone == ZONES.HAND:
 		$SpotSprite.visible = false
@@ -25,12 +26,18 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if board != null and not disabled:
+		if not disabled:
 			if boundsMouse:
 				if event.is_pressed():
-					board.onMouseDown(self, event.button_index)
+					if get_parent() is cardDisplay:
+						get_parent().onMouseDown(self, event.button_index)
+					else:
+						NodeLoc.getBoard().onMouseDown(self, event.button_index)
 				elif not event.is_pressed():
-					board.onMouseUp(self, event.button_index)
+					if get_parent() is cardDisplay:
+						get_parent().onMouseUp(self, event.button_index)
+					else:
+						NodeLoc.getBoard().onMouseUp(self, event.button_index)
 	
 	
 	"""
@@ -47,7 +54,7 @@ func _input(event):
 				globallyVis = false
 				break
 			else:
-				currentNode = currentNode.get_parent()
+				currentNode = currentNode.NodeLoc.getBoard()
 			
 		if globallyVis and inBounds and board != null and not disabled:
 			yield(get_tree().create_timer(0.02), "timeout")
@@ -57,13 +64,18 @@ func _input(event):
 	"""
 	
 func mouseEnter():
-	if board != null and not disabled:
-		board.onSlotEnter(self)
-	boundsMouse = true
+	if not disabled:
+		if get_parent() is cardDisplay:
+			get_parent().onSlotEnter(self)
+		else:
+			NodeLoc.getBoard().onSlotEnter(self)
+		boundsMouse = true
 	
 func mouseExit():
-	if board != null:
-		board.onSlotExit(self)
+	if get_parent() is cardDisplay:
+		get_parent().onSlotExit(self)
+	else:
+		NodeLoc.getBoard().onSlotExit(self)
 	boundsMouse = false
 
 func getNeighbors() -> Array:

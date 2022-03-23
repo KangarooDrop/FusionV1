@@ -112,7 +112,6 @@ func openDeckDisplayHover(button):
 	
 	hoverSlot = cardSlot.instance()
 	hoverSlot.get_node("SpotSprite").visible = false
-	hoverSlot.board = self
 	hoverSlot.currentZone = CardSlot.ZONES.NONE
 	add_child(hoverSlot)
 	hoverSlot.global_position = Vector2(global_position.x - cardWidth * Settings.cardSlotScale *3.0/5, hoveringOn.rect_global_position.y)

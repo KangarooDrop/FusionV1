@@ -7,19 +7,19 @@ var frozenThisTurn = false
 func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
+func onEnter(slot):
+	.onEnter(slot)
 	onEffect()
 
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
 	onEffect()
 
-func onStartOfTurn(board):
-	.onStartOfTurn(board)
-	if board.isOnBoard(card):
+func onStartOfTurn():
+	.onStartOfTurn()
+	if NodeLoc.getBoard().isOnBoard(card):
 		onEffect()
-		if board.players[board.activePlayer].UUID == card.playerID:
+		if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
 			frozenThisTurn = true
 
 func onEffect():
@@ -27,11 +27,11 @@ func onEffect():
 	card.canFuseThisTurn = false
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
 
-func onEndOfTurn(board):
-	if board.isOnBoard(card):
+func onEndOfTurn():
+	if NodeLoc.getBoard().isOnBoard(card):
 		if frozenThisTurn:
 			card.canFuseThisTurn = true
-			if board.players[board.activePlayer].UUID == card.playerID:
+			if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
 				var scr = get_script()
 				for abl in card.abilities:
 					if abl is scr:

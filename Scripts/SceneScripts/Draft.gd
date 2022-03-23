@@ -50,7 +50,6 @@ func newCards():
 		var slot = cardSlotScene.instance()
 		slot.isOpponent = false
 		slot.currentZone = CardSlot.ZONES.NONE
-		slot.board = self
 		slot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		cardSlotList.append(slot)
 		slot.get_node("SpotSprite").texture = null

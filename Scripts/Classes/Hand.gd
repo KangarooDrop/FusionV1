@@ -27,14 +27,13 @@ var mulliganCount = 0
 func _ready():
 	maxVal = 1.1
 
-func initHand(board, player):
-	self.board = board
+func initHand(player):
 	self.player = player
 	isOpponent = player.isOpponent
 	
 	
 func drawHand():
-	var actualHandSize = handSize - mulliganCount + (0 if board.players[board.activePlayer] == player else 1)
+	var actualHandSize = handSize - mulliganCount + (0 if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer] == player else 1)
 	for i in range(actualHandSize):
 		drawCard()
 
@@ -54,8 +53,7 @@ func _physics_process(delta):
 				nodes.erase(discardQueue[index].cardNode)
 				slots.erase(discardQueue[index])
 				
-				if board != null:
-					board.addCardToGrave(player.UUID, discardQueue[index].cardNode.card)
+				NodeLoc.getBoard().addCardToGrave(player.UUID, discardQueue[index].cardNode.card)
 				
 				discardQueue[index].cardNode.queue_free()
 				discardQueue[index].queue_free()
@@ -72,7 +70,6 @@ func _physics_process(delta):
 		if drawingNode == null:
 			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
-			slotInst.board = self
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
@@ -88,6 +85,7 @@ func _physics_process(delta):
 			nodes.append(cardInst)
 			
 			slotInst.cardNode = cardInst
+			slotInst.cardNode.slot = slotInst
 			
 			centerCards()
 			if drawQueue[0][1]:
@@ -104,8 +102,8 @@ func _physics_process(delta):
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
 				
-				for c in board.getAllCards():
-					c.onDraw(board, cardInst.card)
+				for c in NodeLoc.getBoard().getAllCards():
+					c.onDraw(cardInst.card)
 				
 			if drawQueue[0][2]:
 				player.takeDamage(player.drawDamage, null)
@@ -158,7 +156,6 @@ func addCardToHand(data : Array):
 		else:
 			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
-			slotInst.board = self
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
@@ -175,11 +172,12 @@ func addCardToHand(data : Array):
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			
 			slotInst.cardNode = cardInst
+			slotInst.cardNode.slot = slotInst
 			
 			centerCards()
 			
-			for c in board.getAllCards():
-				c.onDraw(board, cardInst.card)
+			for c in NodeLoc.getBoard().getAllCards():
+				c.onDraw(cardInst.card)
 			
 			if data[1]:
 				player.takeDamage(player.drawDamage, null)

@@ -5,23 +5,23 @@ class_name AbilityMindrot
 func _init(card : Card).("Mindrot", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
-func onEnter(board, slot):
-	.onEnter(board, slot)
-	onEffect(board, slot)
+func onEnter(slot):
+	.onEnter(slot)
+	onEffect(slot)
 	
-func onEnterFromFusion(board, slot):
-	.onEnterFromFusion(board, slot)
-	onEffect(board, slot)
+func onEnterFromFusion(slot):
+	.onEnterFromFusion(slot)
+	onEffect(slot)
 
-func onEffect(board, slot):
-	board.abilityStack.append([get_script(), "onMillEffect", [board, card.playerID, count]])
+func onEffect(slot):
+	NodeLoc.getBoard().abilityStack.append([get_script(), "onMillEffect", [card.playerID, count]])
 	card.removeAbility(self)
 
 static func onMillEffect(params):
-	for p in params[0].players:
-		if p.UUID != params[1]:
-			for i in range(params[2]):
-				p.deck.mill(params[0], p.UUID)
+	for p in NodeLoc.getBoard().players:
+		if p.UUID != params[0]:
+			for i in range(params[1]):
+				p.deck.mill(p.UUID)
 
 func genDescription() -> String:
 	return "When this creature is played, remove the top " + str(count) + " cards of your opponent's deck from the game"
