@@ -28,6 +28,8 @@ var sortOrder : int = SORT_ORDER.TYPE
 
 var loadedDeckName = ""
 
+var popups := []
+
 func _ready():
 	$CenterControl/DeckDisplay.parent = self 
 	setCards()
@@ -269,8 +271,10 @@ func updateSlotCount(slot : CardSlot):
 func onLoadPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmLoad", [pop]], ["Back", pop, "close", []]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmLoad", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
+		pop.options[1].grab_focus()
+		popups.append(pop)
 	else:
 		onConfirmLoad()
 		
@@ -283,8 +287,10 @@ func onSavePressed():
 func onNewPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmNew", [pop]], ["Back", pop, "close", []]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmNew", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
+		pop.options[1].grab_focus()
+		popups.append(pop)
 	else:
 		onConfirmNew()
 	
@@ -294,13 +300,21 @@ func onSaveEnter(s : String):
 func onExitPressed():
 	if not hasSaved:
 		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmExit", [pop]], ["Back", pop, "close", []]])
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmExit", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
+		pop.options[1].grab_focus()
+		popups.append(pop)
 	else:
 		onConfirmExit()
-	
+
+func closePopupUI(popup=null):
+	if popup != null:
+		popups.erase(popup)
+		popup.close()
+
 func onConfirmNew(popup=null):
 	if popup != null:
+		popups.erase(popup)
 		popup.close()
 	$CenterControl/DeckDisplay.clearData()
 	hasSaved = true
@@ -308,6 +322,7 @@ func onConfirmNew(popup=null):
 	
 func onConfirmExit(popup=null):
 	if popup != null:
+		popups.erase(popup)
 		popup.close()
 	
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -316,6 +331,7 @@ func onConfirmExit(popup=null):
 
 func onConfirmLoad(popup=null):
 	if popup != null:
+		popups.erase(popup)
 		popup.close()
 		
 	$CenterControl/FileDisplay.visible = true
@@ -347,6 +363,24 @@ func onConfirmLoad(popup=null):
 	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
 	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
 	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
+	
+	var chs = $CenterControl/FileDisplay/ButtonHolder.get_children()
+	for c in chs.duplicate():
+		if not c is Button:
+			chs.erase(c)
+	for i in range(chs.size()):
+		chs[i].focus_neighbour_left = "../" + chs[i].name
+		chs[i].focus_neighbour_right = "../" + chs[i].name
+		if i == 0:
+			chs[i].focus_neighbour_top = "../" + chs[i].name
+		else:
+			chs[i].focus_neighbour_top = "../" + chs[i-1].name
+		if i == chs.size() - 1:
+			chs[i].focus_neighbour_bottom = "../" + chs[i].name
+		else:
+			chs[i].focus_neighbour_bottom = "../" + chs[i+1].name
+		
+	chs[0].grab_focus()
 		
 func onFileLoadBackPressed():
 	$CenterControl/FileDisplay.visible = false
@@ -363,6 +397,11 @@ func onFileLoadButtonPressed(fileName : String):
 			var id = int(k)
 			for i in range(int(dataRead[k])):
 				$CenterControl/DeckDisplay.addCard(id)
+				
+				for p in pages:
+					for c in p.get_children():
+						if c is CardSlot and is_instance_valid(c.cardNode):
+							updateSlotCount(c)
 		hasSaved = true
 		
 		loadedDeckName = fileName
@@ -370,8 +409,10 @@ func onFileLoadButtonPressed(fileName : String):
 		print("Deck file is not valid")
 		
 		var pop = popupUI.instance()
-		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
+		pop.options[0].grab_focus()
+		popups.append(pop)
 		
 	onFileLoadBackPressed()
 		
@@ -389,19 +430,25 @@ func onFileSaveButtonPressed():
 		if fileError != 0:
 			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
 			var pop = popupUI.instance()
-			pop.init("Error", "File could not be saved")
+			pop.init("Error", "File could not be saved", "", [["Close", self, "closePopupUI", [pop]]])
 			$CenterControl.add_child(pop)
+			pop.options[0].grab_focus()
+			popups.append(pop)
 		else:
 			print("Deck successfully saved")
 			var pop = popupUI.instance()
-			pop.init("Deck Saved")
+			pop.init("Deck Saved", "", [["Close", self, "closePopupUI", [pop]]])
 			$CenterControl.add_child(pop)
 			hasSaved = true
 			loadedDeckName = fileName
+			pop.options[0].grab_focus()
+			popups.append(pop)
 	else:
 		var pop = popupUI.instance()
-		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error])
+		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
+		pop.options[0].grab_focus()
+		popups.append(pop)
 	
 	onFileSaveBackPressed()
 		
@@ -438,12 +485,32 @@ func onDeleteButtonPressed():
 	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
 	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 	
+	var chs = $CenterControl/FileDisplay/ButtonHolder.get_children()
+	for c in chs.duplicate():
+		if not c is Button:
+			chs.erase(c)
+	for i in range(chs.size()):
+		chs[i].focus_neighbour_left = "../" + chs[i].name
+		chs[i].focus_neighbour_right = "../" + chs[i].name
+		if i == 0:
+			chs[i].focus_neighbour_top = "../" + chs[i].name
+		else:
+			chs[i].focus_neighbour_top = "../" + chs[i-1].name
+		if i == chs.size() - 1:
+			chs[i].focus_neighbour_bottom = "../" + chs[i].name
+		else:
+			chs[i].focus_neighbour_bottom = "../" + chs[i+1].name
+		
+	chs[0].grab_focus()
+	
 func onDeleteFileButtonPressed(fileName : String):
 	fileToDelete = fileName
 	$CenterControl/FileDisplay.visible = false
 	var pop = popupUI.instance()
 	pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onDeleteBackPressed", [pop]]])
 	$CenterControl.add_child(pop)
+	pop.options[1].grab_focus()
+	popups.append(pop)
 	
 func onDeleteConfirmed(popup=null):
 	var dir = Directory.new()
@@ -453,6 +520,7 @@ func onDeleteConfirmed(popup=null):
 	
 func onDeleteBackPressed(popup=null):
 	if popup != null:
+		popups.erase(popup)
 		popup.close()
 	fileToDelete = ""
 	
@@ -472,11 +540,23 @@ func getCurrentPage() -> int:
 	return currentPage
 	
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or $CenterControl/FileDisplay.visible):
-		if event.scancode == KEY_A or event.scancode == KEY_LEFT:
-			setCurrentPage(getCurrentPage() - 1)
-		elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
-			setCurrentPage(getCurrentPage() + 1)
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or $CenterControl/FileDisplay.visible) and popups.size() == 0:
+		if Input.is_key_pressed(KEY_CONTROL):
+			if event.scancode == KEY_S:
+				onSavePressed()
+			elif event.scancode == KEY_N:
+				onNewPressed()
+			elif event.scancode == KEY_O:
+				onLoadPressed()
+			elif event.scancode == KEY_DELETE:
+				onDeleteButtonPressed()
+		else:
+			if event.scancode == KEY_ESCAPE:
+				onExitPressed()
+			elif event.scancode == KEY_A or event.scancode == KEY_LEFT:
+				setCurrentPage(getCurrentPage() - 1)
+			elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
+				setCurrentPage(getCurrentPage() + 1)
 	
 	if not slotClicked:
 		if event is InputEventMouseButton:
