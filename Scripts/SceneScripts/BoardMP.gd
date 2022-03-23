@@ -21,7 +21,8 @@ var boardSlots : Array
 
 var players : Array
 var activePlayer := -1
-var cardsPerTurn = 2
+var cardsPerTurnMax = 2
+var cardsPerTurn = cardsPerTurnMax
 var cardsPlayed = 0
 
 var shakeMaxTime = 0.5
@@ -561,9 +562,13 @@ func _physics_process(delta):
 				abilityStack.erase(abl)
 				checkState()
 				
-			elif actionQueue.size() > 0 and (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
-				slotClicked(actionQueue[0][0], actionQueue[0][1], false)
-				actionQueue.remove(0)
+			elif actionQueue.size() > 0:
+				if is_instance_valid(actionQueue[0][0]):
+					if (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
+						slotClicked(actionQueue[0][0], actionQueue[0][1], false)
+						actionQueue.remove(0)
+				else:
+					actionQueue.remove(0)
 	
 	if rightClickQueue.size() > 0:
 		clickedOff = false
@@ -1253,6 +1258,7 @@ func nextTurn():
 	activePlayer = (activePlayer + 1) % players.size()
 	setTurnText()
 	players[activePlayer].hand.drawCard()
+	cardsPerTurn = cardsPerTurnMax
 		
 	if activePlayer == 0:
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)

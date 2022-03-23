@@ -125,6 +125,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityRampage.gd"
 }, {
 "base": "Ability",
+"class": "AbilityReignite",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityReignite.gd"
+}, {
+"base": "Ability",
 "class": "AbilityRekindle",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityRekindle.gd"
@@ -263,6 +268,7 @@ _global_script_class_icons={
 "AbilityPronged": "",
 "AbilityPyroclast": "",
 "AbilityRampage": "",
+"AbilityReignite": "",
 "AbilityRekindle": "",
 "AbilitySacrifice": "",
 "AbilityScavenge": "",
