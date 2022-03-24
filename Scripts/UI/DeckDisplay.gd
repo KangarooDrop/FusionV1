@@ -23,10 +23,10 @@ func setTotal(newTotal : int):
 		if parent != null and parent.has_method("deckModified"):
 			parent.deckModified()
 		
-		if total != deckMax:
-			$Label.set("custom_colors/font_color", Color.black)
-		else:
+		if total != -1 and total >= deckMax:
 			$Label.set("custom_colors/font_color", Color.blueviolet)
+		else:
+			$Label.set("custom_colors/font_color", Color.black)
 	
 func getTotal() -> int:
 	return total

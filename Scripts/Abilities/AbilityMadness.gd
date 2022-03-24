@@ -8,33 +8,42 @@ func _init(card : Card).("Madness", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onDraw(card):
-	onEffect()
+	if NodeLoc.getBoard().isOnBoard(self.card):
+		onEffect()
 
-func onMill(card):
+func onEnter(slot):
 	onEffect()
+	
+func onEnterFromFusion(slot):
+	onEffect()
+	
+func onMill(card):
+	if NodeLoc.getBoard().isOnBoard(self.card):
+		onEffect()
 
 func onEffect():
 	var pid = card.playerID
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
-			var num = player.deck.cards.size()
+			var num = player.deck.deckSize - player.deck.cards.size()
 			var dif = num * count - buffsApplied
-			card.power -= dif
-			card.toughness -= dif
-			card.maxToughness -= dif
+			card.power += dif
+			card.toughness += dif
+			card.maxToughness += dif
 			buffsApplied += dif
+			
 			break
 
 func onRemove(ability):
 	var pid = card.playerID
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
-			var num = player.deck.cards.size()
-			var dif = num * count - buffsApplied
-			card.power += dif
-			card.toughness += dif
-			card.maxToughness += dif
+			var dif = buffsApplied * count
+			card.power -= dif
+			card.toughness -= dif
+			card.maxToughness -= dif
 			buffsApplied -= dif
+			
 			break
 
 func combine(abl : Ability):
@@ -49,4 +58,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return "This creature gets -" + str(count) + "/-" + str(count) + " for each card in your library"
+	return "This creature gets +" + str(count) + "/+" + str(count) + " for each card removed from your library"

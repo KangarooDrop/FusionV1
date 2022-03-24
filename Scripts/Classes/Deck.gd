@@ -3,13 +3,20 @@ class_name Deck
 
 var cards : Array
 
+var deckSize : int = -1
+
+static func MIN_DECK_SIZE() -> int:
+	return 20 
+
 func _init():
 	pass
 
-func setCards(cards : Array, playerID : int):
+func setCards(cards : Array, playerID : int, setDeckSize : bool = false):
 	self.cards = cards
 	for c in cards:
 		c.playerID = playerID
+	if setDeckSize:
+		deckSize = cards.size()
 
 func shuffle():
 	cards.shuffle()
@@ -72,7 +79,6 @@ func getJSONData() -> Dictionary:
 enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE}
 #deckData [%id%] : %count%
 static func verifyDeck(deckData) -> int:
-	var numCards = 20
 	#var numSameCards = 4
 	var maxTier = 1
 	var maxID = ListOfCards.cardList.size()
@@ -109,7 +115,7 @@ static func verifyDeck(deckData) -> int:
 		total += count
 		
 	#CHECKS IF THERE ARE THE RIGHT NUMBER OF TOTAL CARDS
-	if total != numCards:
+	if total < MIN_DECK_SIZE():
 		return DECK_VALIDITY_TYPE.WRONG_SIZE
 		
 	return DECK_VALIDITY_TYPE.VALID

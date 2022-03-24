@@ -12,16 +12,21 @@ var statGain = 3
 func _init(card : Card).("Conjoined", card, Color.brown, false, Vector2(16, 48)):
 	pass
 
-func onDraw(card):
-	if card == self.card:
-		for c in NodeLoc.getBoard().graveCards[self.card.cardNode.playerID]:
-			for t in c.creatureType:
-				onEffect(t)
+func onEnter(card):
+	for c in NodeLoc.getBoard().graveCards[self.card.playerID]:
+		for t in c.creatureType:
+			onEffect(t)
+
+func onEnterFromFusion(card):
+	for c in NodeLoc.getBoard().graveCards[self.card.playerID]:
+		for t in c.creatureType:
+			onEffect(t)
 
 func onGraveAdd(card):
-	if card.playerID == self.card.playerID:
-		for t in card.creatureType:
-			onEffect(t)
+	if NodeLoc.getBoard().isOnBoard(self.card):
+		if card.playerID == self.card.playerID:
+			for t in card.creatureType:
+				onEffect(t)
 
 func onRemove(ability):
 	if ability == self:

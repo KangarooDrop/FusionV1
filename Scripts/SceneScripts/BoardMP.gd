@@ -177,7 +177,7 @@ func onMulliganButtonPressed():
 				handCards.append(players[0].deck.cards[i])
 			
 			handCards.shuffle()
-			players[0].deck.setCards(handCards, players[0].UUID)
+			players[0].deck.setCards(handCards, players[0].UUID, true)
 			
 			Server.sendDeck(opponentID)
 			
@@ -236,7 +236,7 @@ func getDeckFromFile() -> Array:
 	return cardList
 
 func setOwnCardList(cardList : Array):
-	players[0].deck.setCards(cardList, players[0].UUID)
+	players[0].deck.setCards(cardList, players[0].UUID, true)
 	var logDeck = "OWN_DECK "
 	for i in players[0].deck.serialize():
 		logDeck += str(i) + " "
@@ -252,7 +252,7 @@ func setOpponentCardList(cardList : Array):
 	var cards = []
 	for c in cardList:
 		cards.append(ListOfCards.getCard(c))
-	players[1].deck.setCards(cards, players[1].UUID)
+	players[1].deck.setCards(cards, players[1].UUID, true)
 	
 	var logDeck = "OPPONENT_DECK "
 	for i in players[players.size()-1].deck.serialize():
@@ -363,12 +363,17 @@ func startGame():
 	gameStarted = true
 	print("Notice: Players ready, starting game")
 	dataLog.append("GAME_START")
+	
+	setTurnText()
 
 func setTurnText():
 	if activePlayer == 0:
 		$TI/Label.text = "Your\nTurn"
+		if gameStarted:
+			$EndTurnButton.visible = true
 	else:
 		$TI/Label.text = "Opponent\nTurn"
+		$EndTurnButton.visible = false
 
 var rotTimer = 0
 var rotAngle = PI / 2
@@ -413,16 +418,18 @@ func _physics_process(delta):
 			rotTimer = 0
 		$TI.rotation = sin(2 * PI * rotTimer * rotFreq) * rotAngle
 		
-		if is_instance_valid(hoveringWindowSlot):
-			if hoveringWindowSlot.currentZone == CardSlot.ZONES.DECK:
-				var string = ""
-				var numCards = players[1 if hoveringWindowSlot.isOpponent else 0].deck.cards.size()
-				if numCards == 0:
-					string = "Take " + str(players[1 if hoveringWindowSlot.isOpponent else 0].drawDamage) + " damage on draw"
-				else:
-					string = str(numCards)
-				if hoveringWindow.text != string:
-					hoveringWindow.setText(string)
+	if is_instance_valid(hoveringWindowSlot):
+		if hoveringWindowSlot.currentZone == CardSlot.ZONES.DECK:
+			var string = ""
+			var p = players[1 if hoveringWindowSlot.isOpponent else 0]
+			var numCards = p.deck.cards.size()
+			if numCards == 0:
+				string = "Take " + str(players[1 if hoveringWindowSlot.isOpponent else 0].drawDamage) + " damage on draw"
+			else:
+				string = str(numCards) + "/" + str(p.deck.deckSize)
+			if hoveringWindow.text != string:
+				hoveringWindow.visible = true
+				hoveringWindow.setText(string)
 		
 	
 	if is_instance_valid(selectedCard):
@@ -591,21 +598,23 @@ func _physics_process(delta):
 				if hoveringWindow.close(true):
 					hoveringWindowSlot = null
 			if is_instance_valid(selectedSlot) and not selectedSlot.currentZone == CardSlot.ZONES.GRAVE:
-				var string := ""
+				var string = null
 				var pos := Vector2()
 				var flipped := false
 				if selectedSlot.currentZone == CardSlot.ZONES.DECK:
 					var numCards = players[1 if selectedSlot.isOpponent else 0].deck.cards.size()
-					string = str(numCards)
+					string = ""
 					pos = selectedSlot.global_position - Vector2(cardWidth*selectedSlot.scale.x/2, 0)
 					flipped = true
 				elif is_instance_valid(selectedSlot.cardNode) and selectedSlot.cardNode.cardVisible and selectedSlot.cardNode.card != null:
 					string = selectedSlot.cardNode.card.getHoverData()
 					pos = selectedSlot.global_position + Vector2(cardWidth*selectedSlot.scale.x/2, 0)
 				
-				if string != "":
+				if string != null:
 					createHoverNode(pos, self, string, flipped)
 					hoveringWindowSlot = selectedSlot
+					if string == "":
+						hoveringWindow.visible = false
 			elif selectedSlot.currentZone == CardSlot.ZONES.GRAVE:
 				if graveCards[selectedSlot.playerID].size() > 0:
 					if selectedSlot.playerID == graveViewing:
@@ -1106,6 +1115,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			var cn = cardNode.instance()
 			cn.card = card
 			card.cardNode = cn
+			card.playerID = slot.playerID
 			
 			fuseQueue.append(cn)
 			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -1166,45 +1176,48 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 func isMyTurn() -> bool:
 	return 0 == activePlayer
 
+func passMyTurn():
+	if isMyTurn():
+		if not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible:
+			if not gameOver and gameStarted:
+				var waiting = true
+				while waiting:
+					waiting = false
+					for slot in creatures[players[activePlayer].UUID]:
+						if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
+							waiting = true
+							
+					for p in players:
+						if p.hand.drawQueue.size() > 0:
+							waiting = true
+					
+					if fuseQueue.size() > 0:
+						waiting = true
+								
+					if millQueue.size() > 0:
+						waiting = true
+							
+					if actionQueue.size() > 0:
+						waiting = true
+						
+					if abilityStack.size() > 0:
+						waiting = true
+							
+					yield(get_tree().create_timer(0.1), "timeout")
+				
+				if isMyTurn():
+					nextTurn()
+					Server.onNextTurn(opponentID)
+
 var clickedOff = false
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_F1:
 			saveReplay()
 	
-	if not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible:
-		if not gameOver and gameStarted:
-			if event is InputEventKey and event.is_pressed() and not event.is_echo():
-				if event.scancode == KEY_SPACE:
-					if isMyTurn():
-						var waiting = true
-						while waiting:
-							waiting = false
-							for slot in creatures[players[activePlayer].UUID]:
-								if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-									waiting = true
-									
-							for p in players:
-								if p.hand.drawQueue.size() > 0:
-									waiting = true
-							
-							if fuseQueue.size() > 0:
-								waiting = true
-										
-							if millQueue.size() > 0:
-								waiting = true
-									
-							if actionQueue.size() > 0:
-								waiting = true
-								
-							if abilityStack.size() > 0:
-								waiting = true
-									
-							yield(get_tree().create_timer(0.1), "timeout")
-						
-						if isMyTurn():
-							nextTurn()
-							Server.onNextTurn(opponentID)
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.scancode == KEY_SPACE:
+			passMyTurn()
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
 		clickedOff = true
 

@@ -556,8 +556,8 @@
   "50": {
     "name": "Sinusoida",
     "tex": "res://Art/portraits/card_CARRION.png",
-    "power": 8,
-    "toughness": 8,
+    "power": -12,
+    "toughness": -12,
     "creature_type": [
       3
     ],

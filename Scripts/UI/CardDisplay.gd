@@ -151,6 +151,10 @@ func _physics_process(delta):
 			clickedSlot = highestZ
 		mouseDownQueue.clear()
 	
+	if not canReorder and clickedSlot != null:
+		get_parent().onMouseDown(clickedSlot, 1)
+		clickedSlot = null
+	
 	if mouseDown:
 		clickTimer += delta
 		if clickTimer >= clickMaxTime:
@@ -228,7 +232,10 @@ func onMouseDown(slot : CardSlot, button_index : int):
 		mouseDown = true
 		clickTimer = 0
 	else:
-		get_parent().onMouseDown(slot, button_index)
+		if button_index == 1:
+			mouseDownQueue.append(slot)
+		else:
+			get_parent().onMouseDown(slot, button_index)
 	
 func onMouseUp(slot : CardSlot, button_index : int):
 	if button_index == 1:

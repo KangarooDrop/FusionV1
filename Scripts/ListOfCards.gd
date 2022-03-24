@@ -171,6 +171,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 			newIndex = cardA.UUID
 	
 	var cardNew = ListOfCards.getCard(newIndex)
+	cardNew.playerID = cardA.playerID
 	cardNew.power = cardA.power + cardB.power
 	cardNew.toughness = cardA.toughness + cardB.toughness
 	cardNew.maxToughness = cardA.maxToughness + cardB.maxToughness
