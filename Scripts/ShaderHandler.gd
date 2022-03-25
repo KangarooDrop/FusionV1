@@ -89,7 +89,7 @@ func verifyShaders():
 			
 		file.close()
 
-var currentShader = "default"
+var currentShader = "default.json"
 func setShader(path : String):
 	if path != Settings.shaderPath + "default.shader":
 		makeWarning()

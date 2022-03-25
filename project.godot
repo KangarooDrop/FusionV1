@@ -320,8 +320,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-ShaderHandler="*res://Scripts/ShaderHandler.gd"
 MessageManager="*res://Scripts/UI/MessageManager.gd"
+ShaderHandler="*res://Scripts/ShaderHandler.gd"
 ListOfCards="*res://Scripts/ListOfCards.gd"
 Settings="*res://Scripts/Settings.gd"
 Server="*res://Scripts/Networking/Server.gd"

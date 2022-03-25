@@ -11,24 +11,24 @@ var messageHolder
 var versionLabel
 
 func _ready():
-	yield(get_tree(), "idle_frame")
 	
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	set_anchors_and_margins_preset(Control.PRESET_WIDE)
 	
 	messageHolder = Control.new()
 	messageHolder.name = "MessageHolder"
 	add_child(messageHolder)
-	messageHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
 	
 	versionLabel = Label.new()
 	versionLabel.name = "VersionLabel"
 	versionLabel.text = "Version: " + str(Settings.versionID)
 	add_child(versionLabel)
-	versionLabel.set_anchors_and_margins_preset(Control.PRESET_TOP_LEFT)
-	versionLabel.rect_position += Vector2(8, 8)
 	versionLabel.set("custom_colors/font_color", Color(0,0,0))
 	
+	yield(get_tree(), "idle_frame")
+	set_anchors_and_margins_preset(Control.PRESET_WIDE)
+	messageHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
+	versionLabel.set_anchors_and_margins_preset(Control.PRESET_TOP_LEFT)
+	versionLabel.rect_position += Vector2(8, 8)
 
 func _process(delta):
 	var move = delta * yOff / moveTime

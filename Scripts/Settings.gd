@@ -21,8 +21,8 @@ var shaderPath = "user://shaders/"
 
 func _ready():
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
-	if json.keys().size() == 0:
-		FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
+#	if json.keys().size() == 0:
+#		FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
 		
 	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
 	var ok = verifySettings(settings)
@@ -51,7 +51,7 @@ func verifySettings(settings : Dictionary) -> bool:
 		settings["ip_saved"] = "127.0.0.1"
 		ok = false
 	if not settings.has("shader") or typeof(settings["shader"]) != TYPE_STRING:
-		settings["shader"] = shaderPath + "default.shader"
+		settings["shader"] = Settings.shaderPath + "default.shader"
 		ok = false
 		
 	return ok

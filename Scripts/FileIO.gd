@@ -41,7 +41,7 @@ func readJSON(path : String) -> Dictionary:
 			else:
 				MessageManager.notify("Error parsing json save file")
 	else:
-		MessageManager.notify("Error finding json save file")
+		print("Error finding json save file")
 	file.close()
 	return dict
 
