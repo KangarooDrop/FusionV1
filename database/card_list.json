@@ -427,7 +427,7 @@
     "name": "The Boulder",
     "tex": "res://Art/portraits/card_BOULDER.png",
     "power": 0,
-    "toughness": 5,
+    "toughness": 2,
     "creature_type": [
       4
     ],
@@ -603,6 +603,45 @@
     "tier": 1,
     "abilities": [
       "AbilityPurify"
+    ]
+  },
+  "54": {
+    "name": "Ignitia",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 4,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityWorldfire 2"
+    ]
+  },
+  "55": {
+    "name": "Rockardio",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 5,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPhalanx 2"
+    ]
+  },
+  "56": {
+    "name": "Grey Goo",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPermeation"
     ]
   }
 }

@@ -384,11 +384,12 @@ var practiceWaiting = false
 func _physics_process(delta):
 	
 	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
-		if not practiceWaiting and activePlayer != 0 and gameStarted:
+		if not practiceWaiting and activePlayer != 0 and gameStarted and not getWaiting():
 			practiceWaiting = true
 			yield(get_tree().create_timer(1), "timeout")
+			if not getWaiting() and activePlayer != 0:
+				nextTurn()
 			practiceWaiting = false
-			nextTurn()
 	
 	if readyToStart and deckDataSet and hasStartingPlayer and versionConfirmed and gameSeed != -1 and mulliganDone and mulliganDoneOpponent:
 		startGame()
@@ -1182,32 +1183,39 @@ func passMyTurn():
 			if not gameOver and gameStarted:
 				var waiting = true
 				while waiting:
-					waiting = false
-					for slot in creatures[players[activePlayer].UUID]:
-						if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-							waiting = true
-							
-					for p in players:
-						if p.hand.drawQueue.size() > 0:
-							waiting = true
-					
-					if fuseQueue.size() > 0:
-						waiting = true
-								
-					if millQueue.size() > 0:
-						waiting = true
-							
-					if actionQueue.size() > 0:
-						waiting = true
-						
-					if abilityStack.size() > 0:
-						waiting = true
+					waiting = getWaiting()
 							
 					yield(get_tree().create_timer(0.1), "timeout")
 				
 				if isMyTurn():
 					nextTurn()
 					Server.onNextTurn(opponentID)
+
+func getWaiting() -> bool:
+	
+	var waiting = false
+	for slot in creatures[players[activePlayer].UUID]:
+		if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
+			waiting = true
+			
+	for p in players:
+		if p.hand.drawQueue.size() > 0:
+			waiting = true
+	
+	if fuseQueue.size() > 0:
+		waiting = true
+				
+	if millQueue.size() > 0:
+		waiting = true
+			
+	if actionQueue.size() > 0:
+		waiting = true
+		
+	if abilityStack.size() > 0:
+		waiting = true
+	
+	return waiting
+	
 
 var clickedOff = false
 func _input(event):
@@ -1244,6 +1252,13 @@ func getAllCards() -> Array:
 			cards.append(cn.card)
 		
 	return cards
+
+func getAllPlayers() -> Array:
+	var pl := []
+	for i in range(players.size()):
+		var p = players[(activePlayer + i) % players.size()]
+		pl.append(p)
+	return pl
 
 func nextTurn():
 	if gameOver:
@@ -1287,7 +1302,7 @@ func nextTurn():
 func checkState():
 	var boardState = []
 	var slots = []
-	for p in players:
+	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				boardState.append(s.cardNode.card.serialize())
@@ -1295,7 +1310,7 @@ func checkState():
 				boardState.append({})
 	
 	var creaturesDying = []
-	for p in players:
+	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				if s.cardNode.card.toughness <= 0:
@@ -1316,7 +1331,7 @@ func checkState():
 		cardNode.queue_free()
 
 	var boardStateNew = []
-	for p in players:
+	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				boardStateNew.append(s.cardNode.card.serialize())

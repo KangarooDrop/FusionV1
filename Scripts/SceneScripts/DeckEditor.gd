@@ -551,12 +551,21 @@ func _input(event):
 			elif event.scancode == KEY_DELETE:
 				onDeleteButtonPressed()
 		else:
-			if event.scancode == KEY_ESCAPE:
-				onExitPressed()
-			elif event.scancode == KEY_A or event.scancode == KEY_LEFT:
+			if event.scancode == KEY_A or event.scancode == KEY_LEFT:
 				setCurrentPage(getCurrentPage() - 1)
 			elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
 				setCurrentPage(getCurrentPage() + 1)
+	
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
+		if $CenterControl/SaveDisplay.visible:
+			onFileSaveBackPressed()
+		elif $CenterControl/FileDisplay.visible:
+			onFileLoadBackPressed()
+		elif popups.size() > 0:
+			popups[popups.size()-1].close()
+			popups.remove(popups.size()-1)
+		else:
+			onExitPressed()
 	
 	if not slotClicked:
 		if event is InputEventMouseButton:
