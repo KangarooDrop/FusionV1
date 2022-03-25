@@ -1092,7 +1092,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 
 func fuseToSlot(slot : CardSlot, cards : Array):
 	
-	var isEntering = not is_instance_valid(slot.cardNode)
+	isEntering = not is_instance_valid(slot.cardNode)
 	
 	if not isEntering:
 		if slot == selectedCard:

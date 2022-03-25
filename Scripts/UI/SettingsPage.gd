@@ -2,6 +2,8 @@ extends Control
 
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 
+signal settingsClose
+
 func _ready():
 	$Anims/CheckBox.pressed = Settings.playAnimations
 	$NumDraft/LineEdit.text = str(Server.MAX_PEERS + 1)
@@ -9,8 +11,7 @@ func _ready():
 	$Username/LineEdit.text = Server.username
 
 func onBackPressed():
-	if get_node_or_null("/root/StartupScreen"):
-		get_node("/root/StartupScreen/VBoxContainer").visible = true
+	emit_signal("settingsClose")
 	
 	visible = false
 	setNumDraft($NumDraft/LineEdit.get_value())

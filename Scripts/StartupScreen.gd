@@ -35,3 +35,6 @@ func onSettingsPressed():
 	
 func onExitPressed():
 	get_tree().quit()
+
+func onSettingsClose():
+	$VBoxContainer.visible = true

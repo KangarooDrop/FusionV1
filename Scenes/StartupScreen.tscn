@@ -77,3 +77,4 @@ text = "Exit"
 [connection signal="pressed" from="VBoxContainer/DraftButton" to="." method="onDraftPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
+[connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]

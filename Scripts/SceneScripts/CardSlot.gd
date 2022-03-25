@@ -11,8 +11,6 @@ enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK, GRAVE}
 var currentZone = ZONES.NONE
 var isOpponent = false
 
-var boundsMouse = false
-
 var highlightOnSprite = preload("res://Art/card_slot_active.png")
 var highlightOffSprite = preload("res://Art/card_slot.png")
 
@@ -23,21 +21,6 @@ func _ready():
 		$SpotSprite.visible = false
 	else:
 		$SpotSprite.visible = true
-
-func _input(event):
-	if event is InputEventMouseButton:
-		if not disabled:
-			if boundsMouse:
-				if event.is_pressed():
-					if get_parent() is cardDisplay:
-						get_parent().onMouseDown(self, event.button_index)
-					else:
-						NodeLoc.getBoard().onMouseDown(self, event.button_index)
-				elif not event.is_pressed():
-					if get_parent() is cardDisplay:
-						get_parent().onMouseUp(self, event.button_index)
-					else:
-						NodeLoc.getBoard().onMouseUp(self, event.button_index)
 	
 	
 	"""
@@ -62,21 +45,19 @@ func _input(event):
 			if not get_tree().is_input_handled():
 				board.onSlotBeingClicked(self, event.button_index)
 	"""
-	
+
 func mouseEnter():
 	if not disabled:
 		if get_parent() is cardDisplay:
 			get_parent().onSlotEnter(self)
 		else:
 			NodeLoc.getBoard().onSlotEnter(self)
-		boundsMouse = true
 	
 func mouseExit():
 	if get_parent() is cardDisplay:
 		get_parent().onSlotExit(self)
 	else:
 		NodeLoc.getBoard().onSlotExit(self)
-	boundsMouse = false
 
 func getNeighbors() -> Array:
 	var neighbors = []
@@ -96,3 +77,18 @@ func setHighlight(isHighlighted : bool):
 		$SpotSprite.texture = highlightOnSprite
 	else:
 		$SpotSprite.texture = highlightOffSprite
+
+
+func _on_Area2D_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton:
+		if not disabled:
+			if event.is_pressed():
+				if get_parent() is cardDisplay:
+					get_parent().onMouseDown(self, event.button_index)
+				else:
+					NodeLoc.getBoard().onMouseDown(self, event.button_index)
+			elif not event.is_pressed():
+				if get_parent() is cardDisplay:
+					get_parent().onMouseUp(self, event.button_index)
+				else:
+					NodeLoc.getBoard().onMouseUp(self, event.button_index)

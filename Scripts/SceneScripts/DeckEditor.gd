@@ -61,6 +61,88 @@ func setSortOrder(order : int):
 
 func sort():
 	clearPages()
+	var listOfCards := ListOfCards.cardList.duplicate()
+	var cardPages := {}
+	
+	#if sortOrder == SORT_ORDER.POWER:
+	for c in listOfCards:
+		if c.tier == 1:
+			var key = 0
+			if sortOrder == SORT_ORDER.POWER:
+				key = -c.power
+			elif sortOrder == SORT_ORDER.TOUGHNESS:
+				key = -c.toughness
+			elif sortOrder == SORT_ORDER.TYPE:
+				for t in c.creatureType:
+					key |= 1 << t
+			
+			if not cardPages.has(key):
+				cardPages[key] = [c]
+			else:
+				cardPages[key].append(c)
+	
+	for k in cardPages:
+		var mod
+		if cardPages[k].size() == 0:
+			mod = 0
+		elif cardPages[k].size() % slotPageNum == 0:
+			mod = slotPageNum
+		else:
+			mod = cardPages[k].size() % slotPageNum
+		var remainder = slotPageNum - mod
+		
+		for i in range(remainder):
+			cardPages[k].append(null)
+	
+	var cardsToAdd := []
+	while cardPages.size() > 0:
+		var lowest = cardPages.keys()[0]
+		for i in range(1, cardPages.keys().size()):
+			if cardPages.keys()[i] < lowest:
+				lowest = cardPages.keys()[i]
+		cardsToAdd.append(cardPages[lowest])
+		cardPages.erase(lowest)
+	
+	
+	
+	for i in range(cardsToAdd.size()):
+		var page = Node2D.new()
+		page.name = "page_" + str(i)
+		$CenterControl/PageHolder.add_child(page)
+		page.visible = false
+		pages.append(page)
+		for j in range(slotPageNum):
+			var x = j % slotPageWidth
+			var y = j / slotPageWidth
+			var offX = (x - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+			var offY = (y - (slotPageHeight - 1) / 2.0) * (cardHeight + cardDists*2)
+			
+			var slot = cardSlot.instance()
+			slot.currentZone = CardSlot.ZONES.NONE
+			page.add_child(slot)
+			slot.position = Vector2(offX, offY)
+			
+			var card = cardsToAdd[i][j]
+			if card != null:
+				var cardPlacing = cardNode.instance()
+				cardPlacing.card = card
+				page.add_child(cardPlacing)
+				cardPlacing.global_position = slot.global_position
+				slot.cardNode = cardPlacing
+				cardPlacing.slot = slot
+				
+				updateSlotCount(slot)
+	
+	var offL = (-2 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
+	$CenterControl/LArrow.position = Vector2(offL, 30)
+	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists) + 8
+	$CenterControl/RArrow.position = Vector2(offR, 30)
+	
+	setCurrentPage(0)
+
+"""
+func sort():
+	clearPages()
 	
 	var listOfCards := []
 	for k in availableCardCount.keys():
@@ -166,7 +248,7 @@ func sort():
 	$CenterControl/RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
-	
+"""
 
 func leftArrowPressed():
 	setCurrentPage(getCurrentPage() - 1)
@@ -247,7 +329,7 @@ func onMouseDown(slot : CardSlot, button_index : int):
 				updateSlotCount(slot)
 				
 		elif button_index == 2:
-			if slotViewing == null and slot.cardNode != null:
+			if slotViewing == null and slotReturning == null and slot.cardNode != null and slot.get_parent().visible:
 				slotViewing = slot
 				slotViewing.cardNode.z_index += 2
 				viewTimer = 0
@@ -529,7 +611,17 @@ func deckModified():
 	
 func setCurrentPage(newPage : int):
 	newPage = max(min(newPage, pages.size() - 1), 0)
-	pages[currentPage].visible = false
+	
+	if slotViewing != null and currentPage != newPage:
+		if is_instance_valid(infoWindow):
+			infoWindow.close(true)
+		slotViewing.cardNode.global_position = slotViewing.global_position
+		slotViewing.cardNode.scale = Vector2(1, 1)
+		slotViewing.cardNode.z_index -= 1
+		slotViewing = null
+	
+	if currentPage >= 0 and currentPage < pages.size():
+		pages[currentPage].visible = false
 	currentPage = newPage
 	pages[newPage].visible = true
 	
@@ -552,9 +644,9 @@ func _input(event):
 				onDeleteButtonPressed()
 		else:
 			if event.scancode == KEY_A or event.scancode == KEY_LEFT:
-				setCurrentPage(getCurrentPage() - 1)
+				leftArrowPressed()
 			elif event.scancode == KEY_D or event.scancode == KEY_RIGHT:
-				setCurrentPage(getCurrentPage() + 1)
+				rightArrowPressed()
 	
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
 		if $CenterControl/SaveDisplay.visible:
@@ -570,11 +662,12 @@ func _input(event):
 	if not slotClicked:
 		if event is InputEventMouseButton:
 			if event.pressed and (event.button_index == 2):
-				if slotViewing != null and slotReturning == null:
+				if is_instance_valid(slotViewing) and slotReturning == null:
 					yield(get_tree().create_timer(0.02), "timeout")
-					if is_instance_valid(infoWindow):
-						infoWindow.close(true)
-					slotReturning = slotViewing
-					slotViewing.cardNode.z_index -= 1
-					slotViewing = null
-					returnTimer = 0
+					if is_instance_valid(slotViewing) and slotReturning == null:
+						if is_instance_valid(infoWindow):
+							infoWindow.close(true)
+						slotReturning = slotViewing
+						slotViewing.cardNode.z_index -= 1
+						slotViewing = null
+						returnTimer = 0

@@ -394,7 +394,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityMindrot 2"
+      "AbilityMindrot 3"
     ]
   },
   "38": {
@@ -554,7 +554,7 @@
     ]
   },
   "50": {
-    "name": "Sinusoida",
+    "name": "Sigmoid",
     "tex": "res://Art/portraits/card_CARRION.png",
     "power": -12,
     "toughness": -12,
@@ -620,7 +620,7 @@
   },
   "55": {
     "name": "Rockardio",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/RockDude.png",
     "power": 0,
     "toughness": 5,
     "creature_type": [
@@ -633,7 +633,7 @@
   },
   "56": {
     "name": "Grey Goo",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/WurmGuy.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [

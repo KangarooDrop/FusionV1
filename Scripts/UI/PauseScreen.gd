@@ -30,5 +30,10 @@ func onMainMenuPressed():
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 
-func onExitPressed():
-	get_tree().quit()
+func onSettingsButtonClicked():
+	$VBoxContainer.visible = false
+	$SettingsPage.visible = true
+
+func onSettingsClose():
+	$VBoxContainer.visible = true
+	
