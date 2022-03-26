@@ -38,7 +38,11 @@ func setCards():
 	if Settings.gameMode == Settings.GAME_MODE.NONE:
 		for i in range(ListOfCards.cardList.size()):
 			if ListOfCards.cardList[i].tier == 1:
-				availableCardCount[i] = 4
+				if ListOfCards.cardList[i].rarity == Card.RARITY.COMMON:
+					availableCardCount[i] = 4
+				elif ListOfCards.cardList[i].rarity == Card.RARITY.LEGENDARY:
+					availableCardCount[i] = 1
+					
 	else:
 		$CenterControl/Menu/DeleteButton.hide()
 		$CenterControl/Menu/NewButton.hide()
@@ -61,7 +65,10 @@ func setSortOrder(order : int):
 
 func sort():
 	clearPages()
-	var listOfCards := ListOfCards.cardList.duplicate()
+	var listOfCards := []
+	for k in availableCardCount.keys():
+		var c = ListOfCards.getCard(k)
+		listOfCards.append(c)
 	var cardPages := {}
 	
 	#if sortOrder == SORT_ORDER.POWER:

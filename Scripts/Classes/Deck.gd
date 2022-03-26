@@ -111,6 +111,9 @@ static func verifyDeck(deckData) -> int:
 		#CHECKS IF THE DECK ONLY USES TIER 1 CARDS
 		if ListOfCards.getCard(key).tier != 1:
 			return DECK_VALIDITY_TYPE.HIGHER_TIERS
+		
+		if ListOfCards.getCard(key).rarity == Card.RARITY.LEGENDARY and count != 1:
+			return DECK_VALIDITY_TYPE.BAD_COUNT
 			
 		total += count
 		

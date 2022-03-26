@@ -4,6 +4,7 @@ class_name Card
 var cardNodeScene = load("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
+enum RARITY {NONE, COMMON, LEGENDARY}
 
 var UUID = -1
 
@@ -16,6 +17,8 @@ var creatureType := []
 var power : int
 var toughness : int
 var maxToughness : int
+
+var rarity : int
 
 var hasAttacked = true
 var canAttackThisTurn = true
@@ -66,6 +69,8 @@ func _init(params):
 		canAttackThisTurn = params["can_attack"]
 	if params.has("can_play"):
 		canBePlayed = params["can_play"]
+	if params.has("rarity"):
+		rarity = RARITY[params["rarity"]]
 	
 	if params.has("max_toughness"):
 		maxToughness = params["max_toughness"]
@@ -243,6 +248,16 @@ static func areIdentical(dict1 : Dictionary, dict2 : Dictionary) -> bool:
 
 func getHoverData() -> String:
 	var string = name + "\n"
+	
+	match rarity:
+		RARITY.COMMON:
+			string += "[color=gray]Common[/color]\n"
+			
+		RARITY.LEGENDARY:
+			string += "[color=#FF00FF]Legendary[/color]\n"
+			
+		_:
+			pass
 	
 	string += "Types: "
 	for i in range(creatureType.size()):

@@ -80,11 +80,7 @@ func _ready():
 		playerIDs.shuffle()
 		
 		for i in range(numCards * playerIDs.size()):
-			var card : Card
-			while card == null or card.tier > 1:
-				var index = randi() % ListOfCards.cardList.size()
-				card = ListOfCards.getCard(index)
-			mainStack.append(card)
+			mainStack.append(ListOfCards.generateCard())
 		
 		var cardIDs : Array = []
 		for c in mainStack:

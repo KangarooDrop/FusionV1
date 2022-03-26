@@ -18,4 +18,7 @@ static func onEffect(params):
 					p.takeDamage(1, params[0])
 
 func genDescription() -> String:
-	return "At the start of your turn, create another " + (str(count) + " Grey Goo creatures" if count > 1 else " Grey Goo creature") + ". If you cannot, take 1 damage"
+	if count > 1:
+		return  "At the start of your turn, create another " + str(count) + " " + str(TextGreyGoo.new(null)) + " creatures" + ". If you cannot, take 1 damage"
+	else:
+		return  "At the start of your turn, create another " + str(TextGreyGoo.new(null)) + " creatures" + ". If you cannot, take 1 damage"

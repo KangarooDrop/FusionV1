@@ -80,7 +80,7 @@ func handle(meta : String):
 		hoverInst.z_index = z_index + 1
 		get_parent().add_child(hoverInst)
 		hoverInst.flipped = flipped
-		hoverInst.setText(ability.desc)
+		hoverInst.setText(ability.genDescription())
 		hoverInst.global_position = get_global_mouse_position() + Vector2(3, 0) * (1 if flipped else -1)# * Vector2(0, hoverInst.get_node("HoverBack").rect_size.y / 2)
 		
 		spawnedWindows.append(hoverInst)

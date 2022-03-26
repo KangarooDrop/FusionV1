@@ -2,7 +2,6 @@
 class_name Ability
 
 var name
-var desc
 var card : Card
 var c : Color
 var iconPos : Vector2
@@ -12,7 +11,6 @@ var count = 1
 
 func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Vector2):
 	self.name = name
-	self.desc = genDescription()
 	self.card = card
 	self.c = c
 	self.showCount = showCount
@@ -88,9 +86,9 @@ static func discardSelf(card):
 					break
 			break
 
-func setCount(count : int):
+func setCount(count : int) -> Ability:
 	self.count = count
-	desc = genDescription()
+	return self
 
 func getFileName():
 	return self.get_script().get_path().get_file().get_basename()

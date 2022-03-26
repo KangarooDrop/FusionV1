@@ -7,7 +7,8 @@
     "creature_type": [
       1
     ],
-    "tier": 1
+    "tier": 1,
+    "rarity": "COMMON"
   },
   "1": {
     "name": "Fire Elemental",
@@ -20,7 +21,8 @@
     "tier": 1,
     "abilities": [
       "AbilityDash"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "2": {
     "name": "Water Elemental",
@@ -33,7 +35,8 @@
     "tier": 1,
     "abilities": [
       "AbilityWisdom 1"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "3": {
     "name": "Earth Elemental",
@@ -46,7 +49,8 @@
     "tier": 1,
     "abilities": [
       "AbilityTough"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "4": {
     "name": "Wolf",
@@ -56,7 +60,8 @@
     "creature_type": [
       5
     ],
-    "tier": 1
+    "tier": 1,
+    "rarity": "COMMON"
   },
   "5": {
     "name": "Automaton",
@@ -69,7 +74,8 @@
     "tier": 1,
     "abilities": [
       "AbilityProduction"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "6": {
     "name": "Fiend",
@@ -77,7 +83,8 @@
     "creature_type": [
       2
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "7": {
     "name": "Djinn",
@@ -86,7 +93,8 @@
       2,
       3
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "8": {
     "name": "Torrent",
@@ -94,7 +102,8 @@
     "creature_type": [
       3
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "9": {
     "name": "Volcan",
@@ -103,7 +112,8 @@
       2,
       4
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "10": {
     "name": "Sludge",
@@ -112,7 +122,8 @@
       4,
       3
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "11": {
     "name": "Golem",
@@ -120,7 +131,8 @@
     "creature_type": [
       4
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "12": {
     "name": "Cerberus",
@@ -129,7 +141,8 @@
       5,
       2
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "13": {
     "name": "Leviathan",
@@ -138,7 +151,8 @@
       5,
       3
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "14": {
     "name": "Stone Serpent",
@@ -147,7 +161,8 @@
       5,
       4
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "15": {
     "name": "Gargantua",
@@ -155,7 +170,8 @@
     "creature_type": [
       5
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "16": {
     "name": "Flame Cannon",
@@ -164,7 +180,8 @@
       2,
       6
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "17": {
     "name": "Steamer",
@@ -173,7 +190,8 @@
       6,
       3
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "18": {
     "name": "Miner",
@@ -182,7 +200,8 @@
       6,
       4
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "19": {
     "name": "Cyber wolf",
@@ -191,7 +210,8 @@
       5,
       6
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "20": {
     "name": "Factory",
@@ -199,7 +219,8 @@
     "creature_type": [
       6
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "21": {
     "name": "Necro",
@@ -212,7 +233,8 @@
     "tier": 1,
     "abilities": [
       "AbilitySacrifice"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "22": {
     "name": "Combust",
@@ -221,7 +243,8 @@
       2,
       7
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "23": {
     "name": "Drifter",
@@ -230,7 +253,8 @@
       3,
       7
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "24": {
     "name": "Grave Robber",
@@ -239,7 +263,8 @@
       4,
       7
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "25": {
     "name": "Necro-Wolf",
@@ -248,7 +273,8 @@
       5,
       7
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "26": {
     "name": "Abomination",
@@ -257,7 +283,8 @@
       7,
       6
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "27": {
     "name": "Lichomancer",
@@ -265,7 +292,8 @@
     "creature_type": [
       7
     ],
-    "tier": 2
+    "tier": 2,
+    "rarity": "COMMON"
   },
   "28": {
     "name": "Spitfire",
@@ -278,7 +306,8 @@
     "tier": 1,
     "abilities": [
       "AbilityPronged"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "29": {
     "name": "Legionstones",
@@ -291,7 +320,8 @@
     "tier": 1,
     "abilities": [
       "AbilityTaunt"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "30": {
     "name": "Badger",
@@ -304,7 +334,8 @@
     "tier": 1,
     "abilities": [
       "AbilityRampage"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "31": {
     "name": "Bonelord",
@@ -317,7 +348,8 @@
     "tier": 1,
     "abilities": [
       "AbilityScavenge"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "32": {
     "name": "Slime",
@@ -330,7 +362,8 @@
     "tier": 1,
     "abilities": [
       "AbilityDegenerate"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "33": {
     "name": "Frostling",
@@ -343,7 +376,8 @@
     "tier": 1,
     "abilities": [
       "AbilityFrozen"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "34": {
     "name": "Blighted",
@@ -356,7 +390,8 @@
     "tier": 1,
     "abilities": [
 
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "35": {
     "name": "Frost-tongue",
@@ -369,7 +404,8 @@
     "tier": 1,
     "abilities": [
       "AbilityFrostbite"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "36": {
     "name": "Chipper",
@@ -382,7 +418,8 @@
     "tier": 1,
     "abilities": [
       "AbilityComposite"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "37": {
     "name": "Thought Sapper",
@@ -395,7 +432,8 @@
     "tier": 1,
     "abilities": [
       "AbilityMindrot 3"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "38": {
     "name": "Rust Crawler",
@@ -408,7 +446,8 @@
     "tier": 1,
     "abilities": [
       "AbilityBrittle"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "39": {
     "name": "Torchling",
@@ -421,7 +460,8 @@
     "tier": 1,
     "abilities": [
       "AbilityPyroclast 5"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "40": {
     "name": "The Boulder",
@@ -434,7 +474,8 @@
     "tier": 1,
     "abilities": [
       "AbilityBulwark"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "41": {
     "name": "Serpent",
@@ -447,7 +488,8 @@
     "tier": 1,
     "abilities": [
       "AbilityVenomous 2"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "42": {
     "name": "Carrion",
@@ -460,7 +502,8 @@
     "tier": 1,
     "abilities": [
       "AbilityInfested"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "43": {
     "name": "Phoenix",
@@ -473,7 +516,8 @@
     "tier": 1,
     "abilities": [
       "AbilityRekindle 2"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "44": {
     "name": "Ice King",
@@ -486,7 +530,8 @@
     "tier": 1,
     "abilities": [
       "AbilityIcecage"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "45": {
     "name": "Hullera",
@@ -499,7 +544,8 @@
     "tier": 1,
     "abilities": [
       "AbilityShieldUp 5"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "46": {
     "name": "Pupa",
@@ -512,7 +558,8 @@
     "tier": 1,
     "abilities": [
       "AbilityEvolution"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "47": {
     "name": "Processor",
@@ -525,7 +572,8 @@
     "tier": 1,
     "abilities": [
       "AbilityConfigure 2"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "48": {
     "name": "Devourer",
@@ -538,7 +586,8 @@
     "tier": 1,
     "abilities": [
       "AbilityEssenceDrain"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "49": {
     "name": "Amalgam",
@@ -551,7 +600,8 @@
     "tier": 1,
     "abilities": [
       "AbilityConjoined"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "50": {
     "name": "Sigmoid",
@@ -564,7 +614,8 @@
     "tier": 1,
     "abilities": [
       "AbilityMadness"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "51": {
     "name": "Parasite",
@@ -577,7 +628,8 @@
     "tier": 1,
     "abilities": [
       "AbilityEmerge"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "52": {
     "name": "Ghastly Presence",
@@ -590,7 +642,8 @@
     "tier": -1,
     "abilities": [
       "AbilityPossession"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "53": {
     "name": "Sanctifier",
@@ -603,7 +656,8 @@
     "tier": 1,
     "abilities": [
       "AbilityPurify"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "54": {
     "name": "Ignitia",
@@ -616,7 +670,8 @@
     "tier": 1,
     "abilities": [
       "AbilityWorldfire 2"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "55": {
     "name": "Rockardio",
@@ -629,7 +684,8 @@
     "tier": 1,
     "abilities": [
       "AbilityPhalanx 2"
-    ]
+    ],
+    "rarity": "COMMON"
   },
   "56": {
     "name": "Grey Goo",
@@ -642,6 +698,35 @@
     "tier": 1,
     "abilities": [
       "AbilityPermeation"
-    ]
+    ],
+    "rarity": "COMMON"
+  },
+  "57": {
+    "name": "Skin Shedder",
+    "tex": "res://Art/portraits/WurmGuy.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+	"AbilityMatryoshka 2"
+    ],
+    "rarity": "LEGENDARY"
+  },
+  "58": {
+    "name": "Clone",
+    "tex": "res://Art/portraits/WurmGuy.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+	"AbilityDuplicant 1"
+    ],
+    "rarity": "LEGENDARY"
   }
 }

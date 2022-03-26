@@ -63,7 +63,7 @@ func genNewBooster(cards = null):
 			
 			cards = []
 			while cards.size() != cardsPerBooster:
-				var card = ListOfCards.getCard(randi() % ListOfCards.cardList.size())
+				var card = ListOfCards.generateCard()
 				if card.tier == 1:
 					cards.append(card.UUID)
 	

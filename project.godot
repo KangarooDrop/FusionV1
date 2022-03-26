@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityDegenerate.gd"
 }, {
 "base": "Ability",
+"class": "AbilityDuplicant",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityDuplicant.gd"
+}, {
+"base": "Ability",
 "class": "AbilityEmerge",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityEmerge.gd"
@@ -88,6 +93,11 @@ _global_script_classes=[ {
 "class": "AbilityMadness",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityMadness.gd"
+}, {
+"base": "Ability",
+"class": "AbilityMatryoshka",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityMatryoshka.gd"
 }, {
 "base": "Ability",
 "class": "AbilityMindrot",
@@ -255,6 +265,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/AbilityText/TextArmor.gd"
 }, {
 "base": "Ability",
+"class": "TextGreyGoo",
+"language": "GDScript",
+"path": "res://Scripts/AbilityText/TextGreyGoo.gd"
+}, {
+"base": "Ability",
 "class": "TextScrapyard",
 "language": "GDScript",
 "path": "res://Scripts/AbilityText/TextScrapyard.gd"
@@ -268,6 +283,7 @@ _global_script_class_icons={
 "AbilityConjoined": "",
 "AbilityDash": "",
 "AbilityDegenerate": "",
+"AbilityDuplicant": "",
 "AbilityEmerge": "",
 "AbilityEssenceDrain": "",
 "AbilityEvolution": "",
@@ -276,6 +292,7 @@ _global_script_class_icons={
 "AbilityIcecage": "",
 "AbilityInfested": "",
 "AbilityMadness": "",
+"AbilityMatryoshka": "",
 "AbilityMindrot": "",
 "AbilityPermeation": "",
 "AbilityPhalanx": "",
@@ -309,6 +326,7 @@ _global_script_class_icons={
 "Player": "",
 "PopupUI": "",
 "TextArmor": "",
+"TextGreyGoo": "",
 "TextScrapyard": ""
 }
 
