@@ -5,6 +5,7 @@
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
 
 [node name="PauseMenu" type="Control"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

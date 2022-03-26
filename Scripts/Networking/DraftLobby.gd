@@ -1,12 +1,15 @@
 extends Control
 
+var fontTRES = preload("res://Fonts/FontNormal.tres")
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var playerLabel = preload("res://Scenes/Networking/PlayerLabel.tscn")
 
-var pLabels := []
+var pLabels := {}
 var ids := []
 
 var numMaxPlayers = -1
+
+var startingUsername : String = ""
 
 class_name DraftLobby
 
@@ -25,6 +28,8 @@ func _ready():
 	$IPSet/HBoxContainer/LineEdit.text = str(Server.ip)
 	$DraftTypeOptions/BoosterOptions/LineEdit.text = "3"
 	$DraftTypeOptions/BoosterOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/BoosterOptions/LineEdit.text)
+	
+	startingUsername = Server.username
 
 ###############################################
 
@@ -66,7 +71,7 @@ func ipBackButtonPressed():
 func ipJoinButtonPressed():
 	Server.ip = $IPSet/HBoxContainer/LineEdit.text
 	Settings.writeToSettings()
-	print(Server.ip)
+	print("Draft joinging ip ", Server.ip)
 	Server.online = true
 	Server.connectToServer()
 	$IPSet.visible = false
@@ -106,15 +111,22 @@ func joinedLobby(numMaxPlayers : int):
 	setPlayerLabel()
 
 func addPlayer(id, name):
-	var pl = playerLabel.instance()
-	pl.get_node("HBoxContainer/Label").text = name
-	if Server.host and id != -1:
-		pl.get_node("HBoxContainer/Button").visible = true
-		pl.get_node("HBoxContainer/Button").connect("pressed", Server, "kickUser", [id])
+	var pl
+	if id != -1:
+		pl = playerLabel.instance()
+		pl.get_node("HBoxContainer/Label").text = name
+		if Server.host and id != -1:
+			pl.get_node("HBoxContainer/Button").visible = true
+			pl.get_node("HBoxContainer/Button").connect("pressed", Server, "kickUser", [id])
+	else:
+		pl = LineEdit.new()
+		pl.text = name
+		pl.set("custom_fonts/font", fontTRES)
+		pl.connect("text_changed", self, "changeName")
 	
 	$VBoxContainer.add_child(pl)
 	
-	pLabels.append(pl)
+	pLabels[id] = pl
 	ids.append(id)
 	
 	setPlayerLabel()
@@ -122,13 +134,21 @@ func addPlayer(id, name):
 	if Server.host:
 		Server.setDraftType($DraftTypeButton.selected)
 
+func changeName(newName : String):
+	Server.setPlayerName(newName)
+
+func editOwnName(username):
+	pass
+	#pLabels[-1].text = username
+
+func editPlayerName(player_id : int, username : String):
+	pLabels[player_id].get_node("HBoxContainer/Label").text = username
+
 func removePlayer(id):
-	var index = ids.find(id)
-	if index >= 0:
-		$VBoxContainer.remove_child(pLabels[index])
-		pLabels[index].queue_free()
-		pLabels.remove(index)
-		ids.remove(index)
+	$VBoxContainer.remove_child(pLabels[id])
+	pLabels[id].queue_free()
+	pLabels.erase(id)
+	ids.erase(id)
 	setPlayerLabel()
 	$VBoxContainer.rect_size.y = 0
 
@@ -180,3 +200,7 @@ func draftTypeSelected(index):
 		Server.setDraftType(index)
 	else:
 		$DraftTypeButton.select(index)
+
+func _exit_tree():
+	if startingUsername != Server.username:
+		Settings.writeToSettings()

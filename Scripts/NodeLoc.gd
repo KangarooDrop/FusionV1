@@ -15,4 +15,8 @@ func getBoard() -> Node:
 	if b != null:
 		return b
 	
+	b = get_node_or_null("/root/DraftLobby")
+	if b != null:
+		return b
+	
 	return null

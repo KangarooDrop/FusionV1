@@ -1358,6 +1358,13 @@ func setOpponentUsername(username : String):
 	$UsernameLabel2.text = username
 	dataLog.append("SET_OPPONENT_USERNAME " + username)
 
+func editOwnName(username):
+	setOwnUsername()
+
+func editPlayerName(player_id : int, username : String):
+	if player_id == opponentID:
+		setOpponentUsername(username)
+
 var dataLog := []
 
 func saveReplay():

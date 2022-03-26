@@ -138,6 +138,21 @@ func playerDisconnected(player_id : int):
 
 ####################################################################
 
+remote func setPlayerName(username : String):
+	self.username = username
+	if NodeLoc.getBoard() != null:
+		NodeLoc.getBoard().editOwnName(username)
+	if online:
+		for id in playerIDs:
+			rpc_id(id, "receiveSetPlayerName", username)
+
+remote func receiveSetPlayerName(username : String, player_id : int = -1):
+	if player_id == -1:
+		player_id = get_tree().get_rpc_sender_id()
+	playerNames[player_id] = username
+	if NodeLoc.getBoard() != null:
+		NodeLoc.getBoard().editPlayerName(player_id, username)
+
 remote func addUser(player_id : int, username : String):
 	print("User "+ str(player_id) + " Connected")
 	playerIDs.append(player_id)

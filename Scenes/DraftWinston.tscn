@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DraftWinston.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=5]
 
 [node name="Draft" type="Control"]
 anchor_right = 1.0
@@ -35,6 +36,17 @@ margin_right = 84.0
 margin_bottom = 89.0
 custom_fonts/font = ExtResource( 2 )
 text = "Quit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsButton" type="Button" parent="."]
+margin_left = 32.0
+margin_top = 104.0
+margin_right = 120.0
+margin_bottom = 129.0
+custom_fonts/font = ExtResource( 2 )
+text = "Settings"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -100,6 +112,7 @@ margin_top = -212.0
 margin_right = -76.0
 margin_bottom = -192.0
 grow_horizontal = 2
+custom_fonts/font = ExtResource( 2 )
 text = "Show Cards"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -115,9 +128,9 @@ z_index = 2
 
 [node name="OrderDisplay" type="Control" parent="."]
 margin_left = 32.0
-margin_top = 128.0
+margin_top = 168.0
 margin_right = 72.0
-margin_bottom = 168.0
+margin_bottom = 208.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -163,7 +176,18 @@ __meta__ = {
 [node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 4 )]
 position = Vector2( -120, 75 )
 
+[node name="SettingsHolder" type="Node2D" parent="."]
+z_index = 99
+
+[node name="SettingsPage" parent="SettingsHolder" instance=ExtResource( 5 )]
+visible = false
+margin_left = 297.0
+margin_top = 172.0
+margin_right = 727.0
+margin_bottom = 428.0
+
 [connection signal="pressed" from="QuitButton" to="." method="quitButtonPressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="settingsButtonPressed"]
 [connection signal="pressed" from="TakeLeaveCenter/ButtonZ/TakeButton" to="." method="onTakeButtonPressed"]
 [connection signal="pressed" from="TakeLeaveCenter/ButtonZ/LeaveButton" to="." method="onLeaveButtonPressed"]
 [connection signal="pressed" from="ShowHideButton" to="." method="showHideButtonPressed"]

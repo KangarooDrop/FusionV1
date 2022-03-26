@@ -5,17 +5,17 @@ var fontTRES = preload("res://Fonts/FontNormal.tres")
 signal settingsClose
 
 func _ready():
-	$Anims/CheckBox.pressed = Settings.playAnimations
-	$NumDraft/LineEdit.text = str(Server.MAX_PEERS + 1)
-	$NumDraft/LineEdit.oldtext = $NumDraft/LineEdit.text
-	$Username/LineEdit.text = Server.username
+	$VBox/Anims/CheckBox.pressed = Settings.playAnimations
+	$VBox/NumDraft/LineEdit.text = str(Server.MAX_PEERS + 1)
+	$VBox/NumDraft/LineEdit.oldtext = $VBox/NumDraft/LineEdit.text
+	$VBox/Username/LineEdit.text = Server.username
 
 func onBackPressed():
 	emit_signal("settingsClose")
 	
 	visible = false
-	setNumDraft($NumDraft/LineEdit.get_value())
-	setUsername(get_node("Username/LineEdit").text)
+	setNumDraft($VBox/NumDraft/LineEdit.get_value())
+	setUsername($VBox/Username/LineEdit.text)
 	Settings.writeToSettings()
 
 func setPlayAnims(button_pressed : bool):
@@ -25,14 +25,14 @@ func setNumDraft(num : int):
 	Server.MAX_PEERS = num - 1
 	
 func setUsername(username : String):
-	Server.username = username
+	Server.setPlayerName(username)
 
 func openShaderFolder():
 	OS.shell_open(ProjectSettings.globalize_path("user://") + "shaders/")
 	#OS.shell_open(OS.get_user_data_dir() + "/shaders")
 
 func shaderButtonPressed():
-		
+	
 	$FileDisplay.visible = true
 	$FileDisplay/ButtonHolder/Label.text = "Load File"
 	
@@ -57,7 +57,7 @@ func shaderButtonPressed():
 	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 
 func onShaderLoadButtonPressed(path):
-	$Shaders/SelectShaderButton.text = path.get_basename().capitalize()
+	$VBox/Shaders/SelectShaderButton.text = path.get_basename().capitalize()
 	ShaderHandler.setShader(Settings.shaderPath + path)
 	onShaderBackButtonPressed()
 

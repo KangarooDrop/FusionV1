@@ -216,6 +216,9 @@ func onQuitButtonPressed():
 			pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 		$CenterControl.add_child(pop)
 
+func onSettingsPressed():
+	$SettingsHolder/SettingsPage.visible = true
+
 func _exit_tree():
 	if Server.online and getNextPlayerID() != get_tree().get_network_unique_id():
 		sendAllBoosters()

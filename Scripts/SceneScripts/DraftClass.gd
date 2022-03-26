@@ -25,3 +25,9 @@ func onMouseDown(slot : CardSlot, button_index : int):
 	
 func onMouseUp(Slot : CardSlot, button_index : int):
 	pass
+
+func editOwnName(username : String):
+	pass
+
+func editPlayerName(player_id : int, username : String):
+	pass

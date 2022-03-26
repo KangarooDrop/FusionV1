@@ -5,7 +5,7 @@ var textToFileName := {}
 func _ready():
 	Settings.gameMode = Settings.GAME_MODE.NONE
 	
-	$SettingsPage/Shaders/SelectShaderButton.text = ShaderHandler.currentShader.get_file().get_basename().capitalize()
+	$SettingsPage/VBox/Shaders/SelectShaderButton.text = ShaderHandler.currentShader.get_file().get_basename().capitalize()
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")

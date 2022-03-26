@@ -318,6 +318,13 @@ func addPlayerDisplay(username : String, player_id : int):
 	
 	idToDisplayLabel[player_id] = label
 
+func editOwnName(username : String):
+	editPlayerName(get_tree().get_network_unique_id(), username)
+
+func editPlayerName(player_id : int, username : String):
+	idToDisplayLabel[player_id].text = username
+	setCurrentPlayerDisplay(currentPlayer)
+
 func playerDisconnected(player_id):
 	if idToDisplayLabel.has(player_id):
 		var c = idToDisplayLabel[player_id]
@@ -357,11 +364,12 @@ func nextPlayer():
 		Server.nextPlayer()
 
 func setCurrentPlayerDisplay(currentPlayer):
+	self.currentPlayer = currentPlayer
 	yield(get_tree().create_timer(0.02), "timeout")
 	
 	var extra = Vector2(4, 4)
 	
-	var player_id = playerIDs[currentPlayer]
+	var player_id = playerIDs[self.currentPlayer]
 	$OrderDisplay/ReferenceRect.rect_global_position = idToDisplayLabel[player_id].rect_global_position - extra
 	$OrderDisplay/ReferenceRect.rect_size = idToDisplayLabel[player_id].rect_size + extra * 2
 
@@ -469,6 +477,9 @@ func quitButtonPressed():
 	else:
 		pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 	$CardHolder.add_child(pop)
+
+func settingsButtonPressed():
+	$SettingsHolder/SettingsPage.visible = true
 
 func onMouseDown(slot : CardSlot, buttonIndex):
 	if buttonIndex == 1:
