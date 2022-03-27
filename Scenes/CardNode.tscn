@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Art/portraits/card_NULL.png" type="Texture" id=1]
 [ext_resource path="res://Fonts/BarlowCondensed-Light.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scripts/SceneScripts/CardNode.gd" type="Script" id=3]
 [ext_resource path="res://Art/backgrounds/card_blank.png" type="Texture" id=4]
 [ext_resource path="res://Art/types/type_null.png" type="Texture" id=5]
+[ext_resource path="res://Art/Rarity/rarity.png" type="Texture" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 2 )
@@ -27,6 +28,13 @@ texture = ExtResource( 5 )
 visible = false
 position = Vector2( -17, -26 )
 texture = ExtResource( 5 )
+
+[node name="CardRarity" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -26 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 14, 14 )
 
 [node name="Label" type="Label" parent="."]
 anchor_left = 0.5

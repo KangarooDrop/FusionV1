@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/Ability.gd"
 }, {
 "base": "Ability",
+"class": "AbilityAmass",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityAmass.gd"
+}, {
+"base": "Ability",
 "class": "AbilityBrittle",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityBrittle.gd"
@@ -88,6 +93,11 @@ _global_script_classes=[ {
 "class": "AbilityInfested",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityInfested.gd"
+}, {
+"base": "Ability",
+"class": "AbilityInsignia",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityInsignia.gd"
 }, {
 "base": "Ability",
 "class": "AbilityMadness",
@@ -173,6 +183,11 @@ _global_script_classes=[ {
 "class": "AbilityShieldUp",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityShieldUp.gd"
+}, {
+"base": "Ability",
+"class": "AbilitySoulblaze",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilitySoulblaze.gd"
 }, {
 "base": "Ability",
 "class": "AbilityTaunt",
@@ -286,6 +301,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Ability": "",
+"AbilityAmass": "",
 "AbilityBrittle": "",
 "AbilityBulwark": "",
 "AbilityComposite": "",
@@ -301,6 +317,7 @@ _global_script_class_icons={
 "AbilityFrozen": "",
 "AbilityIcecage": "",
 "AbilityInfested": "",
+"AbilityInsignia": "",
 "AbilityMadness": "",
 "AbilityMatryoshka": "",
 "AbilityMindrot": "",
@@ -318,6 +335,7 @@ _global_script_class_icons={
 "AbilitySacrifice": "",
 "AbilityScavenge": "",
 "AbilityShieldUp": "",
+"AbilitySoulblaze": "",
 "AbilityTaunt": "",
 "AbilityTough": "",
 "AbilityVenomous": "",

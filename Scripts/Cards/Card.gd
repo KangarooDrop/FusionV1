@@ -184,7 +184,13 @@ func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
 
 func clone() -> Card:
-	var c : Card = ListOfCards.deserialize(serialize())
+	var c : Card = ListOfCards.getCard(UUID)
+	c.power = power
+	c.toughness = toughness
+	c.creatureType = creatureType
+	c.maxToughness = maxToughness
+	c.abilities = abilities
+	c.removedAbilities = c.removedAbilities
 	return c
 	
 func copyBase() -> Card:

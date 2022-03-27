@@ -50,14 +50,18 @@ func setCardVisible(isVis : bool):
 				$CardType2.visible = false
 				
 			$CardPortrait.texture = card.texture
+			$CardRarity.visible = true
+			$CardRarity.region_rect = Rect2(Vector2(14 * (card.rarity - 1), 0), Vector2(14, 14))
 			
 		else:
 			$CardPortrait.texture = ListOfCards.noneCardTex
 			$Label.visible = false
+			$CardRarity.visible = false
 	else:
 		$CardPortrait.texture = ListOfCards.unknownCardTex
 		$CardType.visible = false
 		$Label.visible = false
+		$CardRarity.visible = false
 	cardVisible = isVis
 		
 func getCardVisible() -> bool:

@@ -742,5 +742,33 @@
 	"AbilityMolting 1"
     ],
     "rarity": "LEGENDARY"
+  },
+  "60": {
+    "name": "Catylos",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 4,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+	"AbilityInsignia 1"
+    ],
+    "rarity": "LEGENDARY"
+  },
+  "61": {
+    "name": "Scraprion",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+	"AbilityAmass"
+    ],
+    "rarity": "LEGENDARY"
   }
 }
