@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityDuplicant
 
-func _init(card : Card).("Duplicant", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Duplicant", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
 func onEnter(slot):
@@ -31,4 +31,4 @@ func onEffect(slot):
 				break
 
 func genDescription() -> String:
-	return .genDescription() + "On being played, add a 1/1 copy of the card with all abilities and removed abilities. Removes this ability"
+	return .genDescription() + "On being played, add a 1/1 copy of the card with all abilities and removed abilities to your hand. Removes this ability"

@@ -10,4 +10,4 @@ func onFusion(card):
 	card.toughness += count
 
 func genDescription() -> String:
-	return .genDescription() + "On fusion, this creature gets +" + str(count) + "/+" + str(count) + " damage to you"
+	return .genDescription() + "On fusion, this creature gets +" + str(count) + "/+" + str(count)

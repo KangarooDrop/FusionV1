@@ -647,7 +647,7 @@
   },
   "53": {
     "name": "Sanctifier",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_SANCTIFIER.png",
     "power": 0,
     "toughness": 0,
     "creature_type": [
@@ -661,7 +661,7 @@
   },
   "54": {
     "name": "Ignitia",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_IGNITIA.png",
     "power": 1,
     "toughness": 4,
     "creature_type": [
