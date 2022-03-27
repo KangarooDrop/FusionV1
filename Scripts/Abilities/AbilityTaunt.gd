@@ -15,7 +15,7 @@ func onBeingAttacked(attacker):
 	active = false
 
 func genDescription() -> String:
-	return "Once per turn, this creature must be the target of enemy attacks"
+	return .genDescription() + "Once per turn, this creature must be the target of enemy attacks"
 
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)

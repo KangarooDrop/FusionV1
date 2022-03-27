@@ -24,4 +24,4 @@ static func onMillEffect(params):
 				p.deck.mill(p.UUID)
 
 func genDescription() -> String:
-	return "When this creature is played, remove the top " + str(count) + " cards of your opponent's deck from the game"
+	return .genDescription() + "When this creature is played, remove the top " + str(count) + " cards of your opponent's deck from the game"

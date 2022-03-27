@@ -11,4 +11,4 @@ func onBeingAttacked(attacker):
 	card.maxToughness += count
 
 func genDescription() -> String:
-	return "This creature gains +" + str(count) + "/+" + str(count) + " when attacked"
+	return .genDescription() + "This creature gains +" + str(count) + "/+" + str(count) + " when attacked"

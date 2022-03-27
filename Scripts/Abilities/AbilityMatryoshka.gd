@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityMatryoshka
 
-func _init(card : Card).("Matryoshka", card, Color.black, true, Vector2(32, 96)):
+func _init(card : Card).("Matryoshka", card, Color.darkgray, true, Vector2(32, 96)):
 	pass
 
 func onDeath():
@@ -18,4 +18,4 @@ static func onEffect(params):
 			break
 
 func genDescription() -> String:
-	return "When this creature dies, add " + str(count) + " Skin Shedders to your hand"
+	return .genDescription() + "When this creature dies, add " + str(count) + " " + str(TextSkinShedder.new(null)) +" to your hand"

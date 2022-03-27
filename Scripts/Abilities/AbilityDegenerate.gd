@@ -14,4 +14,4 @@ func onFusion(card):
 			break
 
 func genDescription() -> String:
-	return "On fusion, the card loses all creature types. Removes this ability"
+	return .genDescription() + "On fusion, the card loses all creature types. Removes this ability"

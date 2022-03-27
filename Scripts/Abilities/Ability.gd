@@ -102,4 +102,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return ""
+	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count) if (showCount) else "") +":[/color]\n"

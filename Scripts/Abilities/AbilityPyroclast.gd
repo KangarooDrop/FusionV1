@@ -22,4 +22,4 @@ static func onEffect(params):
 			break
 
 func genDescription() -> String:
-	return "When this creature is played, it deals " + str(count) + " damage to you"
+	return .genDescription() + "When this creature is played, it deals " + str(count) + " damage to you"

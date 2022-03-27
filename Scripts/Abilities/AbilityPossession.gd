@@ -16,4 +16,4 @@ static func onEffect(params):
 	discardSelf(params[1])
 	
 func genDescription() -> String:
-	return "Cannot be played. When a creature you control is attacked, this card is automatically fused onto it from your hand"
+	return .genDescription() + "Cannot be played. When a creature you control is attacked, this card is automatically fused onto it from your hand"

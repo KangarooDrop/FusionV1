@@ -43,4 +43,4 @@ func combine(abl : Ability):
 	frozenThisTurn = frozenThisTurn and abl.frozenThisTurn
 
 func genDescription() -> String:
-	return "This creature cannot attack or be fused until the end of its owners next turn"
+	return .genDescription() + "This creature cannot attack or be fused until the end of its owners next turn"

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilitySacrifice
 
-func _init(card : Card).("Sacrifice", card, Color.black, true, Vector2(0, 96)):
+func _init(card : Card).("Sacrifice", card, Color.darkgray, true, Vector2(0, 96)):
 	pass
 
 func onDeath():
@@ -16,4 +16,4 @@ static func onEffect(params):
 			slot.cardNode.card.toughness += params[1]
 
 func genDescription() -> String:
-	return "This creature gives your other creatures on board +" + str(count) + "/+" + str(count) + " when it dies"
+	return .genDescription() + "This creature gives your other creatures on board +" + str(count) + "/+" + str(count) + " when it dies"

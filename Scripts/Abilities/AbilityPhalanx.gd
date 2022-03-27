@@ -55,4 +55,4 @@ func combine(abl : Ability):
 	abl.buffsApplied += buffsApplied
 
 func genDescription() -> String:
-	return "Adjacent creatures get +" + str(count) + "/+" + str(count)
+	return .genDescription() + "Adjacent creatures get +" + str(count) + "/+" + str(count)

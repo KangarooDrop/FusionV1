@@ -18,4 +18,4 @@ static func onEffect(params):
 		params[0].cardNode.card.addAbility(frozen)
 
 func genDescription() -> String:
-	return "Inflicts " + str(AbilityFrozen.new(null)) + " on the enemy creature when this creature attacks or is attacked"
+	return .genDescription() + "Inflicts " + str(AbilityFrozen.new(null)) + " on the enemy creature when this creature attacks or is attacked"

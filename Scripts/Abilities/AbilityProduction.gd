@@ -14,17 +14,16 @@ func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
 	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
 	card.removeAbility(self)
-
+			
 static func onEffect(params):
-	var hand = null
-	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0].cardNode.slot.playerID:
-			for i in range(params[1]):
-				p.hand.addCardToHand([ListOfCards.getCard(5), true, false])
-			break
-	
+	for i in range(params[1]):
+		var card = ListOfCards.getCard(5)
+		for abl in card.abilities.duplicate():
+			card.removeAbility(abl)
+		params[0].addCreatureToBoard(card, null)
+
 func genDescription() -> String:
-	var string = "a mech"
+	var string = "a"
 	if count > 1:
-		string = str(count) + " mechs"
-	return "When this creature is played, add " + string + " to your hand. Removes this ability"
+		string = str(count)
+	return .genDescription() + "When this creature is played, create " + string +" 1/1 mech with no abilities. Removes this ability"

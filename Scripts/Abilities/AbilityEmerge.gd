@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityEmerge
 
-func _init(card : Card).("Emerge", card, Color.black, false, Vector2(16, 96)):
+func _init(card : Card).("Emerge", card, Color.darkgray, false, Vector2(16, 96)):
 	pass
 
 func onOtherDeath(slot):
@@ -16,4 +16,4 @@ static func onEffect(params):
 		discardSelf(params[0])
 
 func genDescription() -> String:
-	return "When a creature you control dies, this card is automatically put into play from your hand"
+	return .genDescription() + "When a creature you control dies, this card is automatically put into play from your hand"

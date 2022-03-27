@@ -72,4 +72,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return "When there are " + str(threshold) + " or more creature types in your " + str(TextScrapyard.new(null)) + ", this creature gets +" + str(statGain) + "/+" + str(statGain)
+	return .genDescription() + "When there are " + str(threshold) + " or more creature types in your " + str(TextScrapyard.new(null)) + ", this creature gets +" + str(statGain) + "/+" + str(statGain)

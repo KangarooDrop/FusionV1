@@ -21,4 +21,4 @@ static func onEffect(params):
 			p.addArmour(params[1])
 
 func genDescription() -> String:
-	return "When this creature is played, gain " + str(count) + " " + str(TextArmor.new(null)) + ". Removes this ability"
+	return .genDescription() + "When this creature is played, gain " + str(count) + " " + str(TextArmor.new(null)) + ". Removes this ability"

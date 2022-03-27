@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityEssenceDrain
 
-func _init(card : Card).("Essence Drain", card, Color.black, true, Vector2(0, 0)):
+func _init(card : Card).("Essence Drain", card, Color.darkgray, true, Vector2(0, 0)):
 	pass
 
 func onEnter(slot):
@@ -28,4 +28,4 @@ static func onEffect(params):
 
 func genDescription() -> String:
 	var strCount = str(count)
-	return "When this creature is played, all other creatures get -" + strCount + "/-" + strCount + ". Gain +" + strCount + " power for each creature affected. Removes this ability"
+	return .genDescription() + "When this creature is played, all other creatures get -" + strCount + "/-" + strCount + ". Gain +" + strCount + " power for each creature affected. Removes this ability"

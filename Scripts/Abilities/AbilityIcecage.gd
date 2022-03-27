@@ -23,4 +23,4 @@ static func onEffect(params):
 			s.cardNode.card.addAbility(frozen)
 
 func genDescription() -> String:
-	return "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures. Removes this ability"
+	return .genDescription() + "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures. Removes this ability"

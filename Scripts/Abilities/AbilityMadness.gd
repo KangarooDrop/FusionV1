@@ -58,4 +58,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return "This creature gets +" + str(count) + "/+" + str(count) + " for each card removed from your library"
+	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each card removed from your library"

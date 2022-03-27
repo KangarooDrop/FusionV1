@@ -23,4 +23,4 @@ static func onDrawEffect(params : Array):
 			break
 
 func genDescription() -> String:
-	return "When this creature is played, draw " + str(count) + (" cards" if count > 1 else " card") + ". Removes this ability"
+	return .genDescription() + "When this creature is played, draw " + str(count) + (" cards" if count > 1 else " card") + ". Removes this ability"

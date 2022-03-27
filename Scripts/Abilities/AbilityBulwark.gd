@@ -9,4 +9,4 @@ func onBeingAttacked(attacker):
 	attacker.cardNode.card.toughness -= attacker.cardNode.card.power
 
 func genDescription() -> String:
-	return "Deals damage when attacked equal to the damage taken"
+	return .genDescription() + "Deals damage when attacked equal to the damage taken"

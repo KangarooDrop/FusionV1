@@ -76,7 +76,7 @@ func getJSONData() -> Dictionary:
 	return rtn
 	
 	
-enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE}
+enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE, TOO_MANY_LEGENDS}
 #deckData [%id%] : %count%
 static func verifyDeck(deckData) -> int:
 	#var numSameCards = 4
@@ -113,7 +113,7 @@ static func verifyDeck(deckData) -> int:
 			return DECK_VALIDITY_TYPE.HIGHER_TIERS
 		
 		if ListOfCards.getCard(key).rarity == Card.RARITY.LEGENDARY and count != 1:
-			return DECK_VALIDITY_TYPE.BAD_COUNT
+			return DECK_VALIDITY_TYPE.TOO_MANY_LEGENDS
 			
 		total += count
 		

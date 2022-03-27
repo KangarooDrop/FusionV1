@@ -27,4 +27,4 @@ static func onEffect(params : Array):
 			break
 	
 func genDescription() -> String:
-	return "When this creature is played, discard your hand and then draw that many cards. Removes this ability"
+	return .genDescription() + "When this creature is played, discard your hand and then draw that many cards. Removes this ability"

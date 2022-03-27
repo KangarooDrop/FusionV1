@@ -16,4 +16,4 @@ func onEnterFromFusion(slot):
 	card.removeAbility(self)
 
 func genDescription() -> String:
-	return "This creature can attack the turn it is played"
+	return .genDescription() + "This creature can attack the turn it is played"

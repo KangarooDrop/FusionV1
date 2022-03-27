@@ -11,4 +11,4 @@ func onEndOfTurn():
 		card.toughness += count
 
 func genDescription() -> String:
-	return "At the end of your turn, this card gains +" + str(count) + "/+" + str(count)
+	return .genDescription() + "At the end of your turn, this card gains +" + str(count) + "/+" + str(count)

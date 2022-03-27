@@ -10,4 +10,4 @@ func onFusion(card):
 		card.removeAbility(abl)
 
 func genDescription() -> String:
-	return "On fusion, removes all abilities"
+	return .genDescription() + "On fusion, removes all abilities"

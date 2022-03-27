@@ -619,7 +619,7 @@
   },
   "51": {
     "name": "Parasite",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_PARASITE.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -726,6 +726,20 @@
     "tier": 1,
     "abilities": [
 	"AbilityDuplicant 1"
+    ],
+    "rarity": "LEGENDARY"
+  },
+  "59": {
+    "name": "Calcified Crab",
+    "tex": "res://Art/portraits/card_CRAB.png",
+    "power": 1,
+    "toughness": 2,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+	"AbilityMolting 1"
     ],
     "rarity": "LEGENDARY"
   }

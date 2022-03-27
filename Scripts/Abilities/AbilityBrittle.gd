@@ -13,4 +13,4 @@ static func onEffect(params):
 	params[0].toughness = -INF
 	
 func genDescription() -> String:
-	return "At the end of the turn, this creature is destroyed."
+	return .genDescription() + "At the end of the turn, this creature is destroyed."

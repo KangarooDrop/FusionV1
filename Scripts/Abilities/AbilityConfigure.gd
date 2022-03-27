@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityConfigure
 
-func _init(card : Card).("Configure", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Configure", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
 func onEnter(slot):
@@ -21,4 +21,4 @@ static func onEffect(params):
 			s.cardNode.card.power += params[1]
 
 func genDescription() -> String:
-	return "When this creature is played, all other creatures you control gain +" + str(count) + " power. Removes this ability"
+	return .genDescription() + "When this creature is played, all other creatures you control gain +" + str(count) + " power. Removes this ability"
