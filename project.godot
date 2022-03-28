@@ -190,6 +190,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilitySoulblaze.gd"
 }, {
 "base": "Ability",
+"class": "AbilitySwarm",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilitySwarm.gd"
+}, {
+"base": "Ability",
 "class": "AbilityTaunt",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTaunt.gd"
@@ -336,6 +341,7 @@ _global_script_class_icons={
 "AbilityScavenge": "",
 "AbilityShieldUp": "",
 "AbilitySoulblaze": "",
+"AbilitySwarm": "",
 "AbilityTaunt": "",
 "AbilityTough": "",
 "AbilityVenomous": "",

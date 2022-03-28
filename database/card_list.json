@@ -535,7 +535,7 @@
   },
   "45": {
     "name": "Hullera",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_HULLERA.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -605,7 +605,7 @@
   },
   "50": {
     "name": "Sigmoid",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_SIGMOID.png",
     "power": -12,
     "toughness": -12,
     "creature_type": [
@@ -770,5 +770,19 @@
 	"AbilityAmass"
     ],
     "rarity": "LEGENDARY"
+  },
+  "62": {
+    "name": "Locus",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilitySwarm 1"
+    ],
+    "rarity": "COMMON"
   }
 }

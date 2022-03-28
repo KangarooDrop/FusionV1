@@ -104,10 +104,6 @@ func _physics_process(delta):
 				
 				for c in NodeLoc.getBoard().getAllCards():
 					c.onDraw(cardInst.card)
-				
-			if drawQueue[0][2]:
-				player.takeDamage(player.drawDamage, null)
-				player.drawDamage += 1
 			
 			drawingSlot = slotInst
 			drawingNode = cardInst
@@ -137,7 +133,9 @@ func drawCard():
 	if card != null:
 		addCardToHand([card, false, false])
 	else:
-		addCardToHand([ListOfCards.getCard(0), true, true])
+		player.takeDamage(player.drawDamage, null)
+		player.drawDamage += 1
+	#	addCardToHand([ListOfCards.getCard(0), true, true])
 
 #[Card, drawFromDeck, takeDamage]
 func discardIndex(index : int):
@@ -178,7 +176,3 @@ func addCardToHand(data : Array):
 			
 			for c in NodeLoc.getBoard().getAllCards():
 				c.onDraw(cardInst.card)
-			
-			if data[1]:
-				player.takeDamage(player.drawDamage, null)
-				player.drawDamage += 1
