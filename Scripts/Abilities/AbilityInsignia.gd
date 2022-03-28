@@ -7,12 +7,12 @@ func _init(card : Card).("Insignia", card, Color.red, true, Vector2(0, 0)):
 
 func onEnter(slot):
 	.onEnter(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", []])
+	addToStack("onEffect", [])
 	card.removeAbility(self)
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", []])
+	addToStack("onEffect", [])
 	card.removeAbility(self)
 			
 static func onEffect(params):

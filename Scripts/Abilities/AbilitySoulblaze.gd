@@ -7,11 +7,11 @@ func _init(card : Card).("Soulblaze", card, Color.red, true, Vector2(32, 64)):
 
 func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onStartEffect", [card, self]])
+		addToStack("onStartEffect", [card, self])
 
 func onDeath():
 	.onDeath()
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onDeathEffect", [card.playerID, count]])
+	addToStack("onDeathEffect", [card.playerID, count])
 
 static func onStartEffect(params):
 	params[0].toughness -= params[1].count
@@ -23,4 +23,4 @@ static func onDeathEffect(params):
 			p.takeDamage(params[1], null)
 
 func genDescription() -> String:
-	return .genDescription() + "At the start of your turn, this creature takes " + str(count) + " damage and increases the counter by 1. When it dies, you take " + str(count) + " damage"
+	return .genDescription() + "At the start of your turn, this creature takes " + str(count) + " damage and increases its count by 1. When it dies, you take damage equal to the count"

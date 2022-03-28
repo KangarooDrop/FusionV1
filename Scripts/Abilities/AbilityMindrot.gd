@@ -7,17 +7,15 @@ func _init(card : Card).("Mindrot", card, Color.blue, true, Vector2(0, 0)):
 
 func onEnter(slot):
 	.onEnter(slot)
-	onEffect(slot)
+	addToStack("onEffect", [card.playerID, count])
+	card.removeAbility(self)
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	onEffect(slot)
-
-func onEffect(slot):
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onMillEffect", [card.playerID, count]])
+	addToStack("onEffect", [card.playerID, count])
 	card.removeAbility(self)
 
-static func onMillEffect(params):
+static func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID != params[0]:
 			for i in range(params[1]):

@@ -82,6 +82,7 @@ func sort():
 			elif sortOrder == SORT_ORDER.TYPE:
 				for t in c.creatureType:
 					key |= 1 << t
+				key += (c.creatureType.size() - 1)*10000
 			
 			if not cardPages.has(key):
 				cardPages[key] = [c]
@@ -109,7 +110,6 @@ func sort():
 				lowest = cardPages.keys()[i]
 		cardsToAdd.append(cardPages[lowest])
 		cardPages.erase(lowest)
-	
 	
 	
 	for i in range(cardsToAdd.size()):

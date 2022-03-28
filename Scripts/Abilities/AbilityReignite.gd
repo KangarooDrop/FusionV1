@@ -7,12 +7,12 @@ func _init(card : Card).("Reignite", card, Color.red, false, Vector2(0, 0)):
 
 func onEnter(slot):
 	.onEnter(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID]])
+	addToStack("onEffect", [card.playerID])
 	card.removeAbility(self)
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID]])
+	addToStack("onEffect", [card.playerID])
 	card.removeAbility(self)
 
 static func onEffect(params : Array):

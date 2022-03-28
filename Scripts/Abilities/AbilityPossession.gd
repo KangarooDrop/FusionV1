@@ -8,7 +8,7 @@ func _init(card : Card).("Possession", card, Color.gray, false, Vector2(0, 0)):
 
 func onOtherBeingAttacked(attacker, blocker):
 	if blocker.playerID == card.playerID and not NodeLoc.getBoard().isOnBoard(card):
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [blocker, card]])
+		addToStack("onEffect", [blocker, card])
 		card.removeAbility(self)
 
 static func onEffect(params):

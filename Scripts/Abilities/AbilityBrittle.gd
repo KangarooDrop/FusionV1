@@ -7,7 +7,7 @@ func _init(card : Card).("Brittle", card, Color.gray, false, Vector2(16, 80)):
 
 func onEndOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card):
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card]])
+		addToStack("onEffect", [card])
 
 static func onEffect(params):
 	params[0].toughness = -INF

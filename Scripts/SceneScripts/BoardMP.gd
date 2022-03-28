@@ -86,6 +86,10 @@ var rightClickQueue := []
 
 var boardReady = false
 
+var selectingSlot = false
+var selectingSource = null
+var selectingUUID = -1
+
 func _ready():
 	print("-".repeat(30))
 	
@@ -567,13 +571,15 @@ func _physics_process(delta):
 			serverCheckTimer = 0
 	
 	if gameStarted:
-		if fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
+		#print("Stack: ", abilityStack)
+		if not selectingSlot and fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
 				#print("Stack: ", abilityStack)
 				var abl = abilityStack[0]
 				abl[0].call(abl[1], abl[2])
-				abilityStack.erase(abl)
-				checkState()
+				if not selectingSlot:
+					abilityStack.erase(abl)
+					checkState()
 				
 			elif actionQueue.size() > 0:
 				if is_instance_valid(actionQueue[0][0]):
@@ -801,7 +807,7 @@ var serverCheckTimer = serverCheckMaxTime
 #F 1 8 1
 func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	var playerIndex = 0 if isOpponent else 1
-	var parent
+	var parent = null
 	match slotZone:
 		CardSlot.ZONES.NONE:
 			parent = null
@@ -815,14 +821,15 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
 	#	yield(get_tree().create_timer(0.02), "timeout")
-		
-	if serverQueue.size() == 0:
-		if not slotClicked(parent.get_child(slotID), button_index, true):
+	
+	if parent != null:
+		if serverQueue.size() == 0:
+			if not slotClicked(parent.get_child(slotID), button_index, true):
+				serverQueue.append([parent.get_child(slotID), button_index, true])
+				print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
+		else:
 			serverQueue.append([parent.get_child(slotID), button_index, true])
 			print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
-	else:
-		serverQueue.append([parent.get_child(slotID), button_index, true])
-		print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
 		
 var hoveringOn = null
 
@@ -903,7 +910,10 @@ func onSlotExit(slot : CardSlot):
 
 func onMouseDown(slot : CardSlot, button_index : int):
 	if gameStarted and not gameOver and button_index == 1:
-		actionQueue.append([slot, button_index])
+		if selectingSlot:
+			slotClicked(slot, button_index)
+		else:
+			actionQueue.append([slot, button_index])
 	elif button_index == 2:
 		rightClickQueue.append(slot)
 	
@@ -911,184 +921,189 @@ func onMouseUp(Slot : CardSlot, button_index : int):
 	pass
 
 func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> bool:
-	
-	if not is_instance_valid(slot):
-		return false
+	if button_index == 1 and selectingSlot:
+		if (fromServer or players[0].UUID == selectingUUID):
+			selectingSource.slotClicked(slot)
+		else:
+			return false
+	else:
+		if not is_instance_valid(slot):
+			return false
+			
+		if gameOver:
+			return false
+			
+		if activePlayer == -1:
+			return false
 		
-	if gameOver:
-		return false
+		if button_index == 2:
+			return false
 		
-	if activePlayer == -1:
-		return false
-	
-	if button_index == 2:
-		return false
-	
-	if button_index == 1:
-		if slot.currentZone == CardSlot.ZONES.HAND:
-			if slot.playerID == players[activePlayer].UUID:
-				#ADDING CARDS TO THE FUSION LIST
-				if slot.playerID != players[0].UUID and not fromServer:
-					return false
-				
-				if is_instance_valid(selectedCard):
-					selectedCard.cardNode.rotation = 0
-					selectRotTimer = 0
-					selectedCard = null
-				
-				if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
-					if cardsHolding.has(slot):
-						cardsHolding.erase(slot)
-						slot.position.y += cardDists
-						if hoveringOn != null:
-							onSlotExit(slot)
-						slot.cardNode.position.y = slot.position.y
-					else:
-						if cardsPerTurn - cardsPlayed - cardsHolding.size() > 0:
-							if slot.cardNode.card.canBePlayed:
-								cardsHolding.append(slot)
-								slot.position.y -= cardDists
-								slot.cardNode.position.y = slot.position.y
-							else:
-								if cardsShaking.has(slot):
-									MessageManager.notify("This card cannot be played")
-								cardsShaking[slot] = shakeMaxTime
-								return false
-						else:
-							if cardsShaking.has(slot):
-								MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
-							cardsShaking[slot] = shakeMaxTime
-							return false
-					if activePlayer == 0:
-						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
-					else:
-						$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
-				else:
-					if cardsShaking.has(slot):
-						MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
-					cardsShaking[slot] = shakeMaxTime
-					return false
-		elif slot.currentZone == CardSlot.ZONES.CREATURE:
-			if cardsHolding.size() > 0 and fuseQueue.size() == 0:
-				#PUTTING A CREATURE ONTO THE FIELD
-				
-				if not isMyTurn() and not fromServer:
-					return false
-				
-				if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
-					if cardsShaking.has(slot):
-						MessageManager.notify("This creature cannot be fused this turn")
-					cardsShaking[slot] = shakeMaxTime
-					return false
-				##
-				if is_instance_valid(slot.cardNode):
-					var cardA = slot.cardNode.card
-					for c in cardsHolding:
-						var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
-						if Card.areIdentical(cardA.serialize(), cardB.serialize()):
-							if cardsShaking.has(slot):
-								MessageManager.notify("A creature can only fuse to have two types")
-							cardsShaking[slot] = shakeMaxTime
-							return false
-						else:
-							cardA = cardB
-				##
-				
-				
-				if highlightedSlots.size() > 0:
-					for s in highlightedSlots:
-						if is_instance_valid(s):
-							s.setHighlight(false)
-					highlightedSlots.clear()
-				
-				var cardList = []
-					
-				for c in cardsHolding:
-					cardList.append(c.cardNode.card)
-					
-				cardsPlayed += cardsHolding.size()
-				
-				
-				while cardsHolding.size() > 0:
-					var c = cardsHolding[0]
-					cardsHolding.remove(0)
-					var cardNode = c.cardNode
-					cardNode.get_parent().remove_child(cardNode)
-					card_A_Holder.nodes.erase(cardNode)
-					card_B_Holder.nodes.erase(cardNode)
-					if c.currentZone == CardSlot.ZONES.HAND:
-						card_A_Holder.slots.erase(c)
-						card_B_Holder.slots.erase(c)
-						c.queue_free()
-				
-				fuseToSlot(slot, cardList)
-
-				if activePlayer == 0:
-					$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
-				else:
-					$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
-					
-			else:
-				if not isMyTurn() and not fromServer:
-					return false
+		if button_index == 1:
+			if slot.currentZone == CardSlot.ZONES.HAND:
 				if slot.playerID == players[activePlayer].UUID:
-					#ATTACKING
-					if is_instance_valid(slot) and selectedCard == slot:
+					#ADDING CARDS TO THE FUSION LIST
+					if slot.playerID != players[0].UUID and not fromServer:
+						return false
+					
+					if is_instance_valid(selectedCard):
 						selectedCard.cardNode.rotation = 0
 						selectRotTimer = 0
 						selectedCard = null
-					else:
-						if is_instance_valid(slot.cardNode) and (not slot.cardNode.card.hasAttacked and slot.cardNode.card.canAttackThisTurn):
-							if is_instance_valid(selectedCard):
-								selectedCard.cardNode.rotation = 0
-							selectRotTimer = 0
-							selectedCard = slot
+					
+					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
+						if cardsHolding.has(slot):
+							cardsHolding.erase(slot)
+							slot.position.y += cardDists
+							if hoveringOn != null:
+								onSlotExit(slot)
+							slot.cardNode.position.y = slot.position.y
 						else:
-							if cardsShaking.has(slot):
-								MessageManager.notify("This creature cannot attack")
-							cardsShaking[slot] = shakeMaxTime
-							return false
-				else:
-					if is_instance_valid(selectedCard):
-						var opponentHasTaunt = false
-						for s in creatures[slot.playerID]:
-							if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
-								opponentHasTaunt = true
-						
-						if not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
-							var slots = []
-							if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
-								slots = slot.getNeighbors()
+							if cardsPerTurn - cardsPlayed - cardsHolding.size() > 0:
+								if slot.cardNode.card.canBePlayed:
+									cardsHolding.append(slot)
+									slot.position.y -= cardDists
+									slot.cardNode.position.y = slot.position.y
+								else:
+									if cardsShaking.has(slot):
+										MessageManager.notify("This card cannot be played")
+									cardsShaking[slot] = shakeMaxTime
+									return false
 							else:
-								slots = [slot]
-								
-							selectedCard.cardNode.attack(slots)
-							if is_instance_valid(selectedCard.cardNode):
-								selectedCard.cardNode.rotation = 0
-								selectRotTimer = 0
-							selectedCard = null
-							
-							if highlightedSlots.size() > 0:
-								for s in highlightedSlots:
-									if is_instance_valid(s):
-										s.setHighlight(false)
-								highlightedSlots.clear()
-		
+								if cardsShaking.has(slot):
+									MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
+								cardsShaking[slot] = shakeMaxTime
+								return false
+						if activePlayer == 0:
+							$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
 						else:
-							if cardsShaking.has(slot):
-								MessageManager.notify("A creature with taunt must be attacked first")
-							cardsShaking[slot] = shakeMaxTime
+							$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+					else:
+						if cardsShaking.has(slot):
+							MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
+						cardsShaking[slot] = shakeMaxTime
+						return false
+			elif slot.currentZone == CardSlot.ZONES.CREATURE:
+				if cardsHolding.size() > 0 and fuseQueue.size() == 0:
+					#PUTTING A CREATURE ONTO THE FIELD
+					
+					if not isMyTurn() and not fromServer:
+						return false
+					
+					if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
+						if cardsShaking.has(slot):
+							MessageManager.notify("This creature cannot be fused this turn")
+						cardsShaking[slot] = shakeMaxTime
+						return false
+					##
+					if is_instance_valid(slot.cardNode):
+						var cardA = slot.cardNode.card
+						for c in cardsHolding:
+							var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
+							if Card.areIdentical(cardA.serialize(), cardB.serialize()):
+								if cardsShaking.has(slot):
+									MessageManager.notify("A creature can only fuse to have two types")
+								cardsShaking[slot] = shakeMaxTime
+								return false
+							else:
+								cardA = cardB
+					##
+					
+					
+					if highlightedSlots.size() > 0:
+						for s in highlightedSlots:
+							if is_instance_valid(s):
+								s.setHighlight(false)
+						highlightedSlots.clear()
+					
+					var cardList = []
+						
+					for c in cardsHolding:
+						cardList.append(c.cardNode.card)
+						
+					cardsPlayed += cardsHolding.size()
+					
+					
+					while cardsHolding.size() > 0:
+						var c = cardsHolding[0]
+						cardsHolding.remove(0)
+						var cardNode = c.cardNode
+						cardNode.get_parent().remove_child(cardNode)
+						card_A_Holder.nodes.erase(cardNode)
+						card_B_Holder.nodes.erase(cardNode)
+						if c.currentZone == CardSlot.ZONES.HAND:
+							card_A_Holder.slots.erase(c)
+							card_B_Holder.slots.erase(c)
+							c.queue_free()
+					
+					fuseToSlot(slot, cardList)
+
+					if activePlayer == 0:
+						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+					else:
+						$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+						
+				else:
+					if not isMyTurn() and not fromServer:
+						return false
+					if slot.playerID == players[activePlayer].UUID:
+						#ATTACKING
+						if is_instance_valid(slot) and selectedCard == slot:
+							selectedCard.cardNode.rotation = 0
+							selectRotTimer = 0
+							selectedCard = null
+						else:
+							if is_instance_valid(slot.cardNode) and (not slot.cardNode.card.hasAttacked and slot.cardNode.card.canAttackThisTurn):
+								if is_instance_valid(selectedCard):
+									selectedCard.cardNode.rotation = 0
+								selectRotTimer = 0
+								selectedCard = slot
+							else:
+								if cardsShaking.has(slot):
+									MessageManager.notify("This creature cannot attack")
+								cardsShaking[slot] = shakeMaxTime
+								return false
+					else:
+						if is_instance_valid(selectedCard):
+							var opponentHasTaunt = false
+							for s in creatures[slot.playerID]:
+								if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
+									opponentHasTaunt = true
+							
+							if not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
+								var slots = []
+								if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
+									slots = slot.getNeighbors()
+								else:
+									slots = [slot]
+									
+								selectedCard.cardNode.attack(slots)
+								if is_instance_valid(selectedCard.cardNode):
+									selectedCard.cardNode.rotation = 0
+									selectRotTimer = 0
+								selectedCard = null
+								
+								if highlightedSlots.size() > 0:
+									for s in highlightedSlots:
+										if is_instance_valid(s):
+											s.setHighlight(false)
+									highlightedSlots.clear()
+			
+							else:
+								if cardsShaking.has(slot):
+									MessageManager.notify("A creature with taunt must be attacked first")
+								cardsShaking[slot] = shakeMaxTime
+								return false
+						else:
 							return false
 							
 							
-		#CODE IS ONLY REACHABLE IF NOT RETURNED
-		dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
-		if not fromServer:
-			Server.slotClicked(opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
-		
-		return true
+	#CODE IS ONLY REACHABLE IF NOT RETURNED
+	dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
+	if not fromServer:
+		Server.slotClicked(opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 	
-	return false
+	return true
 
 func fuseToSlot(slot : CardSlot, cards : Array):
 	
@@ -1342,6 +1357,17 @@ func checkState():
 		if not Card.areIdentical(boardState[i], boardStateNew[i]):
 			#yield(get_tree().create_timer(0.1), "timeout")
 			checkState()
+
+func getSlot(source, selectingUUID : int):
+	selectingSlot = true
+	selectingSource = source
+	self.selectingUUID = selectingUUID
+
+func endGetSlot():
+	selectingSlot = false
+	selectingSource = null
+	abilityStack.remove(0)
+	checkState()
 
 func onLoss(player : Player):
 	if not gameOver:

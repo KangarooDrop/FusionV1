@@ -7,15 +7,15 @@ func _init(card : Card).("Wisedom", card, Color.blue, true, Vector2(0, 0)):
 
 func onEnter(slot):
 	.onEnter(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onDrawEffect", [card.playerID, count]])
+	addToStack("onEffect", [card.playerID, count])
 	card.removeAbility(self)
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onDrawEffect", [card.playerID, count]])
+	addToStack("onEffect", [card.playerID, count])
 	card.removeAbility(self)
 			
-static func onDrawEffect(params : Array):
+static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == params[0]:
 			for i in range(params[1]):

@@ -7,7 +7,7 @@ func _init(card : Card).("Scavenge", card, Color.darkgray, true, Vector2(16, 96)
 
 func onOtherDeath(slot):
 	if NodeLoc.getBoard().isOnBoard(card) and card.playerID == slot.playerID:
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
+		addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	params[0].power += params[1]

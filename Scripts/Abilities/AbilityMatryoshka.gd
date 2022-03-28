@@ -7,7 +7,7 @@ func _init(card : Card).("Matryoshka", card, Color.darkgray, true, Vector2(32, 9
 
 func onDeath():
 	.onDeath()
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
+	addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	var hand = null

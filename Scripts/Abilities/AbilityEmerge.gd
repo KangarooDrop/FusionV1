@@ -7,7 +7,7 @@ func _init(card : Card).("Emerge", card, Color.darkgray, false, Vector2(16, 96))
 
 func onOtherDeath(slot):
 	if not NodeLoc.getBoard().isOnBoard(card) and card.playerID == slot.playerID:
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card]])
+		addToStack("onEffect", [card])
 
 static func onEffect(params):
 	var card = ListOfCards.getCard(params[0].UUID)

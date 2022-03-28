@@ -7,7 +7,7 @@ func _init(card : Card).("Sacrifice", card, Color.darkgray, true, Vector2(0, 96)
 
 func onDeath():
 	.onDeath()
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
+	addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	for slot in NodeLoc.getBoard().creatures[params[0].playerID]:

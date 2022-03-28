@@ -103,3 +103,6 @@ func clone(card : Card) -> Ability:
 
 func genDescription() -> String:
 	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count) if (showCount) else "") +":[/color]\n"
+
+func addToStack(funcName : String, params : Array):
+	NodeLoc.getBoard().abilityStack.append([get_script(), funcName, params])

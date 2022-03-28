@@ -7,12 +7,12 @@ func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
 
 func onEnter(slot):
 	.onEnter(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID, count]])
+	addToStack("onEffect", [card.playerID, count])
 	card.removeAbility(self)
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card.playerID, count]])
+	addToStack("onEffect", [card.playerID, count])
 	card.removeAbility(self)
 
 static func onEffect(params : Array):

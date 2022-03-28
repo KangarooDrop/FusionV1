@@ -7,7 +7,7 @@ func _init(card : Card).("Infested", card, Color.darkgray, true, Vector2(32, 96)
 
 func onDeath():
 	.onDeath()
-	NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
+	addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	for i in range(params[1]):

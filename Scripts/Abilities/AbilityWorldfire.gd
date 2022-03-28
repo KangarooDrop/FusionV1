@@ -7,7 +7,7 @@ func _init(card : Card).("Worldfire", card, Color.red, true, Vector2(32, 64)):
 
 func onEndOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-		NodeLoc.getBoard().abilityStack.append([get_script(), "onEffect", [card, count]])
+		addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	for p in NodeLoc.getBoard().getAllPlayers():

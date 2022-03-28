@@ -784,5 +784,19 @@
       "AbilitySwarm 1"
     ],
     "rarity": "COMMON"
+  },
+  "63": {
+    "name": "Thought Erasure",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      2, 3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityThoughtknock"
+    ],
+    "rarity": "COMMON"
   }
 }

@@ -37,6 +37,11 @@ func drawHand():
 	for i in range(actualHandSize):
 		drawCard()
 
+func reveal():
+	for c in nodes:
+		if not c.getCardVisible():
+			c.flip()
+
 func _physics_process(delta):
 	if discardQueue.size() > 0:
 		var toRemove = []
