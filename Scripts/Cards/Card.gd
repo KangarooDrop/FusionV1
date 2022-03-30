@@ -78,27 +78,39 @@ func _init(params):
 		maxToughness = toughness
 
 func onEnter(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onEnter(slot)
 	
 func onOtherEnter(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherEnter(slot)
 	
 func onOtherDeath(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherDeath(slot)
 	
 func onOtherLeave(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherLeave(slot)
 	
 func onDeath():
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onDeath()
 	
 func onLeave():
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onLeave()
 	
 func onStartOfTurn():
@@ -106,53 +118,77 @@ func onStartOfTurn():
 		hasAttacked = false
 		canAttackThisTurn = true
 		canFuseThisTurn = true
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onStartOfTurn()
 
 func onEndOfTurn():
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onEndOfTurn()
 				
 func onFusion(card):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onFusion(card)
 	
 func onEnterFromFusion(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onEnterFromFusion(slot)
 	
 func onOtherEnterFromFusion(slot):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherEnterFromFusion(slot)
 	
 func onAttack(blocker):
 	hasAttacked = true
 	canAttackThisTurn = false
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onAttack(blocker)
 	
 func onBeingAttacked(attacker):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onBeingAttacked(attacker)
 
 func onOtherAttack(attacker, blocker):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherAttack(attacker, blocker)
 
 func onOtherBeingAttacked(attacker, blocker):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onOtherBeingAttacked(attacker, blocker)
 
 func onDraw(card):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onDraw(card)
 
 func onMill(card):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onMill(card)
 
 func onGraveAdd(card):
-	for abl in abilities.duplicate():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
 		abl.onGraveAdd(card)
 
 func addCreatureToBoard(card, slot = null) -> bool:

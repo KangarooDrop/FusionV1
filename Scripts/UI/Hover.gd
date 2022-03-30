@@ -2,7 +2,7 @@ extends Node2D
 
 var text := ""
 
-var maxTextLen = 175
+var maxTextLen = 225
 var flipped = false
 
 var parentWindow = null
@@ -23,13 +23,10 @@ func setText(text : String, margin = 4):
 	
 	$Label.rect_position.x = margin
 	
-	var textLength = $Label.get_font("normal_font").get_string_size(text).x
-	textLength = min(maxTextLen, textLength)
-	
-	$Label.rect_size.x = textLength
+	$Label.rect_size.x = maxTextLen
 	
 	$Label.rect_position.y = -$Label.get_minimum_size().y / 2
-	$HoverBack.rect_size = Vector2(textLength + margin * 2, $Label.get_minimum_size().y + margin * 2)
+	$HoverBack.rect_size = Vector2(maxTextLen + margin * 2, $Label.get_minimum_size().y + margin * 2)
 	$HoverBack.rect_position.y = -$HoverBack.rect_size.y / 2
 	
 	if flipped:

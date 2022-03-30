@@ -18,6 +18,12 @@ func onEnterFromFusion(slot):
 	card.removeAbility(self)
 
 func slotClicked(slot : CardSlot):
+	if slot == null:
+		for p in NodeLoc.getBoard().players:
+			if p.UUID == card.playerID:
+				slot = p.hand.slots[randi() % p.hand.slots.size()]
+				break
+	
 	if slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == card.playerID:
 		var hand : HandNode = slot.get_parent()
 		var index = -1

@@ -424,8 +424,8 @@
   "37": {
     "name": "Thought Sapper",
     "tex": "res://Art/portraits/card_THOUGH_SAPPER.png",
-    "power": 3,
-    "toughness": 1,
+    "power": 1,
+    "toughness": 3,
     "creature_type": [
       3
     ],

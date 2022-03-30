@@ -29,6 +29,8 @@ var flipTimer = 0
 var flipMaxTime = 0.5
 var originalScale = 1
 
+var fightingWait = false
+
 var cardVisible = true setget setCardVisible, getCardVisible
 
 var iconsShowing = false
@@ -92,46 +94,48 @@ func _physics_process(delta):
 			flipping = false
 			
 	if attacking and NodeLoc.getBoard().abilityStack.size() == 0 and NodeLoc.getBoard().fuseQueue.size() == 0:
-		if attackStartupTimer < attackStartupMaxTime:
-			attackStartupTimer += delta
-			rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
-		elif attackTimer < attackMaxTime:
-			attackTimer += delta
-			global_position = lerp(attackReturnPos, attackingPositions[0], attackTimer / attackMaxTime)
-		elif attackWaitTimer < attackWaitMaxTime:
-			attackWaitTimer += delta
-		elif attackReturnTimer < attackReturnMaxTime:
-			if not waitingForStackToClear:
-				if not dealtDamage:
-					waitingForStackToClear = true
-					fight(attackingSlots[0])
-					waitingForStackToClear = false
-					dealtDamage = true
-				attackReturnTimer += delta
-				global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
-				rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
-		else:
-			global_position = attackReturnPos
-			rotation = 0
-			
-			attackingPositions.remove(0)
-			attackingSlots.remove(0)
-			attackStartupTimer = 0
-			attackWaitTimer = 0
-			attackTimer = 0
-			attackReturnTimer = 0
-			dealtDamage = false
-			if attackingSlots.size() == 0:
-				attacking = false
-				z_index -= 1
-				attackReturnPos = null
+		if not fightingWait:
+			if attackStartupTimer < attackStartupMaxTime:
+				attackStartupTimer += delta
+				rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
+			elif attackTimer < attackMaxTime:
+				attackTimer += delta
+				global_position = lerp(attackReturnPos, attackingPositions[0], attackTimer / attackMaxTime)
+			elif attackWaitTimer < attackWaitMaxTime:
+				attackWaitTimer += delta
+			elif attackReturnTimer < attackReturnMaxTime:
+				if not waitingForStackToClear:
+					if not dealtDamage:
+						waitingForStackToClear = true
+						fight(attackingSlots[0])
+						waitingForStackToClear = false
+						dealtDamage = true
+					if not fightingWait:
+						attackReturnTimer += delta
+						global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
+						rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
 			else:
-				attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
-				if attackRotation > PI:
-					attackRotation -= PI
-				elif attackRotation < 0:
-					attackRotation += PI
-				attackRotation -= PI / 2
+				global_position = attackReturnPos
+				rotation = 0
+				
+				attackingPositions.remove(0)
+				attackingSlots.remove(0)
+				attackStartupTimer = 0
+				attackWaitTimer = 0
+				attackTimer = 0
+				attackReturnTimer = 0
+				dealtDamage = false
+				if attackingSlots.size() == 0:
+					attacking = false
+					z_index -= 1
+					attackReturnPos = null
+				else:
+					attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
+					if attackRotation > PI:
+						attackRotation -= PI
+					elif attackRotation < 0:
+						attackRotation += PI
+					attackRotation -= PI / 2
 			
 
 func takeDamage(dmg : int):
@@ -185,8 +189,10 @@ func fight(slot, damageSelf = true):
 			if not isBlocker:
 				c.onOtherBeingAttacked(self.slot, slot)
 	
-	while NodeLoc.getBoard().abilityStack.size() > 0 or NodeLoc.getBoard().fuseQueue.size() > 0:
+	while NodeLoc.getBoard().abilityStack.size() > 0 or NodeLoc.getBoard().fuseQueue.size() > 0 or NodeLoc.getBoard().millQueue.size() > 0 or NodeLoc.getBoard().isDrawing():
+		fightingWait = true
 		yield(get_tree().create_timer(0.1), "timeout")
+	fightingWait = false
 	
 	if is_instance_valid(slot.cardNode):
 		if damageSelf:

@@ -65,7 +65,7 @@ var fuseWaitMaxTime = 0.3
 var gameStarted = false
 var gameOver = false
 
-var abilityStack : Array = []
+var abilityStack : AbilityStack = AbilityStack.new()
 
 var opponentID = -1
 var gameSeed = -1
@@ -89,6 +89,8 @@ var boardReady = false
 var selectingSlot = false
 var selectingSource = null
 var selectingUUID = -1
+var stackMaxTime = 1
+var stackTimer = 0
 
 func _ready():
 	print("-".repeat(30))
@@ -572,14 +574,20 @@ func _physics_process(delta):
 	
 	if gameStarted:
 		#print("Stack: ", abilityStack)
+		if selectingSlot and selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+			selectingSource.slotClicked(null)
+		
 		if not selectingSlot and fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
-			if abilityStack.size() > 0:
+			if abilityStack.size() > 0 and stackTimer <= 0:
 				#print("Stack: ", abilityStack)
-				var abl = abilityStack[0]
+				var abl = abilityStack.getFront()
 				abl[0].call(abl[1], abl[2])
+				stackTimer = stackMaxTime
 				if not selectingSlot:
 					abilityStack.erase(abl)
 					checkState()
+			elif stackTimer > 0:
+				stackTimer -= delta
 				
 			elif actionQueue.size() > 0:
 				if is_instance_valid(actionQueue[0][0]):
@@ -1206,6 +1214,12 @@ func passMyTurn():
 					nextTurn()
 					Server.onNextTurn(opponentID)
 
+func isDrawing() -> bool:
+	for p in players:
+		if p.hand.drawQueue.size() > 0:
+			return true
+	return false
+
 func getWaiting() -> bool:
 	
 	var waiting = false
@@ -1362,11 +1376,13 @@ func getSlot(source, selectingUUID : int):
 	selectingSlot = true
 	selectingSource = source
 	self.selectingUUID = selectingUUID
+	stackTimer = 0
 
 func endGetSlot():
 	selectingSlot = false
 	selectingSource = null
 	abilityStack.remove(0)
+	stackTimer = stackMaxTime
 	checkState()
 
 func onLoss(player : Player):
