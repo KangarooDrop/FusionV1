@@ -240,6 +240,7 @@ __meta__ = {
 }
 
 [node name="SortButtons" type="Node2D" parent="CenterControl"]
+visible = false
 position = Vector2( 0, -204 )
 z_index = 3
 
@@ -368,6 +369,43 @@ margin_bottom = 71.0
 custom_fonts/font = ExtResource( 5 )
 text = "Back"
 
+[node name="SortNode" type="Node2D" parent="CenterControl"]
+position = Vector2( -96, -204 )
+z_index = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterControl/SortNode"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -108.5
+margin_top = -14.5
+margin_right = 108.5
+margin_bottom = 14.5
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SortLabel" type="Label" parent="CenterControl/SortNode/HBoxContainer"]
+margin_top = 6.0
+margin_right = 108.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Sort Order: "
+
+[node name="SortButton" type="OptionButton" parent="CenterControl/SortNode/HBoxContainer"]
+margin_left = 112.0
+margin_right = 252.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 140, 32 )
+custom_fonts/font = ExtResource( 5 )
+text = "AAAAAAAAAA"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="CenterControl/Menu/SaveButton" to="." method="onSavePressed"]
 [connection signal="pressed" from="CenterControl/Menu/LoadButton" to="." method="onLoadPressed"]
 [connection signal="pressed" from="CenterControl/Menu/NewButton" to="." method="onNewPressed"]
@@ -383,3 +421,4 @@ text = "Back"
 [connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/ToughnessButton" to="." method="setSortOrder" binds= [ 2 ]]
 [connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/RarityButton" to="." method="setSortOrder" binds= [ 3 ]]
 [connection signal="pressed" from="CenterControl/FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
+[connection signal="item_selected" from="CenterControl/SortNode/HBoxContainer/SortButton" to="." method="setSortOrder"]

@@ -23,7 +23,7 @@ var pages := []
 
 var hasSaved = true
 
-enum SORT_ORDER {TYPE, POWER, TOUGHNESS, RARITY}
+enum SORT_ORDER {TYPE, POWER, HEALTH, RARITY, NAME}
 var sortOrder : int = SORT_ORDER.TYPE
 
 var loadedDeckName = ""
@@ -33,6 +33,15 @@ var popups := []
 func _ready():
 	$CenterControl/DeckDisplay.parent = self 
 	setCards()
+	
+	for k in SORT_ORDER.keys():
+		$CenterControl/SortNode/HBoxContainer/SortButton.add_item(k.capitalize())
+	
+	$CenterControl/SortNode/HBoxContainer/SortButton.theme = Theme.new()
+	$CenterControl/SortNode/HBoxContainer/SortButton.theme.default_font = fontTRES
+	
+	$CenterControl/SortNode/HBoxContainer/SortButton.select(0)
+	setSortOrder(0)
 
 func setCards():
 	if Settings.gameMode == Settings.GAME_MODE.NONE:
@@ -47,7 +56,6 @@ func setCards():
 		$CenterControl/Menu/DeleteButton.hide()
 		$CenterControl/Menu/NewButton.hide()
 		$CenterControl/Menu/LoadButton.hide()
-	sort()
 
 func clearPages():
 	slotViewing = null
@@ -69,49 +77,44 @@ func sort():
 	for k in availableCardCount.keys():
 		var c = ListOfCards.getCard(k)
 		listOfCards.append(c)
-	var cardPages := {}
 	
-	#if sortOrder == SORT_ORDER.POWER:
-	for c in listOfCards:
-		if c.tier == 1:
-			var key = 0
-			if sortOrder == SORT_ORDER.POWER:
-				key = -c.power
-			elif sortOrder == SORT_ORDER.TOUGHNESS:
-				key = -c.toughness
-			elif sortOrder == SORT_ORDER.TYPE:
-				for t in c.creatureType:
-					key |= 1 << t
-				key += (c.creatureType.size() - 1)*10000
-			elif sortOrder == SORT_ORDER.RARITY:
-				key = c.rarity
-			
-			if not cardPages.has(key):
-				cardPages[key] = [c]
-			else:
-				cardPages[key].append(c)
+	print("Here? ", sortOrder)
+	#SORT BY: TYPE   = TYPE,  RARITY, NAME
+	#SORT BY: POWER  = POWER, RARITY, TYPE, NAME
+	#SORT BY: TOUGH  = TOUGH, RARITY, TYPE, NAME
+	#SORT BY: RARITY = RARITY, TYPE,  NAME
 	
-	for k in cardPages:
-		var mod
-		if cardPages[k].size() == 0:
-			mod = 0
-		elif cardPages[k].size() % slotPageNum == 0:
-			mod = slotPageNum
-		else:
-			mod = cardPages[k].size() % slotPageNum
-		var remainder = slotPageNum - mod
+	var cardsToAdd = sortArray(listOfCards, sortOrder)
+	
+	if sortOrder == SORT_ORDER.TYPE:
+		for i in range(cardsToAdd.size()):
+			var newPage = []
+			var r = sortArray(cardsToAdd[i], SORT_ORDER.RARITY)
+			for ra in r:
+				for t in sortArray(ra, SORT_ORDER.NAME):
+					newPage.append(t[0])
+			cardsToAdd[i] = newPage
+	elif sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.HEALTH:
+		for i in range(cardsToAdd.size()):
+			var newPage = []
+			for r in sortArray(cardsToAdd[i], SORT_ORDER.RARITY):
+				for t in sortArray(r, SORT_ORDER.TYPE):
+					for n in sortArray(t, SORT_ORDER.NAME):
+						newPage.append(n[0])
+			cardsToAdd[i] = newPage
+	elif sortOrder == SORT_ORDER.RARITY:
+		for i in range(cardsToAdd.size()):
+			var newPage = []
+			for t in sortArray(cardsToAdd[i], SORT_ORDER.TYPE):
+				for n in sortArray(t, SORT_ORDER.NAME):
+					newPage.append(n[0])
+			cardsToAdd[i] = newPage
+	elif sortOrder == SORT_ORDER.NAME:
+		var newPage = []
+		for n in cardsToAdd:
+			newPage.append(n[0])
+		cardsToAdd = [newPage]
 		
-		for i in range(remainder):
-			cardPages[k].append(null)
-	
-	var cardsToAdd := []
-	while cardPages.size() > 0:
-		var lowest = cardPages.keys()[0]
-		for i in range(1, cardPages.keys().size()):
-			if cardPages.keys()[i] < lowest:
-				lowest = cardPages.keys()[i]
-		cardsToAdd.append(cardPages[lowest])
-		cardPages.erase(lowest)
 	
 	var n = 0
 	while n < cardsToAdd.size():
@@ -128,6 +131,18 @@ func sort():
 			cardsToAdd.insert(n, p1)
 		n += 1
 	
+	for k in cardsToAdd:
+		var mod
+		if k.size() == 0:
+			mod = 0
+		elif k.size() % slotPageNum == 0:
+			mod = slotPageNum
+		else:
+			mod = k.size() % slotPageNum
+		var remainder = slotPageNum - mod
+		
+		for i in range(remainder):
+			k.append(null)
 	
 	for i in range(cardsToAdd.size()):
 		var page = Node2D.new()
@@ -149,8 +164,7 @@ func sort():
 			var card = cardsToAdd[i][j]
 			if card != null:
 				var cardPlacing = cardNode.instance()
-				#cardPlacing.visible = false
-				#cardPlacing.z_index = -INF
+				cardPlacing.z_index = 0
 				cardPlacing.card = card
 				page.add_child(cardPlacing)
 				cardPlacing.global_position = slot.global_position
@@ -165,6 +179,41 @@ func sort():
 	$CenterControl/RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
+
+static func sortArray(listOfCards : Array, sortOrder : int) -> Array:
+	var cardPages := {}
+	
+	for c in listOfCards:
+		if c.tier == 1:
+			var key = 0
+			if sortOrder == SORT_ORDER.POWER:
+				key = -c.power
+			elif sortOrder == SORT_ORDER.HEALTH:
+				key = -c.toughness
+			elif sortOrder == SORT_ORDER.TYPE:
+				for t in c.creatureType:
+					key |= 1 << t
+				key += (c.creatureType.size() - 1) * 10000
+			elif sortOrder == SORT_ORDER.RARITY:
+				key = -c.rarity
+			elif sortOrder == SORT_ORDER.NAME:
+				key = c.name
+			
+			if not cardPages.has(key):
+				cardPages[key] = [c]
+			else:
+				cardPages[key].append(c)
+	
+	var cardsToAdd := []
+	while cardPages.size() > 0:
+		var lowest = cardPages.keys()[0]
+		for i in range(1, cardPages.keys().size()):
+			if cardPages.keys()[i] < lowest:
+				lowest = cardPages.keys()[i]
+		cardsToAdd.append(cardPages[lowest])
+		cardPages.erase(lowest)
+	
+	return cardsToAdd
 
 func leftArrowPressed():
 	setCurrentPage(getCurrentPage() - 1)
