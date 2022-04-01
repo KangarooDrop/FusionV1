@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityIcecage
 
-func _init(card : Card).("Icecage", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Icecage", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
 func onEnter(slot):

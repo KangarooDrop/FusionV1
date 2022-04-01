@@ -87,24 +87,18 @@ func close(closeAll = false) -> bool:
 	if closeChildrenFirst and not closeAll:
 		if spawnedWindows.size() == 0:
 			queue_free()
+			if is_instance_valid(parentWindow):
+				parentWindow.spawnedWindows.erase(self)
 			return true
-		
-		var toRemove := []
-		for w in spawnedWindows:
-			if w.close():
-				toRemove.append(w)
-		for w in toRemove.duplicate():
-			spawnedWindows.erase(w)
-		
-		return false
+		else:
+			spawnedWindows[0].close()
+			return false
 	
 	else:
 		queue_free()
 		var windows = spawnedWindows.duplicate()
 		for w in windows:
-			if is_instance_valid(w):
-				w.close(closeAll)
-				spawnedWindows.erase(w)
+			w.close(closeAll)
 		if is_instance_valid(parentWindow):
 			parentWindow.spawnedWindows.erase(self)
 			

@@ -23,7 +23,8 @@ func onStartOfTurn():
 			frozenThisTurn = true
 
 func onEffect():
-	card.canAttackThisTurn = false
+	if not card.cantAttackSources.has(self):
+		card.cantAttackSources.append(self)
 	card.canFuseThisTurn = false
 	card.cardNode.setCardVisible(card.cardNode.getCardVisible())
 
@@ -36,6 +37,7 @@ func onEndOfTurn():
 				for abl in card.abilities:
 					if abl is scr:
 						card.abilities.erase(abl)
+						card.cantAttackSources.erase(self)
 						break
 
 func combine(abl : Ability):

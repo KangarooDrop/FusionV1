@@ -54,4 +54,4 @@ func slotClicked(slot : CardSlot):
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription() -> String:
-	return .genDescription() + "When this creature is played, discard up to " + str(count) + " cards and then draw " + str(count) + " cards. Removes this ability"
+	return .genDescription() + "When this creature is played, choose " + str(count) + " cards to discard and then draw " + str(count) + " cards. Removes this ability"

@@ -29,14 +29,20 @@ func onEffect():
 	if board.isOnBoard(card):
 		for p in board.players:
 			for s in board.creatures[p.UUID]:
-				if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, get_script()) and (s.cardNode.card.toughness > 0 or s.cardNode.card == card):
+				if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, get_script()) and s.cardNode.card != card:
 					buffsNew += 1
 		
-		self.card.power += buffsNew - buffsApplied
-		self.card.toughness += buffsNew - buffsApplied
-		self.card.maxToughness += buffsNew - buffsApplied
+		self.card.power += (buffsNew - buffsApplied) * count
+		self.card.toughness += (buffsNew - buffsApplied) * count
+		self.card.maxToughness += (buffsNew - buffsApplied) * count
 		buffsApplied = buffsNew
 	
+func onRemove(ability):
+	if ability == self:
+		self.card.power -= buffsApplied * count
+		self.card.toughness -= buffsApplied * count
+		self.card.maxToughness -= buffsApplied * count
+
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)
 	abl.buffsApplied = buffsApplied
@@ -47,4 +53,4 @@ func combine(abl : Ability):
 	abl.buffsApplied += buffsApplied
 
 func genDescription() -> String:
-	return .genDescription() + "Get +" + str(count) + "/+" + str(count) + " for each creature with " + name
+	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each other creature with " + name

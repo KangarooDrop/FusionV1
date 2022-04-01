@@ -35,16 +35,16 @@ func onEffect():
 			break
 
 func onRemove(ability):
-	var pid = card.playerID
-	for player in NodeLoc.getBoard().players:
-		if player.UUID == pid:
-			var dif = buffsApplied * count
-			card.power -= dif
-			card.toughness -= dif
-			card.maxToughness -= dif
-			buffsApplied -= dif
-			
-			break
+	if ability == self:
+		var pid = card.playerID
+		for player in NodeLoc.getBoard().players:
+			if player.UUID == pid:
+				var dif = buffsApplied * count
+				card.power -= dif
+				card.toughness -= dif
+				card.maxToughness -= dif
+				buffsApplied -= dif
+				break
 
 func combine(abl : Ability):
 	.combine(abl)

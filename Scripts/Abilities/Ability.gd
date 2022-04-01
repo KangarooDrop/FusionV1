@@ -15,6 +15,7 @@ func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Ve
 	self.c = c
 	self.showCount = showCount
 	self.iconPos = iconPos
+	self.setCount(1)
 
 func onEnter(slot):
 	pass
@@ -73,6 +74,12 @@ func onGraveAdd(card):
 func onRemove(ability):
 	pass
 
+func onKill(slot):
+	pass
+
+func checkWaiting() -> bool:
+	return true
+
 func combine(abl : Ability):
 	setCount(count + abl.count)
 
@@ -104,5 +111,16 @@ func clone(card : Card) -> Ability:
 func genDescription() -> String:
 	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count) if (showCount) else "") +":[/color]\n"
 
-func addToStack(funcName : String, params : Array):
-	NodeLoc.getBoard().abilityStack.add([clone(card), funcName, params])
+func addToStack(funcName : String, params : Array, forceWait = false, canAttack = false):
+	var cl = clone(card)
+	var data = \
+	{
+		"source":cl,
+		"funcName":funcName,
+		"params":params,
+		"triggered":false,
+		"canAttack":canAttack
+	}
+	NodeLoc.getBoard().abilityStack.add(data)
+	if forceWait:
+		NodeLoc.getBoard().waitingAbilities.append(cl)

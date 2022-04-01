@@ -80,7 +80,7 @@ func _physics_process(delta):
 		$Label.text = str(card.power) + " / " + str(card.toughness)
 		
 	if is_instance_valid(card) and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
-		$CardBackground.texture = (ListOfCards.cardBackground if (card.hasAttacked or not card.canAttackThisTurn) else ListOfCards.cardBackgroundActive)
+		$CardBackground.texture = (ListOfCards.cardBackground if (not card.canAttack()) else ListOfCards.cardBackgroundActive)
 		
 	if flipping:
 		flipTimer += delta
@@ -93,7 +93,7 @@ func _physics_process(delta):
 			hasFlipped = false
 			flipping = false
 			
-	if attacking and NodeLoc.getBoard().abilityStack.size() == 0 and NodeLoc.getBoard().fuseQueue.size() == 0:
+	if attacking and NodeLoc.getBoard().getCanFight():
 		if not fightingWait:
 			if attackStartupTimer < attackStartupMaxTime:
 				attackStartupTimer += delta
@@ -142,6 +142,7 @@ func takeDamage(dmg : int):
 	card.toughness -= dmg
 
 func attack(slots : Array):
+	card.hasAttacked = true
 	if Settings.playAnimations:
 		z_index += 1
 		attacking = true
@@ -177,19 +178,19 @@ func fight(slot, damageSelf = true):
 		if venomB > 0:
 			slot.cardNode.card.power += venomB
 	
-	card.onAttack(slot)
+	
+	for c in NodeLoc.getBoard().getAllCards():
+		var isAttacker = c == card
+		var isBlocker = is_instance_valid(slot.cardNode) and c == slot.cardNode.card
+		if not isAttacker:
+			c.onOtherAttack(self.slot, slot)
+		if not isBlocker:
+			c.onOtherBeingAttacked(self.slot, slot)
 	if is_instance_valid(slot.cardNode):
 		slot.cardNode.card.onBeingAttacked(self.slot)
-		
-		for c in NodeLoc.getBoard().getAllCards():
-			var isAttacker = c == card
-			var isBlocker = is_instance_valid(slot.cardNode) and c == slot.cardNode.card
-			if not isAttacker:
-				c.onOtherAttack(self.slot, slot)
-			if not isBlocker:
-				c.onOtherBeingAttacked(self.slot, slot)
+	card.onAttack(slot)
 	
-	while NodeLoc.getBoard().abilityStack.size() > 0 or NodeLoc.getBoard().fuseQueue.size() > 0 or NodeLoc.getBoard().millQueue.size() > 0 or NodeLoc.getBoard().isDrawing():
+	while not NodeLoc.getBoard().getCanFight():
 		fightingWait = true
 		yield(get_tree().create_timer(0.1), "timeout")
 	fightingWait = false
@@ -205,12 +206,16 @@ func fight(slot, damageSelf = true):
 					var damage = -slot.cardNode.card.toughness
 					p.takeDamage(damage, self)
 		
+		if slot.cardNode.card.toughness <= 0:
+			card.onKill(slot)
+		if card.toughness <= 0:
+			slot.cardNode.card.onKill(self.slot)
+	
 	else:
 		for p in NodeLoc.getBoard().players:
 			if p.UUID == slot.playerID:
 				var damage = max(card.power, 0)
 				p.takeDamage(damage, self)
-	
 	
 	if venomA > 0:
 		card.power -= venomA

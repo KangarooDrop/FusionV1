@@ -21,7 +21,7 @@ var maxToughness : int
 var rarity : int
 
 var hasAttacked = true
-var canAttackThisTurn = true
+var cantAttackSources = []
 var canFuseThisTurn = true
 var canBePlayed = true
 
@@ -43,6 +43,7 @@ func _init(params):
 	if params.has("abilities"):
 		for abl in params["abilities"]:
 			var ablData = abl.rsplit(" ")
+			var found = false
 			
 			for data in ProjectSettings.get_setting("_global_script_classes"):
 				if data["class"] == ablData[0]:
@@ -50,6 +51,9 @@ func _init(params):
 					if ablData.size() > 1:
 						abilityLoaded.setCount(int(ablData[1]))
 					addAbility(abilityLoaded)
+					found = true
+			if not found:
+				print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", abl)
 	if params.has("removed_abilities"):
 		for abl in params["removed_abilities"]:
 			for data in ProjectSettings.get_setting("_global_script_classes"):
@@ -65,8 +69,8 @@ func _init(params):
 		toughness = int(params["toughness"])
 	if params.has("has_attacked"):
 		hasAttacked = params["has_attacked"]
-	if params.has("can_attack"):
-		canAttackThisTurn = params["can_attack"]
+#	if params.has("can_attack"):
+#		canAttackThisTurn = params["can_attack"]
 	if params.has("can_play"):
 		canBePlayed = params["can_play"]
 	if params.has("rarity"):
@@ -116,7 +120,6 @@ func onLeave():
 func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(self) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == playerID:
 		hasAttacked = false
-		canAttackThisTurn = true
 		canFuseThisTurn = true
 	var abls = abilities.duplicate()
 	abls.invert()
@@ -148,8 +151,6 @@ func onOtherEnterFromFusion(slot):
 		abl.onOtherEnterFromFusion(slot)
 	
 func onAttack(blocker):
-	hasAttacked = true
-	canAttackThisTurn = false
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
@@ -191,6 +192,12 @@ func onGraveAdd(card):
 	for abl in abls:
 		abl.onGraveAdd(card)
 
+func onKill(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onKill(slot)
+
 func addCreatureToBoard(card, slot = null) -> bool:
 	if slot == null:
 		for s in NodeLoc.getBoard().creatures[playerID]:
@@ -210,11 +217,14 @@ func addCreatureToBoard(card, slot = null) -> bool:
 		card.cardNode = cardPlacing
 		
 		card.onEnter(slot)
-		for s in NodeLoc.getBoard().creatures[slot.playerID]:
-			if is_instance_valid(s.cardNode) and s != slot:
-				s.cardNode.card.onOtherEnter(slot)
+		for c in NodeLoc.getBoard().getAllCards():
+			if c != self:
+				c.onOtherEnter(slot)
 		return true
 	return false
+
+func canAttack() -> bool:
+	return cantAttackSources.size() == 0 and not hasAttacked
 
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
@@ -242,7 +252,6 @@ func serialize() -> Dictionary:
 	rtn["power"] = power
 	rtn["toughness"] = toughness
 	rtn["has_attacked"] = hasAttacked
-	rtn["can_attack"] = canAttackThisTurn
 	rtn["abilities"] = []
 	rtn["removed_abilities"] = []
 	rtn["can_play"] = canBePlayed
@@ -291,15 +300,7 @@ static func areIdentical(dict1 : Dictionary, dict2 : Dictionary) -> bool:
 func getHoverData() -> String:
 	var string = name + "\n"
 	
-	match rarity:
-		RARITY.COMMON:
-			string += "[color=gray]Common[/color]\n"
-			
-		RARITY.LEGENDARY:
-			string += "[color=#FF00FF]Legendary[/color]\n"
-			
-		_:
-			pass
+	string += str(load("res://Scripts/AbilityText/TextRarity.gd").new(null).setCount(rarity)) + "\n"
 	
 	string += "Types: "
 	for i in range(creatureType.size()):
@@ -326,6 +327,7 @@ func trimAbilities():
 		var foundAbility = false
 		for abl in abilities.duplicate():
 			if abl != abilities[0] and abl is abilities[0].get_script() and not foundAbilities.has(abl) and not foundAbilities.has(abilities[0]):
+				cantAttackSources.erase(abl)
 				abilities[0].combine(abl)
 				abilities.erase(abl)
 				foundAbility = true

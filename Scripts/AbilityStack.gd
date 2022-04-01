@@ -3,7 +3,7 @@ class_name AbilityStack
 
 var stack := []
 
-var hoverScene = preload("res://Scenes/UI/Hover.tscn")
+var hoverScene = preload("res://Scenes/UI/AbilityHover.tscn")
 var abilityHovers := []
 
 var offset = 28
@@ -11,11 +11,19 @@ var offset = 28
 func size() -> int:
 	return stack.size()
 
+func trigger(abilityData : Dictionary):
+	abilityData["triggered"] = true
+	abilityData["source"].call(abilityData["funcName"], abilityData["params"])
+	abilityData["window"].get_node("Check").visible = true
+	NodeLoc.getBoard().checkState()
+
 func add(data):
 	stack.insert(0, data)
 	var stackSize = stack.size()
-	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data[0].genDescription(), false)
+	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data["source"].genDescription(), false)
+	data["window"] = h
 	h.position = Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset) + Vector2(0, h.get_node("HoverBack").rect_size.y / 2)
+	h.get_node("Check").rect_position = Vector2(h.get_node("HoverBack").rect_size.x - 20, -h.get_node("HoverBack").rect_size.y/2 + 4)
 	NodeLoc.getBoard().stackTimer = NodeLoc.getBoard().stackMaxTime
 
 func erase(data):

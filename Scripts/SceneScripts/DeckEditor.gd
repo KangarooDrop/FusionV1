@@ -23,7 +23,7 @@ var pages := []
 
 var hasSaved = true
 
-enum SORT_ORDER {TYPE, POWER, TOUGHNESS}
+enum SORT_ORDER {TYPE, POWER, TOUGHNESS, RARITY}
 var sortOrder : int = SORT_ORDER.TYPE
 
 var loadedDeckName = ""
@@ -83,6 +83,8 @@ func sort():
 				for t in c.creatureType:
 					key |= 1 << t
 				key += (c.creatureType.size() - 1)*10000
+			elif sortOrder == SORT_ORDER.RARITY:
+				key = c.rarity
 			
 			if not cardPages.has(key):
 				cardPages[key] = [c]
@@ -111,6 +113,21 @@ func sort():
 		cardsToAdd.append(cardPages[lowest])
 		cardPages.erase(lowest)
 	
+	var n = 0
+	while n < cardsToAdd.size():
+		if cardsToAdd[n].size() > slotPageNum:
+			var p1 = []
+			var p2 = []
+			for i in range(cardsToAdd[n].size()):
+				if i < slotPageNum:
+					p1.append(cardsToAdd[n][i])
+				else:
+					p2.append(cardsToAdd[n][i])
+			cardsToAdd.remove(n)
+			cardsToAdd.insert(n, p2)
+			cardsToAdd.insert(n, p1)
+		n += 1
+	
 	
 	for i in range(cardsToAdd.size()):
 		var page = Node2D.new()
@@ -132,6 +149,8 @@ func sort():
 			var card = cardsToAdd[i][j]
 			if card != null:
 				var cardPlacing = cardNode.instance()
+				#cardPlacing.visible = false
+				#cardPlacing.z_index = -INF
 				cardPlacing.card = card
 				page.add_child(cardPlacing)
 				cardPlacing.global_position = slot.global_position
@@ -146,116 +165,6 @@ func sort():
 	$CenterControl/RArrow.position = Vector2(offR, 30)
 	
 	setCurrentPage(0)
-
-"""
-func sort():
-	clearPages()
-	
-	var listOfCards := []
-	for k in availableCardCount.keys():
-		var c = ListOfCards.getCard(k)
-		listOfCards.append(c)
-	
-	var cardsToAdd = []
-	if sortOrder == SORT_ORDER.TYPE or sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
-		for i in Card.CREATURE_TYPE.values():
-			for j in Card.CREATURE_TYPE.values():
-				if i == 0:
-					break
-				var typesToComp = []
-				if i != 0:
-					typesToComp.append(i)
-				if j != 0:
-					typesToComp.append(j)
-					
-				var cardsToRemove = []
-				for c in listOfCards:
-					var hasAll = true
-					for t in typesToComp:
-						if not c.creatureType.has(t):
-							hasAll = false
-					for t in c.creatureType:
-						if not typesToComp.has(t):
-							hasAll = false
-					if hasAll:
-						cardsToAdd.append(c)
-						cardsToRemove.append(c)
-				for c in cardsToRemove:
-					listOfCards.erase(c)
-				
-	if sortOrder == SORT_ORDER.POWER or sortOrder == SORT_ORDER.TOUGHNESS:
-		for c in cardsToAdd:
-			listOfCards.append(c)
-		cardsToAdd = []
-		while listOfCards.size() > 0:
-			var highest = null
-			for c in listOfCards:
-				if highest == null:
-					highest = c
-				else:
-					var compA
-					var compB
-					if sortOrder == SORT_ORDER.POWER:
-						compA = highest.power
-						compB = c.power
-					elif sortOrder == SORT_ORDER.TOUGHNESS:
-						compA = highest.toughness
-						compB = c.toughness
-					if compB > compA:
-						highest = c
-			cardsToAdd.append(highest)
-			listOfCards.erase(highest)
-				
-	var mod
-	if cardsToAdd.size() == 0:
-		mod = 0
-	elif cardsToAdd.size() % slotPageNum == 0:
-		mod = slotPageNum
-	else:
-		mod = cardsToAdd.size() % slotPageNum
-		
-	var remainder = slotPageNum - mod
-	for i in range(remainder):
-		cardsToAdd.append(null)
-			
-	for i in range(cardsToAdd.size() / slotPageNum):
-		var page = Node2D.new()
-		page.name = "page_" + str(i)
-		$CenterControl/PageHolder.add_child(page)
-		page.visible = false
-		pages.append(page)
-		for j in range(slotPageNum):
-			var x = j % slotPageWidth
-			var y = j / slotPageWidth
-			var offX = (x - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
-			var offY = (y - (slotPageHeight - 1) / 2.0) * (cardHeight + cardDists*2)
-			
-			var slot = cardSlot.instance()
-			slot.currentZone = CardSlot.ZONES.NONE
-			page.add_child(slot)
-			slot.position = Vector2(offX, offY)
-			
-			var card = cardsToAdd[i * slotPageNum + j]
-			if card != null:
-				var cardPlacing = cardNode.instance()
-				cardPlacing.card = card
-				page.add_child(cardPlacing)
-				cardPlacing.global_position = slot.global_position
-				slot.cardNode = cardPlacing
-				cardPlacing.slot = slot
-			
-			
-						
-			if card != null:
-				updateSlotCount(slot)
-				
-	var offL = (-2 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists)
-	$CenterControl/LArrow.position = Vector2(offL, 30)
-	var offR = (slotPageWidth + 1 - (slotPageWidth - 1) / 2.0) * (cardWidth + cardDists) + 8
-	$CenterControl/RArrow.position = Vector2(offR, 30)
-	
-	setCurrentPage(0)
-"""
 
 func leftArrowPressed():
 	setCurrentPage(getCurrentPage() - 1)
@@ -304,6 +213,7 @@ var infoWindow = null
 	
 func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
+	hoverInst.closeChildrenFirst = true
 	hoverInst.z_index = 3
 	hoverInst.flipped = true
 	$CenterControl.add_child(hoverInst)
@@ -519,7 +429,7 @@ func onFileSaveButtonPressed():
 		if fileError != 0:
 			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
 			var pop = popupUI.instance()
-			pop.init("Error", "File could not be saved", "", [["Close", self, "closePopupUI", [pop]]])
+			pop.init("Error", "File could not be saved", [["Close", self, "closePopupUI", [pop]]])
 			$CenterControl.add_child(pop)
 			pop.options[0].grab_focus()
 			popups.append(pop)
@@ -672,9 +582,12 @@ func _input(event):
 				if is_instance_valid(slotViewing) and slotReturning == null:
 					yield(get_tree().create_timer(0.02), "timeout")
 					if is_instance_valid(slotViewing) and slotReturning == null:
-						if is_instance_valid(infoWindow):
+						if is_instance_valid(infoWindow) and infoWindow.spawnedWindows.size() > 0:
+							infoWindow.close()
+						else:
 							infoWindow.close(true)
-						slotReturning = slotViewing
-						slotViewing.cardNode.z_index -= 1
-						slotViewing = null
-						returnTimer = 0
+							slotReturning = slotViewing
+							slotViewing.cardNode.z_index -= 1
+							slotViewing = null
+							returnTimer = 0
+

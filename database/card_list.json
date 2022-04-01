@@ -60,7 +60,7 @@
     "creature_type": [
       5
     ],
-    "tier": 1,
+    "tier": 0,
     "rarity": "COMMON"
   },
   "5": {
@@ -431,7 +431,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityMindrot 3"
+      "AbilityMindrot 2"
     ],
     "rarity": "COMMON"
   },
@@ -772,16 +772,16 @@
     "rarity": "LEGENDARY"
   },
   "62": {
-    "name": "Locus",
+    "name": "Locust",
     "tex": "res://Art/portraits/card_CARRION.png",
-    "power": 0,
-    "toughness": 0,
+    "power": 1,
+    "toughness": 1,
     "creature_type": [
       5
     ],
     "tier": 1,
     "abilities": [
-      "AbilitySwarm 1"
+      "AbilitySwarm 2"
     ],
     "rarity": "COMMON"
   },
@@ -796,6 +796,62 @@
     "tier": 1,
     "abilities": [
       "AbilityThoughtknock"
+    ],
+    "rarity": "COMMON"
+  },
+  "64": {
+    "name": "Chupacabra",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 3,
+    "toughness": 2,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityRabid"
+    ],
+    "rarity": "COMMON"
+  },
+  "65": {
+    "name": "Dreadnought Raven",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 2,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityRavenous"
+    ],
+    "rarity": "COMMON"
+  },
+  "66": {
+    "name": "Spineripper",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 5,
+    "toughness": 2,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityCoup"
+    ],
+    "rarity": "COMMON"
+  },
+  "67": {
+    "name": "Cultmaester",
+    "tex": "res://Art/portraits/card_NECRO.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityUnwillingOffering"
     ],
     "rarity": "COMMON"
   }

@@ -23,12 +23,14 @@ func onOtherEnter(slot):
 			if s == slot:
 				s.cardNode.card.power += count
 				s.cardNode.card.toughness += count
+				s.cardNode.card.maxToughness += count
 
 func onEffect():
 	for s in card.cardNode.slot.getNeighbors():
 		if is_instance_valid(s.cardNode):
 			s.cardNode.card.power += 1
 			s.cardNode.card.toughness += 1
+			s.cardNode.card.maxToughness += 1
 
 func onLeave():
 	if is_instance_valid(card.cardNode):
@@ -36,6 +38,16 @@ func onLeave():
 			if is_instance_valid(s.cardNode):
 				s.cardNode.card.power -= count
 				s.cardNode.card.toughness -= count
+				s.cardNode.card.maxToughness -= count
+
+func onRemove(ability):
+	if ability == self:
+		if is_instance_valid(card.cardNode):
+			for s in card.cardNode.slot.getNeighbors():
+				if is_instance_valid(s.cardNode):
+					s.cardNode.card.power -= count
+					s.cardNode.card.toughness -= count
+					s.cardNode.card.maxToughness -= count
 
 func onOtherLeave(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
@@ -43,6 +55,7 @@ func onOtherLeave(slot):
 			if slot in card.cardNode.slot.getNeighbors():
 				slot.cardNode.card.power -= count
 				slot.cardNode.card.toughness -= count
+				slot.cardNode.card.maxToughness -= count
 	
 	
 func clone(card : Card) -> Ability:

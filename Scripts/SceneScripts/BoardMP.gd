@@ -66,6 +66,8 @@ var gameStarted = false
 var gameOver = false
 
 var abilityStack : AbilityStack = AbilityStack.new()
+var currentAbility = null
+var waitingAbilities := []
 
 var opponentID = -1
 var gameSeed = -1
@@ -381,6 +383,9 @@ func setTurnText():
 		$TI/Label.text = "Opponent\nTurn"
 		$EndTurnButton.visible = false
 
+func getCanFight() -> bool:
+	return (abilityStack.size() == 0 or abilityStack.getFront()["canAttack"]) and fuseQueue.size() == 0 and millQueue.size() == 0 and not isDrawing()
+
 var rotTimer = 0
 var rotAngle = PI / 2
 var rotFreq = 1
@@ -459,7 +464,8 @@ func _physics_process(delta):
 					if fuseTimer >= fuseMaxTime:
 						fuseTimer = 0
 						fusing = false
-						fuseQueue[0].card = ListOfCards.fusePair(fuseQueue[0].card, fuseQueue[1].card)
+						fuseQueue[0].slot = fuseEndSlot
+						fuseQueue[0].card = ListOfCards.fusePair(fuseQueue[0].card, fuseQueue[1].card, fuseQueue[0])
 						fuseQueue[0].setCardVisible(true)
 						fuseQueue[1].queue_free()
 						fuseQueue.remove(1)
@@ -483,18 +489,18 @@ func _physics_process(delta):
 					fuseQueue = []
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.cardNode = cardNode
+					
+					var cs = getAllCards()
 					if isEntering:
-						cardNode.card.onEnter(fuseEndSlot)
-						
-						for c in getAllCards():
+						for c in cs:
 							if c != cardNode.card:
 								c.onOtherEnter(fuseEndSlot)
+						cardNode.card.onEnter(fuseEndSlot)
 					else:
-						cardNode.card.onEnterFromFusion(fuseEndSlot)
-						
-						for c in getAllCards():
+						for c in cs:
 							if c != cardNode.card:
 								c.onOtherEnterFromFusion(fuseEndSlot)
+						cardNode.card.onEnterFromFusion(fuseEndSlot)
 					checkState()
 					
 	if millQueue.size() > 0:
@@ -573,19 +579,25 @@ func _physics_process(delta):
 			serverCheckTimer = 0
 	
 	if gameStarted:
-		#print("Stack: ", abilityStack)
 		if selectingSlot and selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 			selectingSource.slotClicked(null)
 		
 		if not selectingSlot and fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
+			if abilityStack.size() > 0:
+				currentAbility = abilityStack.getFront()
+				
+			if abilityStack.size() > 0 and not currentAbility["triggered"]:
+				abilityStack.trigger(currentAbility)
+				
 			if abilityStack.size() > 0 and stackTimer <= 0:
-				#print("Stack: ", abilityStack)
-				var abl = abilityStack.getFront()
-				abl[0].call(abl[1], abl[2])
-				stackTimer = stackMaxTime
 				if not selectingSlot:
-					abilityStack.erase(abl)
-					checkState()
+					if not waitingAbilities.has(currentAbility["source"]) or currentAbility["source"].checkWaiting():
+						waitingAbilities.erase(currentAbility["source"])
+						abilityStack.erase(currentAbility)
+						currentAbility = null
+				if abilityStack.size() > 0:
+					stackTimer = stackMaxTime
+					
 			elif stackTimer > 0:
 				stackTimer -= delta
 				
@@ -869,14 +881,14 @@ func onSlotEnter(slot : CardSlot):
 		if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
 			canFuse = false
 		
-		if is_instance_valid(slot.cardNode) and slot.currentZone == CardSlot.ZONES.CREATURE:
-			var cardA = slot.cardNode.card
-			for c in cardsHolding:
-				var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
-				if Card.areIdentical(cardA.serialize(), cardB.serialize()):
-					canFuse = false
-				else:
-					cardA = cardB
+		if canFuse:
+			var cardsToCheck = []
+			if is_instance_valid(slot.cardNode):
+				cardsToCheck.append(slot.cardNode.card)
+			for s in cardsHolding:
+				cardsToCheck.append(s.cardNode.card)
+			if not ListOfCards.canFuseCards(cardsToCheck):
+				canFuse = false
 		
 		if canFuse and isMyTurn():
 			slot.setHighlight(true)
@@ -1004,17 +1016,25 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						cardsShaking[slot] = shakeMaxTime
 						return false
 					##
+					var cardsToCheck = []
 					if is_instance_valid(slot.cardNode):
-						var cardA = slot.cardNode.card
-						for c in cardsHolding:
-							var cardB = ListOfCards.fusePair(cardA, c.cardNode.card)
-							if Card.areIdentical(cardA.serialize(), cardB.serialize()):
-								if cardsShaking.has(slot):
-									MessageManager.notify("A creature can only fuse to have two types")
-								cardsShaking[slot] = shakeMaxTime
-								return false
-							else:
-								cardA = cardB
+						cardsToCheck.append(slot.cardNode.card)
+					for s in cardsHolding:
+						cardsToCheck.append(s.cardNode.card)
+					if not ListOfCards.canFuseCards(cardsToCheck):
+						if is_instance_valid(slot.cardNode):
+							if cardsShaking.has(slot):
+								MessageManager.notify("A creature can have at most two creature types")
+							cardsShaking[slot] = shakeMaxTime
+						else:
+							var shownMessage = false
+							for s in cardsHolding:
+								if cardsShaking.has(s) and not shownMessage:
+									shownMessage = true
+									MessageManager.notify("A creature can have at most two creature types")
+								cardsShaking[s] = shakeMaxTime
+								
+						return false
 					##
 					
 					
@@ -1061,7 +1081,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							selectRotTimer = 0
 							selectedCard = null
 						else:
-							if is_instance_valid(slot.cardNode) and (not slot.cardNode.card.hasAttacked and slot.cardNode.card.canAttackThisTurn):
+							if is_instance_valid(slot.cardNode) and slot.cardNode.card.canAttack():
 								if is_instance_valid(selectedCard):
 									selectedCard.cardNode.rotation = 0
 								selectRotTimer = 0
@@ -1279,7 +1299,8 @@ func getAllCards() -> Array:
 				cards.append(s.cardNode.card)
 		for cn in fuseQueue:
 			cards.append(cn.card)
-		
+	
+	cards.invert()
 	return cards
 
 func getAllPlayers() -> Array:
@@ -1349,14 +1370,16 @@ func checkState():
 		if hoveringWindowSlot == cardNode.slot:
 			hoveringWindow.close(true)
 			hoveringWindowSlot = null
-					
+		
+		
+		cardNode.card.onLeave()
+		cardNode.card.onDeath()
+		
 		for c in getAllCards():
 			if c != cardNode.card:
 				c.onOtherLeave(cardNode.slot)
 				c.onOtherDeath(cardNode.slot)
-		cardNode.card.onLeave()
 		cardNode.slot.cardNode = null
-		cardNode.card.onDeath()
 		cardNode.queue_free()
 
 	var boardStateNew = []
@@ -1382,7 +1405,9 @@ func endGetSlot():
 	selectingSlot = false
 	selectingSource = null
 	abilityStack.remove(0)
-	stackTimer = stackMaxTime
+	if abilityStack.size() > 0:
+		stackTimer = stackMaxTime
+	currentAbility = null
 	checkState()
 
 func onLoss(player : Player):

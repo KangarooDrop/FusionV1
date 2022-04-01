@@ -84,17 +84,30 @@ static func deserialize(data : Dictionary) -> Card:
 	card.playerID = data["player_id"]
 	return card
 	
+func canFuseCards(cards : Array) -> bool:
+	var uniques = []
+	for c in cards:
+		if not c.canFuseThisTurn:
+			return false
+		
+		for t in (c.creatureType):
+			if not uniques.has(t) and t != Card.CREATURE_TYPE.Null:
+				uniques.append(t)
 	
+	return uniques.size() <= 2
+
 func fuseCards(cards : Array) -> Card:
-	if cards.size() > 1:
+	while cards.size() > 1:
 		var c_new = fusePair(cards[0], cards[1])
 		cards.remove(0)
 		cards.remove(0)
 		cards.insert(0, c_new)
-		return fuseCards(cards)
 	return cards[0]
 	
-func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
+func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
+	if cardA == null or cardB == null:
+		return null
+	
 	var uniques = []
 	for t in (cardA.creatureType + cardB.creatureType):
 		if not uniques.has(t) and t != Card.CREATURE_TYPE.Null:
@@ -122,7 +135,7 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 	elif uniques.size() == 2:
 		types = uniques
 	else:
-		return cardA
+		return null
 	
 	var numTypes = types.size()
 	var newIndex
@@ -154,8 +167,10 @@ func fusePair(cardA : Card, cardB : Card, hasSwapped = false) -> Card:
 		cardNew.removedAbilities.append(abl.clone(cardNew))
 	cardNew.trimAbilities()
 	cardNew.hasAttacked = cardA.hasAttacked
-	cardNew.canAttackThisTurn = cardA.canAttackThisTurn
+	#cardNew.canAttackThisTurn = cardA.canAttackThisTurn
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
+	
+	cardNew.cardNode = cardNode
 	
 	cardA.onFusion(cardNew)
 	cardB.onFusion(cardNew)

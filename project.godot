@@ -45,6 +45,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityConjoined.gd"
 }, {
 "base": "Ability",
+"class": "AbilityCoup",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityCoup.gd"
+}, {
+"base": "Ability",
 "class": "AbilityDash",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityDash.gd"
@@ -155,9 +160,19 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityPyroclast.gd"
 }, {
 "base": "Ability",
+"class": "AbilityRabid",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRabid.gd"
+}, {
+"base": "Ability",
 "class": "AbilityRampage",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityRampage.gd"
+}, {
+"base": "Ability",
+"class": "AbilityRavenous",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRavenous.gd"
 }, {
 "base": "Ability",
 "class": "AbilityReignite",
@@ -213,6 +228,11 @@ _global_script_classes=[ {
 "class": "AbilityTough",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTough.gd"
+}, {
+"base": "Ability",
+"class": "AbilityUnwillingOffering",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityUnwillingOffering.gd"
 }, {
 "base": "Ability",
 "class": "AbilityVenomous",
@@ -305,6 +325,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/AbilityText/TextGreyGoo.gd"
 }, {
 "base": "Ability",
+"class": "TextRarity",
+"language": "GDScript",
+"path": "res://Scripts/AbilityText/TextRarity.gd"
+}, {
+"base": "Ability",
 "class": "TextScrapyard",
 "language": "GDScript",
 "path": "res://Scripts/AbilityText/TextScrapyard.gd"
@@ -322,6 +347,7 @@ _global_script_class_icons={
 "AbilityComposite": "",
 "AbilityConfigure": "",
 "AbilityConjoined": "",
+"AbilityCoup": "",
 "AbilityDash": "",
 "AbilityDegenerate": "",
 "AbilityDuplicant": "",
@@ -344,7 +370,9 @@ _global_script_class_icons={
 "AbilityPronged": "",
 "AbilityPurify": "",
 "AbilityPyroclast": "",
+"AbilityRabid": "",
 "AbilityRampage": "",
+"AbilityRavenous": "",
 "AbilityReignite": "",
 "AbilityRekindle": "",
 "AbilitySacrifice": "",
@@ -356,6 +384,7 @@ _global_script_class_icons={
 "AbilityTaunt": "",
 "AbilityThoughtknock": "",
 "AbilityTough": "",
+"AbilityUnwillingOffering": "",
 "AbilityVenomous": "",
 "AbilityWisdom": "",
 "AbilityWorldfire": "",
@@ -374,6 +403,7 @@ _global_script_class_icons={
 "PopupUI": "",
 "TextArmor": "",
 "TextGreyGoo": "",
+"TextRarity": "",
 "TextScrapyard": "",
 "TextSkinShedder": ""
 }

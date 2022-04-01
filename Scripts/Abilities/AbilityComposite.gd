@@ -23,8 +23,7 @@ func onOtherEnterFromFusion(slot):
 	
 func onOtherLeave(slot):
 	if NodeLoc.getBoard().isOnBoard(self.card):
-		card.power -= count
-		buffsApplied -= 1
+		onEffect()
 
 func onEffect():
 	card.power -= buffsApplied * count
@@ -34,6 +33,10 @@ func onEffect():
 		if is_instance_valid(s.cardNode) and (is_instance_valid(card.cardNode.slot) and s != card.cardNode.slot):
 			card.power += count
 			buffsApplied += 1
+
+func onRemove(ability):
+	if ability == self:
+		card.power -= buffsApplied * count
 
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)
