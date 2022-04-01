@@ -24,7 +24,7 @@ func onHoverExit(slot):
 	var pid = slot.playerID
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
-			var dif = buffsApplied * count
+			var dif = buffsApplied
 			card.power -= dif
 			card.toughness -= dif
 			card.maxToughness -= dif
@@ -63,7 +63,7 @@ func onRemove(ability):
 		var pid = card.playerID
 		for player in NodeLoc.getBoard().players:
 			if player.UUID == pid:
-				var dif = buffsApplied * count
+				var dif = buffsApplied
 				card.power -= dif
 				card.toughness -= dif
 				card.maxToughness -= dif

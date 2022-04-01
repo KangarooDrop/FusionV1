@@ -7,9 +7,8 @@ var tribes := 0
 var buffsApplied = 0
 
 var threshold = 4
-var statGain = 3
 
-func _init(card : Card).("Conjoined", card, Color.brown, false, Vector2(16, 48)):
+func _init(card : Card).("Conjoined", card, Color.brown, true, Vector2(16, 48)):
 	pass
 
 func onHoverEnter(slot):
@@ -46,10 +45,10 @@ func onRemove(ability):
 			t = t >> 1
 		
 		if c >= threshold:
-			buffsApplied -= 1
-			self.card.power -= statGain
-			self.card.toughness -= statGain
-			self.card.maxToughness -= statGain
+			buffsApplied -= count
+			self.card.power -= count
+			self.card.toughness -= count
+			self.card.maxToughness -= count
 		tribes = 0
 
 func onEffect(tribe : int):
@@ -63,10 +62,10 @@ func onEffect(tribe : int):
 			t = t >> 1
 		
 		if c >= threshold:
-			buffsApplied += 1
-			self.card.power += statGain
-			self.card.toughness += statGain
-			self.card.maxToughness += statGain
+			buffsApplied += count
+			self.card.power += count
+			self.card.toughness += count
+			self.card.maxToughness += count
 
 func combine(abl : Ability):
 	var total = abl.buffsApplied + buffsApplied
@@ -81,4 +80,4 @@ func clone(card : Card) -> Ability:
 	return abl
 
 func genDescription() -> String:
-	return .genDescription() + "When there are " + str(threshold) + " or more creature types in your " + str(TextScrapyard.new(null)) + ", this creature gets +" + str(statGain) + "/+" + str(statGain)
+	return .genDescription() + "When there are " + str(threshold) + " or more creature types in your " + str(TextScrapyard.new(null)) + ", this creature gets +" + str(count) + "/+" + str(count)

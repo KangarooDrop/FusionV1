@@ -599,7 +599,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityConjoined"
+      "AbilityConjoined 3"
     ],
     "rarity": "COMMON"
   },
@@ -896,5 +896,19 @@
       "AbilityDaedalus"
     ],
     "rarity": "COMMON"
+  },
+  "71": {
+    "name": "Riella",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 0,
+    "toughness": 2,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityUpgrade 1"
+    ],
+    "rarity": "LEGENDARY"
   }
 }
