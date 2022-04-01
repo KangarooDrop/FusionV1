@@ -245,11 +245,6 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityTough.gd"
 }, {
 "base": "Ability",
-"class": "AbilityUnwillingOffering",
-"language": "GDScript",
-"path": "res://Scripts/Abilities/AbilityUnwillingOffering.gd"
-}, {
-"base": "Ability",
 "class": "AbilityUpgrade",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityUpgrade.gd"
@@ -258,6 +253,11 @@ _global_script_classes=[ {
 "class": "AbilityVenomous",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityVenomous.gd"
+}, {
+"base": "Ability",
+"class": "AbilityWillingOffering",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityWillingOffering.gd"
 }, {
 "base": "Ability",
 "class": "AbilityWisdom",
@@ -407,9 +407,9 @@ _global_script_class_icons={
 "AbilityTaunt": "",
 "AbilityThoughtknock": "",
 "AbilityTough": "",
-"AbilityUnwillingOffering": "",
 "AbilityUpgrade": "",
 "AbilityVenomous": "",
+"AbilityWillingOffering": "",
 "AbilityWisdom": "",
 "AbilityWorldfire": "",
 "BoardMP": "",

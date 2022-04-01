@@ -1,10 +1,10 @@
 extends Ability
 
-class_name AbilityUnwillingOffering
+class_name AbilityWillingOffering
 
 var buffsAppliedVec = Vector2()
 
-func _init(card : Card).("Unwilling Offering", card, Color.darkgray, false, Vector2(16, 48)):
+func _init(card).("Willing Offering", card, Color.darkgray, false, Vector2(16, 48)):
 	pass
 
 func onOtherEnter(slot):
@@ -28,12 +28,12 @@ func onEffect(params):
 		buffsAppliedVec.y += params[1].toughness
 	params[1].toughness = -INF
 
-func clone(card : Card) -> Ability:
+func clone(card):
 	var abl = .clone(card)
 	abl.buffsAppliedVec = buffsAppliedVec
 	return abl
 
-func combine(abl : Ability):
+func combine(abl):
 	.combine(abl)
 	abl.buffsAppliedVec += buffsAppliedVec
 

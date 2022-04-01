@@ -24,15 +24,15 @@ onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 func _ready():
+	var gameSeed = OS.get_system_time_msecs()
+	print("current game seed is ", gameSeed)
+	seed(gameSeed)
+	
 	$DeckDisplayControl/DeckDisplay.parent = self
 	$CardDisplay.canReorder = true
 	genNewBooster()
-		
-	if Server.host:
-		var gameSeed = OS.get_system_time_msecs()
-		print("current game seed is ", gameSeed)
-		seed(gameSeed)
 	
+	if Server.host:
 		playerIDs = Server.playerIDs.duplicate()
 		playerIDs.append(1)
 		playerIDs.shuffle()
