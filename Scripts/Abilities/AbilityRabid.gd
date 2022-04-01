@@ -10,7 +10,7 @@ func onOtherEnter(slot):
 		addToStack("onEffect", [card, slot], true, true)
 
 func onEffect(params):
-	if is_instance_valid(params[1].cardNode) and params[0].cantAttackSources.size() == 0:
+	if is_instance_valid(params[1].cardNode) and params[0].canAttack():
 		card.cardNode.attack([params[1]])
 
 func checkWaiting() -> bool:

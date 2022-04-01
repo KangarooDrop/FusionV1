@@ -12,6 +12,14 @@ var statGain = 3
 func _init(card : Card).("Conjoined", card, Color.brown, false, Vector2(16, 48)):
 	pass
 
+func onHoverEnter(slot):
+	for c in NodeLoc.getBoard().graveCards[slot.playerID]:
+		for t in c.creatureType:
+			onEffect(t)
+
+func onHoverExit(slot):
+	onRemove(self)
+
 func onEnter(card):
 	for c in NodeLoc.getBoard().graveCards[self.card.playerID]:
 		for t in c.creatureType:
@@ -42,6 +50,7 @@ func onRemove(ability):
 			self.card.power -= statGain
 			self.card.toughness -= statGain
 			self.card.maxToughness -= statGain
+		tribes = 0
 
 func onEffect(tribe : int):
 	tribes |= 1 << tribe

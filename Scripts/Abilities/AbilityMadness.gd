@@ -7,6 +7,30 @@ var buffsApplied := 0
 func _init(card : Card).("Madness", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
+func onHoverEnter(slot):
+	var pid = slot.playerID
+	for player in NodeLoc.getBoard().players:
+		if player.UUID == pid:
+			var num = player.deck.deckSize - player.deck.cards.size()
+			var dif = num * count - buffsApplied
+			card.power += dif
+			card.toughness += dif
+			card.maxToughness += dif
+			buffsApplied += dif
+			
+			break
+
+func onHoverExit(slot):
+	var pid = slot.playerID
+	for player in NodeLoc.getBoard().players:
+		if player.UUID == pid:
+			var dif = buffsApplied * count
+			card.power -= dif
+			card.toughness -= dif
+			card.maxToughness -= dif
+			buffsApplied -= dif
+			break
+
 func onDraw(card):
 	if NodeLoc.getBoard().isOnBoard(self.card):
 		onEffect()

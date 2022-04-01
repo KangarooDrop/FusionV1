@@ -81,6 +81,18 @@ func _init(params):
 	else:
 		maxToughness = toughness
 
+func onHoverEnter(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onHoverEnter(slot)
+
+func onHoverExit(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onHoverExit(slot)
+
 func onEnter(slot):
 	var abls = abilities.duplicate()
 	abls.invert()
@@ -197,6 +209,12 @@ func onKill(slot):
 	abls.invert()
 	for abl in abls:
 		abl.onKill(slot)
+
+func onKilledBy(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onKilledBy(slot)
 
 func addCreatureToBoard(card, slot = null) -> bool:
 	if slot == null:

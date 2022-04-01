@@ -207,8 +207,10 @@ func fight(slot, damageSelf = true):
 					p.takeDamage(damage, self)
 		
 		if slot.cardNode.card.toughness <= 0:
+			slot.cardNode.card.onKilledBy(self.slot)
 			card.onKill(slot)
 		if card.toughness <= 0:
+			card.onKilledBy(slot.cardNode.card)
 			slot.cardNode.card.onKill(self.slot)
 	
 	else:

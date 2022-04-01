@@ -17,6 +17,12 @@ func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Ve
 	self.iconPos = iconPos
 	self.setCount(1)
 
+func onHoverEnter(slot):
+	pass
+
+func onHoverExit(slot):
+	pass
+
 func onEnter(slot):
 	pass
 	
@@ -75,6 +81,9 @@ func onRemove(ability):
 	pass
 
 func onKill(slot):
+	pass
+
+func onKilledBy(slot):
 	pass
 
 func checkWaiting() -> bool:

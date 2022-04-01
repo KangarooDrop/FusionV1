@@ -20,10 +20,12 @@ func onEnterFromFusion(slot):
 static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == params[1]:
-			if p.hand.slots.size() == 0:
+			if p.hand.slots.size() <= params[2]:
+				for i in range(p.hand.nodes.size()):
+					p.hand.discardIndex(i)
 				for i in range(params[2]):
 					p.hand.drawCard()
-				return	
+				return
 	NodeLoc.getBoard().getSlot(params[0], params[1])
 
 func slotClicked(slot : CardSlot):

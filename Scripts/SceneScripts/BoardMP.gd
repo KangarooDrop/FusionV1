@@ -894,7 +894,6 @@ func onSlotEnter(slot : CardSlot):
 			slot.setHighlight(true)
 			highlightedSlots.append(slot)
 		
-	
 	if slot.playerID != -1:
 		if is_instance_valid(selectedCard):
 			var opponentHasTaunt = false
@@ -911,6 +910,10 @@ func onSlotEnter(slot : CardSlot):
 					else:
 						slot.setHighlight(true)
 						highlightedSlots.append(slot)
+		
+	if is_instance_valid(slot) and cardsHolding.size() > 0 and slot.currentZone == CardSlot.ZONES.CREATURE:
+		for s in cardsHolding:
+			s.cardNode.card.onHoverEnter(slot)
 
 
 func onSlotExit(slot : CardSlot):
@@ -926,6 +929,10 @@ func onSlotExit(slot : CardSlot):
 						s.setHighlight(false)
 				highlightedSlots.clear()
 			hoveringOn = null
+
+			if is_instance_valid(slot) and cardsHolding.size() > 0 and slot.currentZone == CardSlot.ZONES.CREATURE:
+				for s in cardsHolding:
+					s.cardNode.card.onHoverExit(slot)
 		
 
 func onMouseDown(slot : CardSlot, button_index : int):
@@ -1309,6 +1316,15 @@ func getAllPlayers() -> Array:
 		var p = players[(activePlayer + i) % players.size()]
 		pl.append(p)
 	return pl
+
+func getAllCreatures() -> Array:
+	var cards := []
+	for p in getAllPlayers():
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				cards.append(s.cardNode.card)
+	cards.invert()
+	return cards
 
 func nextTurn():
 	if gameOver:

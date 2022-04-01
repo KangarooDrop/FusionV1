@@ -803,7 +803,7 @@
     "name": "Chupacabra",
     "tex": "res://Art/portraits/card_CARRION.png",
     "power": 3,
-    "toughness": 2,
+    "toughness": 3,
     "creature_type": [
       5
     ],
@@ -830,7 +830,7 @@
   "66": {
     "name": "Spineripper",
     "tex": "res://Art/portraits/card_CARRION.png",
-    "power": 5,
+    "power": 4,
     "toughness": 2,
     "creature_type": [
       6
@@ -852,6 +852,48 @@
     "tier": 1,
     "abilities": [
       "AbilityUnwillingOffering"
+    ],
+    "rarity": "COMMON"
+  },
+  "68": {
+    "name": "Cicatrix",
+    "tex": "res://Art/portraits/card_NECRO.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityFleshrot"
+    ],
+    "rarity": "COMMON"
+  },
+  "69": {
+    "name": "Bloated Corpse",
+    "tex": "res://Art/portraits/card_NECRO.png",
+    "power": 0,
+    "toughness": 2,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityBioagent 5"
+    ],
+    "rarity": "COMMON"
+  },
+  "70": {
+    "name": "Feller",
+    "tex": "res://Art/portraits/card_CARRION.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityDaedalus"
     ],
     "rarity": "COMMON"
   }
