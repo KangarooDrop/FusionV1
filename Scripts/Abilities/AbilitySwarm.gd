@@ -4,7 +4,7 @@ class_name AbilitySwarm
 
 var buffsApplied = 0
 
-func _init(card : Card).("Sworm", card, Color.brown, true, Vector2(16, 48)):
+func _init(card : Card).("Swarm", card, Color.brown, true, Vector2(16, 48)):
 	pass
 
 func onHoverEnter(slot):

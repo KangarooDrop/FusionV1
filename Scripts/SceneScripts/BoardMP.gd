@@ -3,6 +3,8 @@ extends Node2D
 
 class_name BoardMP
 
+var deadPlayers = []
+
 var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
@@ -121,7 +123,7 @@ func _ready():
 	
 	if not Server.online or Server.host:
 		setGameSeed(OS.get_system_time_msecs())
-		Server.setGameSeed(opponentID, gameSeed)
+		Server.setGameSeed(opponentID, gameSeed + 1)
 	
 	if not Server.online or Server.host:
 		var startingPlayerIndex = randi() % 2
@@ -393,6 +395,19 @@ var rotFreq = 1
 var practiceWaiting = false
 
 func _physics_process(delta):
+	
+	if gameOver and deadPlayers.size() > 0:
+		print(deadPlayers)
+		var out
+		if deadPlayers.size() == 1:
+			if deadPlayers[0] == players[0]:
+				out = 1
+			elif deadPlayers[0] == players[1]:
+				out = 0
+		elif deadPlayers.size() == players.size():
+			out = 2
+		get_node("/root/main/CenterControl/WinLose").showWinLose(out)
+		deadPlayers.clear()
 	
 	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		if not practiceWaiting and activePlayer != 0 and gameStarted and not getWaiting():
@@ -691,6 +706,15 @@ func addCardToGrave(playerID : int, card : Card):
 func clearGraveDisplay():
 	graveViewing = -1
 	$GraveDisplay.clear()
+
+func removeCardFromGrave(playerID : int, index : int):
+	graveCards[playerID].remove(index)
+	if graveCards[playerID].size() == 0:
+		var cn = graves[playerID].cardNode
+		cn.visible = false
+		cn.setCardVisible(false)
+		clearGraveDisplay()
+		
 
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
 	var hoverInst = hoverScene.instance()
@@ -1050,6 +1074,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							if is_instance_valid(s):
 								s.setHighlight(false)
 						highlightedSlots.clear()
+					
+					if is_instance_valid(hoveringOn):
+						for s in cardsHolding:
+							s.cardNode.card.onHoverExit(slot)
 					
 					var cardList = []
 						
@@ -1427,9 +1455,8 @@ func endGetSlot():
 	checkState()
 
 func onLoss(player : Player):
-	if not gameOver:
-		gameOver = true
-		get_node("/root/main/CenterControl/WinLose").showWinLose(player != players[0])
+	gameOver = true
+	deadPlayers.append(player)
 
 func setOwnUsername():
 	print("Settings own username")

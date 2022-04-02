@@ -54,7 +54,6 @@ region_rect = Rect2( 0, 0, 64, 32 )
 z_index = 99
 
 [node name="PauseMenu" parent="CenterControl/PauseNode" instance=ExtResource( 4 )]
-visible = false
 
 [node name="FileSelector" type="Node2D" parent="CenterControl"]
 visible = false

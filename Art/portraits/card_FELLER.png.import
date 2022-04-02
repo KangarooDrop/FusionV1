@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/card_active.png-6137ea5c9d6f32782e69c44868fd6f47.stex"
+path="res://.import/card_FELLER.png-565d2350ac53ddbc1c77b46f850651f0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/backgrounds/card_active.png"
-dest_files=[ "res://.import/card_active.png-6137ea5c9d6f32782e69c44868fd6f47.stex" ]
+source_file="res://Art/portraits/card_FELLER.png"
+dest_files=[ "res://.import/card_FELLER.png-565d2350ac53ddbc1c77b46f850651f0.stex" ]
 
 [params]
 

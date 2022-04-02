@@ -2,7 +2,7 @@ extends Ability
 
 class_name TextRarity
 
-var colors = [Color(0, 0, 0), Color(.5, .5, .5), Color(1, 0, 1)]
+var colors = [Color(0, 0, 0), Color(.5, .5, .5), Color(1, 0.6, 0)]
 
 func _init(card : Card).("", card, Color.lightgray, false, Vector2(0, 0)):
 	pass

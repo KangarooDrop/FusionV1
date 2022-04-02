@@ -35,6 +35,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityBulwark.gd"
 }, {
 "base": "Ability",
+"class": "AbilityChimera",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityChimera.gd"
+}, {
+"base": "Ability",
 "class": "AbilityComposite",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityComposite.gd"
@@ -365,6 +370,7 @@ _global_script_class_icons={
 "AbilityBioagent": "",
 "AbilityBrittle": "",
 "AbilityBulwark": "",
+"AbilityChimera": "",
 "AbilityComposite": "",
 "AbilityConfigure": "",
 "AbilityConjoined": "",

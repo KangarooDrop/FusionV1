@@ -395,7 +395,7 @@
   },
   "35": {
     "name": "Frost-tongue",
-    "tex": "res://Art/portraits/ToasterToilet.png",
+    "tex": "res://Art/portraits/card_FROSTTONGUE.png",
     "power": 0,
     "toughness": 5,
     "creature_type": [
@@ -423,7 +423,7 @@
   },
   "37": {
     "name": "Thought Sapper",
-    "tex": "res://Art/portraits/card_THOUGH_SAPPER.png",
+    "tex": "res://Art/portraits/card_THOUGHT_SAPPER.png",
     "power": 1,
     "toughness": 3,
     "creature_type": [
@@ -591,15 +591,15 @@
   },
   "49": {
     "name": "Amalgam",
-    "tex": "res://Art/portraits/card_CARRION.png",
-    "power": 1,
-    "toughness": 1,
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 0,
     "creature_type": [
       5
     ],
     "tier": 1,
     "abilities": [
-      "AbilityConjoined 3"
+      "AbilityChimera 1"
     ],
     "rarity": "COMMON"
   },
@@ -633,7 +633,7 @@
   },
   "52": {
     "name": "Ghastly Presence",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -703,7 +703,7 @@
   },
   "57": {
     "name": "Skin Shedder",
-    "tex": "res://Art/portraits/WurmGuy.png",
+    "tex": "res://Art/portraits/card_SKIN_SHEDDER.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -717,7 +717,7 @@
   },
   "58": {
     "name": "Clone",
-    "tex": "res://Art/portraits/WurmGuy.png",
+    "tex": "res://Art/portraits/card_CLONE.png",
     "power": 0,
     "toughness": 0,
     "creature_type": [
@@ -745,7 +745,7 @@
   },
   "60": {
     "name": "Catylos",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_CATYLOS.png",
     "power": 0,
     "toughness": 4,
     "creature_type": [
@@ -759,7 +759,7 @@
   },
   "61": {
     "name": "Scraprion",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_SCRAPRION.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -772,8 +772,8 @@
     "rarity": "LEGENDARY"
   },
   "62": {
-    "name": "Locust",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "name": "Locust Swarm",
+    "tex": "res://Art/portraits/card_LOCUSTSWARM.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -787,7 +787,7 @@
   },
   "63": {
     "name": "Thought Erasure",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_THOUGHTERASURE.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -801,7 +801,7 @@
   },
   "64": {
     "name": "Chupacabra",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 3,
     "toughness": 3,
     "creature_type": [
@@ -815,7 +815,7 @@
   },
   "65": {
     "name": "Dreadnought Raven",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [
@@ -829,7 +829,7 @@
   },
   "66": {
     "name": "Spineripper",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 4,
     "toughness": 2,
     "creature_type": [
@@ -843,7 +843,7 @@
   },
   "67": {
     "name": "Cultmaester",
-    "tex": "res://Art/portraits/card_NECRO.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -857,7 +857,7 @@
   },
   "68": {
     "name": "Cicatrix",
-    "tex": "res://Art/portraits/card_NECRO.png",
+    "tex": "res://Art/portraits/card_CICATRIX.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -871,7 +871,7 @@
   },
   "69": {
     "name": "Bloated Corpse",
-    "tex": "res://Art/portraits/card_NECRO.png",
+    "tex": "res://Art/portraits/card_BLOATEDCORPSE.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [
@@ -885,7 +885,7 @@
   },
   "70": {
     "name": "Feller",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_FELLER.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -899,7 +899,7 @@
   },
   "71": {
     "name": "Riella",
-    "tex": "res://Art/portraits/card_CARRION.png",
+    "tex": "res://Art/portraits/card_WIP.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/card_THOUGH_SAPPER.png-e71a51b0cc5a203ddeb4a2ed021900ae.stex"
+path="res://.import/card_SCRAPRION.png-b692e2d3c8e3ed5fef333a81a77e8a8a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/card_THOUGH_SAPPER.png"
-dest_files=[ "res://.import/card_THOUGH_SAPPER.png-e71a51b0cc5a203ddeb4a2ed021900ae.stex" ]
+source_file="res://Art/portraits/card_SCRAPRION.png"
+dest_files=[ "res://.import/card_SCRAPRION.png-b692e2d3c8e3ed5fef333a81a77e8a8a.stex" ]
 
 [params]
 

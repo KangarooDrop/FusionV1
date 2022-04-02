@@ -78,7 +78,6 @@ func sort():
 		var c = ListOfCards.getCard(k)
 		listOfCards.append(c)
 	
-	print("Here? ", sortOrder)
 	#SORT BY: TYPE   = TYPE,  RARITY, NAME
 	#SORT BY: POWER  = POWER, RARITY, TYPE, NAME
 	#SORT BY: TOUGH  = TOUGH, RARITY, TYPE, NAME
