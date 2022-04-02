@@ -397,7 +397,6 @@ var practiceWaiting = false
 func _physics_process(delta):
 	
 	if gameOver and deadPlayers.size() > 0:
-		print(deadPlayers)
 		var out
 		if deadPlayers.size() == 1:
 			if deadPlayers[0] == players[0]:
