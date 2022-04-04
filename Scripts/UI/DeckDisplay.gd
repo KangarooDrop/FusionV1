@@ -140,7 +140,7 @@ func closeDeckDisplayHover(forceClose=false):
 
 func createHoverNode(position : Vector2, text : String):
 	var hoverInst = hoverScene.instance()
-	hoverInst.z_index = 3
+	hoverInst.z_index = 100
 	hoverInst.flipped = true
 	add_child(hoverInst)
 	hoverInst.global_position = position

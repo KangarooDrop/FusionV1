@@ -29,6 +29,7 @@ var params
 
 var cardNode
 var playerID = -1
+var ownerID = -1
 
 
 func _init(params):
@@ -215,6 +216,25 @@ func onKilledBy(slot):
 	abls.invert()
 	for abl in abls:
 		abl.onKilledBy(slot)
+
+func onOtherKilled(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onOtherKilled(slot)
+
+func onAdjustCost(card, cost) -> int:
+	var costAdjustment = 0
+	for abl in abilities.duplicate():
+		costAdjustment += abl.onAdjustCost(card, cost)
+	return costAdjustment
+
+func onCardsPlayed(slot, cards):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onCardsPlayed(slot, cards)
+	
 
 func addCreatureToBoard(card, slot = null) -> bool:
 	if slot == null:

@@ -95,6 +95,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityEvolution.gd"
 }, {
 "base": "Ability",
+"class": "AbilityFilibuster",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityFilibuster.gd"
+}, {
+"base": "Ability",
 "class": "AbilityFleshrot",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityFleshrot.gd"
@@ -205,6 +210,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityRekindle.gd"
 }, {
 "base": "Ability",
+"class": "AbilityRevive",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRevive.gd"
+}, {
+"base": "Ability",
 "class": "AbilitySacrifice",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilitySacrifice.gd"
@@ -253,6 +263,11 @@ _global_script_classes=[ {
 "class": "AbilityUpgrade",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityUpgrade.gd"
+}, {
+"base": "Ability",
+"class": "AbilityUseless",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityUseless.gd"
 }, {
 "base": "Ability",
 "class": "AbilityVenomous",
@@ -319,6 +334,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Networking/DraftLobby.gd"
 }, {
+"base": "DraftClass",
+"class": "DraftSolomon",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/DraftSolomon.gd"
+}, {
 "base": "",
 "class": "GitAPI",
 "language": "NativeScript",
@@ -382,6 +402,7 @@ _global_script_class_icons={
 "AbilityEmerge": "",
 "AbilityEssenceDrain": "",
 "AbilityEvolution": "",
+"AbilityFilibuster": "",
 "AbilityFleshrot": "",
 "AbilityFrostbite": "",
 "AbilityFrozen": "",
@@ -404,6 +425,7 @@ _global_script_class_icons={
 "AbilityRavenous": "",
 "AbilityReignite": "",
 "AbilityRekindle": "",
+"AbilityRevive": "",
 "AbilitySacrifice": "",
 "AbilityScavenge": "",
 "AbilityShieldUp": "",
@@ -414,6 +436,7 @@ _global_script_class_icons={
 "AbilityThoughtknock": "",
 "AbilityTough": "",
 "AbilityUpgrade": "",
+"AbilityUseless": "",
 "AbilityVenomous": "",
 "AbilityWillingOffering": "",
 "AbilityWisdom": "",
@@ -427,6 +450,7 @@ _global_script_class_icons={
 "Deck": "",
 "DraftClass": "",
 "DraftLobby": "",
+"DraftSolomon": "",
 "GitAPI": "",
 "HandNode": "",
 "Player": "",

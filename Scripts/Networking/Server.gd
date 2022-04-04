@@ -163,15 +163,16 @@ remote func addUser(player_id : int, username : String):
 		pass
 
 remote func removeUser(player_id : int):
+	if playerIDs.has(player_id):
+		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
+		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
+	
 	if Settings.gameMode == Settings.GAME_MODE.DRAFTING:
 		get_node("/root/Draft").playerDisconnected(player_id)
 	
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
 		get_node("/root/DraftLobby").removePlayer(player_id)
 	
-	if playerIDs.has(player_id):
-		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
-		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
 	playerIDs.erase(player_id)
 	playerNames.erase(player_id)
 	
@@ -525,6 +526,54 @@ remote func receiveSendMulliganDeck(order : Array):
 	board.players[0].hand.drawHand()
 	board.mulliganDone = true
 	board.handMoving = true
+
+####################################################################
+
+func sendSolomonCards(player_id : int, cards : Array, withFlourish = false):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendSolomonCards", cards, withFlourish)
+
+remote func receiveSendSolomonCards(cards : Array, withFlourish = false):
+	get_node("/root/Draft").setCards(cards, withFlourish)
+
+func takeSolomonStack(player_id : int, stackNum : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveTakeSolomonStack", stackNum)
+
+remote func receiveTakeSolomonStack(stackNum):
+	get_node("/root/Draft").takeSolomonStack(stackNum)
+
+func doneSplitting(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveDoneSplitting")
+
+remote func receiveDoneSplitting():
+	get_node("/root/Draft").opponentDoneSplitting()
+
+func solomonSlotClicked(player_id : int, cardDisplayInt : int, cardIndex : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSolomonSlotClicked", cardDisplayInt, cardIndex)
+
+remote func receiveSolomonSlotClicked(cardDisplayInt : int, cardIndex : int):
+	get_node("/root/Draft").opponentSlotClicked(cardDisplayInt, cardIndex)
+
+func solomonStart(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSolomonStart")
+		
+remote func receiveSolomonStart():
+	get_node("/root/Draft").genNewBooster()
+
+func solomonSetState(player_id : int, state : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSolomonSetState", state)
+		
+remote func receiveSolomonSetState(state : int):
+	get_node("/root/Draft").setOpponentState(state)
+
+func startSolomonBuilding(player_id):
+	rpc_id(player_id, "receivedStartBuilding")
+	receivedStartBuilding()
 
 ####################################################################
 

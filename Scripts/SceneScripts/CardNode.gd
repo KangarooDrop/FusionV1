@@ -208,11 +208,14 @@ func fight(slot, damageSelf = true):
 		
 		if slot.cardNode.card.toughness <= 0:
 			slot.cardNode.card.onKilledBy(self.slot)
+			for c in NodeLoc.getBoard().getAllCards():
+				c.onOtherKilled(slot)
 			card.onKill(slot)
 		if card.toughness <= 0:
 			card.onKilledBy(slot.cardNode.card)
 			slot.cardNode.card.onKill(self.slot)
-	
+			for c in NodeLoc.getBoard().getAllCards():
+				c.onOtherKilled(self.slot)
 	else:
 		for p in NodeLoc.getBoard().players:
 			if p.UUID == slot.playerID:

@@ -180,7 +180,6 @@ position = Vector2( -120, 75 )
 z_index = 99
 
 [node name="SettingsPage" parent="SettingsHolder" instance=ExtResource( 5 )]
-visible = false
 margin_left = 297.0
 margin_top = 172.0
 margin_right = 727.0

@@ -39,6 +39,9 @@ margin_right = 76.0
 margin_bottom = 84.0
 custom_fonts/font = ExtResource( 3 )
 text = "Quit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SettingsButton" type="Button" parent="."]
 margin_left = 64.0

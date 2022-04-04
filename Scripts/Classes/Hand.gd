@@ -154,6 +154,7 @@ func discardIndex(index : int):
 
 func addCardToHand(data : Array):
 	if data[0] != null:
+		data[0].ownerID = player.UUID
 		if Settings.playAnimations:
 			drawQueue.append(data)
 		else:

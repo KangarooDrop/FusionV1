@@ -15,7 +15,6 @@ func onHoverExit(slot):
 	card.toughness -= buffs * count
 	card.maxToughness -= buffs * count
 	buffs = 0
-	print("exit")
 
 func onEnter(slot):
 	.onEnter(slot)

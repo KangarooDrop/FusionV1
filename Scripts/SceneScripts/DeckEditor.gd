@@ -575,6 +575,8 @@ func deckModified():
 	hasSaved = false
 	
 func setCurrentPage(newPage : int):
+	if pages.size() == 0:
+		return
 	newPage = max(min(newPage, pages.size() - 1), 0)
 	
 	if slotViewing != null and currentPage != newPage:

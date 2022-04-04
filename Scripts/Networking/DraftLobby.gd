@@ -17,6 +17,7 @@ static func getDraftTypes():
 	return \
 		[["Winston", "res://Scenes/DraftWinston.tscn", "DraftTypeOptions/WinstonOptions"], 
 		["Booster", "res://Scenes/DraftBooster.tscn", "DraftTypeOptions/BoosterOptions"],
+		["Solomon", "res://Scenes/DraftSolomon.tscn", "DraftTypeOptions/SolomonOptions"],
 #		["Test", "res://Scenes/main.tscn"]
 	]
 
@@ -26,8 +27,12 @@ func _ready():
 		$DraftTypeButton.add_item(s[0] + " Draft")
 	
 	$IPSet/HBoxContainer/LineEdit.text = str(Server.ip)
+	
 	$DraftTypeOptions/BoosterOptions/LineEdit.text = "3"
 	$DraftTypeOptions/BoosterOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/BoosterOptions/LineEdit.text)
+	
+	$DraftTypeOptions/SolomonOptions/LineEdit.text = "3"
+	$DraftTypeOptions/SolomonOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/SolomonOptions/LineEdit.text)
 	
 	startingUsername = Server.username
 
@@ -46,10 +51,10 @@ func hostButtonPressed():
 	
 	$DraftTypeOptions.visible = true
 	$DraftTypeButton.disabled = false
-	$DraftTypeOptions/WinstonOptions/Label.visible = true
-	$DraftTypeOptions/BoosterOptions/Label.visible = true
 	$DraftTypeOptions/BoosterOptions/Label2.visible = true
 	$DraftTypeOptions/BoosterOptions/LineEdit.visible = true
+	$DraftTypeOptions/SolomonOptions/Label2.visible = true
+	$DraftTypeOptions/SolomonOptions/LineEdit.visible = true
 	$DraftTypeButton.select(0)
 	draftTypeSelected(0)
 	
@@ -82,10 +87,10 @@ func ipJoinButtonPressed():
 	$DraftTypeButton.visible = true
 	$DraftTypeOptions.visible = true
 	$DraftTypeButton.disabled = true
-	$DraftTypeOptions/WinstonOptions/Label.visible = false
-	$DraftTypeOptions/BoosterOptions/Label.visible = false
 	$DraftTypeOptions/BoosterOptions/Label2.visible = false
 	$DraftTypeOptions/BoosterOptions/LineEdit.visible = false
+	$DraftTypeOptions/SolomonOptions/Label2.visible = false
+	$DraftTypeOptions/SolomonOptions/LineEdit.visible = false
 
 ###############################################
 
@@ -158,9 +163,16 @@ func setPlayerLabel():
 ###############################################
 
 func startDraftButtonPressed():
+	if $DraftTypeButton.selected == 2 and ids.size() != 2:
+		var pop = popupUI.instance()
+		pop.init("Solomon Draft", "There must be exactly 2 players to have a Solomon Draft", [["Close", pop, "close", []]])
+		$PopupCenter.add_child(pop)
+		return
 	var params = {}
 	if $DraftTypeButton.selected == 1:
 		params["num_boosters"] = $DraftTypeOptions/BoosterOptions/LineEdit.get_value()
+	elif $DraftTypeButton.selected == 2:
+		params["num_boosters"] = $DraftTypeOptions/SolomonOptions/LineEdit.get_value()
 	Server.startDraft($DraftTypeButton.get_selected_id(), params)
 
 func howToPlayWinstonPressed():

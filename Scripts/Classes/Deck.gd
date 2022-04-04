@@ -15,6 +15,7 @@ func setCards(cards : Array, playerID : int, setDeckSize : bool = false):
 	self.cards = cards
 	for c in cards:
 		c.playerID = playerID
+		c.ownerID = playerID
 	if setDeckSize:
 		deckSize = cards.size()
 
@@ -32,7 +33,7 @@ func mill(playerID):
 	if Settings.playAnimations:
 		NodeLoc.getBoard().millQueue.append(playerID)
 	else:
-		pop()
+		NodeLoc.getBoard().addCardToGrave(playerID, pop())
 
 func draw(count : int) -> Array:
 	var c : Array

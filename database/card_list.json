@@ -633,13 +633,13 @@
   },
   "52": {
     "name": "Ghastly Presence",
-    "tex": "res://Art/portraits/card_WIP.png",
-    "power": 2,
+    "tex": "res://Art/portraits/card_GHASTLY_PRESENCE.png",
+    "power": 0,
     "toughness": 2,
     "creature_type": [
       1
     ],
-    "tier": -1,
+    "tier": 1,
     "abilities": [
       "AbilityPossession"
     ],
@@ -815,7 +815,7 @@
   },
   "65": {
     "name": "Dreadnought Raven",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_RAVEN.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [
@@ -842,8 +842,8 @@
     "rarity": "COMMON"
   },
   "67": {
-    "name": "Cultmaester",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Supplicant",
+    "tex": "res://Art/portraits/card_SUPPLICANT.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -910,5 +910,34 @@
       "AbilityUpgrade 1"
     ],
     "rarity": "LEGENDARY"
+  },
+  "72": {
+    "name": "Nihileth",
+    "tex": "res://Art/portraits/card_NIHILETH.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityFilibuster"
+    ],
+    "rarity": "COMMON"
+  },
+  "73": {
+    "name": "Bottled Faerie",
+    "tex": "res://Art/portraits/card_BOTTLED_FAERIE.png",
+    "power": 0,
+    "toughness": 1,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityUseless",
+      "AbilityRevive"
+    ],
+    "rarity": "COMMON"
   }
 }

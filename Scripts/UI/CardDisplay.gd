@@ -114,12 +114,14 @@ func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
 		cardSlot.global_position = lastPos
 
 func clear():
-	while slots.size() > 0:
-		slots[0].queue_free()
-		slots.remove(0)
-	while nodes.size() > 0:
-		nodes[0].queue_free()
-		nodes.remove(0)
+	for s in slots.duplicate():
+		remove_child(s)
+		s.queue_free()
+	for n in nodes.duplicate():
+		remove_child(n)
+		n.queue_free()
+	slots.clear()
+	nodes.clear()
 	movingCards.clear()
 
 func _physics_process(delta):
@@ -198,7 +200,7 @@ func _physics_process(delta):
 			var dRatio = dist / totalWidth
 			var maxValScaled = Settings.cardSlotScale * 1.5
 			var minValScaled = Settings.cardSlotScale
-			var val = lerp(minValScaled, maxValScaled, pow(1 - dRatio, 5))
+			var val = lerp(minValScaled, maxValScaled, max(0, min(1, pow(1 - dRatio, 5))))
 			#val = stepify(val, 0.05)
 			
 			slots[i].scale = Vector2(val, val)
@@ -249,3 +251,9 @@ func onMouseUp(slot : CardSlot, button_index : int):
 			cardHolding.global_position.y = oldY[0]
 			cardHolding.cardNode.global_position.y = oldY[1]
 			cardHolding = null
+
+func setCards(cards : Array):
+	clear()
+	
+	for c in cards:
+		addCard(c)

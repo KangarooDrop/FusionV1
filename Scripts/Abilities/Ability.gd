@@ -86,6 +86,15 @@ func onKill(slot):
 func onKilledBy(slot):
 	pass
 
+func onOtherKilled(slot):
+	pass
+
+func onAdjustCost(card, cost) -> int:
+	return 0
+
+func onCardsPlayed(slot, cards):
+	pass
+
 func checkWaiting() -> bool:
 	return true
 

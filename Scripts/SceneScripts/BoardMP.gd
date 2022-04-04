@@ -51,7 +51,7 @@ var millWaitTimer = 0
 var millWaitMaxTime = 0.5
 
 var isEntering = false
-var fuseQueue : Array
+var cardNodesFusing : Array
 var fusing = false
 var fuseEndSlot = null
 var fuseEndPos = null
@@ -386,7 +386,7 @@ func setTurnText():
 		$EndTurnButton.visible = false
 
 func getCanFight() -> bool:
-	return (abilityStack.size() == 0 or abilityStack.getFront()["canAttack"]) and fuseQueue.size() == 0 and millQueue.size() == 0 and not isDrawing()
+	return (abilityStack.size() == 0 or abilityStack.getFront()["canAttack"]) and cardNodesFusing.size() == 0 and millQueue.size() == 0 and not isDrawing()
 
 var rotTimer = 0
 var rotAngle = PI / 2
@@ -462,45 +462,45 @@ func _physics_process(delta):
 		selectRotTimer += delta
 		selectedCard.cardNode.rotation = sin(selectRotTimer * 1.5) * PI / 32
 	
-	if fuseQueue.size() > 0:
+	if cardNodesFusing.size() > 0:
 		if fuseWaiting:
 			fuseWaitTimer += delta
 			if fuseWaitTimer >= fuseWaitMaxTime:
 				fuseWaiting = false
 		else:
-			if fuseQueue.size() > 1:
+			if cardNodesFusing.size() > 1:
 				if not fusing:
 					fusing = true
-					fuseStartPos = fuseQueue[1].position
-					fuseEndPos = fuseQueue[0].position
+					fuseStartPos = cardNodesFusing[1].position
+					fuseEndPos = cardNodesFusing[0].position
 				if fusing:
 					fuseTimer += delta
 					if fuseTimer >= fuseMaxTime:
 						fuseTimer = 0
 						fusing = false
-						fuseQueue[0].slot = fuseEndSlot
-						fuseQueue[0].card = ListOfCards.fusePair(fuseQueue[0].card, fuseQueue[1].card, fuseQueue[0])
-						fuseQueue[0].setCardVisible(true)
-						fuseQueue[1].queue_free()
-						fuseQueue.remove(1)
+						cardNodesFusing[0].slot = fuseEndSlot
+						cardNodesFusing[0].card = ListOfCards.fusePair(cardNodesFusing[0].card, cardNodesFusing[1].card, cardNodesFusing[0])
+						cardNodesFusing[0].setCardVisible(true)
+						cardNodesFusing[1].queue_free()
+						cardNodesFusing.remove(1)
 						fuseWaiting = true
 						fuseWaitTimer = 0
-						if fuseQueue.size() == 1:
-							fuseStartPos = fuseQueue[0].global_position
+						if cardNodesFusing.size() == 1:
+							fuseStartPos = cardNodesFusing[0].global_position
 							fuseReturnTimer = 0
 					else:
-						fuseQueue[1].position = lerp(fuseStartPos, fuseEndPos, fuseTimer / fuseMaxTime)
-			elif fuseQueue.size() == 1:
+						cardNodesFusing[1].position = lerp(fuseStartPos, fuseEndPos, fuseTimer / fuseMaxTime)
+			elif cardNodesFusing.size() == 1:
 				fuseReturnTimer += delta
-				fuseQueue[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
+				cardNodesFusing[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
 				if fuseReturnTimer >= fuseReturnMaxTime:
-					var cardNode = fuseQueue[0]
-					fuseEndSlot.cardNode = fuseQueue[0]
+					var cardNode = cardNodesFusing[0]
+					fuseEndSlot.cardNode = cardNodesFusing[0]
 					cardNode.get_parent().remove_child(cardNode)
 					cardNode.slot = fuseEndSlot
 					creatures_A_Holder.add_child(cardNode)
 					cardNode.global_position = fuseEndSlot.global_position
-					fuseQueue = []
+					cardNodesFusing = []
 					cardNode.card.playerID = fuseEndSlot.playerID
 					cardNode.card.cardNode = cardNode
 					
@@ -596,7 +596,7 @@ func _physics_process(delta):
 		if selectingSlot and selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 			selectingSource.slotClicked(null)
 		
-		if not selectingSlot and fuseQueue.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
+		if not selectingSlot and cardNodesFusing.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
 				currentAbility = abilityStack.getFront()
 				
@@ -1009,7 +1009,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 								onSlotExit(slot)
 							slot.cardNode.position.y = slot.position.y
 						else:
-							if cardsPerTurn - cardsPlayed - cardsHolding.size() > 0:
+							if cardsPerTurn - cardsPlayed - cardsHolding.size() > getCardCost(slot.cardNode.card) - 1:
 								if slot.cardNode.card.canBePlayed:
 									cardsHolding.append(slot)
 									slot.position.y -= cardDists
@@ -1024,17 +1024,20 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 									MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 								cardsShaking[slot] = shakeMaxTime
 								return false
+						var cost = 0
+						for s in cardsHolding:
+							cost += getCardCost(s.cardNode.card)
 						if activePlayer == 0:
-							$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+							$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
 						else:
-							$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+							$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
 					else:
 						if cardsShaking.has(slot):
 							MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 						cardsShaking[slot] = shakeMaxTime
 						return false
 			elif slot.currentZone == CardSlot.ZONES.CREATURE:
-				if cardsHolding.size() > 0 and fuseQueue.size() == 0:
+				if cardsHolding.size() > 0 and cardNodesFusing.size() == 0:
 					#PUTTING A CREATURE ONTO THE FIELD
 					
 					if not isMyTurn() and not fromServer:
@@ -1083,8 +1086,13 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					for c in cardsHolding:
 						cardList.append(c.cardNode.card)
 						
-					cardsPlayed += cardsHolding.size()
+					var cost = 0
+					for s in cardsHolding:
+						cost += getCardCost(s.cardNode.card)
+					cardsPlayed += cost
 					
+					for c in getAllCards():
+						c.onCardsPlayed(slot, cardList)
 					
 					while cardsHolding.size() > 0:
 						var c = cardsHolding[0]
@@ -1168,7 +1176,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	return true
 
 func fuseToSlot(slot : CardSlot, cards : Array):
-	
 	isEntering = not is_instance_valid(slot.cardNode)
 	
 	if not isEntering:
@@ -1195,7 +1202,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			card.cardNode = cn
 			card.playerID = slot.playerID
 			
-			fuseQueue.append(cn)
+			cardNodesFusing.append(cn)
 			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			cn.z_index = 1
 			$Fusion_Holder.add_child(cn)
@@ -1203,10 +1210,10 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			card_A_Holder.nodes.erase(cn)
 			card_B_Holder.nodes.erase(cn)
 		
-		for i in range(0 if isEntering else 1, fuseQueue.size()):
-			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(fuseQueue[i].card.UUID))
+		for i in range(0 if isEntering else 1, cardNodesFusing.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
 		
-		fuseStartPos = fuseQueue[0].global_position
+		fuseStartPos = cardNodesFusing[0].global_position
 		fuseEndSlot = slot
 		fuseTimer = 0
 		fuseReturnTimer = 0
@@ -1285,7 +1292,7 @@ func getWaiting() -> bool:
 		if p.hand.drawQueue.size() > 0:
 			waiting = true
 	
-	if fuseQueue.size() > 0:
+	if cardNodesFusing.size() > 0:
 		waiting = true
 				
 	if millQueue.size() > 0:
@@ -1320,6 +1327,18 @@ func isOnBoard(card : Card):
 				return true
 	return false
 
+func getCardCost(card) -> int:
+	var cost = 1
+	
+	cost += card.onAdjustCost(card, cost)
+	
+	var crs = getAllCreatures()
+	crs.invert()
+	for c in crs:
+		cost += c.onAdjustCost(card, cost)
+	
+	return cost
+
 func getAllCards() -> Array:
 	var cards := []
 	for i in range(players.size()):
@@ -1331,7 +1350,7 @@ func getAllCards() -> Array:
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
 				cards.append(s.cardNode.card)
-		for cn in fuseQueue:
+		for cn in cardNodesFusing:
 			cards.append(cn.card)
 	
 	cards.invert()
@@ -1383,9 +1402,9 @@ func nextTurn():
 	cardsPerTurn = cardsPerTurnMax
 		
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cardsHolding.size(), cardsHolding.size(), cardsPlayed)
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 		
 	######################	ON START OF TURN EFFECTS
 	for c in getAllCards():
@@ -1422,8 +1441,9 @@ func checkState():
 			if c != cardNode.card:
 				c.onOtherLeave(cardNode.slot)
 				c.onOtherDeath(cardNode.slot)
-		cardNode.slot.cardNode = null
-		cardNode.queue_free()
+		if cardNode.card.toughness <= 0:
+			cardNode.slot.cardNode = null
+			cardNode.queue_free()
 
 	var boardStateNew = []
 	for p in getAllPlayers():
