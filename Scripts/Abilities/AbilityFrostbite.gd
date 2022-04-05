@@ -5,13 +5,9 @@ class_name AbilityFrostbite
 func _init(card : Card).("Frostbite", card, Color.blue, false, Vector2(0, 32)):
 	pass
 	
-func onAttack(blocker):
-	if is_instance_valid(blocker.cardNode):
-		addToStack("onEffect", [blocker])
-	
-func onBeingAttacked(attacker):
-	if is_instance_valid(attacker.cardNode):
-		addToStack("onEffect", [attacker])
+func onDealDamage(slot):
+	if is_instance_valid(slot.cardNode):
+		addToStack("onEffect", [slot])
 
 static func onEffect(params):
 	if is_instance_valid(params[0].cardNode):

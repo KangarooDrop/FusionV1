@@ -162,30 +162,6 @@ func onOtherEnterFromFusion(slot):
 	abls.invert()
 	for abl in abls:
 		abl.onOtherEnterFromFusion(slot)
-	
-func onAttack(blocker):
-	var abls = abilities.duplicate()
-	abls.invert()
-	for abl in abls:
-		abl.onAttack(blocker)
-	
-func onBeingAttacked(attacker):
-	var abls = abilities.duplicate()
-	abls.invert()
-	for abl in abls:
-		abl.onBeingAttacked(attacker)
-
-func onOtherAttack(attacker, blocker):
-	var abls = abilities.duplicate()
-	abls.invert()
-	for abl in abls:
-		abl.onOtherAttack(attacker, blocker)
-
-func onOtherBeingAttacked(attacker, blocker):
-	var abls = abilities.duplicate()
-	abls.invert()
-	for abl in abls:
-		abl.onOtherBeingAttacked(attacker, blocker)
 
 func onDraw(card):
 	var abls = abilities.duplicate()
@@ -222,6 +198,56 @@ func onOtherKilled(slot):
 	abls.invert()
 	for abl in abls:
 		abl.onOtherKilled(slot)
+
+func onBeforeDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onBeforeDamage(attacker, blocker)
+
+func onAfterDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onAfterDamage(attacker, blocker)
+
+func onOtherBeforeDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onOtherBeforeDamage(attacker, blocker)
+
+func onOtherAfterDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onOtherAfterDamage(attacker, blocker)
+
+func onTakeDamage(card):
+	toughness -= max(card.power, 0)
+	
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onTakeDamage(card)
+
+func onDealDamage(slot):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onDealDamage(slot)
+
+func onOtherTakeDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onOtherTakeDamage(attacker, blocker)
+
+func onOtherDealDamage(attacker, blocker):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onOtherDealDamage(attacker, blocker)
 
 func onAdjustCost(card, cost) -> int:
 	var costAdjustment = 0

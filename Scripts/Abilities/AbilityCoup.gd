@@ -7,8 +7,8 @@ var frozenThisTurn = false
 func _init(card : Card).("Coup", card, Color.lightgray, false, Vector2(16, 0)):
 	pass
 
-func onOtherAttack(attacker, blocker):
-	.onOtherAttack(attacker, blocker)
+func onOtherBeforeDamage(attacker, blocker):
+	.onOtherBeforeDamage(attacker, blocker)
 	if NodeLoc.getBoard().isOnBoard(card) and attacker.playerID == card.playerID:
 		card.cantAttackSources.erase(self)
 

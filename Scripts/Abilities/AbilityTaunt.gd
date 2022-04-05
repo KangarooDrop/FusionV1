@@ -11,7 +11,7 @@ func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card):
 		active = true
 
-func onBeingAttacked(attacker):
+func onAfterDamage(attacker, blocker):
 	active = false
 
 func genDescription() -> String:

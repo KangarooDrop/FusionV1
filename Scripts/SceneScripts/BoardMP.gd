@@ -515,6 +515,7 @@ func _physics_process(delta):
 							if c != cardNode.card:
 								c.onOtherEnterFromFusion(fuseEndSlot)
 						cardNode.card.onEnterFromFusion(fuseEndSlot)
+					
 					checkState()
 					
 	if millQueue.size() > 0:

@@ -46,18 +46,6 @@ func onStartOfTurn():
 
 func onEndOfTurn():
 	pass
-	
-func onAttack(blocker):
-	pass
-	
-func onBeingAttacked(attacker):
-	pass
-
-func onOtherAttack(attacker, blocker):
-	pass
-
-func onOtherBeingAttacked(attacker, blocker):
-	pass
 
 func onFusion(card):
 	pass
@@ -87,6 +75,30 @@ func onKilledBy(slot):
 	pass
 
 func onOtherKilled(slot):
+	pass
+
+func onBeforeDamage(attacker, blocker):
+	pass
+
+func onAfterDamage(attacker, blocker):
+	pass
+
+func onOtherBeforeDamage(attacker, blocker):
+	pass
+
+func onOtherAfterDamage(attacker, blocker):
+	pass
+
+func onTakeDamage(card):
+	pass
+
+func onDealDamage(slot):
+	pass
+
+func onOtherTakeDamage(attacker, blocker):
+	pass
+
+func onOtherDealDamage(attacker, blocker):
 	pass
 
 func onAdjustCost(card, cost) -> int:

@@ -5,8 +5,8 @@ class_name AbilityPossession
 func _init(card : Card).("Possession", card, Color.gray, false, Vector2(0, 0)):
 	pass
 
-func onOtherBeingAttacked(attacker, blocker):
-	if blocker.playerID == card.playerID and not NodeLoc.getBoard().isOnBoard(card):
+func onOtherBeforeDamage(attacker, blocker):
+	if is_instance_valid(blocker.cardNode) and blocker.playerID == card.playerID and not NodeLoc.getBoard().isOnBoard(card):
 		addToStack("onEffect", [blocker, card])
 		card.removeAbility(self)
 

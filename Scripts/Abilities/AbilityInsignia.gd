@@ -21,4 +21,4 @@ static func onEffect(params):
 			c.addAbility(AbilitySoulblaze.new(c))
 
 func genDescription() -> String:
-	return .genDescription() + "When this creature is played, inflict " + str(AbilitySoulblaze.new(null)) + " on all creatures. Removes this ability"
+	return .genDescription() + "When this creature is played, inflict " + str(AbilitySoulblaze.new(null)) + " on all opposing creatures. Removes this ability"

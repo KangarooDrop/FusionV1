@@ -5,8 +5,9 @@ class_name AbilityTough
 func _init(card : Card).("Tough", card, Color.darkgray, true, Vector2(0, 48)):
 	pass
 
-func onBeingAttacked(attacker):
-	addToStack("onEffect", [card, count])
+func onBeforeDamage(attacker, blocker):
+	if blocker == card.cardNode.slot:
+		addToStack("onEffect", [card, count])
 
 static func onEffect(params):
 	params[0].power += params[1]

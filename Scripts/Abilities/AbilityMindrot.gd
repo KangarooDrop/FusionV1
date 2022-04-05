@@ -5,9 +5,10 @@ class_name AbilityMindrot
 func _init(card : Card).("Mindrot", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
-func onAttack(blocker):
-	.onAttack(blocker)
-	addToStack("onEffect", [card.playerID, count])
+func onBeforeDamage(attacker, blocker):
+	.onBeforeDamage(attacker, blocker)
+	if attacker == card.cardNode.slot:
+		addToStack("onEffect", [card.playerID, count])
 
 static func onEffect(params):
 	for p in NodeLoc.getBoard().players:
