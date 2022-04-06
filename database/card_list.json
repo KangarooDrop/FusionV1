@@ -1009,5 +1009,19 @@
       "AbilityRebound"
     ],
     "rarity": "COMMON"
+  },
+  "79": {
+    "name": "Spectre",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 3,
+    "toughness": 0,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      
+    ],
+    "rarity": "COMMON"
   }
 }

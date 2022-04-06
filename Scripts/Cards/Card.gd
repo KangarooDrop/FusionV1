@@ -4,7 +4,7 @@ class_name Card
 var cardNodeScene = load("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
-enum RARITY {NONE, COMMON, LEGENDARY}
+enum RARITY {NONE, COMMON, LEGENDARY, VANGUARD}
 
 var UUID = -1
 
@@ -31,7 +31,6 @@ var params
 var cardNode
 var playerID = -1
 var ownerID = -1
-
 
 func _init(params):
 	self.params = params

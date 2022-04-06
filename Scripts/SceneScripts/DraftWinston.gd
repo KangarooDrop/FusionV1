@@ -230,16 +230,6 @@ func onTakeButtonPressed():
 		addCardToStack(currentIndex)
 		checkEnded()
 
-func showHideButtonPressed():
-	if $CardDisplay.slots.has(hoveringSlot):
-		closeHoverWindow(true)
-	
-	$CardDisplay.visible = !$CardDisplay.visible
-	if $ShowHideButton.text == "Show Cards":
-		$ShowHideButton.text = "Hide Cards"
-	else:
-		$ShowHideButton.text = "Show Cards"
-
 func clearStack(index : int, fromServer = false):
 	
 	if not activePlayer:

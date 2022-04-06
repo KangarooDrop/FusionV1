@@ -5,6 +5,8 @@ var cards : Array
 
 var deckSize : int = -1
 
+var vanguard : Card
+
 static func MIN_DECK_SIZE() -> int:
 	return 20 
 
@@ -18,6 +20,9 @@ func setCards(cards : Array, playerID : int, setDeckSize : bool = false):
 		c.ownerID = playerID
 	if setDeckSize:
 		deckSize = cards.size()
+
+func setVanguard(card : Card):
+	self.vanguard = card
 
 func shuffle():
 	cards.shuffle()
@@ -61,23 +66,29 @@ func _to_string() -> String:
 #DECK DATA IS NOT VERIFIED BY THIS FUNCTION, MUST BE PERFORMED BEFORE
 func readJSONData(deckData : Dictionary):
 	cards.clear()
-	for k in deckData.keys():
+	vanguard = null
+	for k in deckData["vanguard"].keys():
+		vanguard = ListOfCards.getCard(int(deckData["vanguard"][k]))
+	
+	for k in deckData["card"].keys():
 		var id = int(k)
-		for i in range(int(deckData[k])):
+		for i in range(int(deckData["cards"][k])):
 			cards.append(ListOfCards.getCard(id))
 	
 func getJSONData() -> Dictionary:
-	var rtn = {}
+	var rtn = {"vanguard":{}, "cards":{}}
+	if vanguard != null:
+		rtn["vanguard"][str(vanguard.UUID)] = 1.0
 	for c in cards:
-		if not rtn.has(str(c.UUID)):
-			rtn[str(c.UUID)] = 0
-		rtn[str(c.UUID)] += 1
-	for k in rtn.keys():
-		rtn[k] = float(rtn[k])
+		if not rtn["cards"].has(str(c.UUID)):
+			rtn["cards"][str(c.UUID)] = 0
+		rtn["cards"][str(c.UUID)] += 1
+	for k in rtn["cards"].keys():
+		rtn["cards"][k] = float(rtn["cards"][k])
 	return rtn
 	
 	
-enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE, TOO_MANY_LEGENDS}
+enum DECK_VALIDITY_TYPE {VALID, WRONG_TYPE, BAD_KEYS, BAD_KEY_INDEX, UNKNOWN_INDEX, BAD_COUNT, HIGHER_TIERS, WRONG_SIZE, TOO_MANY_LEGENDS, TOO_MANY_VANGUARDS, BAD_CARDS}
 #deckData [%id%] : %count%
 static func verifyDeck(deckData) -> int:
 	#var numSameCards = 4
@@ -90,33 +101,18 @@ static func verifyDeck(deckData) -> int:
 	if typeof(deckData) != TYPE_DICTIONARY:
 		return DECK_VALIDITY_TYPE.WRONG_TYPE
 	
-	for k in deckData.keys():
-		#CHECK IF THE ID AND COUNT ARE INTEGERS
-		if typeof(k) != TYPE_STRING or typeof(deckData[k]) != TYPE_REAL:
-			return DECK_VALIDITY_TYPE.BAD_KEYS
+	if deckData.keys() != ["vanguard", "cards"]:
+		return DECK_VALIDITY_TYPE.BAD_KEYS
+	
+	for dat in deckData.keys():
+		for k in deckData[dat].keys():
+			var error = verifyCardData(k, deckData[dat][k], dat)
+			if error != DECK_VALIDITY_TYPE.VALID:
+				return error
 			
-		if not k.is_valid_integer():
-			return DECK_VALIDITY_TYPE.BAD_KEY_INDEX 
-			
-		var key = int(k)
-		var count = int(deckData[k])
-			
-		#CHECK IF INDEX IS WITHIN BOUNDS OF CARD LIST
-		if key < 0 or key >= maxID:
-			return DECK_VALIDITY_TYPE.UNKNOWN_INDEX
-			
-		#CHECKS IF THERE ARE TOO MANY OF SAME CARD or LESS THAN ONE CARD
-		if count < 1:# or count > numSameCards:
-			return DECK_VALIDITY_TYPE.BAD_COUNT
-			
-		#CHECKS IF THE DECK ONLY USES TIER 1 CARDS
-		if ListOfCards.getCard(key).tier != 1:
-			return DECK_VALIDITY_TYPE.HIGHER_TIERS
-		
-		if ListOfCards.getCard(key).rarity == Card.RARITY.LEGENDARY and count != 1:
-			return DECK_VALIDITY_TYPE.TOO_MANY_LEGENDS
-			
-		total += count
+			total += int(deckData[dat][k])
+		if dat == "vanguard" and total > 1:
+			return DECK_VALIDITY_TYPE.TOO_MANY_VANGUARDS
 		
 	#CHECKS IF THERE ARE THE RIGHT NUMBER OF TOTAL CARDS
 	if total < MIN_DECK_SIZE():
@@ -124,3 +120,45 @@ static func verifyDeck(deckData) -> int:
 		
 	return DECK_VALIDITY_TYPE.VALID
 
+static func verifyCardData(cardID, cardCount, cardType) -> int:
+	
+	var maxID = ListOfCards.cardList.size()
+	
+	#CHECK IF THE ID AND COUNT ARE INTEGERS
+	if typeof(cardID) != TYPE_STRING or typeof(cardCount) != TYPE_REAL:
+		return DECK_VALIDITY_TYPE.BAD_KEYS
+		
+	if not cardID.is_valid_integer():
+		return DECK_VALIDITY_TYPE.BAD_KEY_INDEX 
+		
+	var key = int(cardID)
+	var count = int(cardCount)
+		
+	#CHECK IF INDEX IS WITHIN BOUNDS OF CARD LIST
+	if key < 0 or key >= maxID:
+		return DECK_VALIDITY_TYPE.UNKNOWN_INDEX
+		
+	#CHECKS IF THERE ARE TOO MANY OF SAME CARD or LESS THAN ONE CARD
+	if count < 1:# or count > numSameCards:
+		return DECK_VALIDITY_TYPE.BAD_COUNT
+	
+	var card = ListOfCards.getCard(key)
+	
+	#CHECKS IF THE DECK ONLY USES TIER 1 CARDS
+	if card.tier != 1:
+		return DECK_VALIDITY_TYPE.HIGHER_TIERS
+	
+	if card.rarity == Card.RARITY.LEGENDARY and count != 1:
+		return DECK_VALIDITY_TYPE.TOO_MANY_LEGENDS
+	
+	if card.rarity == Card.RARITY.VANGUARD and count != 1:
+		return DECK_VALIDITY_TYPE.TOO_MANY_VANGUARDS
+	
+	if cardType == "vanguard":
+		if card.rarity != Card.RARITY.VANGUARD:
+			return DECK_VALIDITY_TYPE.BAD_CARDS
+	elif cardType == "cards":
+		if card.rarity == Card.RARITY.VANGUARD:
+			return DECK_VALIDITY_TYPE.BAD_CARDS
+	
+	return DECK_VALIDITY_TYPE.VALID

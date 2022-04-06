@@ -31,7 +31,7 @@ var loadedDeckName = ""
 var popups := []
 
 func _ready():
-	$CenterControl/DeckDisplay.parent = self 
+	$CenterControl/DeckDisplay.parent = self
 	setCards()
 	
 	for k in SORT_ORDER.keys():
@@ -50,6 +50,8 @@ func setCards():
 				if ListOfCards.cardList[i].rarity == Card.RARITY.COMMON:
 					availableCardCount[i] = 4
 				elif ListOfCards.cardList[i].rarity == Card.RARITY.LEGENDARY:
+					availableCardCount[i] = 1
+				elif ListOfCards.cardList[i].rarity == Card.RARITY.VANGUARD:
 					availableCardCount[i] = 1
 					
 	else:
@@ -440,15 +442,16 @@ func onFileLoadButtonPressed(fileName : String):
 	print("Deck validity: " + str(error))
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
 		$CenterControl/DeckDisplay.clearData()
-		for k in dataRead.keys():
-			var id = int(k)
-			for i in range(int(dataRead[k])):
-				$CenterControl/DeckDisplay.addCard(id)
-				
-				for p in pages:
-					for c in p.get_children():
-						if c is CardSlot and is_instance_valid(c.cardNode):
-							updateSlotCount(c)
+		for dat in dataRead.keys():
+			for k in dataRead[dat].keys():
+				var id = int(k)
+				for i in range(int(dataRead[dat][k])):
+					$CenterControl/DeckDisplay.addCard(id)
+					
+					for p in pages:
+						for c in p.get_children():
+							if c is CardSlot and is_instance_valid(c.cardNode):
+								updateSlotCount(c)
 		hasSaved = true
 		
 		loadedDeckName = fileName

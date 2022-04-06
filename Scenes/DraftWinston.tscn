@@ -3,7 +3,7 @@
 [ext_resource path="res://Scripts/SceneScripts/DraftWinston.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/UI/DeckDisplayX.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=5]
 
 [node name="Draft" type="Control"]
@@ -102,24 +102,7 @@ grow_vertical = 2
 custom_fonts/font = ExtResource( 2 )
 text = "Leave Cards"
 
-[node name="ShowHideButton" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -212.0
-margin_right = -76.0
-margin_bottom = -192.0
-grow_horizontal = 2
-custom_fonts/font = ExtResource( 2 )
-text = "Show Cards"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CardDisplay" parent="." instance=ExtResource( 3 )]
-visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -104.0
@@ -174,7 +157,7 @@ __meta__ = {
 }
 
 [node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 4 )]
-position = Vector2( -120, 75 )
+position = Vector2( -210, 20 )
 
 [node name="SettingsHolder" type="Node2D" parent="."]
 z_index = 99
@@ -189,4 +172,3 @@ margin_bottom = 428.0
 [connection signal="pressed" from="SettingsButton" to="." method="settingsButtonPressed"]
 [connection signal="pressed" from="TakeLeaveCenter/ButtonZ/TakeButton" to="." method="onTakeButtonPressed"]
 [connection signal="pressed" from="TakeLeaveCenter/ButtonZ/LeaveButton" to="." method="onLeaveButtonPressed"]
-[connection signal="pressed" from="ShowHideButton" to="." method="showHideButtonPressed"]

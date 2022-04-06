@@ -3,8 +3,8 @@
 [ext_resource path="res://Scripts/SceneScripts/DraftSolomon.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/UI/CardDisplay.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/UI/DeckDisplayX.tscn" type="PackedScene" id=6]
 
 [node name="Draft" type="Control"]
 anchor_right = 1.0
@@ -63,7 +63,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 4 )]
+[node name="DeckDisplay" parent="DeckDisplayControl" instance=ExtResource( 6 )]
 position = Vector2( -120, 123 )
 
 [node name="BoosterDisplay" parent="." instance=ExtResource( 5 )]

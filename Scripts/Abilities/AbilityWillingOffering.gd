@@ -19,14 +19,15 @@ func onRemove(ability):
 		card.maxToughness -= buffsAppliedVec.y
 
 func onEffect(params):
-	if params[1].power > 0:
-		params[0].power += params[1].power
-		buffsAppliedVec.x += params[1].power
-	if params[1].toughness > 0:
-		params[0].toughness += params[1].toughness
-		params[0].maxToughness += params[1].maxToughness
-		buffsAppliedVec.y += params[1].toughness
-	params[1].toughness = -INF
+	if NodeLoc.getBoard().isOnBoard(params[0]):
+		if params[1].power > 0:
+			params[0].power += params[1].power
+			buffsAppliedVec.x += params[1].power
+		if params[1].toughness > 0:
+			params[0].toughness += params[1].toughness
+			params[0].maxToughness += params[1].maxToughness
+			buffsAppliedVec.y += params[1].toughness
+		params[1].toughness = -INF
 
 func clone(card):
 	var abl = .clone(card)

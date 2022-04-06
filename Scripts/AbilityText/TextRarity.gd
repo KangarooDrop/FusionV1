@@ -2,7 +2,13 @@ extends Ability
 
 class_name TextRarity
 
-var colors = [Color(0, 0, 0), Color(.5, .5, .5), Color(1, 0.6, 0)]
+var colors = \
+[
+	Color(0, 0, 0), 
+	Color(.5, .5, .5), 
+	Color(1, 0.6, 0),
+	Color(1, 0, 1)
+]
 
 func _init(card : Card).("", card, Color.lightgray, false, Vector2(0, 0)):
 	pass
@@ -18,4 +24,6 @@ func genDescription() -> String:
 		return .genDescription() + "A deck can have up to 4 of the same common card"
 	elif count == 2:
 		return .genDescription() + "A deck can have only 1 of the same legendary card"
+	elif count == 3:
+		return .genDescription() + "A deck can have only 1 vanguard card. It's basically commander"
 	return .genDescription() + "uh-oh"

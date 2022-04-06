@@ -1,10 +1,10 @@
 [gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DeckEditor.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/UI/DeckDisplay.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=3]
 [ext_resource path="res://Art/UI/hover_arrow.png" type="Texture" id=4]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Scenes/UI/DeckDisplayX.tscn" type="PackedScene" id=6]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -179,8 +179,8 @@ scale = Vector2( 1.5, 1.5 )
 [node name="FusionPreview" type="Node2D" parent="CenterControl"]
 position = Vector2( 20, 212 )
 
-[node name="DeckDisplay" parent="CenterControl" instance=ExtResource( 2 )]
-position = Vector2( 320, -132 )
+[node name="DeckDisplay" parent="CenterControl" instance=ExtResource( 6 )]
+position = Vector2( 320, -240 )
 deckMax = 20
 
 [node name="LArrow" type="Node2D" parent="CenterControl"]

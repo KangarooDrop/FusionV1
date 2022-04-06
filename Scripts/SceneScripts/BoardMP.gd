@@ -154,9 +154,13 @@ func setGameSeed(gameSeed : int):
 	seed(gameSeed)
 	dataLog.append("SET_SEED " + str(gameSeed))
 	
-	var cardList = getDeckFromFile()
+	var cardData = getDeckFromFile()
+	var cardList = cardData[0]
+	var van
+	if cardData[1].size() > 0:
+		van = cardData[1][0]
 	cardList.shuffle()
-	setOwnCardList(cardList)
+	setOwnCardList(cardList, van)
 		
 	print("Fetch: Opponent's deck list")
 	Server.sendDeck(opponentID)
@@ -227,13 +231,15 @@ func getDeckFromFile() -> Array:
 	
 	var dataRead = FileIO.readJSON(path + fileName)
 	var error = Deck.verifyDeck(dataRead)
-	var cardList := []
+	var cardList := [[], []]
 	
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		for k in dataRead.keys():
+		for k in dataRead["cards"].keys():
 			var id = int(k)
-			for i in range(int(dataRead[k])):
-				cardList.append(ListOfCards.getCard(id))
+			for i in range(int(dataRead["cards"][k])):
+				cardList[0].append(ListOfCards.getCard(id))
+		for k in dataRead["vanguard"].keys():
+			cardList[1].append(ListOfCards.getCard(int(k)))
 	else:
 		MessageManager.notify("Invalid Deck:\nverify deck file contents")
 		Server.disconnectMessage(opponentID, "Error: Opponent's deck is invalid")
@@ -245,8 +251,9 @@ func getDeckFromFile() -> Array:
 			
 	return cardList
 
-func setOwnCardList(cardList : Array):
+func setOwnCardList(cardList : Array, vanguard):
 	players[0].deck.setCards(cardList, players[0].UUID, true)
+	players[0].deck.setVanguard(vanguard)
 	var logDeck = "OWN_DECK "
 	for i in players[0].deck.serialize():
 		logDeck += str(i) + " "
@@ -258,11 +265,12 @@ func setOwnCardList(cardList : Array):
 	
 	dataLog.append(logDeck)
 
-func setOpponentCardList(cardList : Array):
+func setOpponentCardList(cardList : Array, vanguard):
 	var cards = []
 	for c in cardList:
 		cards.append(ListOfCards.getCard(c))
 	players[1].deck.setCards(cards, players[1].UUID, true)
+	players[1].deck.setVanguard(vanguard)
 	
 	var logDeck = "OPPONENT_DECK "
 	for i in players[players.size()-1].deck.serialize():
@@ -276,7 +284,10 @@ func setDeckData(data, order):
 	
 	var good = verifyDeckData(data, order)
 	if good:
-		setOpponentCardList(order)
+		var van
+		if data["vanguard"].keys().size() > 0:
+			van = ListOfCards.getCard(data["vanguard"][data["vanguard"].keys()[0]])
+		setOpponentCardList(order, van)
 	else:
 		MessageManager.notify("Opponent's deck is invalid")
 		Server.disconnectMessage(opponentID, "Error: Your deck has been flagged by the opponent as invalid")
@@ -293,6 +304,8 @@ func setDeckData(data, order):
 func verifyDeckData(data, order) -> bool:
 	var error = Deck.verifyDeck(data)
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+		
+		data = data["cards"]
 		
 		var dict = {}
 		for id in order:

@@ -68,12 +68,15 @@ func getCard(index : int) -> Card:
 	return card
 
 func generateCard() -> Card:
+	var vanChance = 0.05
 	var legChance = 0.1
 	var r = randf()
 	var rar = 0
 	
 	if r < legChance:
 		rar = Card.RARITY.LEGENDARY
+#	elif r < legChance + vanChance:
+#		rar = Card.RARITY.VANGUARD
 	else:
 		rar = Card.RARITY.COMMON
 	
