@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/Ability.gd"
 }, {
 "base": "Ability",
+"class": "AbilityAbandon",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityAbandon.gd"
+}, {
+"base": "Ability",
 "class": "AbilityAmass",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityAmass.gd"
@@ -78,6 +83,11 @@ _global_script_classes=[ {
 "class": "AbilityDuplicant",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityDuplicant.gd"
+}, {
+"base": "Ability",
+"class": "AbilityEmblazon",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityEmblazon.gd"
 }, {
 "base": "Ability",
 "class": "AbilityEmerge",
@@ -200,6 +210,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityRavenous.gd"
 }, {
 "base": "Ability",
+"class": "AbilityRebound",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRebound.gd"
+}, {
+"base": "Ability",
 "class": "AbilityReignite",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityReignite.gd"
@@ -223,6 +238,11 @@ _global_script_classes=[ {
 "class": "AbilityScavenge",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityScavenge.gd"
+}, {
+"base": "Ability",
+"class": "AbilitySecondStrike",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilitySecondStrike.gd"
 }, {
 "base": "Ability",
 "class": "AbilityShieldUp",
@@ -258,6 +278,11 @@ _global_script_classes=[ {
 "class": "AbilityTough",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTough.gd"
+}, {
+"base": "Ability",
+"class": "AbilityTransfigur",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityTransfigur.gd"
 }, {
 "base": "Ability",
 "class": "AbilityUpgrade",
@@ -386,6 +411,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Ability": "",
+"AbilityAbandon": "",
 "AbilityAmass": "",
 "AbilityBioagent": "",
 "AbilityBrittle": "",
@@ -399,6 +425,7 @@ _global_script_class_icons={
 "AbilityDash": "",
 "AbilityDegenerate": "",
 "AbilityDuplicant": "",
+"AbilityEmblazon": "",
 "AbilityEmerge": "",
 "AbilityEssenceDrain": "",
 "AbilityEvolution": "",
@@ -423,11 +450,13 @@ _global_script_class_icons={
 "AbilityRabid": "",
 "AbilityRampage": "",
 "AbilityRavenous": "",
+"AbilityRebound": "",
 "AbilityReignite": "",
 "AbilityRekindle": "",
 "AbilityRevive": "",
 "AbilitySacrifice": "",
 "AbilityScavenge": "",
+"AbilitySecondStrike": "",
 "AbilityShieldUp": "",
 "AbilitySoulblaze": "",
 "AbilityStack": "",
@@ -435,6 +464,7 @@ _global_script_class_icons={
 "AbilityTaunt": "",
 "AbilityThoughtknock": "",
 "AbilityTough": "",
+"AbilityTransfigur": "",
 "AbilityUpgrade": "",
 "AbilityUseless": "",
 "AbilityVenomous": "",

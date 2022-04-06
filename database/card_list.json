@@ -939,5 +939,75 @@
       "AbilityRevive"
     ],
     "rarity": "COMMON"
+  },
+  "74": {
+    "name": "Sigil",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityEmblazon 1"
+    ],
+    "rarity": "COMMON"
+  },
+  "75": {
+    "name": "Raanagan",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityAbandon 1"
+    ],
+    "rarity": "COMMON"
+  },
+  "76": {
+    "name": "Mongu",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityTransfigur"
+    ],
+    "rarity": "COMMON"
+  },
+  "77": {
+    "name": "Gaint Scorpone'",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilitySecondStrike"
+    ],
+    "rarity": "COMMON"
+  },
+  "78": {
+    "name": "Inverter Arcanist",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 2,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityRebound"
+    ],
+    "rarity": "COMMON"
   }
 }

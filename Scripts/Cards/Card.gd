@@ -20,10 +20,11 @@ var maxToughness : int
 
 var rarity : int
 
-var hasAttacked = true
+var hasAttacked = false
 var cantAttackSources = []
 var canFuseThisTurn = true
 var canBePlayed = true
+var playedThisTurn = false
 
 var params
 
@@ -74,6 +75,10 @@ func _init(params):
 #		canAttackThisTurn = params["can_attack"]
 	if params.has("can_play"):
 		canBePlayed = params["can_play"]
+	if params.has("played_this_turn"):
+		playedThisTurn = params.has("played_this_turn")
+	else:
+		playedThisTurn = true
 	if params.has("rarity"):
 		rarity = RARITY[params["rarity"]]
 	
@@ -134,6 +139,7 @@ func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(self) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == playerID:
 		hasAttacked = false
 		canFuseThisTurn = true
+		playedThisTurn = false
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
@@ -249,6 +255,18 @@ func onOtherDealDamage(attacker, blocker):
 	for abl in abls:
 		abl.onOtherDealDamage(attacker, blocker)
 
+func onBeforeCombat(attacker, blockers):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onBeforeCombat(attacker, blockers)
+
+func onAfterCombat(attacker, blockers):
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.onAfterCombat(attacker, blockers)
+
 func onAdjustCost(card, cost) -> int:
 	var costAdjustment = 0
 	for abl in abilities.duplicate():
@@ -288,7 +306,7 @@ func addCreatureToBoard(card, slot = null) -> bool:
 	return false
 
 func canAttack() -> bool:
-	return cantAttackSources.size() == 0 and not hasAttacked
+	return cantAttackSources.size() == 0 and not hasAttacked and not playedThisTurn
 
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
@@ -299,8 +317,10 @@ func clone() -> Card:
 	c.toughness = toughness
 	c.creatureType = creatureType
 	c.maxToughness = maxToughness
-	c.abilities = abilities
-	c.removedAbilities = c.removedAbilities
+	for abl in abilities:
+		c.addAbility(abl.clone(c))
+	for abl in removedAbilities:
+		c.removedAbilities.append(abl.clone(c))
 	return c
 	
 func copyBase() -> Card:
@@ -316,6 +336,7 @@ func serialize() -> Dictionary:
 	rtn["power"] = power
 	rtn["toughness"] = toughness
 	rtn["has_attacked"] = hasAttacked
+	rtn["played_this_turn"] = playedThisTurn
 	rtn["abilities"] = []
 	rtn["removed_abilities"] = []
 	rtn["can_play"] = canBePlayed

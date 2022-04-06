@@ -12,7 +12,8 @@ var attacking = false
 var dealtDamage = false
 var attackingPositions = []
 var attackReturnPos = null
-var attackingSlots = null
+var attackingSlots := []
+var attackingIndex = -1
 var attackRotation = 0
 var attackStartupTimer = 0
 var attackStartupMaxTime = 0.1
@@ -100,37 +101,43 @@ func _physics_process(delta):
 				rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
 			elif attackTimer < attackMaxTime:
 				attackTimer += delta
-				global_position = lerp(attackReturnPos, attackingPositions[0], attackTimer / attackMaxTime)
+				global_position = lerp(attackReturnPos, attackingPositions[attackingIndex], attackTimer / attackMaxTime)
 			elif attackWaitTimer < attackWaitMaxTime:
 				attackWaitTimer += delta
 			elif attackReturnTimer < attackReturnMaxTime:
 				if not waitingForStackToClear:
 					if not dealtDamage:
 						waitingForStackToClear = true
-						fight(attackingSlots[0])
+						fight(attackingSlots[attackingIndex])
 						waitingForStackToClear = false
 						dealtDamage = true
 					if not fightingWait:
 						attackReturnTimer += delta
-						global_position = lerp(attackingPositions[0], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
+						global_position = lerp(attackingPositions[attackingIndex], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
 						rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
 			else:
 				global_position = attackReturnPos
 				rotation = 0
 				
-				attackingPositions.remove(0)
-				attackingSlots.remove(0)
+				attackingIndex += 1
 				attackStartupTimer = 0
 				attackWaitTimer = 0
 				attackTimer = 0
 				attackReturnTimer = 0
 				dealtDamage = false
-				if attackingSlots.size() == 0:
+				if attackingIndex >= attackingSlots.size():
+			
+					for s in attackingSlots:
+						if is_instance_valid(s.cardNode):
+							s.cardNode.card.onAfterCombat(slot, attackingSlots.duplicate())
+					card.onAfterCombat(slot, attackingSlots.duplicate())
+					
+					attackingSlots.clear()
+					attackReturnPos = null
 					attacking = false
 					z_index -= 1
-					attackReturnPos = null
 				else:
-					attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
+					attackRotation = attackReturnPos.angle_to_point(attackingPositions[attackingIndex])
 					if attackRotation > PI:
 						attackRotation -= PI
 					elif attackRotation < 0:
@@ -139,7 +146,14 @@ func _physics_process(delta):
 
 func attack(slots : Array):
 	card.hasAttacked = true
+	
+	for s in slots:
+		if is_instance_valid(s.cardNode):
+			s.cardNode.card.onBeforeCombat(slot, slots)
+	card.onBeforeCombat(slot, slots)
+	
 	if Settings.playAnimations:
+		attackingIndex = 0
 		z_index += 1
 		attacking = true
 		dealtDamage = false
@@ -149,7 +163,7 @@ func attack(slots : Array):
 		for s in slots:
 			attackingPositions.append(s.global_position + (global_position - s.global_position).normalized() * ListOfCards.cardBackground.get_width() * Settings.cardSlotScale)
 		attackReturnPos = global_position
-		attackRotation = attackReturnPos.angle_to_point(attackingPositions[0])
+		attackRotation = attackReturnPos.angle_to_point(attackingPositions[attackingIndex])
 		if attackRotation > PI:
 			attackRotation -= PI
 		elif attackRotation < 0:
@@ -159,6 +173,11 @@ func attack(slots : Array):
 	else:
 		for s in slots:
 			fight(s)
+			
+		for s in slots:
+			if is_instance_valid(s.cardNode):
+				s.cardNode.card.onAfterCombat(slot, slots)
+		card.onAfterCombat(slot, slots)
 
 func flip():
 	flipping = true
@@ -206,21 +225,6 @@ func fight(slot):
 	
 	
 	if is_instance_valid(slot.cardNode):
-		
-		##########################################################################################################################
-		
-		
-		
-		"""
-		if ListOfCards.hasAbility(card, AbilityRampage) and slot.cardNode.card.toughness < 0:
-			for p in NodeLoc.getBoard().players:
-				if p.UUID == slot.playerID:
-					var damage = -slot.cardNode.card.toughness
-					p.takeDamage(damage, self)
-		"""
-					
-		##########################################################################################################################
-		
 		
 		if slot.cardNode.card.toughness <= 0:
 			slot.cardNode.card.onKilledBy(self.slot)

@@ -1,21 +1,15 @@
 extends Ability
 
-class_name AbilityRekindle
+class_name AbilityAbandon
 
 var discardIndexes := []
 
-func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
+func _init(card : Card).("Abandon", card, Color.red, true, Vector2(0, 48)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
-	addToStack("onEffect", [clone(card), card.playerID, count])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [clone(card), card.playerID, count])
-	card.removeAbility(self)
+func onBeforeDamage(attacker, blocker):
+	if attacker == card.cardNode.slot:
+		addToStack("onEffect", [clone(card), card.playerID, count])
 
 static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
@@ -23,8 +17,6 @@ static func onEffect(params : Array):
 			if p.hand.slots.size() <= params[2]:
 				for i in range(p.hand.nodes.size()):
 					p.hand.discardIndex(i)
-				for i in range(params[2]):
-					p.hand.drawCard()
 				return
 	NodeLoc.getBoard().getSlot(params[0], params[1])
 
@@ -51,14 +43,7 @@ func slotClicked(slot : CardSlot):
 		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
-			for i in range(count):
-				hand.drawCard()
 			NodeLoc.getBoard().endGetSlot()
-	
+
 func genDescription() -> String:
-	var string
-	if count == 1:
-		string = "1 card"
-	else:
-		string = str(count) + " cards"
-	return .genDescription() + "When this creature is played, choose " + string + " to discard and then draw " + string + ". Removes this ability"
+	return .genDescription() + ("When this creature attacks, choose and discard " + str(count) + " card") + ("s" if count > 1 else "")

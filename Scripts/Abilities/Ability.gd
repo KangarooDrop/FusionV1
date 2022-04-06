@@ -101,6 +101,12 @@ func onOtherTakeDamage(attacker, blocker):
 func onOtherDealDamage(attacker, blocker):
 	pass
 
+func onBeforeCombat(attacker, blockers):
+	pass
+
+func onAfterCombat(attacker, blockers):
+	pass
+
 func onAdjustCost(card, cost) -> int:
 	return 0
 

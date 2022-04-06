@@ -396,7 +396,8 @@ var practiceWaiting = false
 
 func _physics_process(delta):
 	
-	if gameOver and deadPlayers.size() > 0:
+	if not gameOver and deadPlayers.size() > 0:
+		gameOver = true
 		var out
 		if deadPlayers.size() == 1:
 			if deadPlayers[0] == players[0]:
@@ -1239,16 +1240,16 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		cardPlacing.slot = slot
 		
 		if isEntering:
-			newCard.onEnter(fuseEndSlot)
-			
 			for c in getAllCards():
 				if c != newCard:
 					c.onOtherEnter(fuseEndSlot)
+			newCard.onEnter(fuseEndSlot)
+			
 		else:
-			newCard.onEnterFromFusion(fuseEndSlot)
 			for c in getAllCards():
 				if c != newCard:
 					c.onOtherEnterFromFusion(fuseEndSlot)
+			newCard.onEnterFromFusion(fuseEndSlot)
 		
 		checkState()
 		
@@ -1475,8 +1476,8 @@ func endGetSlot():
 	checkState()
 
 func onLoss(player : Player):
-	gameOver = true
-	deadPlayers.append(player)
+	if not gameOver and not deadPlayers.has(player):
+		deadPlayers.append(player)
 
 func setOwnUsername():
 	print("Settings own username")

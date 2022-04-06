@@ -168,6 +168,7 @@ func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
 		cardNew.removedAbilities.append(abl.clone(cardNew))
 	cardNew.trimAbilities()
 	cardNew.hasAttacked = cardA.hasAttacked
+	cardNew.playedThisTurn = cardA.playedThisTurn
 	#cardNew.canAttackThisTurn = cardA.canAttackThisTurn
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
 	
