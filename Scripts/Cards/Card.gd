@@ -99,6 +99,7 @@ func onHoverExit(slot):
 		abl.onHoverExit(slot)
 
 func onEnter(slot):
+	playedThisTurn = true
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:

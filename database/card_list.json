@@ -1023,5 +1023,33 @@
       
     ],
     "rarity": "COMMON"
+  },
+  "80": {
+    "name": "Flicker",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityBounce"
+    ],
+    "rarity": "COMMON"
+  },
+  "81": {
+    "name": "Grafter",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 3,
+    "toughness": 1,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityConjoin"
+    ],
+    "rarity": "COMMON"
   }
 }

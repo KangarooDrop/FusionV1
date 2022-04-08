@@ -50,19 +50,29 @@ var millNode
 var millWaitTimer = 0
 var millWaitMaxTime = 0.5
 
+
+
 var isEntering = false
 var cardNodesFusing : Array
 var fusing = false
 var fuseEndSlot = null
 var fuseEndPos = null
 var fuseStartPos = null
+
 var fuseTimer = 0
 var fuseMaxTime = 0.1
+
 var fuseReturnTimer = 0
 var fuseReturnMaxTime = 0.3
+
 var fuseWaiting = false
 var fuseWaitTimer = 0
 var fuseWaitMaxTime = 0.3
+
+var fusingToHandPlayer
+var isFusingToHand = false
+
+
 
 var gameStarted = false
 var gameOver = false
@@ -492,7 +502,7 @@ func _physics_process(delta):
 					if fuseTimer >= fuseMaxTime:
 						fuseTimer = 0
 						fusing = false
-						cardNodesFusing[0].slot = fuseEndSlot
+						#cardNodesFusing[0].slot = fuseEndSlot
 						cardNodesFusing[0].card = ListOfCards.fusePair(cardNodesFusing[0].card, cardNodesFusing[1].card, cardNodesFusing[0])
 						cardNodesFusing[0].setCardVisible(true)
 						cardNodesFusing[1].queue_free()
@@ -505,30 +515,37 @@ func _physics_process(delta):
 					else:
 						cardNodesFusing[1].position = lerp(fuseStartPos, fuseEndPos, fuseTimer / fuseMaxTime)
 			elif cardNodesFusing.size() == 1:
-				fuseReturnTimer += delta
-				cardNodesFusing[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
-				if fuseReturnTimer >= fuseReturnMaxTime:
-					var cardNode = cardNodesFusing[0]
-					fuseEndSlot.cardNode = cardNodesFusing[0]
-					cardNode.get_parent().remove_child(cardNode)
-					cardNode.slot = fuseEndSlot
-					creatures_A_Holder.add_child(cardNode)
-					cardNode.global_position = fuseEndSlot.global_position
-					cardNodesFusing = []
-					cardNode.card.playerID = fuseEndSlot.playerID
-					cardNode.card.cardNode = cardNode
-					
-					var cs = getAllCards()
-					if isEntering:
-						for c in cs:
-							if c != cardNode.card:
-								c.onOtherEnter(fuseEndSlot)
-						cardNode.card.onEnter(fuseEndSlot)
-					else:
-						for c in cs:
-							if c != cardNode.card:
-								c.onOtherEnterFromFusion(fuseEndSlot)
-						cardNode.card.onEnterFromFusion(fuseEndSlot)
+				if isFusingToHand:
+					fusingToHandPlayer.hand.addCardToHand([cardNodesFusing[0].card, true, true])
+					fusingToHandPlayer = null
+					isFusingToHand = false
+					cardNodesFusing[0].queue_free()
+					cardNodesFusing.clear()
+				else:
+					fuseReturnTimer += delta
+					cardNodesFusing[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
+					if fuseReturnTimer >= fuseReturnMaxTime:
+						var cardNode = cardNodesFusing[0]
+						fuseEndSlot.cardNode = cardNodesFusing[0]
+						cardNode.get_parent().remove_child(cardNode)
+						cardNode.slot = fuseEndSlot
+						creatures_A_Holder.add_child(cardNode)
+						cardNode.global_position = fuseEndSlot.global_position
+						cardNodesFusing = []
+						cardNode.card.playerID = fuseEndSlot.playerID
+						cardNode.card.cardNode = cardNode
+						
+						var cs = getAllCards()
+						if isEntering:
+							for c in cs:
+								if c != cardNode.card:
+									c.onOtherEnter(fuseEndSlot)
+							cardNode.card.onEnter(fuseEndSlot)
+						else:
+							for c in cs:
+								if c != cardNode.card:
+									c.onOtherEnterFromFusion(fuseEndSlot)
+							cardNode.card.onEnterFromFusion(fuseEndSlot)
 					
 					checkState()
 					
@@ -1271,6 +1288,49 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		
 		card_A_Holder.centerCards()
 		card_B_Holder.centerCards()
+	
+	card_A_Holder.centerCards()
+	card_B_Holder.centerCards()
+	centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
+
+func fuseToHand(player : Player, cards : Array):
+	if Settings.playAnimations:
+		while cards.size() > 0:
+			var card = cards[0]
+			cards.remove(0)
+			
+			var cn = cardNode.instance()
+			cn.card = card
+			card.cardNode = cn
+			card.playerID = player.UUID
+			
+			cardNodesFusing.append(cn)
+			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+			cn.z_index = 1
+			$Fusion_Holder.add_child(cn)
+			cn.position = Vector2()
+			card_A_Holder.nodes.erase(cn)
+			card_B_Holder.nodes.erase(cn)
+		
+		for i in range(0 if isEntering else 1, cardNodesFusing.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
+		
+		fuseStartPos = cardNodesFusing[0].global_position
+		isFusingToHand = true
+		fusingToHandPlayer = player
+		fuseTimer = 0
+		fuseReturnTimer = 0
+		
+		fuseWaiting = true
+		fuseWaitTimer = 0
+	else:
+		for i in range(0 if isEntering else 1, cards.size()):
+			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cards[i].UUID))
+		
+		var newCard = ListOfCards.fuseCards(cards)
+		player.hand.addCardToHand([newCard, true, true])
+		
+		checkState()
 	
 	card_A_Holder.centerCards()
 	card_B_Holder.centerCards()
