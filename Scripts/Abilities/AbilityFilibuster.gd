@@ -25,7 +25,7 @@ func onAdjustCost(card, cost) -> int:
 	else:
 		return 0
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	var string = " card "
 	if count > 1:
 		string = " " + str(count) + " cards "

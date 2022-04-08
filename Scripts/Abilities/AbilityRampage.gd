@@ -11,5 +11,5 @@ func onDealDamage(slot):
 			if p.UUID == slot.playerID:
 				p.takeDamage(-slot.cardNode.card.toughness, card)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When attacking a creature, excess damage is dealt to its owner"

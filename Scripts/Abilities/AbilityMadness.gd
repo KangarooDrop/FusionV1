@@ -81,5 +81,5 @@ func clone(card : Card) -> Ability:
 	abl.buffsApplied = buffsApplied
 	return abl
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each card removed from your library"

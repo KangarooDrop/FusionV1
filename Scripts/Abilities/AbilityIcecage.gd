@@ -1,19 +1,12 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityIcecage
 
 func _init(card : Card).("Icecage", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
+func onApplied(slot):
 	addToStack("onEffect", [])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [])
-	card.removeAbility(self)
 			
 static func onEffect(params):
 	for s in NodeLoc.getBoard().boardSlots:
@@ -22,5 +15,5 @@ static func onEffect(params):
 			frozen.onEffect()
 			s.cardNode.card.addAbility(frozen)
 
-func genDescription() -> String:
-	return .genDescription() + "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures. Removes this ability"
+func genDescription(subCount = 0) -> String:
+	return .genDescription() + "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures"

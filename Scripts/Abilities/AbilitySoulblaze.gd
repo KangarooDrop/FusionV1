@@ -22,5 +22,5 @@ static func onDeathEffect(params):
 		if p.UUID == params[0]:
 			p.takeDamage(params[1], null)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the start of your turn, this creature takes " + str(count) + " damage and increases its count by 1. When it dies, you take damage equal to the count"

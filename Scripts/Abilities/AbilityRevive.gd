@@ -14,5 +14,5 @@ func onOtherDeath(slot):
 			discardSelf(self.card)
 			#NodeLoc.getBoard().fuseToSlot(slot, [card])
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "If a creature you control would die, instead its health becomes 1. Discard this card"

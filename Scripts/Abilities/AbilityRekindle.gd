@@ -1,4 +1,4 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityRekindle
 
@@ -7,15 +7,8 @@ var discardIndexes := []
 func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
-	addToStack("onEffect", [clone(card), card.playerID, count])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [clone(card), card.playerID, count])
-	card.removeAbility(self)
+func onApplied(slot):
+	addToStack("onEffect", [clone(card), card.playerID, count - timesApplied])
 
 static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
@@ -48,17 +41,17 @@ func slotClicked(slot : CardSlot):
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count:
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count - timesApplied:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
-			for i in range(count):
+			for i in range(count - timesApplied):
 				hand.drawCard()
 			NodeLoc.getBoard().endGetSlot()
 	
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	var string
-	if count == 1:
+	if count - subCount == 1:
 		string = "1 card"
 	else:
-		string = str(count) + " cards"
-	return .genDescription() + "When this creature is played, choose " + string + " to discard and then draw " + string + ". Removes this ability"
+		string = str(count - subCount) + " cards"
+	return .genDescription() + "When this creature is played, choose " + string + " to discard and then draw " + string

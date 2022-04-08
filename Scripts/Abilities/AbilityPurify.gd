@@ -9,5 +9,5 @@ func onFusion(card):
 	for abl in card.abilities.duplicate():
 		card.removeAbility(abl)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "On fusion, removes all abilities"

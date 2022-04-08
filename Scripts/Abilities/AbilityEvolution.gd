@@ -10,5 +10,5 @@ func onEndOfTurn():
 		card.power += count
 		card.toughness += count
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the end of your turn, this card gains +" + str(count) + "/+" + str(count)

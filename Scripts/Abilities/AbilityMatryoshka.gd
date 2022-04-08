@@ -17,5 +17,5 @@ static func onEffect(params):
 				p.hand.addCardToHand([ListOfCards.getCard(57), true, false])
 			break
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature dies, add " + str(count) + " " + str(TextSkinShedder.new(null)) +" to your hand"

@@ -19,7 +19,7 @@ func setCount(count : int) -> Ability:
 	self.name = Card.RARITY.keys()[count].capitalize()
 	return r
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	if count == 1:
 		return .genDescription() + "A deck can have up to 4 of the same common card"
 	elif count == 2:

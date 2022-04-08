@@ -634,7 +634,7 @@
   "52": {
     "name": "Ghastly Presence",
     "tex": "res://Art/portraits/card_GHASTLY_PRESENCE.png",
-    "power": 0,
+    "power": 2,
     "toughness": 2,
     "creature_type": [
       1

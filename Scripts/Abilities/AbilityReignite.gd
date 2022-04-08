@@ -1,19 +1,12 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityReignite
 
 func _init(card : Card).("Reignite", card, Color.red, false, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
+func onApplied(slot):
 	addToStack("onEffect", [card.playerID])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [card.playerID])
-	card.removeAbility(self)
 
 static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
@@ -26,5 +19,5 @@ static func onEffect(params : Array):
 				p.hand.drawCard()
 			break
 	
-func genDescription() -> String:
-	return .genDescription() + "When this creature is played, discard your hand and then draw that many cards. Removes this ability"
+func genDescription(subCount = 0) -> String:
+	return .genDescription() + "When this creature is played, discard your hand and then draw that many cards"

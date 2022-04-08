@@ -9,8 +9,7 @@ func onFusion(card):
 	for abl in card.abilities:
 		if abl is get_script():
 			card.creatureType = [Card.CREATURE_TYPE.Null]
-			card.removeAbility(abl)
 			break
 
-func genDescription() -> String:
-	return .genDescription() + "On fusion, the card loses all creature types. Removes this ability"
+func genDescription(subCount = 0) -> String:
+	return .genDescription() + "On fusion, the card loses all creature types"

@@ -14,5 +14,5 @@ static func onEffect(params):
 		if is_instance_valid(s.cardNode):
 			s.cardNode.card.toughness -= params[1]
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature dies, it deals " + str(count) +" damage to each adjacent creature"

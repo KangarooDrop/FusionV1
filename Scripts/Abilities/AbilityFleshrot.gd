@@ -13,5 +13,5 @@ func onKilledBy(slot):
 static func onEffect(params):
 	params[0].toughness = -INF
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is killed in combat, the other creature dies as well"

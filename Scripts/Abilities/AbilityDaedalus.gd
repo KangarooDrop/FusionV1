@@ -1,19 +1,12 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityDaedalus
 
 func _init(card : Card).("Daedalus", card, Color.lightgray, false, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
+func onApplied(slot):
 	addToStack("onEffect", [])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [])
-	card.removeAbility(self)
 			
 static func onEffect(params : Array):
 	var cards = NodeLoc.getBoard().getAllCreatures()
@@ -26,5 +19,5 @@ static func onEffect(params : Array):
 	for c in highest:
 		c.toughness = -INF
 
-func genDescription() -> String:
-	return .genDescription() + "When this creature is played, destroy all creatures with the highest power. Removes this ability"
+func genDescription(subCount = 0) -> String:
+	return .genDescription() + "When this creature is played, destroy all creatures with the highest power"

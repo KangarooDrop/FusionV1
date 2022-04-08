@@ -13,5 +13,5 @@ static func onEffect(params):
 	for p in NodeLoc.getBoard().getAllPlayers():
 		p.takeDamage(params[1], params[0])
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the end of your turn, this card deals " + str(count) + " damage to each player"

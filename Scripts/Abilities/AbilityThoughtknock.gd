@@ -1,4 +1,4 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityThoughtknock
 
@@ -7,15 +7,8 @@ var numCards = 0
 func _init(card : Card).("Thoughtknock", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
+func onApplied(slot):
 	addToStack("onEffect", [clone(card)])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [clone(card)])
-	card.removeAbility(self)
 
 func slotClicked(slot : CardSlot):
 	if slot == null:
@@ -33,7 +26,7 @@ func slotClicked(slot : CardSlot):
 		hand.discardIndex(index)
 		#hand.drawCard()
 		numCards += 1
-		if numCards >= count:
+		if numCards >= count - timesApplied:
 			NodeLoc.getBoard().endGetSlot()
 
 static func onEffect(params):
@@ -48,10 +41,10 @@ static func onEffect(params):
 			slectingUUID = p.UUID
 	NodeLoc.getBoard().getSlot(params[0], slectingUUID)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	var c = ""
-	if count == 1:
-		c = "When this creature is played, reveal your hand and your opponent chooses a card from it. Discard that card. Removes this ability"
+	if count - subCount == 1:
+		c = "When this creature is played, reveal your hand and your opponent chooses a card from it. Discard that card"
 	else:
-		c = "When this creature is played, reveal your hand and your opponent chooses " + str(count) + " cards" + " from it. Discard those cards. Removes this ability"
+		c = "When this creature is played, reveal your hand and your opponent chooses " + str(count - subCount) + " cards" + " from it. Discard those cards"
 	return .genDescription() + c

@@ -13,5 +13,5 @@ func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
 	card.playedThisTurn = false
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "This creature can attack the turn it is played"

@@ -79,5 +79,5 @@ func clone(card : Card) -> Ability:
 	abl.buffsApplied = buffsApplied
 	return abl
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When there are " + str(threshold) + " or more creature types in your " + str(TextScrapyard.new(null)) + ", this creature gets +" + str(count) + "/+" + str(count)

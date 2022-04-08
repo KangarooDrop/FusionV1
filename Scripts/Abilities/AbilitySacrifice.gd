@@ -15,5 +15,5 @@ static func onEffect(params):
 			slot.cardNode.card.power += params[1]
 			slot.cardNode.card.toughness += params[1]
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "This creature gives your other creatures on board +" + str(count) + "/+" + str(count) + " when it dies"

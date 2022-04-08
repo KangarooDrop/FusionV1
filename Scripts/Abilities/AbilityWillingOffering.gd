@@ -38,5 +38,5 @@ func combine(abl):
 	.combine(abl)
 	abl.buffsAppliedVec += buffsAppliedVec
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When a creature is put onto the board under your control, destroy that creature and get its power and toughness"

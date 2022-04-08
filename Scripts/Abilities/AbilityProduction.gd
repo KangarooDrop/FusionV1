@@ -1,29 +1,21 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityProduction
 
 func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
-	addToStack("onEffect", [card, count])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [card, count])
-	card.removeAbility(self)
-			
+func onApplied(slot):
+		addToStack("onEffect", [card, count - timesApplied])
+
 static func onEffect(params):
 	for i in range(params[1]):
 		var card = ListOfCards.getCard(5)
-		for abl in card.abilities.duplicate():
-			card.removeAbility(abl)
+		card.abilities[0].timesApplied = 1
 		params[0].addCreatureToBoard(card, null)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	var string = "a"
 	if count > 1:
-		string = str(count)
-	return .genDescription() + "When this creature is played, create " + string +" 1/1 mech with no abilities. Removes this ability"
+		string = str(count - subCount)
+	return .genDescription() + "When this creature is played, create " + string +" 1/1 mech with no abilities"

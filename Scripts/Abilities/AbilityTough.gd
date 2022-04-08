@@ -14,5 +14,5 @@ static func onEffect(params):
 	params[0].toughness += params[1]
 	params[0].maxToughness += params[1]
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "This creature gains +" + str(count) + "/+" + str(count) + " when attacked"

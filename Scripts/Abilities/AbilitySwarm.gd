@@ -63,5 +63,5 @@ func combine(abl : Ability):
 	.combine(abl)
 	abl.buffsApplied += buffsApplied
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each other creature with " + name

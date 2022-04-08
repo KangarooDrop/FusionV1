@@ -8,5 +8,5 @@ func _init(card : Card).("Ravenous", card, Color.brown, false,Vector2(0, 64)):
 func onKill(slot):
 	card.hasAttacked = false
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature kills another creature, it can attack again"

@@ -17,5 +17,5 @@ static func onEffect(params):
 		card.toughness = 1
 		params[0].addCreatureToBoard(card, null)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature dies, creates " + str(count) + " 1/1 Necro with no abilities"

@@ -1,19 +1,12 @@
-extends Ability
+extends AbilityETB
 
 class_name AbilityEssenceDrain
 
 func _init(card : Card).("Essence Drain", card, Color.darkgray, true, Vector2(0, 0)):
 	pass
 
-func onEnter(slot):
-	.onEnter(slot)
-	addToStack("onEffect", [card, count])
-	card.removeAbility(self)
-	
-func onEnterFromFusion(slot):
-	.onEnterFromFusion(slot)
-	addToStack("onEffect", [card, count])
-	card.removeAbility(self)
+func onApplied(slot):
+	addToStack("onEffect", [card, count - timesApplied])
 
 static func onEffect(params):
 	var n = 0
@@ -26,6 +19,6 @@ static func onEffect(params):
 			
 	params[0].power += params[1] * n
 
-func genDescription() -> String:
-	var strCount = str(count)
-	return .genDescription() + "When this creature is played, all other creatures get -" + strCount + "/-" + strCount + ". Gain +" + strCount + " power for each creature affected. Removes this ability"
+func genDescription(subCount = 0) -> String:
+	var strCount = str(count - subCount)
+	return .genDescription() + "When this creature is played, all other creatures get -" + strCount + "/-" + strCount + ". Gain +" + strCount + " power for each creature affected"

@@ -14,7 +14,7 @@ func onStartOfTurn():
 func onAfterDamage(attacker, blocker):
 	active = false
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "Once per turn, this creature must be the target of enemy attacks"
 
 func clone(card : Card) -> Ability:

@@ -9,5 +9,5 @@ func onTakeDamage(card):
 	.onTakeDamage(card)
 	card.toughness -= card.power
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "Deals damage when attacked equal to the damage taken"

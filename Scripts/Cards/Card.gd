@@ -312,6 +312,7 @@ func _to_string() -> String:
 
 func clone() -> Card:
 	var c : Card = ListOfCards.getCard(UUID)
+	c.abilities.clear()
 	c.power = power
 	c.toughness = toughness
 	c.creatureType = creatureType

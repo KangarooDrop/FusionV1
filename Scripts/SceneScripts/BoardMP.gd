@@ -700,6 +700,9 @@ var graveViewing := -1
 
 func addCardToGrave(playerID : int, card : Card):
 	
+	if card.tier != 1:
+		return
+	
 	card.playerID = playerID
 	
 	graveCards[playerID].append(card)

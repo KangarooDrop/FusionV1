@@ -83,6 +83,7 @@ func _physics_process(delta):
 			
 			var cardInst = cardNodeScene.instance()
 			cardInst.card = drawQueue[0][0]
+			drawQueue[0][0].playerID = player.UUID
 			cardInst.card.cardNode = cardInst
 			cardInst.playerID = player.UUID
 			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
@@ -168,6 +169,7 @@ func addCardToHand(data : Array):
 			
 			var cardInst = cardNodeScene.instance()
 			cardInst.card = data[0]
+			data[0].playerID = player.UUID
 			cardInst.card.cardNode = cardInst
 			cardInst.setCardVisible(handVisible)
 			cardInst.playerID = player.UUID

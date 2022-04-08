@@ -144,8 +144,8 @@ func clone(card : Card) -> Ability:
 	abl.count = count
 	return abl
 
-func genDescription() -> String:
-	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count) if (showCount) else "") +":[/color]\n"
+func genDescription(subCount = 0) -> String:
+	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count - subCount) if (showCount) else "") +":[/color]\n"
 
 func addToStack(funcName : String, params : Array, forceWait = false, canAttack = false):
 	var cl = clone(card)

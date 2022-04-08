@@ -17,7 +17,7 @@ static func onEffect(params):
 				if p.UUID == params[0].playerID:
 					p.takeDamage(1, params[0])
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	if count > 1:
 		return  .genDescription() + "At the start of your turn, create another " + str(count) + " " + str(TextGreyGoo.new(null)) + " creatures" + ". If you cannot, take 1 damage"
 	else:

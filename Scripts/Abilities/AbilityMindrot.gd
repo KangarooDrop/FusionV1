@@ -16,5 +16,5 @@ static func onEffect(params):
 			for i in range(params[1]):
 				p.deck.mill(p.UUID)
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature attacks, remove the top " + str(count) + " cards of your opponent's deck from the game"

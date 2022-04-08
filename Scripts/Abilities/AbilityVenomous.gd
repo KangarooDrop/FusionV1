@@ -17,5 +17,5 @@ func onAfterDamage(attacker, blocker):
 		activated = false
 		card.power -= count
 
-func genDescription() -> String:
+func genDescription(subCount = 0) -> String:
 	return .genDescription() + "While attacking another creature, this creature has +" + str(count) + " power"
