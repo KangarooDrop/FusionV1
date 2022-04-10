@@ -39,7 +39,7 @@ func onEffect():
 	
 	for p in board.players:
 		for s in board.creatures[p.UUID]:
-			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, get_script()) and s.cardNode.card != card:
+			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, get_script()):
 				buffsNew += 1
 	
 	self.card.power += (buffsNew - buffsApplied) * count
@@ -64,4 +64,4 @@ func combine(abl : Ability):
 	abl.buffsApplied += buffsApplied
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each other creature with " + name
+	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each creature with " + name

@@ -772,12 +772,12 @@
     "rarity": "LEGENDARY"
   },
   "62": {
-    "name": "Locust Swarm",
+    "name": "Nanite Cloud",
     "tex": "res://Art/portraits/card_LOCUSTSWARM.png",
-    "power": 1,
-    "toughness": 1,
+    "power": 0,
+    "toughness": 0,
     "creature_type": [
-      5
+      6
     ],
     "tier": 1,
     "abilities": [

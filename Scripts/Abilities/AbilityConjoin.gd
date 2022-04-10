@@ -62,8 +62,10 @@ func slotClicked(slot : CardSlot):
 		for n in fuseIndexes:
 			tmp.append(hand.nodes[n].card)
 		
+		print("AAAA ", getValidCombinations(tmp, hand.nodes, fuseIndexes.size()+1), "  ", fuseIndexes.size())
+		
 		#(hand.nodes.size() < count + 1) or 
-		if getValidCombinations(tmp, hand.nodes, count + 1) == 0 or fuseIndexes.size() == count + 1:
+		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == count + 1 - timesApplied:
 			for i in range(fuseIndexes.size()):
 				hand.discardIndex(fuseIndexes[i])
 			var board = NodeLoc.getBoard()
@@ -71,4 +73,4 @@ func slotClicked(slot : CardSlot):
 			board.endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this card is played, if you can, fuse " + str(count+1) + " cards together and put the fusion creature into your hand"
+	return .genDescription() + "When this card is played, if you can, fuse " + str(count+1-timesApplied) + " cards together and put the fusion creature into your hand"

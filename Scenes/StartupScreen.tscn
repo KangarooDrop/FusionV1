@@ -7,6 +7,7 @@
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
+outline_size = 2
 font_data = ExtResource( 2 )
 
 [node name="StartupScreen" type="Control"]
@@ -14,6 +15,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackFuseHolder" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

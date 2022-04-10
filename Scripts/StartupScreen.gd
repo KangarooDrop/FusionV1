@@ -1,12 +1,11 @@
 extends Control
 
-var textToFileName := {}
-
 func _ready():
 	MusicManager.playMainMenuMusic()
 	Settings.gameMode = Settings.GAME_MODE.NONE
-	
 	$SettingsPage/VBox/Shaders/SelectShaderButton.text = ShaderHandler.currentShader.get_file().get_basename().capitalize()
+	
+	BackgroundFusion.start()
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")

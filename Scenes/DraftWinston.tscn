@@ -163,10 +163,11 @@ position = Vector2( -210, 20 )
 z_index = 99
 
 [node name="SettingsPage" parent="SettingsHolder" instance=ExtResource( 5 )]
-margin_left = 297.0
-margin_top = 172.0
-margin_right = 727.0
-margin_bottom = 428.0
+visible = false
+margin_left = 313.519
+margin_top = 108.0
+margin_right = 743.519
+margin_bottom = 461.0
 
 [connection signal="pressed" from="QuitButton" to="." method="quitButtonPressed"]
 [connection signal="pressed" from="SettingsButton" to="." method="settingsButtonPressed"]

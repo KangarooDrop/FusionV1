@@ -6,7 +6,9 @@ func _init(card : Card).("Duplicant", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
 func onFusion(card):
-	onEffect(card)
+	var board = NodeLoc.getBoard()
+	if board is BoardMP:
+		onEffect(card)
 
 func onEffect(card):
 	var cardNew = ListOfCards.getCard(card.UUID)

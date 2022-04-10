@@ -109,6 +109,7 @@ var stackTimer = 0
 func _ready():
 	print("-".repeat(30))
 	
+	BackgroundFusion.stop()
 	MusicManager.playBoardMusic()
 	
 	if not Server.online:
@@ -652,13 +653,13 @@ func _physics_process(delta):
 			elif stackTimer > 0:
 				stackTimer -= delta
 				
-			elif actionQueue.size() > 0:
-				if is_instance_valid(actionQueue[0][0]):
-					if (not is_instance_valid(actionQueue[0][0].cardNode) or not actionQueue[0][0].cardNode.attacking):
-						slotClicked(actionQueue[0][0], actionQueue[0][1], false)
-						actionQueue.remove(0)
-				else:
+		if (abilityStack.size() == 0 or selectingSlot) and actionQueue.size() > 0:
+			if is_instance_valid(actionQueue[0][0]):
+				if not (waitAttacking() or waitDrawing() or waitFusing() or waitMilling()) and (not waitAbilityStack() or selectingSlot):
+					slotClicked(actionQueue[0][0], actionQueue[0][1], false)
 					actionQueue.remove(0)
+			else:
+				actionQueue.remove(0)
 	
 	if rightClickQueue.size() > 0:
 		clickedOff = false
@@ -1367,30 +1368,32 @@ func isDrawing() -> bool:
 	return false
 
 func getWaiting() -> bool:
-	
-	var waiting = false
+	return waitAttacking() or waitDrawing() or waitFusing() or waitMilling() or waitActionQueue() or waitAbilityStack()
+
+func waitAttacking() -> bool:
 	for slot in creatures[players[activePlayer].UUID]:
 		if is_instance_valid(slot.cardNode) and slot.cardNode.attacking:
-			waiting = true
-			
+			return true
+	return false
+
+func waitDrawing() -> bool:
 	for p in players:
 		if p.hand.drawQueue.size() > 0:
-			waiting = true
-	
-	if cardNodesFusing.size() > 0:
-		waiting = true
-				
-	if millQueue.size() > 0:
-		waiting = true
-			
-	if actionQueue.size() > 0:
-		waiting = true
-		
-	if abilityStack.size() > 0:
-		waiting = true
-	
-	return waiting
-	
+			return true
+	return false
+
+func waitFusing() -> bool:
+	return cardNodesFusing.size() > 0
+
+func waitMilling() -> bool:
+	return millQueue.size() > 0
+
+func waitActionQueue() -> bool:
+	return actionQueue.size() > 0
+
+func waitAbilityStack() -> bool:
+	return abilityStack.size() > 0
+
 
 var clickedOff = false
 func _input(event):

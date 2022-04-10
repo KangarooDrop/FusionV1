@@ -533,6 +533,7 @@ Server="*res://Scripts/Networking/Server.gd"
 Settings="*res://Scripts/Settings.gd"
 FileIO="*res://Scripts/FileIO.gd"
 NodeLoc="*res://Scripts/NodeLoc.gd"
+BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
 
 [display]
 

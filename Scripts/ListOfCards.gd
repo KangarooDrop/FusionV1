@@ -58,6 +58,8 @@ func _ready():
 	for i in range(cardList.size()):
 		if cardList[i].tier == 1:
 			rarityToCards[cardList[i].rarity].append(i)
+	
+	fuseTest()
 			
 
 func getCard(index : int) -> Card:
@@ -190,3 +192,13 @@ func getAbility(card : Card, abl):
 		if a is abl:
 			return a
 	return null
+
+static func fuseTest():
+	for i in range(ListOfCards.cardList.size()):
+		var c1 = ListOfCards.getCard(i)
+		if c1.tier == 1:
+			for j in range(ListOfCards.cardList.size()):
+				var c2 = ListOfCards.getCard(j)
+				if c2.tier == 1:
+					if ListOfCards.canFuseCards([c1, c2]):
+						var _c = ListOfCards.fusePair(c1, c2)

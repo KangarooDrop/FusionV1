@@ -19,10 +19,10 @@ func playDrawSound():
 	createSoundEffect(randomSoundEffect(drawSounds), 1)
 
 func playSelectSound():
-	createSoundEffect(selectSound, 1)
+	createSoundEffect(selectSound, 0.75)
 
 func playUnselectSound():
-	createSoundEffect(unselectSound, 1)
+	createSoundEffect(unselectSound, 0.75)
 
 func playDeathSound():
 	createSoundEffect(deathSound, 1)

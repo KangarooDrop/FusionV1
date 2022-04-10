@@ -31,6 +31,7 @@ var loadedDeckName = ""
 var popups := []
 
 func _ready():
+	BackgroundFusion.pause()
 	MusicManager.playDeckEditorMusic()
 	
 	$CenterControl/DeckDisplay.parent = self

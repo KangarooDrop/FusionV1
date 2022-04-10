@@ -35,6 +35,8 @@ func _ready():
 	$DraftTypeOptions/SolomonOptions/LineEdit._on_LineEdit_text_changed($DraftTypeOptions/SolomonOptions/LineEdit.text)
 	
 	startingUsername = Server.username
+	
+	BackgroundFusion.stop()
 
 ###############################################
 
