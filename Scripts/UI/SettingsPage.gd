@@ -9,6 +9,8 @@ func _ready():
 	$VBox/NumDraft/LineEdit.text = str(Server.MAX_PEERS + 1)
 	$VBox/NumDraft/LineEdit.oldtext = $VBox/NumDraft/LineEdit.text
 	$VBox/Username/LineEdit.text = Server.username
+	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
+	$VBox/MusicSlider/HSlider.value = MusicManager.volume
 
 func onBackPressed():
 	emit_signal("settingsClose")
@@ -63,3 +65,9 @@ func onShaderLoadButtonPressed(path):
 
 func onShaderBackButtonPressed():
 	$FileDisplay.visible = false
+
+func onSoundVolumeChange(value):
+	SoundEffectManager.setVolume(value)
+
+func onMusicVolumeChange(value):
+	MusicManager.setVolume(value)

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Fluxx69_Head-Long-160.mp3-9e727e2fbfc065eb8aaa9473e61a3922.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/Fluxx69_Head-Long-160.mp3"
+dest_files=[ "res://.import/Fluxx69_Head-Long-160.mp3-9e727e2fbfc065eb8aaa9473e61a3922.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

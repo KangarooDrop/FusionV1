@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Nic-Silver-Reborn-in-a-Dream.mp3-ec004d33d51bcdf2439e261fc2fa4b72.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/Nic-Silver-Reborn-in-a-Dream.mp3"
+dest_files=[ "res://.import/Nic-Silver-Reborn-in-a-Dream.mp3-ec004d33d51bcdf2439e261fc2fa4b72.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -38,7 +38,11 @@ func slotClicked(slot : CardSlot):
 	
 	if slot.currentZone == CardSlot.ZONES.CREATURE and is_instance_valid(slot.cardNode):
 		if not bounceSlots.has(slot):
+			SoundEffectManager.playSelectSound()
 			bounceSlots.append(slot)
+		else:
+			SoundEffectManager.playUnselectSound()
+			bounceSlots.erase(slot)
 		if bounceSlots.size() >= count - timesApplied or bounceSlots.size() >= validTargets:
 			
 			for s in bounceSlots:

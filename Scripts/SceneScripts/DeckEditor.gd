@@ -31,6 +31,8 @@ var loadedDeckName = ""
 var popups := []
 
 func _ready():
+	MusicManager.playDeckEditorMusic()
+	
 	$CenterControl/DeckDisplay.parent = self
 	setCards()
 	

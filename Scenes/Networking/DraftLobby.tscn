@@ -100,16 +100,16 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="IPSet/HBoxContainer"]
 margin_top = 5.0
-margin_right = 77.0
-margin_bottom = 19.0
+margin_right = 105.0
+margin_bottom = 24.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "IP Address: "
 
 [node name="LineEdit" type="LineEdit" parent="IPSet/HBoxContainer"]
-margin_left = 81.0
-margin_right = 209.0
-margin_bottom = 24.0
+margin_left = 109.0
+margin_right = 237.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 128, 0 )
 custom_fonts/font = ExtResource( 2 )
 text = "127.0.0.1"

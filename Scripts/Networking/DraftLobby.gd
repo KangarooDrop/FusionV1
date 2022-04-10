@@ -63,9 +63,15 @@ func joinButtonPressed():
 	$IPSet.visible = true
 
 func backButtonPressed():
-	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+	var root = get_node("/root")
+	var startup = load("res://Scenes/StartupScreen.tscn").instance()
+	
+	startup.onPlayPressed()
+	root.add_child(startup)
+	get_tree().current_scene = startup
+	
+	root.remove_child(self)
+	queue_free()
 
 ###############################################
 
@@ -216,3 +222,12 @@ func draftTypeSelected(index):
 func _exit_tree():
 	if startingUsername != Server.username:
 		Settings.writeToSettings()
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
+		if $MultiplayerUI.visible:
+			backButtonPressed()
+		elif $IPSet.visible:
+			ipBackButtonPressed()
+		elif $Menu.visible:
+			lobbyBackPressed()

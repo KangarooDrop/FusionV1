@@ -34,9 +34,15 @@ func ipBackButtonPressed():
 		
 func backButtonPressed():
 	Server.host = false
-	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+	var root = get_node("/root")
+	var startup = load("res://Scenes/StartupScreen.tscn").instance()
+	
+	startup.onPlayPressed()
+	root.add_child(startup)
+	get_tree().current_scene = startup
+	
+	root.remove_child(self)
+	queue_free()
 		
 func startGame():
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
@@ -110,10 +116,15 @@ func _input(event):
 		if event.scancode == KEY_ESCAPE:
 			if Server.online:
 				disconnected()
+			elif $MultiplayerUI.visible:
+				backButtonPressed()
+			elif $IPSet.visible:
+				ipBackButtonPressed()
+			elif $DeckSelector.visible:
+				onBackButtonClicked()
 
 func disconnected():
 	Server.closeServer()
 	
 	$MultiplayerUI.visible = true
 	$WaitLabel.visible = false
-				

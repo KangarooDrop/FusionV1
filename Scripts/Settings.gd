@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.2.03"
+var versionID = "0.0.2.04"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -31,7 +31,9 @@ func _ready():
 	Server.MAX_PEERS = settings["num_draft"] - 1
 	Server.username = settings["username"]
 	Server.ip = settings["ip_saved"]
-	ShaderHandler.setShader(settings["shader"])
+	SoundEffectManager.setVolume(settings["sound_volume"])
+	MusicManager.setVolume(settings["music_volume"])
+	ShaderHandler.setShader(settings["shader"], false)
 	
 	if not ok:
 		writeToSettings()
@@ -53,6 +55,12 @@ func verifySettings(settings : Dictionary) -> bool:
 	if not settings.has("shader") or typeof(settings["shader"]) != TYPE_STRING:
 		settings["shader"] = Settings.shaderPath + "default.shader"
 		ok = false
+	if not settings.has("sound_volume"):
+		settings["sound_volume"] = -10
+		ok = false
+	if not settings.has("music_volume"):
+		settings["music_volume"] = -20
+		ok = false
 		
 	return ok
 	
@@ -68,7 +76,9 @@ func getSettingsDict() -> Dictionary:
 		"play_anims":playAnimations,
 		"username":Server.username,
 		"ip_saved":Server.ip,
-		"shader":ShaderHandler.currentShader
+		"shader":ShaderHandler.currentShader,
+		"sound_volume":SoundEffectManager.volume,
+		"music_volume":MusicManager.volume
 	}
 	return rtn
 	

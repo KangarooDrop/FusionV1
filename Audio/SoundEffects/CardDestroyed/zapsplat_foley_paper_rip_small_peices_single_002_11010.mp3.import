@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zapsplat_foley_paper_rip_small_peices_single_002_11010.mp3-e6d83fd23f57e1f5c9ed8b44f5c810fe.mp3str"
+
+[deps]
+
+source_file="res://Audio/SoundEffects/CardDestroyed/zapsplat_foley_paper_rip_small_peices_single_002_11010.mp3"
+dest_files=[ "res://.import/zapsplat_foley_paper_rip_small_peices_single_002_11010.mp3-e6d83fd23f57e1f5c9ed8b44f5c810fe.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

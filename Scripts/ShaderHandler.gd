@@ -90,14 +90,15 @@ func verifyShaders():
 		file.close()
 
 var currentShader = "default.json"
-func setShader(path : String):
+func setShader(path : String, writeToSettings : bool = true):
 	if path != Settings.shaderPath + "default.shader":
 		makeWarning()
 	
 	currentShader = path
 	var shader = load(path)
 	shadObj.material.shader = shader
-	Settings.writeToSettings()
+	if writeToSettings:
+		Settings.writeToSettings()
 	
 
 func _input(event):

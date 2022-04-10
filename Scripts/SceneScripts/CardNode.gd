@@ -20,7 +20,7 @@ var attackStartupMaxTime = 0.1
 var attackTimer = 0
 var attackMaxTime = 0.1
 var attackWaitTimer = 0
-var attackWaitMaxTime = 0.3
+var attackWaitMaxTime = 0.1
 var attackReturnTimer = 0
 var attackReturnMaxTime = 0.2
 
@@ -216,7 +216,7 @@ func fight(slot):
 		
 
 	card.onDealDamage(slot)
-	
+	SoundEffectManager.playAttackSound()
 	
 	while not NodeLoc.getBoard().getCanFight():
 		fightingWait = true

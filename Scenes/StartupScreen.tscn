@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=4]
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 2 )
 
 [node name="StartupScreen" type="Control"]
 anchor_right = 1.0
@@ -18,10 +23,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -124.61
-margin_top = -199.293
-margin_right = -2.60986
-margin_bottom = 0.706848
+margin_left = -120.0
+margin_top = -160.0
+margin_right = 2.0
+margin_bottom = 5.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
@@ -34,47 +39,152 @@ margin_bottom = 25.0
 custom_fonts/font = ExtResource( 4 )
 text = "Deck Editor"
 
-[node name="PracticeButton" type="Button" parent="VBoxContainer"]
+[node name="PlayButton" type="Button" parent="VBoxContainer"]
 margin_top = 35.0
 margin_right = 122.0
 margin_bottom = 60.0
 custom_fonts/font = ExtResource( 4 )
-text = "Practice"
+text = "Play"
 
-[node name="LobbyButton" type="Button" parent="VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="VBoxContainer"]
 margin_top = 70.0
 margin_right = 122.0
 margin_bottom = 95.0
 custom_fonts/font = ExtResource( 4 )
-text = "Lobby"
+text = "Settings"
 
-[node name="DraftButton" type="Button" parent="VBoxContainer"]
+[node name="CreditsButton" type="Button" parent="VBoxContainer"]
 margin_top = 105.0
 margin_right = 122.0
 margin_bottom = 130.0
 custom_fonts/font = ExtResource( 4 )
-text = "Draft"
+text = "Credits"
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
 margin_top = 140.0
 margin_right = 122.0
 margin_bottom = 165.0
 custom_fonts/font = ExtResource( 4 )
-text = "Settings"
-
-[node name="ExitButton" type="Button" parent="VBoxContainer"]
-margin_top = 175.0
-margin_right = 122.0
-margin_bottom = 200.0
-custom_fonts/font = ExtResource( 4 )
 text = "Exit"
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -120.0
+margin_top = -110.0
+margin_right = 2.0
+margin_bottom = 2.0
+rect_scale = Vector2( 2, 2 )
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PracticeButton" type="Button" parent="VBoxContainer2"]
+margin_right = 122.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 4 )
+text = "Practice"
+
+[node name="LobbyButton" type="Button" parent="VBoxContainer2"]
+margin_top = 29.0
+margin_right = 122.0
+margin_bottom = 54.0
+custom_fonts/font = ExtResource( 4 )
+text = "Lobby"
+
+[node name="DraftButton" type="Button" parent="VBoxContainer2"]
+margin_top = 58.0
+margin_right = 122.0
+margin_bottom = 83.0
+custom_fonts/font = ExtResource( 4 )
+text = "Draft"
+
+[node name="BackButton" type="Button" parent="VBoxContainer2"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 117.0
+margin_top = 46.5
+margin_right = 239.0
+margin_bottom = 71.5
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+
+[node name="CreditsLabel" type="RichTextLabel" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/normal_font = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "[center]
+[u]Programming[/u]:
+Me
+
+[u]Art[/u]:
+Me & Aaron Wise
+
+[u]Sound Effects[/u]:
+Sound effects obtained from Kenney.nl
+Sound effects obtained from zapsplat.com
+
+[u]Music[/u]: 
+Nic Silver - Reborn in a Dream
+Canton - Floodwaters
+Fluxx69 - Head Long
+LoopKitchen - Ravenous
+TNH - The Reason of Techno
+[/center]"
+text = "
+Programming:
+Me
+
+Art:
+Me & Aaron Wise
+
+Sound Effects:
+Sound effects obtained from Kenney.nl
+Sound effects obtained from zapsplat.com
+
+Music: 
+Nic Silver - Reborn in a Dream
+Canton - Floodwaters
+Fluxx69 - Head Long
+LoopKitchen - Ravenous
+TNH - The Reason of Techno
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackButton" type="Button" parent="CreditsLabel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -154.0
+margin_top = -57.0
+margin_right = -32.0
+margin_bottom = -32.0
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
+visible = false
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
-[connection signal="pressed" from="VBoxContainer/PracticeButton" to="." method="onPracticePressed"]
-[connection signal="pressed" from="VBoxContainer/LobbyButton" to="." method="onLobbyPressed"]
-[connection signal="pressed" from="VBoxContainer/DraftButton" to="." method="onDraftPressed"]
+[connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
+[connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="onCreditsPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="VBoxContainer2/PracticeButton" to="." method="onPracticePressed"]
+[connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyPressed"]
+[connection signal="pressed" from="VBoxContainer2/DraftButton" to="." method="onDraftPressed"]
+[connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="onBackPressed"]
+[connection signal="pressed" from="CreditsLabel/BackButton" to="." method="onBackPressed"]
 [connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]

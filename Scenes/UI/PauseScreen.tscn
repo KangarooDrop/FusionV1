@@ -83,6 +83,7 @@ custom_fonts/font = ExtResource( 2 )
 text = "To Main Menu"
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
+visible = false
 
 [connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsButtonClicked"]

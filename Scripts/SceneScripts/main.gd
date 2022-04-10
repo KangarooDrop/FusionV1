@@ -13,10 +13,15 @@ func _ready():
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_ESCAPE:
-			if not $CenterControl/FileSelector.visible:
-				$CenterControl/PauseNode/PauseMenu.visible = !$CenterControl/PauseNode/PauseMenu.visible
-			else:
+			if $CenterControl/FileSelector.visible:
 				onDeckChangeBackPressed()
+			elif $CenterControl/PauseNode/PauseMenu/SettingsPage/FileDisplay.visible:
+				$CenterControl/PauseNode/PauseMenu/SettingsPage.onShaderBackButtonPressed()
+			elif $CenterControl/PauseNode/PauseMenu/SettingsPage.visible:
+				$CenterControl/PauseNode/PauseMenu/SettingsPage.onBackPressed()
+			else:
+				$CenterControl/PauseNode/PauseMenu.visible = !$CenterControl/PauseNode/PauseMenu.visible
+				
 
 func onDeckChangePressed():
 	$CenterControl/PauseNode/PauseMenu.visible = false

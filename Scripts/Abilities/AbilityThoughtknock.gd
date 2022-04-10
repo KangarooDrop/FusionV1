@@ -23,6 +23,7 @@ func slotClicked(slot : CardSlot):
 		for i in range(hand.slots.size()):
 			if hand.slots[i] == slot:
 				index = i
+		SoundEffectManager.playSelectSound()
 		hand.discardIndex(index)
 		#hand.drawCard()
 		numCards += 1

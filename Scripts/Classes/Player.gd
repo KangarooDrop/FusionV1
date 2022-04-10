@@ -74,10 +74,17 @@ func setArmour(armourNew : int, showChange = true):
 	armour = armourNew
 	armourNode.get_node("Label").text = ("Armour: " + str(armour) if armour > 0 else "")
 
+var ftData := []
 func makeFallingText(text : String, color : Color, position : Vector2):
-	var ft = fallingTextScene.instance()
-	NodeLoc.getBoard().add_child(ft)
-	var labelSize = lifeNode.get_node("Label").get_minimum_size()
-	ft.position = position + Vector2(labelSize.x - 4, labelSize.y / 2)
-	ft.get_node("Label").text = text
-	ft.get_node("Label").set("custom_colors/font_color", color)
+	ftData.append([text, color, position])
+
+func _physics_process(delta):
+	for i in range(10):
+		if ftData.size() > 0:
+			var ft = fallingTextScene.instance()
+			NodeLoc.getBoard().add_child(ft)
+			var labelSize = lifeNode.get_node("Label").get_minimum_size()
+			ft.get_node("Label").text = ftData[0][0]
+			ft.get_node("Label").set("custom_colors/font_color", ftData[0][1])
+			ft.position = ftData[0][2] + Vector2(labelSize.x - 4, labelSize.y / 2)
+			ftData.remove(0)

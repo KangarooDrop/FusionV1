@@ -12,14 +12,8 @@ func onOtherEnter(slot):
 		if slot.playerID == card.playerID:
 			addToStack("onEffect", [self.card, slot.cardNode.card])
 
-func onRemove(ability):
-	if ability == self:
-		card.power -= buffsAppliedVec.x
-		card.toughness -= buffsAppliedVec.y
-		card.maxToughness -= buffsAppliedVec.y
-
 func onEffect(params):
-	if NodeLoc.getBoard().isOnBoard(params[0]):
+	if NodeLoc.getBoard().isOnBoard(params[0]) and NodeLoc.getBoard().isOnBoard(params[1]):
 		if params[1].power > 0:
 			params[0].power += params[1].power
 			buffsAppliedVec.x += params[1].power

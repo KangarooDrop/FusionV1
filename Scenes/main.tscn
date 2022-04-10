@@ -45,7 +45,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="CenterControl/WinLose"]
-z_index = 3
+z_index = 98
 texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 64, 32 )

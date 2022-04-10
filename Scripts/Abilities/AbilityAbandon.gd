@@ -34,9 +34,11 @@ func slotClicked(slot : CardSlot):
 			if hand.slots[i] == slot:
 				index = i
 		if not discardIndexes.has(index):
+			SoundEffectManager.playSelectSound()
 			discardIndexes.append(index)
 			slot.cardNode.position.y -= 16
 		else:
+			SoundEffectManager.playUnselectSound()
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		

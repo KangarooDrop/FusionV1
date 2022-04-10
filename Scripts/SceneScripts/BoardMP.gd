@@ -109,6 +109,8 @@ var stackTimer = 0
 func _ready():
 	print("-".repeat(30))
 	
+	MusicManager.playBoardMusic()
+	
 	if not Server.online:
 		mulliganDoneOpponent = true
 		versionConfirmed = true
@@ -418,6 +420,9 @@ var rotFreq = 1
 var practiceWaiting = false
 
 func _physics_process(delta):
+	
+	for p in players:
+		p._physics_process(delta)
 	
 	if not gameOver and deadPlayers.size() > 0:
 		gameOver = true
@@ -1038,6 +1043,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					
 					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
 						if cardsHolding.has(slot):
+							SoundEffectManager.playUnselectSound()
 							cardsHolding.erase(slot)
 							slot.position.y += cardDists
 							if hoveringOn != null:
@@ -1046,6 +1052,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						else:
 							if cardsPerTurn - cardsPlayed - cardsHolding.size() > getCardCost(slot.cardNode.card) - 1:
 								if slot.cardNode.card.canBePlayed:
+									SoundEffectManager.playSelectSound()
 									cardsHolding.append(slot)
 									slot.position.y -= cardDists
 									slot.cardNode.position.y = slot.position.y
@@ -1512,6 +1519,7 @@ func checkState():
 			hoveringWindowSlot = null
 		
 		
+		SoundEffectManager.playDeathSound()
 		cardNode.card.onLeave()
 		cardNode.card.onDeath()
 		

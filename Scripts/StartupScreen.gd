@@ -3,6 +3,7 @@ extends Control
 var textToFileName := {}
 
 func _ready():
+	MusicManager.playMainMenuMusic()
 	Settings.gameMode = Settings.GAME_MODE.NONE
 	
 	$SettingsPage/VBox/Shaders/SelectShaderButton.text = ShaderHandler.currentShader.get_file().get_basename().capitalize()
@@ -38,3 +39,25 @@ func onExitPressed():
 
 func onSettingsClose():
 	$VBoxContainer.visible = true
+
+func onPlayPressed():
+	$VBoxContainer.visible = false
+	$VBoxContainer2.visible = true
+
+func onBackPressed():
+	$VBoxContainer.visible = true
+	$VBoxContainer2.visible = false
+	$CreditsLabel.visible = false
+
+func onCreditsPressed():
+	$VBoxContainer.visible = false
+	$CreditsLabel.visible = true
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
+		if $CreditsLabel.visible or $VBoxContainer2.visible:
+			onBackPressed()
+		elif $SettingsPage/FileDisplay.visible:
+			$SettingsPage.onShaderBackButtonPressed()
+		elif $SettingsPage.visible:
+			$SettingsPage.onBackPressed()

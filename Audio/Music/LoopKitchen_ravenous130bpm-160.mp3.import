@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/LoopKitchen_ravenous130bpm-160.mp3-797b93dbc0e0ac2c63dd429c445344eb.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/LoopKitchen_ravenous130bpm-160.mp3"
+dest_files=[ "res://.import/LoopKitchen_ravenous130bpm-160.mp3-797b93dbc0e0ac2c63dd429c445344eb.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

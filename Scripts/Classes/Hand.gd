@@ -73,6 +73,7 @@ func _physics_process(delta):
 			
 	elif drawQueue.size() > 0:
 		if drawingNode == null:
+			SoundEffectManager.playDrawSound()
 			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
 			slotInst.isOpponent = isOpponent
@@ -160,6 +161,7 @@ func addCardToHand(data : Array):
 		if Settings.playAnimations:
 			drawQueue.append(data)
 		else:
+			SoundEffectManager.playDrawSound()
 			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
 			slotInst.isOpponent = isOpponent

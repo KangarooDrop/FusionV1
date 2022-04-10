@@ -50,9 +50,11 @@ func slotClicked(slot : CardSlot):
 			if hand.slots[i] == slot:
 				index = i
 		if not fuseIndexes.has(index):
+			SoundEffectManager.playSelectSound()
 			fuseIndexes.append(index)
 			slot.cardNode.position.y -= 16
 		else:
+			SoundEffectManager.playUnselectSound()
 			fuseIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
@@ -69,4 +71,4 @@ func slotClicked(slot : CardSlot):
 			board.endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "A"
+	return .genDescription() + "When this card is played, if you can, fuse " + str(count+1) + " cards together and put the fusion creature into your hand"

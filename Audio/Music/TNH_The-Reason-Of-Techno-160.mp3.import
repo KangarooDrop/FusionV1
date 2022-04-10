@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/TNH_The-Reason-Of-Techno-160.mp3-835c793baa1c63c7005c1726699cf239.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/TNH_The-Reason-Of-Techno-160.mp3"
+dest_files=[ "res://.import/TNH_The-Reason-Of-Techno-160.mp3-835c793baa1c63c7005c1726699cf239.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
