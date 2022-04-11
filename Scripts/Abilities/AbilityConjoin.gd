@@ -73,4 +73,4 @@ func slotClicked(slot : CardSlot):
 			board.endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this card is played, if you can, fuse " + str(count+1-timesApplied) + " cards together and put the fusion creature into your hand"
+	return .genDescription() + "When this card is played, fuse " + str(count+1-timesApplied) + " cards together and put the fusion creature into your hand"

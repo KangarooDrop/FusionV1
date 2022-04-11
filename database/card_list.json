@@ -899,7 +899,7 @@
   },
   "71": {
     "name": "Riella",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_RIELLA.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [
@@ -942,7 +942,7 @@
   },
   "74": {
     "name": "Sigil",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_SIGIL.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -956,7 +956,7 @@
   },
   "75": {
     "name": "Raanagan",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_RAANAGAN.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -970,7 +970,7 @@
   },
   "76": {
     "name": "Mongu",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_MONGU.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -984,7 +984,7 @@
   },
   "77": {
     "name": "Gaint Scorpone'",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_GIANT_SCORPONE.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -998,7 +998,7 @@
   },
   "78": {
     "name": "Inverter Arcanist",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_INVERTER_ARCANIST.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -1012,7 +1012,7 @@
   },
   "79": {
     "name": "Spectre",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_SPECTRE.png",
     "power": 3,
     "toughness": 0,
     "creature_type": [
@@ -1026,7 +1026,7 @@
   },
   "80": {
     "name": "Flicker",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_FLICKER.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -1040,7 +1040,7 @@
   },
   "81": {
     "name": "Grafter",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_GRAFTER.png",
     "power": 3,
     "toughness": 1,
     "creature_type": [
