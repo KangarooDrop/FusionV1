@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Scripts/UI/CreditsUI.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
@@ -125,52 +126,81 @@ text = "Back"
 
 [node name="CreditsLabel" type="RichTextLabel" parent="."]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -512.0
+margin_right = 512.0
+margin_bottom = 934.0
 custom_fonts/normal_font = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
-bbcode_text = "[center]
+bbcode_text = "
+[center]
 [u]Programming[/u]:
 Me
+[u]																			[/u]
 
 [u]Art[/u]:
 Me & Aaron Wise
+[u]																			[/u]
 
 [u]Sound Effects[/u]:
 Sound effects obtained from Kenney.nl
 Sound effects obtained from zapsplat.com
+[u]																			[/u]
 
 [u]Music[/u]: 
 Nic Silver - Reborn in a Dream
-Canton - Floodwaters
+
+Canton Becker - Floodwaters
+cantonbecker.com/music/
+Licensed under Creative Commons By Attribution 2.0 
+creativecommons.org/licenses/by/2.0/
+
 Fluxx69 - Head Long
+
 LoopKitchen - Ravenous
+
 TNH - The Reason of Techno
-[/center]"
+[/center]
+"
 text = "
+
 Programming:
 Me
+																			
 
 Art:
 Me & Aaron Wise
+																			
 
 Sound Effects:
 Sound effects obtained from Kenney.nl
 Sound effects obtained from zapsplat.com
+																			
 
 Music: 
 Nic Silver - Reborn in a Dream
-Canton - Floodwaters
+
+Canton Becker - Floodwaters
+cantonbecker.com/music/
+Licensed under Creative Commons By Attribution 2.0 
+creativecommons.org/licenses/by/2.0/
+
 Fluxx69 - Head Long
+
 LoopKitchen - Ravenous
+
 TNH - The Reason of Techno
+
 "
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackButton" type="Button" parent="CreditsLabel"]
+[node name="BackButton" type="Button" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -181,6 +211,9 @@ margin_right = -32.0
 margin_bottom = -32.0
 custom_fonts/font = ExtResource( 4 )
 text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
@@ -194,5 +227,5 @@ visible = false
 [connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyPressed"]
 [connection signal="pressed" from="VBoxContainer2/DraftButton" to="." method="onDraftPressed"]
 [connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="onBackPressed"]
-[connection signal="pressed" from="CreditsLabel/BackButton" to="." method="onBackPressed"]
+[connection signal="pressed" from="BackButton" to="." method="onBackPressed"]
 [connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]

@@ -592,8 +592,8 @@
   "49": {
     "name": "Amalgam",
     "tex": "res://Art/portraits/card_AMALGAM.png",
-    "power": 0,
-    "toughness": 0,
+    "power": 1,
+    "toughness": 1,
     "creature_type": [
       5
     ],

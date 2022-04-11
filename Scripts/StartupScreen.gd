@@ -46,11 +46,13 @@ func onPlayPressed():
 func onBackPressed():
 	$VBoxContainer.visible = true
 	$VBoxContainer2.visible = false
-	$CreditsLabel.visible = false
+	$CreditsLabel.hide()
+	$BackButton.hide()
 
 func onCreditsPressed():
 	$VBoxContainer.visible = false
-	$CreditsLabel.visible = true
+	$CreditsLabel.show()
+	$BackButton.show()
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:

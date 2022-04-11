@@ -3,7 +3,7 @@ extends Node
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 var cardNode = preload("res://Scenes/CardNode.tscn")
 
-var cardMoveSpeed = 200
+var cardMoveSpeed = 100
 
 #[card1, card2]
 var backFuseData := []
@@ -82,8 +82,8 @@ func _physics_process(delta):
 				genBackgroundFusion()
 		
 		for data in backFuseData:
-			data[0].position += Vector2(-cardMoveSpeed, 0).rotated(data[0].rotation) * delta
-			data[1].position += Vector2(cardMoveSpeed, 0).rotated(data[1].rotation) * delta
+			data[0].position += Vector2(-cardMoveSpeed * data[0].scale.x, 0).rotated(data[0].rotation) * delta
+			data[1].position += Vector2(cardMoveSpeed * data[0].scale.x, 0).rotated(data[1].rotation) * delta
 			
 			if (data[0].position - data[1].position).length() < cardWidth:
 				var card = ListOfCards.fusePair(data[0].card, data[1].card)
@@ -104,7 +104,7 @@ func _physics_process(delta):
 				backFadeData.erase(data)
 		
 		for data in backMovingData:
-			data[0].position += Vector2(-cardMoveSpeed, 0).rotated(data[0].rotation) * delta
+			data[0].position += Vector2(-cardMoveSpeed * data[0].scale.x, 0).rotated(data[0].rotation) * delta
 			if data[0].position.length() > data[1]:
 				data[0].queue_free()
 				backMovingData.erase(data)
