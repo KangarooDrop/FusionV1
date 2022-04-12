@@ -35,8 +35,15 @@ position = Vector2( 446, 0 )
 [node name="GraveHolder" type="Node2D" parent="."]
 position = Vector2( 334, 0 )
 
-[node name="GraveDisplay" parent="." instance=ExtResource( 10 )]
+[node name="GraveDisplay_A" parent="." instance=ExtResource( 10 )]
+visible = false
 z_index = 3
+currentZone = 6
+
+[node name="GraveDisplay_B" parent="." instance=ExtResource( 10 )]
+visible = false
+z_index = 3
+currentZone = 6
 
 [node name="Hand_A" type="Control" parent="."]
 anchor_left = 0.5

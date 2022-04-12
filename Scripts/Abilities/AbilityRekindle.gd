@@ -8,7 +8,7 @@ func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [clone(card), card.playerID, count - timesApplied])
+	addToStack("onEffect", [self.clone(card), card.playerID, count - timesApplied])
 
 static func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:

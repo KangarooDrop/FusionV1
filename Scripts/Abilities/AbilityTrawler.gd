@@ -59,4 +59,4 @@ func removeCards(playerID : int, removeCards : bool):
 			board.removeCardFromGrave(playerID, 0)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, choose a " + str(TextScrapyard.new(null)) +" and remove all cards from it. Gets +1/+1 for each unique creature type removed this way (Includes its own creature types). Removes this ability"
+	return .genDescription() + "When this creature is played, choose a " + str(TextScrapyard.new(null)) +" and remove all cards from it. Gets +1/+1 for each unique creature type removed this way (Includes its own creature types)"

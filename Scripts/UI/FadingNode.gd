@@ -19,12 +19,14 @@ func _physics_process(delta):
 		if timer < maxTime:
 			timer += delta
 			if timer >= maxTime:
+				parent.modulate = Color(1, 1, 1, 1)
 				fadingIn = false
 				emit_signal("onFadeIn")
 	elif fadingOut:
 		if timer > 0:
 			timer -= delta
 			if timer <= 0:
+				parent.modulate = Color(1, 1, 1, 0)
 				fadingOut = false
 				emit_signal("onFadeOut")
 				close()

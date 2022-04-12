@@ -33,6 +33,7 @@ var movingCards := []
 var moveSpeed = 800
 
 export var z_index = 0
+export(CardSlot.ZONES) var currentZone : int = CardSlot.ZONES.NONE
 
 func _ready():
 	myfunc()
@@ -66,36 +67,31 @@ func centerCards():
 					nodes[i].global_position.x = lastPosNodes[i].x
 					
 
+func removeCard(index : int):
+	if index >= 0 and index < slots.size():
+		slots[index].queue_free()
+		nodes[index].queue_free()
+		slots.remove(index)
+		nodes.remove(index)
+		centerCards()
+
 func addCard(card : Card):
-	var cardSlot = cardSlotScene.instance()
 	var cardNode = cardNodeScene.instance()
-	
 	cardNode.card = card
-	
-	cardSlot.cardNode = cardNode
-	cardNode.slot = cardSlot
-	
-	cardSlot.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+	addCardNode(cardNode)
 	cardNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	
-	add_child(cardSlot)
-	add_child(cardNode)
-	
-	slots.append(cardSlot)
-	nodes.append(cardNode)
-	
-	cardSlot.get_node("SpotSprite").visible = false
-	
-	centerCards()
+	cardNode.setCardVisible(cardNode.getCardVisible())
 
 func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
-	var lastPos = cardNode.global_position
 	var cardSlot = cardSlotScene.instance()
+	cardSlot.currentZone = currentZone
 	
 	add_child(cardSlot)
 	if is_instance_valid(cardNode.get_parent()):
 		cardNode.get_parent().remove_child(cardNode)
 	add_child(cardNode)
+	
+	var lastPos = cardNode.global_position
 	
 	cardSlot.cardNode = cardNode
 	cardNode.slot = cardSlot

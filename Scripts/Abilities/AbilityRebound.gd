@@ -15,7 +15,7 @@ static func onEffect(params : Array):
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		for s in board.creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
+			if is_instance_valid(s.cardNode) and s.cardNode.card != params[0].card:
 				validTargets += 1
 	if validTargets >= 1:
 		board.getSlot(params[0], params[1])
@@ -25,7 +25,7 @@ func slotClicked(slot : CardSlot):
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		for s in board.creatures[p.UUID]:
-			if is_instance_valid(s.cardNode):
+			if is_instance_valid(s.cardNode) and s.cardNode.card != self.card:
 				validTargets += 1
 	
 	if slot == null:
@@ -36,7 +36,7 @@ func slotClicked(slot : CardSlot):
 					creatureSlots.append(s)
 		slot = creatureSlots[randi() % creatureSlots.size()]
 	
-	if slot.currentZone == CardSlot.ZONES.CREATURE and is_instance_valid(slot.cardNode):
+	if slot.currentZone == CardSlot.ZONES.CREATURE and is_instance_valid(slot.cardNode) and slot.cardNode.card != self.card:
 		if not bounceSlots.has(slot):
 			SoundEffectManager.playSelectSound()
 			bounceSlots.append(slot)
@@ -63,4 +63,9 @@ func slotClicked(slot : CardSlot):
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, choose " + str(count - subCount) + " cards to discard and then draw " + str(count - subCount) + " cards"
+	var s = ""
+	if count - subCount > 1:
+		s = "When this creature is played, choose " + str(count - subCount) + " other creatures and return them to their owners' hands"
+	else:
+		s = "When this creature is played, choose another creature and return it to its owner's hand"
+	return .genDescription() + s

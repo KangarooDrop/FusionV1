@@ -1025,7 +1025,7 @@
     "rarity": "COMMON"
   },
   "80": {
-    "name": "Flicker",
+    "name": "Popper",
     "tex": "res://Art/portraits/card_FLICKER.png",
     "power": 1,
     "toughness": 1,
@@ -1049,6 +1049,20 @@
     "tier": 1,
     "abilities": [
       "AbilityConjoin"
+    ],
+    "rarity": "COMMON"
+  },
+  "82": {
+    "name": "Grave Robber",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityUnearth"
     ],
     "rarity": "COMMON"
   }

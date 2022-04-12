@@ -87,7 +87,7 @@ margin_left = 153.0
 margin_right = 353.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 200, 19 )
-min_value = -30.0
+min_value = -50.0
 max_value = 10.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -118,7 +118,7 @@ margin_left = 151.0
 margin_right = 351.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 200, 19 )
-min_value = -40.0
+min_value = -50.0
 max_value = 0.0
 __meta__ = {
 "_edit_use_anchors_": false

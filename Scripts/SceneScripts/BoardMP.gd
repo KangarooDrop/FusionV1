@@ -18,6 +18,7 @@ var creatures : Dictionary
 var decks : Dictionary
 var graves : Dictionary
 var graveCards : Dictionary
+var graveDisplays : Dictionary
 
 var boardSlots : Array
 
@@ -697,13 +698,13 @@ func _physics_process(delta):
 			elif selectedSlot.currentZone == CardSlot.ZONES.GRAVE:
 				if graveCards[selectedSlot.playerID].size() > 0:
 					if selectedSlot.playerID == graveViewing:
-						clearGraveDisplay()
-					else:
-						clearGraveDisplay()
+						graveDisplays[graveViewing].visible = false
+						graveViewing = -1
+					elif graveCards[selectedSlot.playerID].size() > 0:
+						if graveViewing != -1:
+							graveDisplays[graveViewing].visible = false
+						graveDisplays[selectedSlot.playerID].visible = true
 						graveViewing = selectedSlot.playerID
-						var gr = graveCards[selectedSlot.playerID]
-						for i in range(gr.size()):
-							$GraveDisplay.addCard(gr[i])
 				else:
 					pass
 			
@@ -717,12 +718,12 @@ func _physics_process(delta):
 			if hoveringWindow.close():
 				hoveringWindowSlot = null
 		elif graveViewing != -1:
-			clearGraveDisplay()
+			graveDisplays[graveViewing].visible = false
+			graveViewing = -1
 
 var graveViewing := -1
 
 func addCardToGrave(playerID : int, card : Card):
-	
 	if card.tier != 1:
 		return
 	
@@ -735,25 +736,21 @@ func addCardToGrave(playerID : int, card : Card):
 	cn.card = card
 	cn.setCardVisible(true)
 	
-	if graveViewing == playerID:
-		$GraveDisplay.addCard(card)
-	
-	
+	graveDisplays[playerID].addCard(card)
 	
 	for c in getAllCards():
 		c.onGraveAdd(card)
 
-func clearGraveDisplay():
-	graveViewing = -1
-	$GraveDisplay.clear()
-
 func removeCardFromGrave(playerID : int, index : int):
 	graveCards[playerID].remove(index)
+	graveDisplays[playerID].removeCard(index)
 	if graveCards[playerID].size() == 0:
 		var cn = graves[playerID].cardNode
 		cn.visible = false
 		cn.setCardVisible(false)
-		clearGraveDisplay()
+		if graveViewing == playerID:
+			graveDisplays[playerID].visible = false
+			graveViewing = -1
 		
 
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
@@ -765,8 +762,6 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 	hoveringWindow = hoverInst
 
 func initZones():
-	$GraveDisplay.moveSpeed = 1200
-	
 	var cardInst = null
 	
 	#	PLAYER 1 SLOTS  	#
@@ -806,6 +801,7 @@ func initZones():
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, cardHeight + cardDists)
 	graves[p.UUID] = cardInst
+	graveDisplays[p.UUID] = $GraveDisplay_A
 	graveCards[p.UUID] = []
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
@@ -858,6 +854,7 @@ func initZones():
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, -cardHeight - cardDists)
 	graves[p.UUID] = cardInst
+	graveDisplays[p.UUID] = $GraveDisplay_B
 	graveCards[p.UUID] = []
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
@@ -1082,7 +1079,6 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 			elif slot.currentZone == CardSlot.ZONES.CREATURE:
 				if cardsHolding.size() > 0 and cardNodesFusing.size() == 0:
 					#PUTTING A CREATURE ONTO THE FIELD
-					
 					if not isMyTurn() and not fromServer:
 						return false
 					

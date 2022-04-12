@@ -11,6 +11,8 @@ var spawnedWindows = []
 var closeOnMouseExit = false
 var closeChildrenFirst = false
 
+var yieldTimer = 0
+
 func _ready():
 	$Label.connect("meta_clicked", self, "handle")
 		
@@ -34,8 +36,7 @@ func setText(text : String, margin = 4):
 		$Label.rect_scale.x = -1
 		$Label.rect_position.x += $Label.rect_size.x
 	
-	yield(get_tree().create_timer(0.02), "timeout")
-	$Label.rect_size.y = 0
+	yieldTimer = 0
 
 static func splitText(string, delimiter):
 	var out = []
@@ -109,6 +110,9 @@ func _physics_process(delta):
 		c.scale = scale
 	if closeOnMouseExit and not isMouseOn(true):
 		close()
+	if yieldTimer == 0:
+		yieldTimer = 1
+		$Label.rect_size.y = 0
 
 func isMouseOn(recursive = false) -> bool:
 	var mousePos = get_viewport().get_mouse_position() - get_viewport_rect().size / 2 

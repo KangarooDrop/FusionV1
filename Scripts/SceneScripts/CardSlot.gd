@@ -7,7 +7,7 @@ var disabled = false
 var cardNode
 var playerID = -1
 
-enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK, GRAVE}
+enum ZONES {NONE, HAND, ENCHANTMENT, CREATURE, DECK, GRAVE, GRAVE_CARD}
 var currentZone = ZONES.NONE
 var isOpponent = false
 

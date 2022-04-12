@@ -300,6 +300,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityTrawler.gd"
 }, {
 "base": "AbilityETB",
+"class": "AbilityUnearth",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityUnearth.gd"
+}, {
+"base": "AbilityETB",
 "class": "AbilityUpgrade",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityUpgrade.gd"
@@ -493,6 +498,7 @@ _global_script_class_icons={
 "AbilityTough": "",
 "AbilityTransfigur": "",
 "AbilityTrawler": "",
+"AbilityUnearth": "",
 "AbilityUpgrade": "",
 "AbilityUseless": "",
 "AbilityVenomous": "",

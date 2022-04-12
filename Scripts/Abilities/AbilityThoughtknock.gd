@@ -2,7 +2,7 @@ extends AbilityETB
 
 class_name AbilityThoughtknock
 
-var numCards = 0
+var discardIndexes := []
 
 func _init(card : Card).("Thoughtknock", card, Color.gray, true, Vector2(0, 0)):
 	pass
@@ -23,11 +23,18 @@ func slotClicked(slot : CardSlot):
 		for i in range(hand.slots.size()):
 			if hand.slots[i] == slot:
 				index = i
-		SoundEffectManager.playSelectSound()
-		hand.discardIndex(index)
-		#hand.drawCard()
-		numCards += 1
-		if numCards >= count - timesApplied:
+		if not discardIndexes.has(index):
+			SoundEffectManager.playSelectSound()
+			discardIndexes.append(index)
+			slot.cardNode.position.y -= 16
+		else:
+			SoundEffectManager.playUnselectSound()
+			discardIndexes.erase(index)
+			slot.cardNode.position.y += 16
+		
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count - timesApplied:
+			for i in range(discardIndexes.size()):
+				hand.discardIndex(discardIndexes[i])
 			NodeLoc.getBoard().endGetSlot()
 
 static func onEffect(params):
