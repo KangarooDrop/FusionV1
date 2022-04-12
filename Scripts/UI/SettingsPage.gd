@@ -11,6 +11,8 @@ func _ready():
 	$VBox/Username/LineEdit.text = Server.username
 	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
 	$VBox/MusicSlider/HSlider.value = MusicManager.volume
+	
+	ShaderHandler.connect("shaderChange", self, "onShaderChange")
 
 func onBackPressed():
 	emit_signal("settingsClose")
@@ -54,12 +56,17 @@ func shaderButtonPressed():
 			$FileDisplay/ButtonHolder.move_child(b, i+1)
 	yield(get_tree(), "idle_frame")
 	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$FileDisplay/ButtonHolder.rect_position.y -= 64
+	#$FileDisplay/ButtonHolder.rect_position.y -= 64
 	$FileDisplay/Background.rect_size = $FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
 	$FileDisplay/Background.rect_position = $FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
 
+func onShaderChange(path : String):
+	$VBox/Shaders/SelectShaderButton.text = path.get_file().get_basename().capitalize()
+
+func _exit_tree():
+	ShaderHandler.disconnect("shaderChange", self, "onShaderChange")
+
 func onShaderLoadButtonPressed(path):
-	$VBox/Shaders/SelectShaderButton.text = path.get_basename().capitalize()
 	ShaderHandler.setShader(Settings.shaderPath + path)
 	onShaderBackButtonPressed()
 

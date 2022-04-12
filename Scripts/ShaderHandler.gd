@@ -6,6 +6,8 @@ var fading = preload("res://Scenes/UI/FadingNode.tscn")
 var shad = preload("res://Scenes/Shader.tscn")
 var shadObj
 
+signal shaderChange
+
 var verifiedShaderData : Array = \
 [
 	["default", getDefaultCode()],
@@ -99,6 +101,8 @@ func setShader(path : String, writeToSettings : bool = true):
 	shadObj.material.shader = shader
 	if writeToSettings:
 		Settings.writeToSettings()
+	
+	emit_signal("shaderChange", path)
 	
 
 func _input(event):

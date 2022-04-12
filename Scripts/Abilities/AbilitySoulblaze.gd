@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilitySoulblaze
 
-func _init(card : Card).("Soulblaze", card, Color.red, true, Vector2(32, 64)):
+func _init(card : Card).("Soulblaze", card, Color.red, false, Vector2(32, 64)):
 	pass
 
 func onEndOfTurn():
