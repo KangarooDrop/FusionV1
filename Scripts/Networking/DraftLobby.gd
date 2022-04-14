@@ -22,6 +22,7 @@ static func getDraftTypes():
 	]
 
 func _ready():
+	MusicManager.playLobbyMusic()
 	numMaxPlayers = Server.MAX_PEERS + 1
 	for s in getDraftTypes():
 		$DraftTypeButton.add_item(s[0] + " Draft")

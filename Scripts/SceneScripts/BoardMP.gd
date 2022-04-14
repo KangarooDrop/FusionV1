@@ -82,7 +82,6 @@ var abilityStack : AbilityStack = AbilityStack.new()
 var currentAbility = null
 var waitingAbilities := []
 
-var opponentID = -1
 var gameSeed = -1
 
 var deckDataSet = false
@@ -113,6 +112,10 @@ func _ready():
 	BackgroundFusion.stop()
 	MusicManager.playBoardMusic()
 	
+	if Settings.gameMode != Settings.GAME_MODE.TOURNAMENT:
+		Server.GM = Server.host
+		Server.gmSet = true
+	
 	if not Server.online:
 		mulliganDoneOpponent = true
 		versionConfirmed = true
@@ -131,23 +134,25 @@ func _ready():
 	initZones()
 	initHands()
 	
-	if opponentID == -1:
+	if Server.opponentID == -1:
 		if Server.playerIDs.size() > 0:
-			opponentID = Server.playerIDs[0]
+			Server.opponentID = Server.playerIDs[0]
 	
-	if not Server.online or Server.host:
+	print("GM=", Server.GM, "  Online=", Server.online)
+	if not Server.online or Server.GM:
 		setGameSeed(OS.get_system_time_msecs())
-		Server.setGameSeed(opponentID, gameSeed + 1)
+		Server.setGameSeed(Server.opponentID, gameSeed + 1)
+		print("GM SETTINGS SEED: ", gameSeed)
 	
-	if not Server.online or Server.host:
+	if not Server.online or Server.GM:
 		var startingPlayerIndex = randi() % 2
 		setStartingPlayer((startingPlayerIndex + 1) % 2)
 		print("Send: Starting player")
 		dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
-		Server.setActivePlayer(opponentID, startingPlayerIndex)
+		Server.setActivePlayer(Server.opponentID, startingPlayerIndex)
 		hasStartingPlayer = true
 
-	Server.fetchVersion(opponentID)
+	Server.fetchVersion(Server.opponentID)
 	
 	setOwnUsername()
 	
@@ -177,10 +182,10 @@ func setGameSeed(gameSeed : int):
 	setOwnCardList(cardList, van)
 		
 	print("Fetch: Opponent's deck list")
-	Server.sendDeck(opponentID)
+	Server.sendDeck(Server.opponentID)
 
 func startMulligan():
-	if not Server.host:
+	if not Server.GM:
 		while gameSeed == -1:
 			yield(get_tree().create_timer(0.1), "timeout")
 			print("waiting for seed")
@@ -192,7 +197,7 @@ func startMulligan():
 func onMulliganButtonPressed():
 	if players[0].hand.drawQueue.size() == 0:
 		var handCards = []
-		if not Server.online or Server.host:
+		if not Server.online or Server.GM:
 			for i in range(players[0].hand.nodes.size()):
 				handCards.append(players[0].hand.nodes[i].card)
 			while players[0].hand.nodes.size() > 0:
@@ -207,7 +212,7 @@ func onMulliganButtonPressed():
 			handCards.shuffle()
 			players[0].deck.setCards(handCards, players[0].UUID, true)
 			
-			Server.sendDeck(opponentID)
+			Server.sendDeck(Server.opponentID)
 			
 			players[0].hand.drawHand()
 			mulliganDone = true
@@ -219,15 +224,15 @@ func onMulliganButtonPressed():
 				players[0].hand.nodes.remove(0)
 				players[0].hand.slots[0].queue_free()
 				players[0].hand.slots.remove(0)
-			Server.requestMulligan(opponentID)
+			Server.requestMulligan(Server.opponentID)
 		
 		$KeepButton.visible = false
 		$MulliganButton.visible = false
-		Server.mulliganDone(opponentID)
+		Server.mulliganDone(Server.opponentID)
 
 func mulliganOpponent():
 	players[1].deck.shuffle()
-	Server.sendMulliganDeck(opponentID)
+	Server.sendMulliganDeck(Server.opponentID)
 
 func mulliganOpponentDone():
 	mulliganDoneOpponent = true
@@ -235,7 +240,7 @@ func mulliganOpponentDone():
 func onKeepButtonPressed():
 	$KeepButton.visible = false
 	$MulliganButton.visible = false
-	Server.mulliganDone(opponentID)
+	Server.mulliganDone(Server.opponentID)
 	mulliganDone = true
 	handMoving = true
 
@@ -256,7 +261,7 @@ func getDeckFromFile() -> Array:
 			cardList[1].append(ListOfCards.getCard(int(k)))
 	else:
 		MessageManager.notify("Invalid Deck:\nverify deck file contents")
-		Server.disconnectMessage(opponentID, "Error: Opponent's deck is invalid")
+		Server.disconnectMessage(Server.opponentID, "Error: Opponent's deck is invalid")
 		print("INVALID DECK : ", error, " : ", Deck.DECK_VALIDITY_TYPE.keys()[error])
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -304,7 +309,7 @@ func setDeckData(data, order):
 		setOpponentCardList(order, van)
 	else:
 		MessageManager.notify("Opponent's deck is invalid")
-		Server.disconnectMessage(opponentID, "Error: Your deck has been flagged by the opponent as invalid")
+		Server.disconnectMessage(Server.opponentID, "Error: Your deck has been flagged by the opponent as invalid")
 		print("INVALID DECK OPPONENT")
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -312,7 +317,7 @@ func setDeckData(data, order):
 			print("Error loading test1.tscn. Error Code = " + str(sceneError))
 	
 	print("Send: Game start signal")
-	Server.onGameStart(opponentID)
+	Server.onGameStart(Server.opponentID)
 	deckDataSet = true
 
 func verifyDeckData(data, order) -> bool:
@@ -360,7 +365,7 @@ func compareVersion(version):
 		versionConfirmed = true
 	else:
 		MessageManager.notify("Error: Incompatable game versions")
-		Server.disconnectMessage(opponentID, "Error: Incompatable game versions")
+		Server.disconnectMessage(Server.opponentID, "Error: Incompatable game versions")
 		print("INVALID VERSIONS")
 	
 		var sceneError = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -389,6 +394,13 @@ func onRestartPressed():
 	if not playerRestart and not opponentRestart:
 		MessageManager.notify("Opponent has requested to restart")
 	opponentRestart = true
+
+func onConcede():
+	Tournament.addLoss()
+	if (Tournament.currentLosses * 2) / Tournament.gamesPerMatch <= 0:
+		playerRestart = true
+		opponentRestart = true
+	Server.onConcede(Server.opponentID)
 
 func startGame():
 	players[1].hand.drawHand()
@@ -438,6 +450,14 @@ func _physics_process(delta):
 			out = 2
 		get_node("/root/main/CenterControl/WinLose").showWinLose(out)
 		deadPlayers.clear()
+		
+		if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
+			yield(get_tree().create_timer(3), "timeout")
+			if out == 1:
+				onConcede()
+			elif out == 2:
+				playerRestart = true
+				opponentRestart = true
 	
 	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		if not practiceWaiting and activePlayer != 0 and gameStarted and not getWaiting():
@@ -455,8 +475,8 @@ func _physics_process(delta):
 		var error = get_tree().change_scene("res://Scenes/main.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
-		
-		
+	
+	
 	
 	if handMoving and players[0].hand.drawQueue.size() == 0:
 		handMoveTimer += delta
@@ -1210,7 +1230,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	#CODE IS ONLY REACHABLE IF NOT RETURNED
 	dataLog.append(("OWN_" if not fromServer else "OPPONENT_") + "SLOT " + str(slot.isOpponent) + " " + str(slot.currentZone) + " " + str(slot.get_index()))
 	if not fromServer:
-		Server.slotClicked(opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
+		Server.slotClicked(Server.opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), button_index)
 	
 	return true
 
@@ -1355,7 +1375,7 @@ func passMyTurn():
 				
 				if isMyTurn():
 					nextTurn()
-					Server.onNextTurn(opponentID)
+					Server.onNextTurn(Server.opponentID)
 
 func isDrawing() -> bool:
 	for p in players:
@@ -1436,6 +1456,8 @@ func getAllCards() -> Array:
 				cards.append(s.cardNode.card)
 		for cn in cardNodesFusing:
 			cards.append(cn.card)
+		for c in graveCards[p.UUID]:
+			cards.append(c)
 	
 	cards.invert()
 	return cards
@@ -1576,7 +1598,7 @@ func editOwnName(username):
 	setOwnUsername()
 
 func editPlayerName(player_id : int, username : String):
-	if player_id == opponentID:
+	if player_id == Server.opponentID:
 		setOpponentUsername(username)
 
 var dataLog := []

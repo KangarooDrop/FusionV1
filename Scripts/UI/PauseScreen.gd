@@ -1,12 +1,19 @@
 extends Control
-	
+
+func _ready():
+	if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
+		$VBoxContainer/RestartButton.visible = false
+		$VBoxContainer/ChangeDeckButton.visible = false
+	else:
+		$VBoxContainer/ConcedeButton.visible = false
+
 func onRestartPressed():
 	if Server.online or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		if not get_node("/root/main/CenterControl/Board").playerRestart:
 			if not get_node("/root/main/CenterControl/Board").opponentRestart:
 				MessageManager.notify("Restart request sent to opponent")
 			get_node("/root/main/CenterControl/Board").playerRestart = true
-			Server.onRestart(get_node("/root/main/CenterControl/Board").opponentID)
+			Server.onRestart(Server.opponentID)
 	else:
 		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()
@@ -36,4 +43,8 @@ func onSettingsButtonClicked():
 
 func onSettingsClose():
 	$VBoxContainer.visible = true
-	
+
+func onConcedePressed():
+	var board = get_node("../../Board")
+	Server.sendMessage(Server.opponentID, "Opponent has conceded")
+	board.onConcede()

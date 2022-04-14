@@ -9,7 +9,7 @@ var sampleBoards = \
 	preload("res://Audio/Music/TNH_The-Reason-Of-Techno-160.mp3")
 ]
 
-enum TRACKS {NONE, BOARD, MAIN_MENU, DECK_EDITOR}
+enum TRACKS {NONE, BOARD, MAIN_MENU, DECK_EDITOR, LOBBY}
 var currentTrack : int = TRACKS.NONE
 
 func playMainMenuMusic():
@@ -29,6 +29,10 @@ func playBoardMusic():
 		currentTrack = TRACKS.BOARD
 	else:
 		pass
+
+func playLobbyMusic():
+	currentTrack = TRACKS.LOBBY
+	clearAll()
 
 func clearAudioStreamPlayer(player : AudioStreamPlayer):
 	.clearAudioStreamPlayer(player)

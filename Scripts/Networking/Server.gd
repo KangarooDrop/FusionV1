@@ -10,8 +10,13 @@ var network : NetworkedMultiplayerENet
 const DEFAULT_PORT := 25565
 var MAX_PEERS := 5
 
+var opponentID = -1
+var GM = false
+var gmSet = false
+
 var playerIDs := []
 var playerNames := {}
+var playersReady := {}
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "playerConnected")
@@ -36,6 +41,9 @@ func startServer():
 	else:
 		print("Server could not be started")
 		MessageManager.notify("Error: The server could not be started")
+	
+	if Server.host:
+		playersReady[1] = false
 
 func connectToServer():
 	network = NetworkedMultiplayerENet.new()
@@ -45,11 +53,15 @@ func connectToServer():
 	get_tree().set_network_peer(network)
 	
 func closeServer():
+	print("Terminating connection")
 	network.close_connection()
 	online = false
 	host = false
+	opponentID = -1
 	playerIDs.clear()
 	playerNames.clear()
+	playersReady.clear()
+	gmData.clear()
 	
 ####################################################################
 
@@ -89,12 +101,12 @@ remote func receiveSetPlayerData(username : String, gameMode : int, versionID : 
 	
 	if Settings.compareVersion(versionID, Settings.versionID) != 0:
 		print("User attempted to connect with wrong version")
-		rpc_id(player_id, "sendMessage", "Notice: Your game versions are not the same; Consider updating")
+		rpc_id(player_id, "receiveSendMessage", "Notice: Your game versions are not the same; Consider updating")
 		network.disconnect_peer(player_id)
 		return
 	if gameMode != Settings.gameMode:
 		print("User attempted to connect with wrong game mode")
-		rpc_id(player_id, "sendMessage", "Notice: Wrong game modes")
+		rpc_id(player_id, "receiveSendMessage", "Notice: Wrong game modes")
 		network.disconnect_peer(player_id)
 		return
 		
@@ -126,7 +138,7 @@ func playerConnected(player_id : int):
 		if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY or Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
 			getPlayerData(player_id)
 		else:
-			rpc_id(player_id, "sendMessage", "Notice: The game has already begun")
+			rpc_id(player_id, "receiveSendMessage", "Notice: The game has already begun")
 			network.disconnect_peer(player_id)
 		
 func playerDisconnected(player_id : int):
@@ -157,6 +169,7 @@ remote func addUser(player_id : int, username : String):
 	print("User "+ str(player_id) + " Connected")
 	playerIDs.append(player_id)
 	playerNames[player_id] = username
+	playersReady[player_id] = false
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
 		get_node("/root/DraftLobby").addPlayer(player_id, username)
 	elif Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
@@ -166,6 +179,11 @@ remote func removeUser(player_id : int):
 	if playerIDs.has(player_id):
 		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
 		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
+		if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
+			Tournament.replaceWith(player_id, -1)
+			Tournament.trimBranches()
+			if NodeLoc.getBoard() is TournamentLobby:
+				NodeLoc.getBoard().checkNextGame()
 	
 	if Settings.gameMode == Settings.GAME_MODE.DRAFTING:
 		get_node("/root/Draft").playerDisconnected(player_id)
@@ -175,6 +193,7 @@ remote func removeUser(player_id : int):
 	
 	playerIDs.erase(player_id)
 	playerNames.erase(player_id)
+	playersReady.erase(player_id)
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		if playerIDs.size() == 0:
@@ -182,10 +201,14 @@ remote func removeUser(player_id : int):
 #			closeServer()
 
 remote func kickUser(player_id):
-	rpc_id(player_id, "sendMessage", "You have been kicked from the server")
+	rpc_id(player_id, "receiveSendMessage", "You have been kicked from the server")
 	network.disconnect_peer(player_id)
 
-remote func sendMessage(message : String):
+func sendMessage(player_id, message : String):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendMessage", message)
+
+remote func receiveSendMessage(message : String):
 	MessageManager.notify(message)
 
 #func _input(event):
@@ -300,7 +323,7 @@ remote func receivedStartBuilding():
 	draft.queue_free()
 	
 	Settings.gameMode = Settings.GAME_MODE.NONE
-	closeServer()
+	#closeServer()
 
 func setCurrentPlayerDisplay(currentPlayer):
 	for id in playerIDs:
@@ -318,7 +341,8 @@ func sendBooster(player_id : int, boosterData : Array):
 		rpc_id(player_id, "receiveSendBooster", boosterData)
 
 remote func receiveSendBooster(boosterData : Array):
-	get_node("/root/Draft").boosterQueue.append(boosterData)
+	if get_node_or_null("/root/Draft") != null:
+		get_node("/root/Draft").boosterQueue.append(boosterData)
 
 func doneBoosterDraft():
 	rpc_id(1, "receiveDoneBoosterDraft")
@@ -330,7 +354,8 @@ func sendAllBoosters(player_id : int, boostersData : Array):
 	rpc_id(player_id, "receiveSendAllBoosters", boostersData)
 
 remote func receiveSendAllBoosters(boostersData : Array):
-	get_node("/root/Draft").boosterQueue += boostersData
+	if get_node_or_null("/root/Draft") != null:
+		get_node("/root/Draft").boosterQueue += boostersData
 
 
 
@@ -371,8 +396,15 @@ remote func onGameStart(player_id : int):
 	
 remote func serverOnGameStart():
 	var player_id = get_tree().get_rpc_sender_id()
+	print("Received game start signal from ", player_id)
 	
 	var board = get_node_or_null("/root/main/CenterControl/Board")
+	while not is_instance_valid(board) or not board is BoardMP or board.gameStarted or board.playerRestart:
+		print("Board not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = get_node_or_null("/root/main/CenterControl/Board")
+		if not Server.online:
+			return
 	board.onGameStart()
 
 ####################################################################
@@ -462,6 +494,7 @@ remote func serverDisconnectMessage(message : String):
 ####################################################################
 
 func setGameSeed(player_id : int, gameSeed : int):
+	print("Sending seed to opponent: ", gameSeed)
 	if playerIDs.has(player_id):
 		rpc_id(player_id, "receiveSetGameSeed", gameSeed)
 
@@ -574,6 +607,109 @@ remote func receiveSolomonSetState(state : int):
 func startSolomonBuilding(player_id):
 	rpc_id(player_id, "receivedStartBuilding")
 	receivedStartBuilding()
+
+####################################################################
+
+func setReady(ready : bool):
+	if Server.online:
+		if Server.host:
+			playersReady[1] = ready
+			checkReady()
+		else:
+			rpc_id(1, "receiveSetReady", ready)
+	else:
+		print("The Server is currently offline")
+
+remote func receiveSetReady(ready : bool):
+	var player_id = get_tree().get_rpc_sender_id()
+	playersReady[player_id] = ready
+	checkReady()
+	
+func checkReady():
+	for player_id in playersReady.keys():
+		if not playersReady[player_id]:
+			return
+	
+	var bracket = Tournament.genTournamentOrder(playersReady.keys())
+	receiveSetBracket(bracket)
+	for player_id in playerIDs:
+		rpc_id(player_id, "receiveSetBracket", bracket)
+
+remote func receiveSetBracket(bracket):
+	Tournament.startTournament(bracket)
+	Tournament.trimBranches()
+	print("TOURNAMENT = ", Tournament.tree)
+	
+	var error = get_tree().change_scene("res://Scenes/Networking/TournamentLobby.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+
+func onConcede(player_id):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveOnConcede")
+
+remote func receiveOnConcede():
+	var board = NodeLoc.getBoard()
+	board.playerRestart = true
+	board.opponentRestart = true
+	Tournament.addWin()
+
+func setTournamentWinner(player_id):
+	receiveSetTournamentWinner(player_id)
+	for p in playerIDs:
+		rpc_id(p, "receiveSetTournamentWinner", player_id)
+
+remote func receiveSetTournamentWinner(player_id):
+	var onPlaying = false
+	var selfID = get_tree().get_network_unique_id()
+	if Tournament.getOpponent(player_id) == selfID or selfID == player_id:
+		onPlaying = true
+		gmSet = false
+		GM = false
+		Tournament.currentWins = 0
+		Tournament.currentLosses = 0
+		print("Clearing tournament game data")
+		
+	Tournament.setWinner(player_id)
+	
+	if NodeLoc.getBoard() is TournamentLobby:
+		NodeLoc.getBoard().checkNextGame()
+	
+	if onPlaying:
+		var error = get_tree().change_scene("res://Scenes/Networking/TournamentLobby.tscn")
+		if error != 0:
+			print("Error loading test1.tscn. Error Code = " + str(error))
+
+func requestGM(p1, p2):
+	if Server.host:
+		receiveRequestGM(p1, p2)
+	elif Server.online:
+		rpc_id(1, "receiveRequestGM", p1, p2)
+
+var gmData := {}
+remote func receiveRequestGM(p1, p2):
+	if not gmData.keys().has([p1, p2]) and not gmData.keys().has([p2, p1]):
+		var gm
+		if randi() % 2 == 0:
+			gm = p1
+		else:
+			gm = p2
+		gmData[[p1, p2]] = gm
+		
+		if Server.host and p1 == 1:
+			receiveSetGM(gm == p1)
+		else:
+			rpc_id(p1, "receiveSetGM", gm == p1)
+		
+		if Server.host and p2 == 1:
+			receiveSetGM(gm == p2)
+		else:
+			rpc_id(p2, "receiveSetGM", gm == p2)
+
+remote func receiveSetGM(isGM):
+	GM = isGM
+	gmSet = true
+	print("Received the GM set command")
 
 ####################################################################
 

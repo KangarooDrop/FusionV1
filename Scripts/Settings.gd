@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.2.06"
+var versionID = "0.0.2.07"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -9,7 +9,7 @@ var path = "user://decks/"
 
 var dumpPath = "user://dumps/"
 
-enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, PRACTICE, DRAFTING}
+enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, PRACTICE, DRAFTING, TOURNAMENT}
 var gameMode : int = 0
 
 var cardSlotScale = 1.5

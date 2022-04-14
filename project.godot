@@ -438,6 +438,11 @@ _global_script_classes=[ {
 "class": "TextSkinShedder",
 "language": "GDScript",
 "path": "res://Scripts/AbilityText/TextSkinShedder.gd"
+}, {
+"base": "Node",
+"class": "TournamentLobby",
+"language": "GDScript",
+"path": "res://Scripts/Networking/TournamentLobby.gd"
 } ]
 _global_script_class_icons={
 "Ability": "",
@@ -525,7 +530,8 @@ _global_script_class_icons={
 "TextGreyGoo": "",
 "TextRarity": "",
 "TextScrapyard": "",
-"TextSkinShedder": ""
+"TextSkinShedder": "",
+"TournamentLobby": ""
 }
 
 [application]
@@ -546,6 +552,7 @@ Settings="*res://Scripts/Settings.gd"
 FileIO="*res://Scripts/FileIO.gd"
 NodeLoc="*res://Scripts/NodeLoc.gd"
 BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
+Tournament="*res://Scripts/Networking/Tournament.gd"
 
 [display]
 

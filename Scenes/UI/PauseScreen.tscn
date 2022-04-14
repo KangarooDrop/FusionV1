@@ -54,6 +54,12 @@ margin_bottom = 42.0
 custom_fonts/font = ExtResource( 2 )
 text = "Restart"
 
+[node name="ConcedeButton" type="Button" parent="VBoxContainer"]
+margin_right = 12.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 2 )
+text = "Concede"
+
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
 margin_top = 52.0
 margin_right = 144.0
@@ -86,6 +92,7 @@ text = "To Main Menu"
 visible = false
 
 [connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
+[connection signal="pressed" from="VBoxContainer/ConcedeButton" to="." method="onConcedePressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsButtonClicked"]
 [connection signal="pressed" from="VBoxContainer/ChangeDeckButton" to="." method="onChangeDeckPressed"]
 [connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]

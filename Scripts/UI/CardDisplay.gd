@@ -78,6 +78,7 @@ func removeCard(index : int):
 func addCard(card : Card):
 	var cardNode = cardNodeScene.instance()
 	cardNode.card = card
+	card.cardNode = cardNode
 	addCardNode(cardNode)
 	cardNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardNode.setCardVisible(cardNode.getCardVisible())
@@ -85,13 +86,18 @@ func addCard(card : Card):
 func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
 	var cardSlot = cardSlotScene.instance()
 	cardSlot.currentZone = currentZone
+	var lastPos = null
+	if cardNode.is_inside_tree():
+		lastPos = cardNode.global_position
 	
 	add_child(cardSlot)
 	if is_instance_valid(cardNode.get_parent()):
 		cardNode.get_parent().remove_child(cardNode)
 	add_child(cardNode)
 	
-	var lastPos = cardNode.global_position
+	#if lastPos == null:
+	#	lastPos = cardNode.global_position
+	
 	
 	cardSlot.cardNode = cardNode
 	cardNode.slot = cardSlot

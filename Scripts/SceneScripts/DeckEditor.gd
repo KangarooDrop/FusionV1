@@ -58,9 +58,11 @@ func setCards():
 					availableCardCount[i] = 1
 					
 	else:
+		$CenterControl/Menu/ReadyButton.show()
 		$CenterControl/Menu/DeleteButton.hide()
 		$CenterControl/Menu/NewButton.hide()
 		$CenterControl/Menu/LoadButton.hide()
+		hasSaved = false
 
 func clearPages():
 	slotViewing = null
@@ -282,6 +284,11 @@ func removeCard(id : int):
 				if s.cardNode.card.UUID == id:
 					slot = s
 	updateSlotCount(slot)
+	
+	if ready:
+		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
+		if error != Deck.DECK_VALIDITY_TYPE.VALID:
+			onReadyPressed()
 	
 
 var slotClicked = false
@@ -576,7 +583,44 @@ func onDeleteBackPressed(popup=null):
 		popups.erase(popup)
 		popup.close()
 	fileToDelete = ""
+
+var ready = false
+var checkTex = preload("res://Art/UI/check.png")
+var uncheckTex = preload("res://Art/UI/un_check.png")
+func onReadyPressed():
+	if not ready:
+		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
+		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			ready = not ready
+			$CenterControl/Menu/ReadyButton/Sprite.texture = checkTex if ready else uncheckTex
+			Server.setReady(ready)
+			
+		else:
+			var pop = popupUI.instance()
+			pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+			$CenterControl.add_child(pop)
+			pop.options[0].grab_focus()
+			popups.append(pop)
+	else:
+		ready = not ready
+		$CenterControl/Menu/ReadyButton/Sprite.texture = checkTex if ready else uncheckTex
+		Server.setReady(ready)
+		
+func startTournament() -> bool:
+	var fileName = ".draft"
+	var fileError = FileIO.writeToJSON(Settings.path, fileName, $CenterControl/DeckDisplay.getDeckData())
+	if fileError != 0:
+		print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
+		var pop = popupUI.instance()
+		pop.init("Error", "File could not be saved", [["Close", self, "closePopupUI", [pop]]])
+		$CenterControl.add_child(pop)
+		pop.options[0].grab_focus()
+		popups.append(pop)
+		return false
+	else:
+		return true
 	
+
 func deckModified():
 	hasSaved = false
 	

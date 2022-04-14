@@ -6,6 +6,22 @@ func _ready():
 	$SettingsPage/VBox/Shaders/SelectShaderButton.text = ShaderHandler.currentShader.get_file().get_basename().capitalize()
 	
 	BackgroundFusion.start()
+	if Server.online:
+		Server.closeServer()
+	
+	"""
+	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5]))
+	Tournament.trimBranches()
+	Tournament.replaceWith(5, -1)
+	while not Tournament.tree.root.hasNoChildren():
+		Tournament.trimBranches()
+		print(Tournament.tree, "\n", Tournament.tree.nodes)
+		var i = randi() % 5 + 1
+		var opp = Tournament.getOpponent(i)
+		if opp >= 0:
+			Tournament.setWinner(opp)
+	print(Tournament.tree, "\n", Tournament.tree.nodes)
+	"""
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")
