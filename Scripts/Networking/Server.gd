@@ -180,8 +180,10 @@ remote func removeUser(player_id : int):
 		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
 		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
 		if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
-			Tournament.replaceWith(player_id, -1)
-			Tournament.trimBranches()
+			if opponentID == player_id:
+				Server.setTournamentWinner(get_tree().get_network_unique_id())
+#			Tournament.replaceWith(player_id, -1)
+#			Tournament.trimBranches()
 			if NodeLoc.getBoard() is TournamentLobby:
 				NodeLoc.getBoard().checkNextGame()
 	
@@ -192,7 +194,7 @@ remote func removeUser(player_id : int):
 		get_node("/root/DraftLobby").removePlayer(player_id)
 	
 	playerIDs.erase(player_id)
-	playerNames.erase(player_id)
+	#playerNames.erase(player_id)
 	playersReady.erase(player_id)
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:

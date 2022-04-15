@@ -27,6 +27,7 @@ func slotClicked(slot : CardSlot):
 			slot = g.slots[g.slots.size()-1]
 	
 	if slot.currentZone == CardSlot.ZONES.GRAVE_CARD:
+		slot.cardNode.select()
 		if not graveCards.has(slot.cardNode.card):
 			SoundEffectManager.playSelectSound()
 			graveCards.append(slot.cardNode.card)

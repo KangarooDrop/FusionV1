@@ -42,7 +42,6 @@ onready var card_B_Holder = $Hand_B
 var cardsHolding : Array
 var selectedCard : CardSlot
 var highlightedSlots := []
-var selectRotTimer = 0
 
 var actionQueue : Array
 
@@ -507,11 +506,6 @@ func _physics_process(delta):
 			if hoveringWindow.text != string:
 				hoveringWindow.visible = true
 				hoveringWindow.setText(string)
-		
-	
-	if is_instance_valid(selectedCard):
-		selectRotTimer += delta
-		selectedCard.cardNode.rotation = sin(selectRotTimer * 1.5) * PI / 32
 	
 	if cardNodesFusing.size() > 0:
 		if fuseWaiting:
@@ -1055,8 +1049,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						return false
 					
 					if is_instance_valid(selectedCard):
-						selectedCard.cardNode.rotation = 0
-						selectRotTimer = 0
+						selectedCard.cardNode.select()
 						selectedCard = null
 					
 					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
@@ -1178,15 +1171,14 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					if slot.playerID == players[activePlayer].UUID:
 						#ATTACKING
 						if is_instance_valid(slot) and selectedCard == slot:
-							selectedCard.cardNode.rotation = 0
-							selectRotTimer = 0
+							selectedCard.cardNode.select()
 							selectedCard = null
 						else:
 							if is_instance_valid(slot.cardNode) and slot.cardNode.card.canAttack():
 								if is_instance_valid(selectedCard):
-									selectedCard.cardNode.rotation = 0
-								selectRotTimer = 0
+									selectedCard.cardNode.select()
 								selectedCard = slot
+								selectedCard.cardNode.select()
 							else:
 								if cardsShaking.has(slot):
 									MessageManager.notify("This creature cannot attack")
@@ -1208,8 +1200,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 									
 								selectedCard.cardNode.attack(slots)
 								if is_instance_valid(selectedCard.cardNode):
-									selectedCard.cardNode.rotation = 0
-									selectRotTimer = 0
+									selectedCard.cardNode.select()
 								selectedCard = null
 								
 								if highlightedSlots.size() > 0:
@@ -1239,8 +1230,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 	
 	if not isEntering:
 		if slot == selectedCard:
-			selectedCard.cardNode.rotation = 0
-			selectRotTimer = 0
+			selectedCard.cardNode.select()
 			selectedCard = null
 		cards.insert(0, slot.cardNode.card)
 		slot.cardNode.queue_free()
@@ -1488,7 +1478,7 @@ func nextTurn():
 		cardsHolding[0].cardNode.position.y = cardsHolding[0].position.y
 		cardsHolding.remove(0)
 	if is_instance_valid(selectedCard):
-		selectedCard.cardNode.rotation = 0
+		selectedCard.cardNode.select()
 		selectedCard = null
 		
 	checkState()

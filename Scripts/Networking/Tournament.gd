@@ -18,10 +18,32 @@ func addWin():
 func addLoss():
 	currentLosses += 1
 
-func replaceWith(data, dataNew):
-	for n in tree.nodes:
-		if n.data == data:
-			n.data = dataNew
+func hasLost(player_id, node=tree.root) -> bool:
+	if node.l_child != null and node.l_child.data == player_id and node.data != -1:
+		return node.data == node.r_child.data
+	elif node.r_child != null and node.r_child.data == player_id and node.data != -1:
+		return node.data == node.l_child.data
+	
+	if node.l_child != null:
+		if hasLost(player_id, node.l_child):
+			return true
+			
+	if node.r_child != null:
+		if hasLost(player_id, node.r_child):
+			return true
+	
+	return false
+
+func isWaiting(player_id):
+	return getOpponent(player_id) == -1
+
+func replaceWith(data, dataNew, node=tree.root):
+	if node.data == data:
+		node.data = dataNew
+	if node.l_child != null:
+		replaceWith(data, dataNew, node.l_child)
+	if node.r_child != null:
+		replaceWith(data, dataNew, node.r_child)
 
 func genTournamentOrder(players : Array) -> Array:
 	var order = players.duplicate()
@@ -42,16 +64,12 @@ func trimBranches(node : TTreeData = tree.root):
 	elif node.l_child.data != -1 and node.r_child.data == -1:
 		if node.l_child.hasNoChildren() and node.r_child.hasNoChildren():
 			node.data = node.l_child.data
-			tree.nodes.erase(node.l_child)
-			tree.nodes.erase(node.r_child)
 			node.l_child = null
 			node.r_child = null
 			return
 	elif node.l_child.data == -1 and node.r_child.data != -1:
 		if node.l_child.hasNoChildren() and node.r_child.hasNoChildren():
 			node.data = node.r_child.data
-			tree.nodes.erase(node.l_child)
-			tree.nodes.erase(node.r_child)
 			node.l_child = null
 			node.r_child = null
 			return
@@ -66,17 +84,9 @@ func setWinner(player_id, node=tree.root) -> bool:
 		return false
 	if node.l_child.data == player_id:
 		node.data = node.l_child.data
-		tree.nodes.erase(node.l_child)
-		tree.nodes.erase(node.r_child)
-		node.l_child = null
-		node.r_child = null
 		return true
 	elif node.r_child.data == player_id:
 		node.data = node.r_child.data
-		tree.nodes.erase(node.l_child)
-		tree.nodes.erase(node.r_child)
-		node.l_child = null
-		node.r_child = null
 		return true
 	else:
 		if setWinner(player_id, node.l_child):
@@ -86,24 +96,26 @@ func setWinner(player_id, node=tree.root) -> bool:
 		else:
 			return false
 
-func getOpponent(player_id) -> int:
-	for n in tree.nodes:
-		if n.l_child != null and n.r_child != null:
-			if n.l_child.data == player_id:
-				return n.r_child.data 
-			elif n.r_child.data == player_id:
-				return n.l_child.data
+func getOpponent(player_id, node = tree.root) -> int:
+	if node.l_child != null and node.l_child.data == player_id:
+		return node.r_child.data
+	elif node.r_child != null and node.r_child.data == player_id:
+		return node.l_child.data
+	
+	if node.l_child != null:
+		var rtn = getOpponent(player_id, node.l_child)
+		if rtn != -2:
+			return rtn
+			
+	if node.r_child != null:
+		var rtn = getOpponent(player_id, node.r_child)
+		if rtn != -2:
+			return rtn
+	
 	return -2
-
-#trim function () - traverses tree and moves up any player is facing an opponent not in Server.playerIDs and only if the node has no children
-
-#getOpponent function (player_id) - finds node w data=player_id and returns the sibling
-
-#setWinner function (player_id) - finds node w a child's data=player_id, removes the children and sets its data to player_id
 
 class TTree:
 	var root : TTreeData = null
-	var nodes : Array = []
 	
 	func _init(order : Array):
 		var t = 1
@@ -134,14 +146,40 @@ class TTree:
 					l_node.parent = p_node
 					r_node.parent = p_node
 					
-					nodes.append(l_node)
-					nodes.append(r_node)
-					
 					layerNew.append(p_node)
 					
 				layer = layerNew
 			root = layer[0]
-			nodes.append(root)
+	
+	func getHeight(node=root) -> int:
+		var total = 1
+		var lLen = 0
+		var rLen = 0
+		
+		if node.l_child != null:
+			lLen += getHeight(node.l_child)
+		if node.r_child != null:
+			rLen += getHeight(node.r_child)
+		
+		if lLen > rLen:
+			total += lLen
+		else:
+			total += rLen
+		
+		return total
+	
+	func getNodesAtHeight(height, node=root, currentHeight = 0) -> Array:
+		if height == currentHeight:
+			return [node]
+		elif height > currentHeight:
+			var rtn = []
+			if node.l_child != null:
+				rtn += getNodesAtHeight(height, node.l_child, currentHeight + 1)
+			if node.r_child != null:
+				rtn += getNodesAtHeight(height, node.r_child, currentHeight + 1)
+			return rtn
+		else:
+			return []
 	
 	func _to_string():
 		return str(root)

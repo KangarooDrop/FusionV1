@@ -10,18 +10,27 @@ func _ready():
 		Server.closeServer()
 	
 	"""
-	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5]))
+	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5, 6]))
 	Tournament.trimBranches()
-	Tournament.replaceWith(5, -1)
-	while not Tournament.tree.root.hasNoChildren():
-		Tournament.trimBranches()
-		print(Tournament.tree, "\n", Tournament.tree.nodes)
-		var i = randi() % 5 + 1
-		var opp = Tournament.getOpponent(i)
-		if opp >= 0:
-			Tournament.setWinner(opp)
-	print(Tournament.tree, "\n", Tournament.tree.nodes)
+	print(Tournament.tree)
+	Tournament.setWinner(5)
+	print(Tournament.tree)
+	print(Tournament.hasLost(5))
+	
+	print(Tournament.tree.getHeight())
+	
+#	print(Tournament.tree)
+#	while Tournament.tree.root.data == -1:
+#		Tournament.trimBranches()
+#		print(Tournament.tree)
+#		var i = randi() % 5 + 1
+#		var opp = Tournament.getOpponent(i)
+#		if opp >= 0:
+#			Tournament.setWinner(opp)
+#	print(Tournament.tree)
 	"""
+	
+	
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")

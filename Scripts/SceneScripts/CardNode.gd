@@ -36,6 +36,9 @@ var cardVisible = true setget setCardVisible, getCardVisible
 
 var iconsShowing = false
 
+var isSelected = false
+var selectedTimer = 0
+
 func _ready():
 	setCardVisible(cardVisible)
 			
@@ -76,7 +79,16 @@ func getCardVisible() -> bool:
 
 var waitingForStackToClear = false
 
+func select():
+	isSelected = not isSelected
+	selectedTimer = 0
+	rotation = 0
+
 func _physics_process(delta):
+	if isSelected:
+		selectedTimer += delta
+		rotation = sin(selectedTimer * 1.5) * PI / 32
+	
 	if card != null:
 		$Label.text = str(card.power) + " / " + str(card.toughness)
 		
