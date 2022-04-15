@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/marisameow_Soulful-Sunlight-160.mp3-6eae12b157882b3ee74514edfccb87ef.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/marisameow_Soulful-Sunlight-160.mp3"
+dest_files=[ "res://.import/marisameow_Soulful-Sunlight-160.mp3-6eae12b157882b3ee74514edfccb87ef.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

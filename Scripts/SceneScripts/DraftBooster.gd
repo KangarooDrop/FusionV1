@@ -23,6 +23,8 @@ var cardDists = 16
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 onready var cardHeight = ListOfCards.cardBackground.get_height()
 
+var pickForMe = false
+
 func _ready():
 	var gameSeed = OS.get_system_time_msecs()
 	print("current game seed is ", gameSeed)
@@ -81,6 +83,9 @@ var doubleClickMaxTime = 0.2
 
 func _physics_process(delta):
 	#print(boosterQueue)
+	
+	if pickForMe and $BoosterDisplay.slots.size() > 0:
+		slotClickedQueue1.append($BoosterDisplay.slots[randi() % $BoosterDisplay.slots.size()])
 	
 	if doubleClickSlot != null:
 		doubleClickTimer += delta
@@ -266,3 +271,5 @@ func closeHoverWindow(forceClose = false):
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 2:
 		clickedOff = true
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_F3:
+		pickForMe = not pickForMe

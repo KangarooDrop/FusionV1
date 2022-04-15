@@ -15,11 +15,11 @@ func onEffect(params):
 
 func slotClicked(slot : CardSlot):
 	var board = NodeLoc.getBoard()
-#	if slot == null:
-#		for p in NodeLoc.getBoard().players:
-#			if p.UUID == card.playerID:
-#				slot = p.hand.slots[randi() % p.hand.slots.size()]
-#				break
+	if slot == null:
+		for p in board.players:
+			if board.graveCards[p.UUID].size() > 0:
+				slot = board.graveCards[p.UUID][randi() % board.graveCards[p.UUID].size()].cardNode.slot
+				break
 	
 	if slot.currentZone == CardSlot.ZONES.GRAVE:
 		var g = board.graveDisplays[slot.playerID]

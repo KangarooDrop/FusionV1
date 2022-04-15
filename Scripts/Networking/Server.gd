@@ -182,8 +182,9 @@ remote func removeUser(player_id : int):
 		if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
 			if opponentID == player_id:
 				Server.setTournamentWinner(get_tree().get_network_unique_id())
-#			Tournament.replaceWith(player_id, -1)
-#			Tournament.trimBranches()
+			if Tournament.tree.root.data == -1 and not Tournament.hasLost(player_id):
+				Tournament.replaceWith(player_id, -1)
+				Tournament.trimBranches()
 			if NodeLoc.getBoard() is TournamentLobby:
 				NodeLoc.getBoard().checkNextGame()
 	
@@ -196,11 +197,16 @@ remote func removeUser(player_id : int):
 	playerIDs.erase(player_id)
 	#playerNames.erase(player_id)
 	playersReady.erase(player_id)
+	print(Server.host, "  ", Settings.gameMode, "  ", Settings.GAME_MODE.TOURNAMENT, "  ", Tournament.tree)
+	if Server.host and get_node_or_null("/root/DeckEditor") != null and Tournament.tree == null:
+		checkReady()
 	
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		if playerIDs.size() == 0:
 			get_node("/root/main/CenterControl/Board").gameOver = true
 #			closeServer()
+	
+
 
 remote func kickUser(player_id):
 	rpc_id(player_id, "receiveSendMessage", "You have been kicked from the server")
@@ -226,6 +232,14 @@ func setDraftType(index : int):
 
 remote func receiveSetDraftType(index : int):
 	get_node("/root/DraftLobby").draftTypeSelected(index)
+
+func setGamesPerMatch(gpm):
+	receiveSetGamesPerMatch(gpm)
+	for player_id in playerIDs:
+		rpc_id(player_id, "receiveSetGamesPerMatch", gpm)
+
+remote func receiveSetGamesPerMatch(gpm):
+	Tournament.gamesPerMatch = gpm
 
 remote func startDraft(index : int, params : Dictionary = {}):
 	if Server.host:
@@ -628,6 +642,8 @@ remote func receiveSetReady(ready : bool):
 	checkReady()
 	
 func checkReady():
+	if playerIDs.size() == 0:
+		return
 	for player_id in playersReady.keys():
 		if not playersReady[player_id]:
 			return
@@ -671,6 +687,9 @@ remote func receiveSetTournamentWinner(player_id):
 		Tournament.currentWins = 0
 		Tournament.currentLosses = 0
 		print("Clearing tournament game data")
+		
+		if Tournament.getOpponent(player_id) == selfID:
+			Tournament.hasLost = true
 		
 	Tournament.setWinner(player_id)
 	

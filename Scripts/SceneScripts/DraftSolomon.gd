@@ -61,7 +61,7 @@ func genNewBooster():
 		setCards(cards, true)
 		sendCards(cards, true)
 		
-		$SendButton.visible = true
+		$BoosterDisplay/SendButton.visible = true
 		setCurrentState(STATES.MOVING)
 		
 
@@ -219,7 +219,7 @@ func removeCard(cardUUID : int):
 	$CardDisplay.addCard(ListOfCards.getCard(cardUUID))
 
 func sendCardsPressed():
-	$SendButton.visible = false
+	$BoosterDisplay/SendButton.visible = false
 	setCurrentState(STATES.WAITING)
 	Server.doneSplitting(opponentID)
 

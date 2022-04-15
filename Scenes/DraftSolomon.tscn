@@ -38,22 +38,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SendButton" type="Button" parent="."]
-visible = false
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -275.0
-margin_top = 64.0
-margin_right = -96.0
-margin_bottom = 89.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_fonts/font = ExtResource( 2 )
-text = "Finished Splitting"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="DeckDisplayControl" type="Control" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -88,6 +72,22 @@ grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = ExtResource( 2 )
 text = "Take Stack"
+
+[node name="SendButton" type="Button" parent="BoosterDisplay"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 216.3
+margin_top = -52.9393
+margin_right = 395.3
+margin_bottom = -27.9393
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Finished Splitting"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BoosterDisplay2" parent="." instance=ExtResource( 5 )]
 margin_left = -84.0
@@ -198,6 +198,6 @@ margin_bottom = 461.173
 
 [connection signal="pressed" from="QuitButton" to="." method="onQuitButtonPressed"]
 [connection signal="pressed" from="SettingsButton" to="." method="onSettingsPressed"]
-[connection signal="pressed" from="SendButton" to="." method="sendCardsPressed"]
 [connection signal="pressed" from="BoosterDisplay/Button" to="." method="takeCards1Pressed"]
+[connection signal="pressed" from="BoosterDisplay/SendButton" to="." method="sendCardsPressed"]
 [connection signal="pressed" from="BoosterDisplay2/Button" to="." method="takeCards2Pressed"]

@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityBounce
 
-func _init(card : Card).("Bounce", card, Color.blue, false, Vector2(0, 0)):
+func _init(card : Card).("Bounce", card, Color.purple, false, Vector2(0, 0)):
 	pass
 
 func onEndOfTurn():

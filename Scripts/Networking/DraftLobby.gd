@@ -22,7 +22,6 @@ static func getDraftTypes():
 	]
 
 func _ready():
-	MusicManager.playLobbyMusic()
 	numMaxPlayers = Server.MAX_PEERS + 1
 	for s in getDraftTypes():
 		$DraftTypeButton.add_item(s[0] + " Draft")
@@ -38,6 +37,9 @@ func _ready():
 	startingUsername = Server.username
 	
 	BackgroundFusion.stop()
+	
+	$GPM/LineEdit.text = str(3)
+	$GPM/LineEdit.oldtext = $GPM/LineEdit.text
 
 ###############################################
 
@@ -59,7 +61,10 @@ func hostButtonPressed():
 	$DraftTypeOptions/SolomonOptions/Label2.visible = true
 	$DraftTypeOptions/SolomonOptions/LineEdit.visible = true
 	$DraftTypeButton.select(0)
+	$GPM.visible = true
 	draftTypeSelected(0)
+	
+	MusicManager.playLobbyMusic()
 	
 func joinButtonPressed():
 	$MultiplayerUI.visible = false
@@ -100,6 +105,9 @@ func ipJoinButtonPressed():
 	$DraftTypeOptions/BoosterOptions/LineEdit.visible = false
 	$DraftTypeOptions/SolomonOptions/Label2.visible = false
 	$DraftTypeOptions/SolomonOptions/LineEdit.visible = false
+	$GPM.visible = false
+	
+	MusicManager.playLobbyMusic()
 
 ###############################################
 
@@ -111,11 +119,14 @@ func lobbyBackPressed():
 	$StartButton.visible = false
 	$DraftTypeButton.visible = false
 	$DraftTypeOptions.visible = false
+	$GPM.visible = false
 	for c in $DraftTypeOptions.get_children():
 		c.visible = false
 	
 	while ids.size() > 0:
 		removePlayer(ids[0])
+		
+	MusicManager.playMainMenuMusic()
 
 ###############################################
 
@@ -177,6 +188,15 @@ func startDraftButtonPressed():
 		pop.init("Solomon Draft", "There must be exactly 2 players to have a Solomon Draft", [["Close", pop, "close", []]])
 		$PopupCenter.add_child(pop)
 		return
+	
+	if int($GPM/LineEdit.text) < 1 or int($GPM/LineEdit.text) % 2 == 0:
+		var pop = popupUI.instance()
+		pop.init("Games Per Match Error", "The number of games per match must be odd and greater than zero", [["Close", pop, "close", []]])
+		$PopupCenter.add_child(pop)
+		return
+	
+	Server.setGamesPerMatch(int($GPM/LineEdit.text))
+	
 	var params = {}
 	if $DraftTypeButton.selected == 1:
 		params["num_boosters"] = $DraftTypeOptions/BoosterOptions/LineEdit.get_value()

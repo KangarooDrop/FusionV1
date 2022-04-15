@@ -7,7 +7,10 @@ var currentWins : int = 0
 var currentLosses : int = 0
 var gamesPerMatch : int = 3
 
+var hasLost = false
+
 func startTournament(order):
+	hasLost = false
 	tree = TTree.new(order)
 
 func addWin():
@@ -17,6 +20,8 @@ func addWin():
 
 func addLoss():
 	currentLosses += 1
+	if (currentLosses * 2) / gamesPerMatch > 0:
+		hasLost = true
 
 func hasLost(player_id, node=tree.root) -> bool:
 	if node.l_child != null and node.l_child.data == player_id and node.data != -1:
@@ -149,7 +154,10 @@ class TTree:
 					layerNew.append(p_node)
 					
 				layer = layerNew
-			root = layer[0]
+			if layer[0] is TTreeData:
+				root = layer[0]
+			else:
+				root = TTreeData.new(layer[0])
 	
 	func getHeight(node=root) -> int:
 		var total = 1

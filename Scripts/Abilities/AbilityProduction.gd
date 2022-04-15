@@ -6,7 +6,7 @@ func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-		addToStack("onEffect", [card, count - timesApplied])
+	addToStack("onEffect", [card, count - timesApplied])
 
 static func onEffect(params):
 	for i in range(params[1]):

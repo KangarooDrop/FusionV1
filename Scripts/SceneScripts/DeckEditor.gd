@@ -58,7 +58,8 @@ func setCards():
 					availableCardCount[i] = 1
 					
 	else:
-		$CenterControl/Menu/ReadyButton.show()
+		if Server.playerIDs.size() > 0:
+			$CenterControl/Menu/ReadyButton.show()
 		$CenterControl/Menu/DeleteButton.hide()
 		$CenterControl/Menu/NewButton.hide()
 		$CenterControl/Menu/LoadButton.hide()
@@ -647,7 +648,42 @@ func setCurrentPage(newPage : int):
 
 func getCurrentPage() -> int:
 	return currentPage
+
+func onRandomizePressed():
+	if not hasSaved:
+		var pop = popupUI.instance()
+		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to create a random deck?", [["Yes", self, "randomizeDeck", [pop]], ["Back", self, "closePopupUI", [pop]]])
+		$CenterControl.add_child(pop)
+		pop.options[1].grab_focus()
+		popups.append(pop)
+	else:
+		randomizeDeck()
+
+func randomizeDeck(popup=null):
+	if popup != null:
+		popups.erase(popup)
+		popup.close()
 	
+	$CenterControl/DeckDisplay.clearData()
+	hasSaved = true
+	loadedDeckName = ""
+	
+	while $CenterControl/DeckDisplay.getTotal() < 20:
+		var id = availableCardCount.keys()[randi() % availableCardCount.keys().size()]
+		var card = ListOfCards.getCard(id)
+		
+		var countCheck = true
+		for i in $CenterControl/DeckDisplay.data.size():
+			if $CenterControl/DeckDisplay.data[i].card.UUID == id:
+				if card.rarity == Card.RARITY.COMMON:
+					countCheck = $CenterControl/DeckDisplay.data[i].count < availableCardCount[id]
+				else:
+					countCheck = false
+				break
+		
+		if countCheck:
+			$CenterControl/DeckDisplay.addCard(id)
+
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or $CenterControl/FileDisplay.visible) and popups.size() == 0:
 		if Input.is_key_pressed(KEY_CONTROL):

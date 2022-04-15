@@ -353,6 +353,33 @@ margin_right = 20.0
 margin_bottom = 20.0
 mouse_filter = 2
 
+[node name="GPM" type="HBoxContainer" parent="."]
+visible = false
+margin_left = 64.0
+margin_top = 128.0
+margin_right = 239.0
+margin_bottom = 152.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GPM"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 21.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Games Per Match"
+
+[node name="LineEdit" type="LineEdit" parent="GPM"]
+margin_left = 160.0
+margin_right = 218.0
+margin_bottom = 24.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="MultiplayerUI/HostButton" to="." method="hostButtonPressed"]
 [connection signal="pressed" from="MultiplayerUI/JoinButton" to="." method="joinButtonPressed"]
 [connection signal="pressed" from="MultiplayerUI/BackButton" to="." method="backButtonPressed"]
@@ -361,3 +388,4 @@ mouse_filter = 2
 [connection signal="pressed" from="Menu/MainMenuButton" to="." method="lobbyBackPressed"]
 [connection signal="pressed" from="StartButton" to="." method="startDraftButtonPressed"]
 [connection signal="item_selected" from="DraftTypeButton" to="." method="draftTypeSelected"]
+[connection signal="text_changed" from="GPM/LineEdit" to="GPM/LineEdit" method="_on_LineEdit_text_changed"]

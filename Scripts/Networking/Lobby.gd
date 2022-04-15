@@ -8,7 +8,6 @@ var waitNum = -1
 var waitNumMax = 4
 
 func _ready():
-	MusicManager.playLobbyMusic()
 	$IPSet/HBoxContainer/LineEdit.text = str(Server.ip)
 
 func _physics_process(delta):

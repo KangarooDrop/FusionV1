@@ -3,8 +3,6 @@ extends Node
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 func _ready():
-	MusicManager.playLobbyMusic()
-	
 	var files = []
 	var dir = Directory.new()
 	dir.open(Settings.path)

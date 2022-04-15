@@ -56,6 +56,7 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 	parent.add_child(hoverInst)
 	hoverInst.position = position
 	hoverInst.setText(text)
+	hoverInst.z_index = 15
 	abilityHovers.insert(0, hoverInst)
 	return hoverInst
 

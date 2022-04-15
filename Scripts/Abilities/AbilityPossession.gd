@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityPossession
 
-func _init(card : Card).("Possession", card, Color.gray, false, Vector2(0, 0)):
+func _init(card : Card).("Possession", card, Color.purple, false, Vector2(0, 0)):
 	pass
 
 func onOtherBeforeDamage(attacker, blocker):

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/robbot-Z.mp3-0e6f0a573e21cf99b6a4d46b596cc6a7.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/robbot-Z.mp3"
+dest_files=[ "res://.import/robbot-Z.mp3-0e6f0a573e21cf99b6a4d46b596cc6a7.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

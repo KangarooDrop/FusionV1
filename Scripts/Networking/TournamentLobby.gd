@@ -11,6 +11,8 @@ var waitingTimer = 0
 var waitingMaxTime = 1
 var waitingNum = 0
 
+var idToLabel := {}
+
 func _ready():
 	MusicManager.playLobbyMusic()
 	#tournyTest()
@@ -70,15 +72,12 @@ func generateBracket():
 	var deltaH = linkSize.y
 	var labelWidth = 90
 	
-	print(screenSize, "  ", bracketSize, "  ", linkSize)
-	
 	for i in range(treeHeight-1, -1, -1):
 		var nodes = Tournament.tree.getNodesAtHeight(i)
 		for j in range(nodes.size()):
 			var a = treeHeight - i
 			var b = j
 			var yVal = b * pow(2, a) + pow(2, a-1) - 0.5
-			print("A ", yVal)
 			
 			var label = Label.new()
 			$BracketHolder.add_child(label)
@@ -89,14 +88,16 @@ func generateBracket():
 			label.clip_text = true
 			
 			if Server.playerNames.has(nodes[j].data):
-				label.text = Server.playerNames[nodes[j].data] + str(nodes[j].data % 100)
+				label.text = Server.playerNames[nodes[j].data]
 			elif nodes[j].data == get_tree().get_network_unique_id():
-				label.text = Server.username + str(nodes[j].data % 100)
+				label.text = Server.username
 			elif nodes[j].data == -1:
 				label.text = "                 "
 			else:
 				label.text = "NA " + str(nodes[j].data % 100)
 				print("no_idea=", nodes[j].data)
+			
+			idToLabel[nodes[j].data] = label
 				
 			var border = Vector2(4, 4)
 			var r = ReferenceRect.new()
@@ -141,7 +142,7 @@ func checkNextGame():
 	if Tournament.tree.root.data == id:
 		currentStatus = STATUS.WIN
 		$Label.text = "You Win!"
-	elif Tournament.hasLost(id):
+	elif Tournament.hasLost:
 		currentStatus = STATUS.LOSE
 		$Label.text = "You Lose!"
 	elif Tournament.isWaiting(id):
@@ -182,3 +183,9 @@ func toMainMenu():
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
+
+func editPlayerName(player_id, username):
+	idToLabel[player_id].text = username
+
+func editOwnName(username):
+	editPlayerName(get_tree().get_network_unique_id(), username)

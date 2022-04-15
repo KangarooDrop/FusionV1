@@ -114,6 +114,17 @@ func _ready():
 	if Settings.gameMode != Settings.GAME_MODE.TOURNAMENT:
 		Server.GM = Server.host
 		Server.gmSet = true
+	else:
+		$MatchInfo.text = "Game: " + str(Tournament.currentWins + Tournament.currentLosses) + "/" + str(Tournament.gamesPerMatch) + "\n"
+		$MatchInfo.text += str(Tournament.currentWins) + " wins \n" + str(Tournament.currentLosses) + " losses"
+		
+		var fn = fadingScene.instance()
+		fn.maxTime = 1
+		fn.name = "FadingNode"
+		$MatchInfo.add_child(fn)
+		fn.fadeIn()
+		fn.connect("onFadeIn", self, "matchInfoFadeIn")
+		
 	
 	if not Server.online:
 		mulliganDoneOpponent = true
@@ -156,6 +167,13 @@ func _ready():
 	setOwnUsername()
 	
 	initCardsLeftIndicator()
+
+func matchInfoFadeIn():
+	yield(get_tree().create_timer(2), "timeout")
+	var fn = $MatchInfo.get_node("FadingNode")
+	fn.timer = 2
+	fn.maxTime = 2
+	fn.fadeOut()
 
 func initCardsLeftIndicator():
 	if activePlayer == 0:
@@ -534,7 +552,12 @@ func _physics_process(delta):
 							fuseStartPos = cardNodesFusing[0].global_position
 							fuseReturnTimer = 0
 					else:
+						var deltaPos = cardNodesFusing[1].position
 						cardNodesFusing[1].position = lerp(fuseStartPos, fuseEndPos, fuseTimer / fuseMaxTime)
+						deltaPos -= cardNodesFusing[1].position
+						for i in range(2, cardNodesFusing.size()):
+							cardNodesFusing[i].position -= deltaPos
+						
 			elif cardNodesFusing.size() == 1:
 				if isFusingToHand:
 					fusingToHandPlayer.hand.addCardToHand([cardNodesFusing[0].card, true, true])
