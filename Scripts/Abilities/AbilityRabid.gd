@@ -17,7 +17,7 @@ func onEffect(params):
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()
 	for c in board.getAllCards():
-		if c.cardNode.attacking:
+		if is_instance_valid(c.cardNode) and c.cardNode.attacking:
 			return false
 	return true
 

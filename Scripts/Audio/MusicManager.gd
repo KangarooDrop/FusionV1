@@ -20,13 +20,23 @@ var sampleDeckEditor = \
 	preload("res://Audio/Music/robbot-Z.mp3")
 ]
 
+var sampleMenu = preload("res://Audio/Music/ScratchedAndMixed.mp3")
+
 enum TRACKS {NONE, BOARD, MAIN_MENU, DECK_EDITOR, LOBBY}
 var currentTrack : int = TRACKS.NONE
 
+var fadeOutMaxTime = 1
+var fadeOutRate = 60
+var fadingTracks := {}
+
 func playMainMenuMusic():
-	currentTrack = TRACKS.MAIN_MENU
-	clearAll()
-#	createSoundEffect(sampleBoard)
+	if currentTrack != TRACKS.MAIN_MENU:
+		currentTrack = TRACKS.NONE
+		clearAll()
+		createSoundEffect(sampleMenu)
+		currentTrack = TRACKS.MAIN_MENU
+	else:
+		pass
 
 func playDeckEditorMusic():
 	if currentTrack != TRACKS.DECK_EDITOR:
@@ -56,7 +66,8 @@ func playLobbyMusic():
 		pass
 
 func clearAudioStreamPlayer(player : AudioStreamPlayer):
-	.clearAudioStreamPlayer(player)
+	fadeOut(player)
+	
 	
 	if currentTrack == TRACKS.BOARD:
 		currentTrack = TRACKS.NONE
@@ -67,3 +78,14 @@ func clearAudioStreamPlayer(player : AudioStreamPlayer):
 	elif currentTrack == TRACKS.DECK_EDITOR:
 		currentTrack = TRACKS.NONE
 		playDeckEditorMusic()
+
+func fadeOut(player : AudioStreamPlayer):
+	fadingTracks[player] = fadeOutMaxTime
+
+func _physics_process(delta):
+	for ft in fadingTracks.keys():
+		fadingTracks[ft] -= delta
+		ft.volume_db -= fadeOutRate * delta
+		if fadingTracks[ft] <= 0:
+			.clearAudioStreamPlayer(ft)
+			fadingTracks.erase(ft)

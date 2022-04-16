@@ -305,7 +305,6 @@ remote func receiveNextPlayer():
 func startBuilding():
 	for id in playerIDs:
 		rpc_id(id, "receivedStartBuilding")
-	yield(get_tree().create_timer(1), "timeout")
 	receivedStartBuilding()
 
 remote func receivedStartBuilding():
@@ -367,7 +366,8 @@ remote func receiveDoneBoosterDraft():
 	get_node("/root/Draft").playerDoneDrafting(get_tree().get_rpc_sender_id())
 
 func sendAllBoosters(player_id : int, boostersData : Array):
-	rpc_id(player_id, "receiveSendAllBoosters", boostersData)
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendAllBoosters", boostersData)
 
 remote func receiveSendAllBoosters(boostersData : Array):
 	if get_node_or_null("/root/Draft") != null:

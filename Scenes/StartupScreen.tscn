@@ -130,11 +130,12 @@ anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -512.0
 margin_right = 512.0
-margin_bottom = 934.0
+margin_bottom = 1489.0
 custom_fonts/normal_font = SubResource( 1 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
 bbcode_text = "
+
 [center]
 [u]Programming[/u]:
 Me
@@ -150,27 +151,39 @@ Sound effects obtained from zapsplat.com
 [u]																			[/u]
 
 [u]Music[/u]: 
+Cam Yeomans & Owen [Lastname] - Scratched & Mixed
+
 Nic Silver - Reborn in a Dream
+Music Provided by Gyft Music ([url=\"https://gyftmusic.com\"]gyftmusic.com[/url])
 
 Canton Becker - Floodwaters
 cantonbecker.com/music/
-Licensed under Creative Commons By Attribution 2.0 
-creativecommons.org/licenses/by/2.0/
-
-Fluxx69 - Head Long
-
-LoopKitchen - Ravenous
-
-TNH - The Reason of Techno
+Licensed under [url=\"https://creativecommons.org/licenses/by/2.0/\"]CC BY 2.0[/url]
 
 Marco Kalach - Synesthetic Fandango
+Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
+
+Fluxx69 - Head Long
+Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
+
+LoopKitchen - Ravenous
+Licensed under [url=\"https://creativecommons.org/licenses/by-nd/3.0/\"]CC BY-ND 3.0[/url]
+
+TNH - The Reason of Techno
+Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
 
 Robbot - Z
+Licensed under [url=\"https://creativecommons.org/licenses/by/3.0/\"]CC BY 3.0[/url]
 
 Marisameow - Soulful Sunlight
+Licensed under [url=\"https://creativecommons.org/licenses/by/3.0/\"]CC BY 3.0[/url]
+
+
+
 [/center]
 "
 text = "
+
 
 Programming:
 Me
@@ -186,24 +199,35 @@ Sound effects obtained from zapsplat.com
 																			
 
 Music: 
+Cam Yeomans & Owen [Lastname] - Scratched & Mixed
+
 Nic Silver - Reborn in a Dream
+Music Provided by Gyft Music (gyftmusic.com)
 
 Canton Becker - Floodwaters
 cantonbecker.com/music/
-Licensed under Creative Commons By Attribution 2.0 
-creativecommons.org/licenses/by/2.0/
-
-Fluxx69 - Head Long
-
-LoopKitchen - Ravenous
-
-TNH - The Reason of Techno
+Licensed under CC BY 2.0
 
 Marco Kalach - Synesthetic Fandango
+Licensed under CC BY-SA 3.0
+
+Fluxx69 - Head Long
+Licensed under CC BY-SA 3.0
+
+LoopKitchen - Ravenous
+Licensed under CC BY-ND 3.0
+
+TNH - The Reason of Techno
+Licensed under CC BY-SA 3.0
 
 Robbot - Z
+Licensed under CC BY 3.0
 
 Marisameow - Soulful Sunlight
+Licensed under CC BY 3.0
+
+
+
 
 "
 script = ExtResource( 5 )
@@ -239,5 +263,6 @@ visible = false
 [connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyPressed"]
 [connection signal="pressed" from="VBoxContainer2/DraftButton" to="." method="onDraftPressed"]
 [connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="onBackPressed"]
+[connection signal="meta_clicked" from="CreditsLabel" to="CreditsLabel" method="_on_CreditsLabel_meta_clicked"]
 [connection signal="pressed" from="BackButton" to="." method="onBackPressed"]
 [connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]

@@ -4,7 +4,7 @@ class_name AbilityThoughtknock
 
 var discardIndexes := []
 
-func _init(card : Card).("Thoughtknock", card, Color.gray, true, Vector2(0, 0)):
+func _init(card : Card).("Thoughtknock", card, Color.gold, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):

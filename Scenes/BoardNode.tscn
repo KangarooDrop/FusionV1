@@ -39,6 +39,34 @@ position = Vector2( 446, 0 )
 [node name="GraveHolder" type="Node2D" parent="."]
 position = Vector2( 334, 0 )
 
+[node name="GraveHolder_A" type="Control" parent="GraveHolder"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GraveHolder_B" type="Control" parent="GraveHolder"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="GraveDisplay_A" parent="." instance=ExtResource( 10 )]
 visible = false
 z_index = 16

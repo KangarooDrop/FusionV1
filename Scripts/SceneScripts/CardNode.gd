@@ -200,7 +200,7 @@ func fight(slot):
 	var board = NodeLoc.getBoard()
 	
 	for c in board.getAllCards():
-		if c.cardNode.slot != slot and c.cardNode.slot != self.slot:
+		if not is_instance_valid(c.cardNode) or (c.cardNode.slot != slot and c.cardNode.slot != self.slot):
 			c.onOtherBeforeDamage(self.slot, slot)
 	
 	
@@ -209,11 +209,11 @@ func fight(slot):
 	card.onBeforeDamage(self.slot, slot)
 	
 	for c in board.getAllCards():
-		if c.cardNode.slot != slot and c.cardNode.slot != self.slot:
+		if not is_instance_valid(c.cardNode) or (c.cardNode.slot != slot and c.cardNode.slot != self.slot):
 			c.onOtherTakeDamage(self.slot, slot)
 	
 	for c in board.getAllCards():
-		if c.cardNode.slot != slot and c.cardNode.slot != self.slot:
+		if not is_instance_valid(c.cardNode) or (c.cardNode.slot != slot and c.cardNode.slot != self.slot):
 			c.onOtherDealDamage(self.slot, slot)
 	
 	while not NodeLoc.getBoard().getCanFight():
@@ -255,7 +255,7 @@ func fight(slot):
 				p.takeDamage(damage, self)
 	
 	for c in board.getAllCards():
-		if c.cardNode.slot != slot and c.cardNode.slot != self.slot:
+		if not is_instance_valid(c.cardNode) or (c.cardNode.slot != slot and c.cardNode.slot != self.slot):
 			c.onOtherAfterDamage(self.slot, slot)
 	
 	if is_instance_valid(slot.cardNode):

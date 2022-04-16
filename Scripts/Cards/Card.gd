@@ -286,7 +286,7 @@ func addCreatureToBoard(card, slot = null) -> bool:
 			if not is_instance_valid(s.cardNode):
 				slot = s
 				break
-	if slot != null:
+	if slot != null and not is_instance_valid(slot.cardNode):
 		card.playerID = playerID
 		
 		var cardPlacing = cardNodeScene.instance()
@@ -300,7 +300,7 @@ func addCreatureToBoard(card, slot = null) -> bool:
 		
 		card.onEnter(slot)
 		for c in NodeLoc.getBoard().getAllCards():
-			if c != self:
+			if c != card:
 				c.onOtherEnter(slot)
 		return true
 	return false

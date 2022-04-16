@@ -50,3 +50,6 @@ func _input(event):
 
 func shift(dist):
 	rect_position.y = min(max(rect_position.y + dist, -totalDelta), 0)
+
+func _on_CreditsLabel_meta_clicked(meta):
+	OS.shell_open(meta)

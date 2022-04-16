@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ScratchedAndMixed.mp3-de48c0d7c16ac92c8c92b18ffe3ba2d2.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/ScratchedAndMixed.mp3"
+dest_files=[ "res://.import/ScratchedAndMixed.mp3-de48c0d7c16ac92c8c92b18ffe3ba2d2.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

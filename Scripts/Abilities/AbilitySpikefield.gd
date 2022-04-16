@@ -8,10 +8,13 @@ func _init(card : Card).("Spikefield", card, Color.gray, true, Vector2(32, 64)):
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
 		if slot.playerID == card.playerID:
-			addToStack("onEffect", [slot.cardNode.card, count])
+			addToStack("onEffect", [card, count])
 
 func onEffect(params):
-	params[0].toughness -= params[1]
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == params[0].playerID:
+			p.takeDamage(params[1], params[0])
+			break
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "Whenever a creature you control enters the battlefield, it takes " + str(count) + " damage"

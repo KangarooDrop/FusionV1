@@ -30,8 +30,8 @@ func _ready():
 #			Tournament.setWinner(opp)
 #	print(Tournament.tree)
 	"""
-	
-	
+
+
 
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")

@@ -119,6 +119,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityFilibuster.gd"
 }, {
+"base": "AbilityETB",
+"class": "AbilityFledge",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityFledge.gd"
+}, {
 "base": "Ability",
 "class": "AbilityFleshrot",
 "language": "GDScript",
@@ -477,6 +482,7 @@ _global_script_class_icons={
 "AbilityEssenceDrain": "",
 "AbilityEvolution": "",
 "AbilityFilibuster": "",
+"AbilityFledge": "",
 "AbilityFleshrot": "",
 "AbilityFrostbite": "",
 "AbilityFrozen": "",

@@ -779,6 +779,12 @@ func addCardToGrave(playerID : int, card : Card):
 		c.onGraveAdd(card)
 
 func removeCardFromGrave(playerID : int, index : int):
+	if index == graveCards[playerID].size() - 1 and graveCards[playerID].size() > 1:
+		var cn = graves[playerID].cardNode
+		cn.visible = true
+		cn.card = graveCards[playerID][index-1]
+		cn.setCardVisible(true)
+	
 	graveCards[playerID].remove(index)
 	graveDisplays[playerID].removeCard(index)
 	if graveCards[playerID].size() == 0:
@@ -788,7 +794,6 @@ func removeCardFromGrave(playerID : int, index : int):
 		if graveViewing == playerID:
 			graveDisplays[playerID].visible = false
 			graveViewing = -1
-		
 
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
 	var hoverInst = hoverScene.instance()
@@ -834,7 +839,7 @@ func initZones():
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
 	cardInst.playerID = p.UUID
-	$GraveHolder.add_child(cardInst)
+	$GraveHolder/GraveHolder_A.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, cardHeight + cardDists)
 	graves[p.UUID] = cardInst
@@ -845,7 +850,7 @@ func initZones():
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
-	$GraveHolder.add_child(cardNodeInst)
+	$GraveHolder/GraveHolder_A.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.position = cardInst.position
@@ -887,7 +892,7 @@ func initZones():
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
 	cardInst.playerID = p.UUID
-	$GraveHolder.add_child(cardInst)
+	$GraveHolder/GraveHolder_B.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, -cardHeight - cardDists)
 	graves[p.UUID] = cardInst
@@ -898,7 +903,7 @@ func initZones():
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
-	$GraveHolder.add_child(cardNodeInst)
+	$GraveHolder/GraveHolder_B.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.position = cardInst.position
@@ -938,7 +943,19 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = creatures_B_Holder
 		CardSlot.ZONES.DECK:
 			parent = deckHolder
+		CardSlot.ZONES.GRAVE:
+			if playerIndex == 0:
+				parent = $GraveHolder/GraveHolder_A
+			else:
+				parent = $GraveHolder/GraveHolder_B
+		CardSlot.ZONES.GRAVE_CARD:
+			if playerIndex == 0:
+				parent = $GraveDisplay_A
+			else:
+				parent = $GraveDisplay_B
 	#	yield(get_tree().create_timer(0.02), "timeout")
+	
+	print(slotID)
 	
 	if parent != null:
 		if serverQueue.size() == 0:
@@ -1460,6 +1477,9 @@ func getAllCards() -> Array:
 	var cards := []
 	for i in range(players.size()):
 		var p = players[(activePlayer + i) % players.size()]
+		
+		for c in p.deck.cards:
+			cards.append(c)
 		
 		for s in p.hand.slots:
 			if is_instance_valid(s.cardNode):

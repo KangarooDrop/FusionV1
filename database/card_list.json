@@ -1079,5 +1079,33 @@
       "AbilitySpikefield"
     ],
     "rarity": "COMMON"
+  },
+  "84": {
+    "name": "Ooze",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      4, 7
+    ],
+    "tier": 0,
+    "abilities": [
+      
+    ],
+    "rarity": "COMMON"
+  },
+  "85": {
+    "name": "Fledgling Conjurer",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 2,
+    "creature_type": [
+      4, 7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityFledge"
+    ],
+    "rarity": "COMMON"
   }
 }
