@@ -177,7 +177,7 @@ remote func addUser(player_id : int, username : String):
 
 remote func removeUser(player_id : int):
 	if playerIDs.has(player_id):
-		print("User ", playerNames[player_id], "[", str(player_id), "] Disconnected")
+		print("User ", playerNames[player_id], " [", str(player_id), "] Disconnected")
 		MessageManager.notify("User \"" + playerNames[player_id] + "\" Disconnected")
 		if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
 			if opponentID == player_id:

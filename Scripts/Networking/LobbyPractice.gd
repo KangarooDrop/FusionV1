@@ -1,5 +1,7 @@
 extends Node
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
+
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 func _ready():
@@ -33,11 +35,23 @@ func _ready():
 		$DeckSelector/Background.rect_position = $DeckSelector/VBoxContainer.rect_position - Vector2(30, 10)
 	else:
 		MessageManager.notify("You must create a new deck before playing")
-		$DeckSelector.visible = false
-		$MultiplayerUI.visible = true
+		onBackButtonClicked()
 	
 	
 func onFileButtonClicked(fileName : String):
+	
+	var path = Settings.path
+	
+	var dataRead = FileIO.readJSON(path + fileName)
+	var dError = Deck.verifyDeck(dataRead)
+	
+	if dError != OK:
+		var pop = popupUI.instance()
+		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [["Close", pop, "close", []]])
+		$PopupHolder.add_child(pop)
+		pop.options[0].grab_focus()
+		return
+	
 	Settings.selectedDeck = fileName
 	Settings.gameMode = Settings.GAME_MODE.PRACTICE
 	

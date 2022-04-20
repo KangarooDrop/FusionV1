@@ -83,9 +83,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -120.0
-margin_top = -110.0
+margin_top = -125.0
 margin_right = 2.0
-margin_bottom = 2.0
+margin_bottom = 5.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
@@ -99,28 +99,23 @@ custom_fonts/font = ExtResource( 4 )
 text = "Practice"
 
 [node name="LobbyButton" type="Button" parent="VBoxContainer2"]
-margin_top = 29.0
+margin_top = 35.0
 margin_right = 122.0
-margin_bottom = 54.0
+margin_bottom = 60.0
 custom_fonts/font = ExtResource( 4 )
 text = "Lobby"
 
 [node name="DraftButton" type="Button" parent="VBoxContainer2"]
-margin_top = 58.0
+margin_top = 70.0
 margin_right = 122.0
-margin_bottom = 83.0
+margin_bottom = 95.0
 custom_fonts/font = ExtResource( 4 )
 text = "Draft"
 
 [node name="BackButton" type="Button" parent="VBoxContainer2"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 117.0
-margin_top = 46.5
-margin_right = 239.0
-margin_bottom = 71.5
+margin_top = 105.0
+margin_right = 122.0
+margin_bottom = 130.0
 custom_fonts/font = ExtResource( 4 )
 text = "Back"
 
@@ -160,16 +155,16 @@ Canton Becker - Floodwaters
 cantonbecker.com/music/
 Licensed under [url=\"https://creativecommons.org/licenses/by/2.0/\"]CC BY 2.0[/url]
 
-Marco Kalach - Synesthetic Fandango
-Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
-
 Fluxx69 - Head Long
 Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
 
 LoopKitchen - Ravenous
 Licensed under [url=\"https://creativecommons.org/licenses/by-nd/3.0/\"]CC BY-ND 3.0[/url]
 
-TNH - The Reason of Techno
+Trimmed version of TNH - The Reason of Techno
+Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
+
+Trimmed version of Marco Kalach - Synesthetic Fandango
 Licensed under [url=\"https://creativecommons.org/licenses/by-sa/3.0/\"]CC BY-SA 3.0[/url]
 
 Robbot - Z
@@ -208,16 +203,16 @@ Canton Becker - Floodwaters
 cantonbecker.com/music/
 Licensed under CC BY 2.0
 
-Marco Kalach - Synesthetic Fandango
-Licensed under CC BY-SA 3.0
-
 Fluxx69 - Head Long
 Licensed under CC BY-SA 3.0
 
 LoopKitchen - Ravenous
 Licensed under CC BY-ND 3.0
 
-TNH - The Reason of Techno
+Trimmed version of TNH - The Reason of Techno
+Licensed under CC BY-SA 3.0
+
+Trimmed version of Marco Kalach - Synesthetic Fandango
 Licensed under CC BY-SA 3.0
 
 Robbot - Z
@@ -253,6 +248,8 @@ __meta__ = {
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]

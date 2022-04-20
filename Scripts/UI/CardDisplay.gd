@@ -25,12 +25,10 @@ var mouseDown = false
 var clickTimer = 0
 var clickMaxTime = 0.18
 
-var oldY = [-1]
-
 export var viewMul = 0.75
 
 var movingCards := []
-var moveSpeed = 800
+export var moveSpeed : int = 800
 
 export var z_index = 0
 export(CardSlot.ZONES) var currentZone : int = CardSlot.ZONES.NONE
@@ -57,14 +55,28 @@ func centerCards():
 		BoardMP.centerNodes(slots, Vector2(), 0, dist)
 		BoardMP.centerNodes(nodes, Vector2(), 0, dist)
 		
-		for i in range(slots.size()):
-			slots[i].global_position.y = lastPosSlots[i].y
-			nodes[i].global_position.y = lastPosNodes[i].y
-			for d in movingCards:
-				if d[0] == slots[i]:
-					d[1].x = slots[i].global_position.x
-					slots[i].global_position.x = lastPosSlots[i].x
-					nodes[i].global_position.x = lastPosNodes[i].x
+		if Settings.playAnimations:
+			for i in range(slots.size()):
+				var foundSlot = slots[i] == cardHolding
+				for d in movingCards:
+					if d[0] == slots[i]:
+						if d[0] != cardHolding:
+							d[1] = d[0].global_position
+						foundSlot = true
+				if not foundSlot:
+					movingCards.append([slots[i], slots[i].global_position])
+				
+				slots[i].global_position = lastPosSlots[i]
+				nodes[i].global_position = lastPosNodes[i]
+		else:
+			for i in range(slots.size()):
+				slots[i].global_position.y = lastPosSlots[i].y
+				nodes[i].global_position.y = lastPosNodes[i].y
+				for d in movingCards:
+					if d[0] == slots[i]:
+						d[1].x = slots[i].global_position.x
+						slots[i].global_position.x = lastPosSlots[i].x
+						nodes[i].global_position.x = lastPosNodes[i].x
 					
 
 func removeCard(index : int):
@@ -75,15 +87,16 @@ func removeCard(index : int):
 		nodes.remove(index)
 		centerCards()
 
-func addCard(card : Card):
+func addCard(card : Card) -> CardNode:
 	var cardNode = cardNodeScene.instance()
 	cardNode.card = card
 	card.cardNode = cardNode
 	addCardNode(cardNode)
 	cardNode.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardNode.setCardVisible(cardNode.getCardVisible())
+	return cardNode
 
-func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
+func addCardNode(cardNode : CardNode, moveIntoDisplay = false) -> CardNode:
 	var cardSlot = cardSlotScene.instance()
 	cardSlot.currentZone = currentZone
 	var lastPos = null
@@ -114,6 +127,8 @@ func addCardNode(cardNode : CardNode, moveIntoDisplay = false):
 		movingCards.append([cardSlot, cardSlot.global_position])
 		cardNode.global_position = lastPos
 		cardSlot.global_position = lastPos
+	
+	return cardNode
 
 func clear():
 	for s in slots.duplicate():
@@ -163,8 +178,6 @@ func _physics_process(delta):
 		clickTimer += delta
 		if clickTimer >= clickMaxTime:
 			mouseDown = false
-			if is_instance_valid(clickedSlot):
-				oldY = [clickedSlot.global_position.y, clickedSlot.cardNode.global_position.y]
 			cardHolding = clickedSlot
 			clickedSlot = null
 		
@@ -203,10 +216,11 @@ func _physics_process(delta):
 			var maxValScaled = Settings.cardSlotScale * 1.5
 			var minValScaled = Settings.cardSlotScale
 			var val = lerp(minValScaled, maxValScaled, max(0, min(1, pow(1 - dRatio, 5))))
-			#val = stepify(val, 0.05)
+			val = stepify(val, 0.05)
 			
-			slots[i].scale = Vector2(val, val)
-			nodes[i].scale = Vector2(val, val)
+			if not nodes[i].flipping:
+				slots[i].scale = Vector2(val, val)
+				nodes[i].scale = Vector2(val, val)
 			
 			var placed = false
 			for j in range(dists.size()):
@@ -248,11 +262,8 @@ func onMouseUp(slot : CardSlot, button_index : int):
 			clickedSlot = null
 		
 		if is_instance_valid(cardHolding) and slot == cardHolding:
-			
-			centerCards()
-			cardHolding.global_position.y = oldY[0]
-			cardHolding.cardNode.global_position.y = oldY[1]
 			cardHolding = null
+			centerCards()
 
 func setCards(cards : Array):
 	clear()

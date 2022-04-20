@@ -131,7 +131,6 @@ class TTree:
 		else:
 			var layer = order.duplicate()
 			while layer.size() > 1:
-				print(layer)
 				var layerNew = []
 				for i in range(0, layer.size(), 2):
 					var p_node = TTreeData.new(-1)

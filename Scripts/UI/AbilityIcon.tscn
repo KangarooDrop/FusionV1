@@ -16,6 +16,7 @@ margin_top = -8.0
 margin_right = 8.0
 margin_bottom = 8.0
 texture = SubResource( 1 )
+stretch_mode = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }

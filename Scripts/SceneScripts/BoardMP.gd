@@ -231,9 +231,9 @@ func onMulliganButtonPressed():
 			
 			Server.sendDeck(Server.opponentID)
 			
+			card_A_Holder.rect_position.y = oldHandPos
 			players[0].hand.drawHand()
 			mulliganDone = true
-			handMoving = true
 			
 		else:
 			while players[0].hand.nodes.size() > 0:
@@ -502,6 +502,7 @@ func _physics_process(delta):
 		else:
 			handMoving = false
 			card_A_Holder.rect_position.y = oldHandPos
+			card_A_Holder.centerCards()
 	
 	if gameStarted:
 		rotAngle = PI / 32
@@ -954,8 +955,6 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 			else:
 				parent = $GraveDisplay_B
 	#	yield(get_tree().create_timer(0.02), "timeout")
-	
-	print(slotID)
 	
 	if parent != null:
 		if serverQueue.size() == 0:

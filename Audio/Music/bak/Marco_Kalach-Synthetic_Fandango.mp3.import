@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Marco_Kalach-Synthetic_Fandango.mp3-ef11cb6e576b0fa289b81ddbb9a9c1a2.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/bak/Marco_Kalach-Synthetic_Fandango.mp3"
+dest_files=[ "res://.import/Marco_Kalach-Synthetic_Fandango.mp3-ef11cb6e576b0fa289b81ddbb9a9c1a2.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

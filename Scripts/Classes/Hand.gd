@@ -8,8 +8,6 @@ var player
 
 var deck
 
-var drawingNode
-var drawingSlot
 var drawTimer = 0
 var drawMaxTime = 0.25
 var drawQueue : Array
@@ -72,8 +70,9 @@ func _physics_process(delta):
 			centerCards()
 			
 	elif drawQueue.size() > 0:
-		if drawingNode == null:
+		if movingCards.size() == 0:
 			SoundEffectManager.playDrawSound()
+			
 			var slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
 			slotInst.isOpponent = isOpponent
@@ -95,13 +94,12 @@ func _physics_process(delta):
 			slotInst.cardNode = cardInst
 			slotInst.cardNode.slot = slotInst
 			
-			centerCards()
 			if drawQueue[0][1]:
 				cardInst.global_position = slotInst.global_position
 				cardInst.setCardVisible(handVisible or drawQueue[0][2])
 				var fn = fadingNode.instance()
 				fn.maxTime = 1
-				fn.connect("onFadeIn", self, "cardFadeInFinish")
+				fn.connect("onFadeIn", self, "cardFadeInFinish", [cardInst])
 				cardInst.add_child(fn)
 				fn.fadeIn()
 			else:
@@ -109,29 +107,20 @@ func _physics_process(delta):
 				if handVisible or drawQueue[0][2]:
 					cardInst.flip()
 				cardInst.global_position = deck.global_position
+				slotInst.global_position = deck.global_position
 				
 				for c in NodeLoc.getBoard().getAllCards():
 					c.onDraw(cardInst.card)
 			
-			drawingSlot = slotInst
-			drawingNode = cardInst
-		else:
+			centerCards()
 			if drawQueue[0][1]:
-				pass
-			else:
-				drawTimer += delta
-				drawingNode.global_position = lerp(deck.global_position, drawingSlot.global_position, drawTimer / drawMaxTime)
-				if drawTimer >= drawMaxTime:
-					drawTimer = 0
-					drawingNode.global_position = drawingSlot.global_position
-					drawingNode = null
-					drawQueue.remove(0)
+				if movingCards.size() > 0:
+					cardInst.global_position = movingCards[movingCards.size()-1][1]
+					slotInst.global_position = cardInst.global_position
+			drawQueue.remove(0)
 
-func cardFadeInFinish():
-	drawingNode.get_node("FadingNode").queue_free()
-	drawTimer = 0
-	drawingNode = null
-	drawQueue.remove(0)
+func cardFadeInFinish(cardNode):
+	cardNode.get_node("FadingNode").queue_free()
 
 func drawCard():
 	var card = player.deck.pop()

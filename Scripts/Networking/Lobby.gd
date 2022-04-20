@@ -1,5 +1,7 @@
 extends Node
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
+
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 var waitMaxTime = 0.6
@@ -87,8 +89,20 @@ func openFileSelector():
 	
 	
 func onFileButtonClicked(fileName : String):
+	var path = Settings.path
+	
+	var dataRead = FileIO.readJSON(path + fileName)
+	var dError = Deck.verifyDeck(dataRead)
+	
+	if dError != OK:
+		var pop = popupUI.instance()
+		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [["Close", pop, "close", []]])
+		$PopupHolder.add_child(pop)
+		pop.options[0].grab_focus()
+		return
+	
 	$DeckSelector.visible = false
-		
+	
 	Settings.selectedDeck = fileName
 	if Server.host:
 		Server.online = true

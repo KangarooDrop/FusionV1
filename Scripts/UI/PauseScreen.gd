@@ -1,5 +1,7 @@
 extends Control
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
+
 func _ready():
 	if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
 		$VBoxContainer/RestartButton.visible = false
@@ -31,6 +33,11 @@ func onBackPressed():
 	visible = false
 
 func onMainMenuPressed():
+	var pop = popupUI.instance()
+	pop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
+	get_parent().add_child(pop)
+	
+func toMainMenu():
 	if Server.online:
 		Server.closeServer()
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")

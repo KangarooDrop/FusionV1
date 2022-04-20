@@ -92,6 +92,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 canReorder = true
+moveSpeed = 1200
 z_index = 2
 
 [node name="KeepButton" type="Button" parent="."]
@@ -142,6 +143,7 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+moveSpeed = 1200
 z_index = 2
 isOpponent = true
 handVisible = false

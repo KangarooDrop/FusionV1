@@ -30,7 +30,14 @@ func _ready():
 #			Tournament.setWinner(opp)
 #	print(Tournament.tree)
 	"""
-
+	
+	"""
+	print("pang")
+	var out = []
+	print(OS.execute("ping", ["livelaughlich.com"], true, out))
+	print(out)
+	#int execute ( String path, PoolStringArray arguments, bool blocking=true, Array output=[ ], bool read_stderr=false )
+	"""
 
 
 func onDeckEditPressed():
