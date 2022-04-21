@@ -23,36 +23,51 @@ func onEnterFromFusion(slot):
 
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
-		onEffect()
+		if is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, get_script()):
+			onEffect()
 
 func onOtherEnterFromFusion(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
-		onEffect()
+		if is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, get_script()):
+			onEffect()
 
 func onOtherLeave(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
-		onEffect()
+		if is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, get_script()):
+			onEffect()
 
 func onEffect():
-	var buffsNew = 0
+	self.card.power -= buffsApplied
+	self.card.toughness -= buffsApplied
+	self.card.maxToughness -= buffsApplied
+	
+	buffsApplied = 0
 	var board = NodeLoc.getBoard()
 	
 	for p in board.players:
 		for s in board.creatures[p.UUID]:
 			if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, get_script()):
-				buffsNew += 1
+				buffsApplied += 1
 	
-	self.card.power += (buffsNew - buffsApplied) * count
-	self.card.toughness += (buffsNew - buffsApplied) * count
-	self.card.maxToughness += (buffsNew - buffsApplied) * count
-	buffsApplied = buffsNew
+	buffsApplied *= count
+	self.card.power += buffsApplied
+	self.card.toughness += buffsApplied
+	self.card.maxToughness += buffsApplied
 	
 func onRemove(ability):
 	if ability == self:
-		self.card.power -= buffsApplied * count
-		self.card.toughness -= buffsApplied * count
-		self.card.maxToughness -= buffsApplied * count
+		self.card.power -= buffsApplied
+		self.card.toughness -= buffsApplied
+		self.card.maxToughness -= buffsApplied
 		buffsApplied = 0
+		
+		var board = NodeLoc.getBoard()
+		if board != null:
+			for c in board.getAllCards():
+				if board.isOnBoard(c):
+					for abl in c.abilities.duplicate():
+						if abl is get_script():
+							abl.onEffect()
 
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)

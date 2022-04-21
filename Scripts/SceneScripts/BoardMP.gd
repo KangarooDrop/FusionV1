@@ -61,6 +61,11 @@ var fuseStartPos = null
 
 var fuseTimer = 0
 var fuseMaxTime = 0.1
+var fuseSpinTimer = 0
+var fuseSpinMaxTime = 0.75
+var fuseRPS = 2
+var fuseSpinWaitTimer = 0
+var fuseSpinWaitMaxTime = 0.501
 
 var fuseReturnTimer = 0
 var fuseReturnMaxTime = 0.3
@@ -539,25 +544,51 @@ func _physics_process(delta):
 					fuseEndPos = cardNodesFusing[0].position
 				if fusing:
 					fuseTimer += delta
-					if fuseTimer >= fuseMaxTime:
-						fuseTimer = 0
-						fusing = false
-						#cardNodesFusing[0].slot = fuseEndSlot
-						cardNodesFusing[0].card = ListOfCards.fusePair(cardNodesFusing[0].card, cardNodesFusing[1].card, cardNodesFusing[0])
-						cardNodesFusing[0].setCardVisible(true)
-						cardNodesFusing[1].queue_free()
-						cardNodesFusing.remove(1)
-						fuseWaiting = true
-						fuseWaitTimer = 0
-						if cardNodesFusing.size() == 1:
-							fuseStartPos = cardNodesFusing[0].global_position
-							fuseReturnTimer = 0
-					else:
+					if fuseTimer < fuseMaxTime:
+						fuseTimer += delta
 						var deltaPos = cardNodesFusing[1].position
 						cardNodesFusing[1].position = lerp(fuseStartPos, fuseEndPos, fuseTimer / fuseMaxTime)
 						deltaPos -= cardNodesFusing[1].position
 						for i in range(2, cardNodesFusing.size()):
 							cardNodesFusing[i].position -= deltaPos
+						
+						if fuseTimer >= fuseMaxTime:
+							cardNodesFusing[0].flipToSameSide()
+							cardNodesFusing[1].flipToSameSide()
+					
+					elif fuseSpinWaitTimer < fuseSpinWaitMaxTime:
+						fuseSpinWaitTimer += delta
+						cardNodesFusing[0].position = fuseEndPos + Vector2(lerp(0, -cardWidth* 1.5, fuseSpinWaitTimer / fuseSpinWaitMaxTime), 0)
+						cardNodesFusing[1].position = fuseEndPos + Vector2(lerp(0, cardWidth* 1.5, fuseSpinWaitTimer / fuseSpinWaitMaxTime), 0)
+					
+					elif fuseSpinTimer < fuseSpinMaxTime:
+						fuseSpinTimer += delta
+						
+						var x = fuseSpinTimer / fuseSpinMaxTime
+						var ss
+						if x < 0.5:
+							ss = 0.5 - sqrt(.25 - x*x)
+						else:
+							ss = 0.5 + sqrt(.25 - (x-1)*(x-1))
+			
+						cardNodesFusing[0].position = fuseEndPos + Vector2(lerp(-cardWidth* 1.5, 0, fuseSpinTimer / fuseSpinMaxTime), 0).rotated(fuseSpinTimer / fuseSpinMaxTime * PI * 2 * fuseRPS)
+						cardNodesFusing[1].position = fuseEndPos + Vector2(lerp(cardWidth* 1.5, 0, fuseSpinTimer / fuseSpinMaxTime), 0).rotated(fuseSpinTimer / fuseSpinMaxTime * PI * 2 * fuseRPS)
+						
+						if fuseSpinTimer >= fuseSpinMaxTime:
+							fuseTimer = 0
+							fuseSpinTimer = 0
+							fuseSpinWaitTimer = 0
+							fusing = false
+							#cardNodesFusing[0].slot = fuseEndSlot
+							cardNodesFusing[0].card = ListOfCards.fusePair(cardNodesFusing[0].card, cardNodesFusing[1].card, cardNodesFusing[0])
+							cardNodesFusing[0].setCardVisible(true)
+							cardNodesFusing[1].queue_free()
+							cardNodesFusing.remove(1)
+							fuseWaiting = true
+							fuseWaitTimer = 0
+							if cardNodesFusing.size() == 1:
+								fuseStartPos = cardNodesFusing[0].global_position
+								fuseReturnTimer = 0
 						
 			elif cardNodesFusing.size() == 1:
 				if isFusingToHand:
@@ -825,7 +856,7 @@ func initZones():
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, cardHeight + cardDists)
+	cardInst.position = Vector2(0, cardHeight)
 	var cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
 	cardNodeInst.cardVisible = false
@@ -842,7 +873,7 @@ func initZones():
 	cardInst.playerID = p.UUID
 	$GraveHolder/GraveHolder_A.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, cardHeight + cardDists)
+	cardInst.position = Vector2(0, cardHeight)
 	graves[p.UUID] = cardInst
 	graveDisplays[p.UUID] = $GraveDisplay_A
 	graveCards[p.UUID] = []
@@ -878,7 +909,7 @@ func initZones():
 	cardInst.playerID = p.UUID
 	deckHolder.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, -cardHeight - cardDists)
+	cardInst.position = Vector2(0, -cardHeight)
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
 	cardNodeInst.cardVisible = false
@@ -895,7 +926,7 @@ func initZones():
 	cardInst.playerID = p.UUID
 	$GraveHolder/GraveHolder_B.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-	cardInst.position = Vector2(0, -cardHeight - cardDists)
+	cardInst.position = Vector2(0, -cardHeight)
 	graves[p.UUID] = cardInst
 	graveDisplays[p.UUID] = $GraveDisplay_B
 	graveCards[p.UUID] = []
@@ -971,9 +1002,9 @@ var hoveringWindowSlot = null
 var hoveringWindow = null
 		
 func onSlotEnter(slot : CardSlot):
-	if is_instance_valid(slot.cardNode) and slot.cardNode.getCardVisible() and slot.currentZone == CardSlot.ZONES.CREATURE:
-		slot.cardNode.addIcons()
-		slot.cardNode.iconsShowing = true
+#	if is_instance_valid(slot.cardNode) and slot.cardNode.getCardVisible() and slot.currentZone == CardSlot.ZONES.CREATURE:
+#		slot.cardNode.addIcons()
+#		slot.cardNode.iconsShowing = true
 	
 	if hoveringOn != null:
 		onSlotExit(hoveringOn)
@@ -1032,9 +1063,9 @@ func onSlotEnter(slot : CardSlot):
 
 func onSlotExit(slot : CardSlot):
 	if is_instance_valid(slot):
-		if is_instance_valid(slot.cardNode):
-			slot.cardNode.removeIcons()
-			slot.cardNode.iconsShowing = false
+#		if is_instance_valid(slot.cardNode):
+#			slot.cardNode.removeIcons()
+#			slot.cardNode.iconsShowing = false
 			
 		if slot == hoveringOn:
 			if highlightedSlots.size() > 0:
@@ -1294,6 +1325,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			cn.z_index = 1
 			$Fusion_Holder.add_child(cn)
+			$Fusion_Holder.move_child(cn, 0)
 			cn.position = Vector2()
 			card_A_Holder.nodes.erase(cn)
 			card_B_Holder.nodes.erase(cn)
@@ -1344,7 +1376,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 	
 	card_A_Holder.centerCards()
 	card_B_Holder.centerCards()
-	centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
+	centerFusion()
 
 func fuseToHand(player : Player, cards : Array):
 	if Settings.playAnimations:
@@ -1361,6 +1393,7 @@ func fuseToHand(player : Player, cards : Array):
 			cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			cn.z_index = 1
 			$Fusion_Holder.add_child(cn)
+			$Fusion_Holder.move_child(cn, 0)
 			cn.position = Vector2()
 			card_A_Holder.nodes.erase(cn)
 			card_B_Holder.nodes.erase(cn)
@@ -1387,7 +1420,10 @@ func fuseToHand(player : Player, cards : Array):
 	
 	card_A_Holder.centerCards()
 	card_B_Holder.centerCards()
-	centerNodes($Fusion_Holder.get_children(), Vector2(), cardWidth, cardDists)
+	centerFusion()
+
+func centerFusion():
+	centerNodes(cardNodesFusing, Vector2((cardWidth * Settings.cardSlotScale + cardDists) * $Fusion_Holder.get_children().size() / 2 - cardWidth / 2 * Settings.cardSlotScale - cardDists / 2, 0), cardWidth, cardDists)
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer

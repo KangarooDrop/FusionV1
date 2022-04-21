@@ -2,8 +2,6 @@ extends Node
 
 var cardList_A : Array
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
-
 var deck_A : Deck
 var hand_A : Array
 
@@ -20,7 +18,10 @@ func _input(event):
 			elif $CenterControl/PauseNode/PauseMenu/SettingsPage.visible:
 				$CenterControl/PauseNode/PauseMenu/SettingsPage.onBackPressed()
 			else:
-				$CenterControl/PauseNode/PauseMenu.visible = !$CenterControl/PauseNode/PauseMenu.visible
+				if $CenterControl/PauseNode/PauseMenu.visible:
+					$CenterControl/PauseNode/PauseMenu.hide()
+				else:
+					$CenterControl/PauseNode/PauseMenu.show()
 				
 
 func onDeckChangePressed():
@@ -47,7 +48,7 @@ func onDeckChangePressed():
 		var b = Button.new()
 		$CenterControl/FileSelector/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
-		b.set("custom_fonts/font", fontTRES)
+		NodeLoc.setButtonParams(b)
 		b.connect("pressed", self, "onDeckChangeButtonPressed", [files[i]])
 		$CenterControl/FileSelector/ButtonHolder.move_child(b, i+1)
 	$CenterControl/FileSelector/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
@@ -61,4 +62,4 @@ func onDeckChangeButtonPressed(fileName : String):
 
 func onDeckChangeBackPressed():
 	$CenterControl/FileSelector.visible = false
-	$CenterControl/PauseNode/PauseMenu.visible = true
+	$CenterControl/PauseNode/PauseMenu.show()

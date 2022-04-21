@@ -1,8 +1,33 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/Networking/DraftLobby.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=3]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=4]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=5]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=6]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+PopupMenu/colors/font_color = Color( 0, 0, 0, 1 )
+PopupMenu/colors/font_color_accel = Color( 0, 0, 0, 0.8 )
+PopupMenu/colors/font_color_disabled = Color( 0, 0, 0, 0.8 )
+PopupMenu/colors/font_color_hover = Color( 0, 0, 0, 1 )
+PopupMenu/colors/font_color_separator = Color( 0, 0, 0, 1 )
+PopupMenu/constants/hseparation = 4
+PopupMenu/constants/vseparation = 4
+PopupMenu/fonts/font = null
+PopupMenu/icons/checked = null
+PopupMenu/icons/radio_checked = null
+PopupMenu/icons/radio_unchecked = null
+PopupMenu/icons/submenu = null
+PopupMenu/icons/unchecked = null
+PopupMenu/styles/hover = ExtResource( 5 )
+PopupMenu/styles/labeled_separator_left = null
+PopupMenu/styles/labeled_separator_right = null
+PopupMenu/styles/panel = ExtResource( 6 )
+PopupMenu/styles/panel_disabled = null
+PopupMenu/styles/separator = ExtResource( 4 )
 
 [node name="DraftLobby" type="Control"]
 anchor_right = 1.0
@@ -57,22 +82,43 @@ __meta__ = {
 
 [node name="HostButton" type="Button" parent="MultiplayerUI"]
 margin_right = 138.0
-margin_bottom = 25.0
+margin_bottom = 23.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Host"
 
 [node name="JoinButton" type="Button" parent="MultiplayerUI"]
-margin_top = 41.0
+margin_top = 39.0
 margin_right = 138.0
-margin_bottom = 66.0
+margin_bottom = 62.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Join"
 
 [node name="BackButton" type="Button" parent="MultiplayerUI"]
-margin_top = 82.0
+margin_top = 78.0
 margin_right = 138.0
-margin_bottom = 107.0
+margin_bottom = 101.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back to Menu"
 
 [node name="IPSet" type="Control" parent="."]
@@ -111,7 +157,17 @@ margin_left = 109.0
 margin_right = 237.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 128, 0 )
+custom_styles/read_only = ExtResource( 5 )
+custom_styles/focus = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color_pressed = Color( 0, 0, 0, 1 )
+custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
 text = "127.0.0.1"
 
 [node name="JoinButton" type="Button" parent="IPSet"]
@@ -123,7 +179,14 @@ margin_left = -45.5
 margin_top = 20.0
 margin_right = 45.5
 margin_bottom = 40.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Join"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -134,7 +197,14 @@ margin_left = -25.5
 margin_top = 72.0
 margin_right = 65.5
 margin_bottom = 92.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -154,7 +224,14 @@ __meta__ = {
 [node name="MainMenuButton" type="Button" parent="Menu"]
 margin_right = 76.0
 margin_bottom = 25.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -170,7 +247,14 @@ margin_right = -112.0
 margin_bottom = 89.0
 grow_horizontal = 2
 grow_vertical = 2
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Start Draft"
 
 [node name="DraftTypeButton" type="OptionButton" parent="."]
@@ -183,7 +267,15 @@ margin_right = -104.0
 margin_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource( 1 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Draft Type"
 
 [node name="DraftTypeOptions" type="Control" parent="."]
@@ -275,7 +367,18 @@ margin_left = -3.746
 margin_top = 4.0
 margin_right = 78.254
 margin_bottom = 33.0
+custom_styles/read_only = ExtResource( 5 )
+custom_styles/focus = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color_pressed = Color( 0, 0, 0, 1 )
+custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
+align = 1
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -336,7 +439,18 @@ margin_left = -3.746
 margin_top = 4.0
 margin_right = 78.254
 margin_bottom = 33.0
+custom_styles/read_only = ExtResource( 5 )
+custom_styles/focus = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color_pressed = Color( 0, 0, 0, 1 )
+custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
+align = 1
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -373,8 +487,20 @@ text = "Games Per Match"
 
 [node name="LineEdit" type="LineEdit" parent="GPM"]
 margin_left = 160.0
-margin_right = 218.0
+margin_right = 236.0
 margin_bottom = 24.0
+custom_styles/read_only = ExtResource( 5 )
+custom_styles/focus = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color_pressed = Color( 0, 0, 0, 1 )
+custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/clear_button_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
+align = 1
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false

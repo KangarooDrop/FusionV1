@@ -2,8 +2,6 @@ extends Node
 
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
-
 func _ready():
 	var files = []
 	var dir = Directory.new()
@@ -27,7 +25,7 @@ func _ready():
 			var b = Button.new()
 			$DeckSelector/VBoxContainer.add_child(b)
 			b.text = str(files[i].get_basename())
-			b.set("custom_fonts/font", fontTRES)
+			NodeLoc.setButtonParams(b)
 			b.connect("pressed", self, "onFileButtonClicked", [files[i]])
 			$DeckSelector/VBoxContainer.move_child(b, i+1)
 		$DeckSelector/VBoxContainer.set_anchors_and_margins_preset(Control.PRESET_CENTER)

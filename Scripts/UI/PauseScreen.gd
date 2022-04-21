@@ -55,3 +55,9 @@ func onConcedePressed():
 	var board = get_node("../../Board")
 	Server.sendMessage(Server.opponentID, "Opponent has conceded")
 	board.onConcede()
+
+func show():
+	.show()
+	var offset = Vector2(64, 0)
+	$NinePatchRect.rect_size = $VBoxContainer.rect_size + offset
+	$NinePatchRect.rect_position = $VBoxContainer.rect_position - offset / 2

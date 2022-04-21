@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/UI/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=4]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=5]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=6]
+[ext_resource path="res://Art/UI/hover.png" type="Texture" id=7]
 
 [node name="PauseMenu" type="Control"]
 visible = false
@@ -32,6 +36,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -75.0
+margin_top = -75.0
+margin_right = 85.0
+margin_bottom = 110.0
+texture = ExtResource( 7 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -47,54 +64,97 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
-margin_top = 17.0
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+margin_top = 6.0
 margin_right = 144.0
-margin_bottom = 42.0
+margin_bottom = 29.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Back"
+
+[node name="RestartButton" type="Button" parent="VBoxContainer"]
+margin_top = 39.0
+margin_right = 144.0
+margin_bottom = 62.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Restart"
 
 [node name="ConcedeButton" type="Button" parent="VBoxContainer"]
-margin_right = 12.0
-margin_bottom = 20.0
+margin_top = 72.0
+margin_right = 144.0
+margin_bottom = 95.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Concede"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 52.0
+margin_top = 105.0
 margin_right = 144.0
-margin_bottom = 77.0
+margin_bottom = 128.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Settings"
 
 [node name="ChangeDeckButton" type="Button" parent="VBoxContainer"]
-margin_top = 87.0
+margin_top = 138.0
 margin_right = 144.0
-margin_bottom = 112.0
+margin_bottom = 161.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Change Deck"
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
-margin_top = 122.0
-margin_right = 144.0
-margin_bottom = 147.0
-custom_fonts/font = ExtResource( 2 )
-text = "Back"
-
 [node name="MainMenuButton" type="Button" parent="VBoxContainer"]
-margin_top = 157.0
+margin_top = 171.0
 margin_right = 144.0
-margin_bottom = 182.0
+margin_bottom = 194.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
 custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "To Main Menu"
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
 
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]
 [connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
 [connection signal="pressed" from="VBoxContainer/ConcedeButton" to="." method="onConcedePressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsButtonClicked"]
 [connection signal="pressed" from="VBoxContainer/ChangeDeckButton" to="." method="onChangeDeckPressed"]
-[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]
 [connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="onMainMenuPressed"]
 [connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]

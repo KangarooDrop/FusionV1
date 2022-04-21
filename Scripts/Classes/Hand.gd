@@ -22,6 +22,9 @@ export var isOpponent = false
 export var handVisible := true
 var mulliganCount = 0
 
+var drawWaitTimer = 0
+var drawWaitMaxTime = 0.15
+
 func _ready():
 	maxVal = 1.1
 
@@ -70,7 +73,7 @@ func _physics_process(delta):
 			centerCards()
 			
 	elif drawQueue.size() > 0:
-		if movingCards.size() == 0:
+		if drawWaitTimer <= 0:
 			SoundEffectManager.playDrawSound()
 			
 			var slotInst = cardSlotScene.instance()
@@ -118,6 +121,11 @@ func _physics_process(delta):
 					cardInst.global_position = movingCards[movingCards.size()-1][1]
 					slotInst.global_position = cardInst.global_position
 			drawQueue.remove(0)
+		
+			drawWaitTimer = drawWaitMaxTime
+			
+	if drawWaitTimer > 0:
+		drawWaitTimer -= delta
 
 func cardFadeInFinish(cardNode):
 	cardNode.get_node("FadingNode").queue_free()

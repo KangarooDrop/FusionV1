@@ -3,7 +3,6 @@ extends Node
 var availableCardCount : Dictionary = {}
 
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 var nums := []
 
@@ -39,9 +38,6 @@ func _ready():
 	
 	for k in SORT_ORDER.keys():
 		$CenterControl/SortNode/HBoxContainer/SortButton.add_item(k.capitalize())
-	
-	$CenterControl/SortNode/HBoxContainer/SortButton.theme = Theme.new()
-	$CenterControl/SortNode/HBoxContainer/SortButton.theme.default_font = fontTRES
 	
 	$CenterControl/SortNode/HBoxContainer/SortButton.select(0)
 	setSortOrder(0)
@@ -417,7 +413,7 @@ func onConfirmLoad(popup=null):
 		var b = Button.new()
 		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
-		b.set("custom_fonts/font", fontTRES)
+		NodeLoc.setButtonParams(b)
 		b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
 		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
 	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
@@ -539,7 +535,7 @@ func onDeleteButtonPressed():
 		var b = Button.new()
 		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
 		b.text = str(files[i].get_basename())
-		b.set("custom_fonts/font", fontTRES)
+		NodeLoc.setButtonParams(b)
 		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
 		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
 	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)

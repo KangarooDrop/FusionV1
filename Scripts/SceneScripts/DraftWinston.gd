@@ -37,7 +37,7 @@ var activePlayer = false
 
 #[Node, timer, start pos, end pos, remove when done, timescale]
 var movingData := []
-var movingMaxTime = 0.2
+var movingMaxTime = 0.35
 
 var processQueue := []
 
@@ -139,8 +139,11 @@ func addCardToStack(index : int, fromServer = false):
 		hoveringWindow.get_node("Label").text = str(mainStack.size())
 
 func revealCards(index : int):
+	SoundEffectManager.playDrawSound()
+	
 	if stacks[index].size() == 0:
 		onLeaveButtonPressed()
+	
 	
 	$TakeLeaveCenter/ButtonZ/TakeButton.visible = true
 	$TakeLeaveCenter/ButtonZ/LeaveButton.visible = true
@@ -203,6 +206,8 @@ func closeHoverWindow(forceClose = false):
 
 func onTakeButtonPressed():
 	if movingData.size() == 0:
+		SoundEffectManager.playDrawSound()
+		
 		$TakeLeaveCenter/ButtonZ/TakeButton.visible = false
 		$TakeLeaveCenter/ButtonZ/LeaveButton.visible = false
 		
@@ -265,8 +270,11 @@ func onLeaveButtonPressed():
 		else:
 			var card = mainStack.pop_front()
 			if card != null:
+				SoundEffectManager.playDrawSound()
 				Server.popMainStack()
-				$CardDisplay.addCard(card)
+				var cn = $CardDisplay.addCard(card)
+				cn.global_position = mainSlot.global_position
+				cn.slot.global_position = mainSlot.global_position
 			else:
 				if is_instance_valid(mainSlot.cardNode):
 					mainSlot.cardNode.queue_free()

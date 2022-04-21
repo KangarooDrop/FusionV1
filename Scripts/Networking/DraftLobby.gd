@@ -1,6 +1,5 @@
 extends Control
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var playerLabel = preload("res://Scenes/Networking/PlayerLabel.tscn")
 
@@ -142,11 +141,12 @@ func addPlayer(id, name):
 		pl.get_node("HBoxContainer/Label").text = name
 		if Server.host and id != -1:
 			pl.get_node("HBoxContainer/Button").visible = true
+			NodeLoc.setButtonParams(pl.get_node("HBoxContainer/Button"))
 			pl.get_node("HBoxContainer/Button").connect("pressed", Server, "kickUser", [id])
 	else:
 		pl = LineEdit.new()
 		pl.text = name
-		pl.set("custom_fonts/font", fontTRES)
+		NodeLoc.setLineEditParams(pl)
 		pl.connect("text_changed", self, "changeName")
 	
 	$VBoxContainer.add_child(pl)
@@ -170,12 +170,13 @@ func editPlayerName(player_id : int, username : String):
 	pLabels[player_id].get_node("HBoxContainer/Label").text = username
 
 func removePlayer(id):
-	$VBoxContainer.remove_child(pLabels[id])
-	pLabels[id].queue_free()
-	pLabels.erase(id)
-	ids.erase(id)
-	setPlayerLabel()
-	$VBoxContainer.rect_size.y = 0
+	if pLabels.has(id):
+		$VBoxContainer.remove_child(pLabels[id])
+		pLabels[id].queue_free()
+		pLabels.erase(id)
+		ids.erase(id)
+		setPlayerLabel()
+		$VBoxContainer.rect_size.y = 0
 
 func setPlayerLabel():
 	$VBoxContainer/Label.text = "Players ( " + str(ids.size()) + "/" + str(numMaxPlayers) + " ): "

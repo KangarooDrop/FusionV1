@@ -26,6 +26,7 @@ var attackReturnMaxTime = 0.2
 
 var flipping = false
 var hasFlipped = false
+var flipSame = false
 var flipTimer = 0
 var flipMaxTime = 0.5
 var originalScale = 1
@@ -98,13 +99,14 @@ func _physics_process(delta):
 	if flipping:
 		flipTimer += delta
 		scale.x = abs(cos(flipTimer / flipMaxTime * PI)) * originalScale
-		if not hasFlipped and flipTimer >= flipMaxTime / 2:
+		if not flipSame and not hasFlipped and flipTimer >= flipMaxTime / 2:
 			hasFlipped = true
 			setCardVisible(!getCardVisible())
 		if flipTimer >= flipMaxTime:
-			flipMaxTime = 0
+			flipTimer = 0
 			hasFlipped = false
 			flipping = false
+			flipSame = false
 			
 	if attacking and NodeLoc.getBoard().getCanFight():
 		if not fightingWait:
@@ -194,7 +196,11 @@ func attack(slots : Array):
 func flip():
 	flipping = true
 	originalScale = scale.x
-	
+
+func flipToSameSide():
+	flip()
+	flipSame = true
+
 func fight(slot):
 	
 	var board = NodeLoc.getBoard()

@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/UI/SettingsPage.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=4]
 [ext_resource path="res://Scripts/UI/CreditsUI.gd" type="Script" id=5]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=6]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=7]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -33,9 +36,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -120.0
-margin_top = -160.0
+margin_top = -128.0
 margin_right = 2.0
-margin_bottom = 5.0
+margin_bottom = 37.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
@@ -44,36 +47,71 @@ __meta__ = {
 
 [node name="DeckEditButton" type="Button" parent="VBoxContainer"]
 margin_right = 122.0
-margin_bottom = 25.0
+margin_bottom = 23.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Deck Editor"
 
 [node name="PlayButton" type="Button" parent="VBoxContainer"]
-margin_top = 35.0
+margin_top = 33.0
 margin_right = 122.0
-margin_bottom = 60.0
+margin_bottom = 56.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Play"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 70.0
+margin_top = 66.0
 margin_right = 122.0
-margin_bottom = 95.0
+margin_bottom = 89.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Settings"
 
 [node name="CreditsButton" type="Button" parent="VBoxContainer"]
-margin_top = 105.0
+margin_top = 99.0
 margin_right = 122.0
-margin_bottom = 130.0
+margin_bottom = 122.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Credits"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
-margin_top = 140.0
+margin_top = 132.0
 margin_right = 122.0
-margin_bottom = 165.0
+margin_bottom = 155.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Exit"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
@@ -83,9 +121,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -120.0
-margin_top = -125.0
+margin_top = -93.0
 margin_right = 2.0
-margin_bottom = 5.0
+margin_bottom = 37.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
@@ -95,28 +133,56 @@ __meta__ = {
 [node name="PracticeButton" type="Button" parent="VBoxContainer2"]
 margin_right = 122.0
 margin_bottom = 25.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Practice"
 
 [node name="LobbyButton" type="Button" parent="VBoxContainer2"]
 margin_top = 35.0
 margin_right = 122.0
 margin_bottom = 60.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Lobby"
 
 [node name="DraftButton" type="Button" parent="VBoxContainer2"]
 margin_top = 70.0
 margin_right = 122.0
 margin_bottom = 95.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Draft"
 
 [node name="BackButton" type="Button" parent="VBoxContainer2"]
 margin_top = 105.0
 margin_right = 122.0
 margin_bottom = 130.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
 [node name="CreditsLabel" type="RichTextLabel" parent="."]
@@ -240,7 +306,14 @@ margin_left = -154.0
 margin_top = -57.0
 margin_right = -32.0
 margin_bottom = -32.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
 custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -248,8 +321,6 @@ __meta__ = {
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]

@@ -108,9 +108,9 @@ func addCardNode(cardNode : CardNode, moveIntoDisplay = false) -> CardNode:
 		cardNode.get_parent().remove_child(cardNode)
 	add_child(cardNode)
 	
-	#if lastPos == null:
-	#	lastPos = cardNode.global_position
-	
+	if lastPos != null:
+		cardSlot.global_position = lastPos
+		cardNode.global_position = lastPos
 	
 	cardSlot.cardNode = cardNode
 	cardNode.slot = cardSlot
@@ -123,10 +123,6 @@ func addCardNode(cardNode : CardNode, moveIntoDisplay = false) -> CardNode:
 	cardSlot.get_node("SpotSprite").visible = false
 	
 	centerCards()
-	if moveIntoDisplay:
-		movingCards.append([cardSlot, cardSlot.global_position])
-		cardNode.global_position = lastPos
-		cardSlot.global_position = lastPos
 	
 	return cardNode
 
@@ -145,13 +141,16 @@ func _physics_process(delta):
 	if movingCards.size() > 0:
 		var toRemove := []
 		for data in movingCards:
-			if (data[1] - data[0].global_position).length() <= moveSpeed / 50.0:
-				data[0].global_position = data[1]
-				data[0].cardNode.global_position = data[0].global_position
-				toRemove.append(data)
+			if is_instance_valid(data[0]):
+				if (data[1] - data[0].global_position).length() <= moveSpeed / 50.0:
+					data[0].global_position = data[1]
+					data[0].cardNode.global_position = data[0].global_position
+					toRemove.append(data)
+				else:
+					data[0].global_position += (data[1] - data[0].global_position).normalized() * moveSpeed * delta
+					data[0].cardNode.global_position = data[0].global_position
 			else:
-				data[0].global_position += (data[1] - data[0].global_position).normalized() * moveSpeed * delta
-				data[0].cardNode.global_position = data[0].global_position
+				movingCards.erase(data)
 				
 		for data in toRemove:
 			movingCards.erase(data)

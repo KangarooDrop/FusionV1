@@ -3,9 +3,12 @@ extends Node
 onready var cardWidth = ListOfCards.cardBackground.get_width()
 var cardNode = preload("res://Scenes/CardNode.tscn")
 
-var cardMoveSpeed = 100
+var cardMoveSpeed = 200
+var fuseSpinMaxTime = 0.75
+var fuseRPS = 2
+var fuseSpinWaitMaxTime = 0.5
 
-#[card1, card2]
+#[card1, card2, point, rot, scale.x, fuseSpinWaitTimer, fuseSpinTimer, ]
 var backFuseData := []
 var backFuseBuffer = 0.1
 
@@ -26,7 +29,6 @@ var paused = false
 
 func _ready():
 	seed(OS.get_system_time_msecs())
-	start()
 
 func start():
 	if not playing:
@@ -82,19 +84,43 @@ func _physics_process(delta):
 				genBackgroundFusion()
 		
 		for data in backFuseData:
-			data[0].position += Vector2(-cardMoveSpeed * data[0].scale.x, 0).rotated(data[0].rotation) * delta
-			data[1].position += Vector2(cardMoveSpeed * data[0].scale.x, 0).rotated(data[1].rotation) * delta
 			
-			if (data[0].position - data[1].position).length() < cardWidth:
-				var card = ListOfCards.fusePair(data[0].card, data[1].card)
-				var cn = genBackgroundCard(card, data[0].rotation)
-				cn.z_index = data[0].z_index
-				cn.scale = data[0].scale
-				cn.position = (data[0].position + data[1].position) / 2
-				backFadeData.append([cn, 0])
-				data[0].queue_free()
-				data[1].queue_free()
-				backFuseData.erase(data)
+			if data[5] == 0 and (data[0].position - data[1].position).length() > cardMoveSpeed * data[4] * delta:
+				data[0].position += Vector2(-cardMoveSpeed * data[4], 0).rotated(data[3]) * delta
+				data[1].position += Vector2(cardMoveSpeed * data[4], 0).rotated(data[3]) * delta
+				
+				if (data[0].position - data[1].position).length() <= cardMoveSpeed * data[4] * delta:
+					data[0].flipToSameSide()
+					data[1].flipToSameSide()
+			
+			elif data[5] < fuseSpinWaitMaxTime:
+				data[5] += delta
+				data[0].position = data[2] + Vector2(lerp(0, cardWidth * 1.5 * data[4], data[5] / fuseSpinWaitMaxTime), 0).rotated(data[3])
+				data[1].position = data[2] + Vector2(lerp(0, -cardWidth * 1.5 * data[4], data[5] / fuseSpinWaitMaxTime), 0).rotated(data[3])
+				
+			elif data[6] < fuseSpinMaxTime:
+				data[6] += delta
+						
+				var x = data[6] / fuseSpinMaxTime
+				var ss
+				if x < 0.5:
+					ss = 0.5 - sqrt(.25 - x*x)
+				else:
+					ss = 0.5 + sqrt(.25 - (x-1)*(x-1))
+	
+				data[0].position = data[2] + Vector2(lerp(cardWidth * 1.5 * data[4], 0, data[6] / fuseSpinMaxTime), 0).rotated(data[6] / fuseSpinMaxTime * PI * 2 * fuseRPS + data[3])
+				data[1].position = data[2] + Vector2(lerp(-cardWidth * 1.5 * data[4], 0, data[6] / fuseSpinMaxTime), 0).rotated(data[6] / fuseSpinMaxTime * PI * 2 * fuseRPS + data[3])
+				
+				if data[6] >= fuseSpinMaxTime:
+					var card = ListOfCards.fusePair(data[0].card, data[1].card)
+					var cn = genBackgroundCard(card, data[3])
+					cn.z_index = data[0].z_index
+					cn.scale = data[0].scale
+					cn.position = (data[0].position + data[1].position) / 2
+					backFadeData.append([cn, 0])
+					data[0].queue_free()
+					data[1].queue_free()
+					backFuseData.erase(data)
 		
 		for data in backFadeData:
 			data[0].modulate.a = (backFadeMaxTime - data[1]) / backFadeMaxTime
@@ -158,7 +184,7 @@ func genBackgroundFusion():
 	cn2.z_index = -100 - maxLayer + layer
 	cn2.scale = Vector2(scale, scale)
 	
-	backFuseData.append([cn1, cn2])
+	backFuseData.append([cn1, cn2, fusePoint, cn1.rotation, cn1.scale.x, 0, 0])
 
 func genBackgroundCard(card : Card, angle : float) -> CardNode:
 	var cn = cardNode.instance()
@@ -168,3 +194,17 @@ func genBackgroundCard(card : Card, angle : float) -> CardNode:
 	move_child(cn, 0)
 	cn.rotation = angle
 	return cn
+
+func _input(event):
+	if event is InputEventKey and not event.is_echo():
+		if event.scancode == KEY_CONTROL:
+			if event.is_pressed():
+				Engine.time_scale = 5
+			else:
+				Engine.time_scale = 1
+		elif event.scancode == KEY_SHIFT:
+			if event.is_pressed():
+				Engine.time_scale = 0.1
+			else:
+				Engine.time_scale = 1
+		

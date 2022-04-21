@@ -137,6 +137,7 @@ func _physics_process(delta):
 			$BoosterDisplay.centerCards()
 			$BoosterDisplay2.centerCards()
 			highestZ.queue_free()
+			SoundEffectManager.playDrawSound()
 			
 		elif $BoosterDisplay2.slots.has(highestZ):
 			if currentState == STATES.MOVING:
@@ -148,6 +149,7 @@ func _physics_process(delta):
 			$BoosterDisplay.centerCards()
 			$BoosterDisplay2.centerCards()
 			highestZ.queue_free()
+			SoundEffectManager.playDrawSound()
 			
 			
 		elif $CardDisplay.slots.has(highestZ):
@@ -250,6 +252,7 @@ func setCards(cards : Array, withFlourish = false):
 		for node in $BoosterDisplay2.nodes.duplicate():
 			yield(get_tree().create_timer(0.05), "timeout")
 			node.flip()
+			SoundEffectManager.playDrawSound()
 	else:
 		var cardsA = []
 		var cardsB = []

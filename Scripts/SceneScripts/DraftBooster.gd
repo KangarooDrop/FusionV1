@@ -71,7 +71,16 @@ func genNewBooster(cards = null):
 	
 	$BoosterDisplay.clear()
 	for cID in cards:
-		$BoosterDisplay.addCard(ListOfCards.getCard(cID))
+		var cn = $BoosterDisplay.addCard(ListOfCards.getCard(cID))
+		cn.setCardVisible(false)
+		
+		
+	yield(get_tree().create_timer(0.2), "timeout")
+	for node in $BoosterDisplay.nodes.duplicate():
+		yield(get_tree().create_timer(0.05), "timeout")
+		if is_instance_valid(node):
+			node.flip()
+			SoundEffectManager.playDrawSound()
 
 var slotClickedQueue1 := []
 var slotClickedQueue2 := []
@@ -98,35 +107,38 @@ func _physics_process(delta):
 		for i in range(1, slotClickedQueue1.size()):
 			if not is_instance_valid(highestZ.cardNode) or (is_instance_valid(slotClickedQueue1[i].cardNode) and slotClickedQueue1[i].cardNode.z_index > highestZ.cardNode.z_index):
 				highestZ = slotClickedQueue1[i]
+		if highestZ.cardNode.getCardVisible():
 		
-		if $BoosterDisplay.slots.has(highestZ):
-			if highestZ == hoveringSlot:
-				closeHoverWindow(true)
-			
-			$CardDisplay.addCardNode(highestZ.cardNode, true)
-			
-			$BoosterDisplay.slots.erase(highestZ)
-			$BoosterDisplay.nodes.erase(highestZ.cardNode)
-			
-			var cardIDs = []
-			for c in $BoosterDisplay.nodes:
-				cardIDs.append(c.card.UUID)
-			var nextID = getNextPlayerID()
-			Server.sendBooster(nextID, cardIDs)
-			
-			$BoosterDisplay.clear()
-			#highestZ.cardNode.queue_free()
-			highestZ.queue_free()
-		elif $CardDisplay.slots.has(highestZ):
-			if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:
-				$DeckDisplayControl/DeckDisplay.addCard(highestZ.cardNode.card.UUID)
-				$CardDisplay.slots.erase(highestZ)
-				$CardDisplay.nodes.erase(highestZ.cardNode)
-				highestZ.cardNode.queue_free()
+			if $BoosterDisplay.slots.has(highestZ):
+				SoundEffectManager.playDrawSound()
+				
+				if highestZ == hoveringSlot:
+					closeHoverWindow(true)
+				
+				$CardDisplay.addCardNode(highestZ.cardNode, true)
+				
+				$BoosterDisplay.slots.erase(highestZ)
+				$BoosterDisplay.nodes.erase(highestZ.cardNode)
+				
+				var cardIDs = []
+				for c in $BoosterDisplay.nodes:
+					cardIDs.append(c.card.UUID)
+				var nextID = getNextPlayerID()
+				Server.sendBooster(nextID, cardIDs)
+				
+				$BoosterDisplay.clear()
+				#highestZ.cardNode.queue_free()
 				highestZ.queue_free()
-				$CardDisplay.centerCards()
-			else:
-				doubleClickSlot = highestZ
+			elif $CardDisplay.slots.has(highestZ):
+				if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:
+					$DeckDisplayControl/DeckDisplay.addCard(highestZ.cardNode.card.UUID)
+					$CardDisplay.slots.erase(highestZ)
+					$CardDisplay.nodes.erase(highestZ.cardNode)
+					highestZ.cardNode.queue_free()
+					highestZ.queue_free()
+					$CardDisplay.centerCards()
+				else:
+					doubleClickSlot = highestZ
 		
 		slotClickedQueue1.clear()
 	

@@ -2,8 +2,6 @@ extends Node2D
 
 class_name PopupUI
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
-
 var margin = 8
 
 var options := []
@@ -19,7 +17,7 @@ func init(notice : String = "Notice", text : String = "", buttonData : Array = [
 		var btn = buttonData[i]
 		var button = Button.new()
 		button.name = "Option_" + str(i)
-		button.set("custom_fonts/font", fontTRES)
+		NodeLoc.setButtonParams(button)
 		button.text = btn[0]
 		button.connect("button_down", btn[1], btn[2], btn[3])
 		$VBoxContainer/ButtonHolder.add_child(button)

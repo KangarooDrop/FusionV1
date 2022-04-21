@@ -1,7 +1,5 @@
 extends Control
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
-
 signal settingsClose
 
 func _ready():
@@ -46,14 +44,16 @@ func shaderButtonPressed():
 		if c is Button and c.name != "BackButton":
 			$FileDisplay/ButtonHolder.remove_child(c)
 			c.queue_free()
+	var c = 0
 	for i in range(files.size()):
 		if not files[i].begins_with(".") and files[i].ends_with("shader"):
 			var b = Button.new()
 			$FileDisplay/ButtonHolder.add_child(b)
 			b.text = files[i].get_basename().capitalize()
-			b.set("custom_fonts/font", fontTRES)
+			NodeLoc.setButtonParams(b)
 			b.connect("pressed", self, "onShaderLoadButtonPressed", [files[i]])
-			$FileDisplay/ButtonHolder.move_child(b, i+1)
+			c += 1
+			$FileDisplay/ButtonHolder.move_child(b, c)
 	yield(get_tree(), "idle_frame")
 	$FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
 	#$FileDisplay/ButtonHolder.rect_position.y -= 64
