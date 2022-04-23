@@ -10,8 +10,8 @@ This is not required for the addon to work
 """
 
 const FLUSH_EVERY = 100
-const LOGFILE_AMOUNT = 10
-const LOGFILE_PATH = 'user://rabid-hole-punch-godot-%s.log'
+const LOGFILE_AMOUNT = 3
+const LOGFILE_PATH = 'user://rabid-hole-punch/log.log'
 
 const FORMAT = '%s - %s - %s'
 const DEBUG = 'debug'
@@ -19,7 +19,7 @@ const INFO = 'info'
 const WARNING = 'warning'
 const ERROR = 'error'
 
-var current_filename = get_logfilename()
+var current_filename = LOGFILE_PATH
 var logfile = File.new()
 var message_amount = 0
 
@@ -28,26 +28,6 @@ func _init():
 
 func _exit_tree():
 	_flush()
-
-func get_logfilename():	
-	var logfilename = null
-	var last_modified_time = 0
-	var file = File.new()
-
-	for index in range(0, LOGFILE_AMOUNT):
-		var filename = LOGFILE_PATH % [index]
-		if not file.file_exists(filename):
-			logfilename = filename
-			break
-	
-	var modified_time = file.get_modified_time(filename)
-
-	if modified_time < last_modified_time or last_modified_time == 0:
-		last_modified_time = modified_time
-		logfilename = filename
-
-	file.close()
-	return logfilename
 
 func debug(message):
 	if OS.is_debug_build():
