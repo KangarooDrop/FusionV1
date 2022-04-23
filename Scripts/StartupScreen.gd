@@ -15,11 +15,6 @@ func _ready():
 	if Server.online:
 		Server.closeServer()
 	
-	
-	$HolePunch.connect("hole_punched", self, "onHolePunch")
-	$HolePunch.connect("session_registered", self, "onSessionRegistered")
-	$HolePunch.start_traversal(session_id, is_host, username)
-	
 	"""
 	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5, 6]))
 	Tournament.trimBranches()
@@ -40,12 +35,6 @@ func _ready():
 #			Tournament.setWinner(opp)
 #	print(Tournament.tree)
 	"""
-
-func onHolePunch(my_port, hosts_port, hosts_address):
-	print(my_port, "  ", hosts_port, "  ", hosts_address)
-
-func onSessionRegistered():
-	print("Session registered")
 
 
 func onDeckEditPressed():
@@ -103,3 +92,9 @@ func _input(event):
 			$SettingsPage.onShaderBackButtonPressed()
 		elif $SettingsPage.visible:
 			$SettingsPage.onBackPressed()
+
+
+func _on_Button_pressed():
+	var error = get_tree().change_scene("res://Scenes/Networking/NAT.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))

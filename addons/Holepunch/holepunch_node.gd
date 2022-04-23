@@ -247,7 +247,9 @@ func _send_client_to_server():
 
 
 func _exit_tree():
-	server_udp.close()
+	if client_name != null:
+		checkout()
+		server_udp.close()
 
 
 func _ready():

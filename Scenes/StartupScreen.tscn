@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=6]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=7]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=8]
-[ext_resource path="res://addons/Holepunch/holepunch_node.gd" type="Script" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -23,6 +22,9 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+username = "dangle_2"
+session_id = "poop_2"
+is_host = true
 
 [node name="BackFuseHolder" type="Control" parent="."]
 anchor_right = 1.0
@@ -114,6 +116,12 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Exit"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 165.0
+margin_right = 122.0
+margin_bottom = 185.0
+text = "PLS IGNORE"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 visible = false
@@ -323,17 +331,12 @@ __meta__ = {
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
 
-[node name="HolePunch" type="Node" parent="."]
-script = ExtResource( 9 )
-rendevouz_address = "3.95.202.60"
-rendevouz_port = 25565
-port_cascade_range = 10000
-
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
 [connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="onCreditsPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/PracticeButton" to="." method="onPracticePressed"]
 [connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyPressed"]
 [connection signal="pressed" from="VBoxContainer2/DraftButton" to="." method="onDraftPressed"]

@@ -1,0 +1,92 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/rabidholepuncher/RabidHolePuncher.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Networking/NAT.gd" type="Script" id=2]
+
+[node name="NAT" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxUsername" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 150.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxUsername"]
+margin_top = 5.0
+margin_right = 74.0
+margin_bottom = 19.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "Username: "
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxUsername"]
+margin_left = 78.0
+margin_right = 136.0
+margin_bottom = 24.0
+
+[node name="HBoxRoom" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 28.0
+margin_right = 150.0
+margin_bottom = 52.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxRoom"]
+margin_top = 5.0
+margin_right = 72.0
+margin_bottom = 19.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "Room Key: "
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxRoom"]
+margin_left = 76.0
+margin_right = 134.0
+margin_bottom = 24.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 56.0
+margin_right = 150.0
+margin_bottom = 76.0
+custom_constants/separation = 16
+alignment = 1
+
+[node name="HostButton" type="Button" parent="VBoxContainer/HBoxContainer3"]
+margin_right = 42.0
+margin_bottom = 20.0
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 58.0
+margin_right = 93.0
+margin_bottom = 20.0
+text = "Join"
+
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 109.0
+margin_right = 150.0
+margin_bottom = 20.0
+text = "Start"
+
+[node name="RabidHolePuncher" parent="." instance=ExtResource( 1 )]
+relay_server_address = "54.147.182.208"
+relay_server_port = 25565
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/HostButton" to="." method="_on_HostButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/StartButton" to="." method="_on_StartButton_pressed"]

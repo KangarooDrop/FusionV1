@@ -419,6 +419,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Classes/Hand.gd"
 }, {
+"base": "Node",
+"class": "HolePunchState",
+"language": "GDScript",
+"path": "res://addons/rabidholepuncher/utils/HolePunchState.gd"
+}, {
+"base": "Node",
+"class": "HolePunchStateMachine",
+"language": "GDScript",
+"path": "res://addons/rabidholepuncher/utils/HolePunchStateMachine.gd"
+}, {
+"base": "Node",
+"class": "HolePuncher",
+"language": "GDScript",
+"path": "res://addons/rabidholepuncher/RabidHolePuncher.gd"
+}, {
 "base": "Reference",
 "class": "Player",
 "language": "GDScript",
@@ -542,6 +557,9 @@ _global_script_class_icons={
 "DraftSolomon": "",
 "GitAPI": "",
 "HandNode": "",
+"HolePunchState": "res://addons/rabidholepuncher/assets/state.svg",
+"HolePunchStateMachine": "res://addons/rabidholepuncher/assets/state_machine.svg",
+"HolePuncher": "res://addons/rabidholepuncher/assets/punch.svg",
 "Player": "",
 "PopupUI": "",
 "TextArmor": "",
@@ -571,6 +589,7 @@ FileIO="*res://Scripts/FileIO.gd"
 NodeLoc="*res://Scripts/NodeLoc.gd"
 BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
 Tournament="*res://Scripts/Networking/Tournament.gd"
+RabidHolePuncher="*res://addons/rabidholepuncher/RabidHolePuncher.tscn"
 
 [display]
 
@@ -579,7 +598,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/Holepunch/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/Holepunch/plugin.cfg", "res://addons/rabidholepuncher/plugin.cfg" )
 
 [gdnative]
 

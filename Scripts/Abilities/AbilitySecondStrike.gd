@@ -37,4 +37,4 @@ func combine(abl : Ability):
 	abl.activated = activated or abl.activated
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When another creature is played, this creature automatically attacks it"
+	return .genDescription() + "After this creature attacks for the first time, it attacks again"
