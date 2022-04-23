@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/StartupScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=6]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=7]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=8]
+[ext_resource path="res://addons/Holepunch/holepunch_node.gd" type="Script" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -321,6 +322,12 @@ __meta__ = {
 
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
+
+[node name="HolePunch" type="Node" parent="."]
+script = ExtResource( 9 )
+rendevouz_address = "3.95.202.60"
+rendevouz_port = 25565
+port_cascade_range = 10000
 
 [connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]

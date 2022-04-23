@@ -1,5 +1,10 @@
 extends Control
 
+export(String) var username = "" 
+export(String) var session_id = ""
+export(bool) var is_host = false
+
+
 func _ready():
 	Tournament.tree = null
 	MusicManager.playMainMenuMusic()
@@ -9,6 +14,11 @@ func _ready():
 	BackgroundFusion.start()
 	if Server.online:
 		Server.closeServer()
+	
+	
+	$HolePunch.connect("hole_punched", self, "onHolePunch")
+	$HolePunch.connect("session_registered", self, "onSessionRegistered")
+	$HolePunch.start_traversal(session_id, is_host, username)
 	
 	"""
 	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5, 6]))
@@ -30,14 +40,12 @@ func _ready():
 #			Tournament.setWinner(opp)
 #	print(Tournament.tree)
 	"""
-	
-	"""
-	print("pang")
-	var out = []
-	print(OS.execute("ping", ["livelaughlich.com"], true, out))
-	print(out)
-	#int execute ( String path, PoolStringArray arguments, bool blocking=true, Array output=[ ], bool read_stderr=false )
-	"""
+
+func onHolePunch(my_port, hosts_port, hosts_address):
+	print(my_port, "  ", hosts_port, "  ", hosts_address)
+
+func onSessionRegistered():
+	print("Session registered")
 
 
 func onDeckEditPressed():

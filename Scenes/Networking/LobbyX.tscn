@@ -1,0 +1,214 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Art/UI/hover.png" type="Texture" id=1]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=3]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=4]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
+[ext_resource path="res://Scripts/Networking/LobbyX.gd" type="Script" id=6]
+[ext_resource path="res://Art/UI/unlock.png" type="Texture" id=7]
+
+[node name="LobbyX" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostJoin" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.0
+margin_top = -64.0
+margin_right = 80.0
+margin_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NinePatchRect" type="NinePatchRect" parent="HostJoin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HostJoin"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -64.0
+margin_top = -42.5
+margin_right = 64.0
+margin_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+custom_constants/separation = 12
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreateButton" type="Button" parent="HostJoin/VBoxContainer"]
+margin_right = 128.0
+margin_bottom = 23.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Create Lobby"
+
+[node name="JoinButton" type="Button" parent="HostJoin/VBoxContainer"]
+margin_top = 35.0
+margin_right = 128.0
+margin_bottom = 58.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Join Lobby"
+
+[node name="BackButton" type="Button" parent="HostJoin/VBoxContainer"]
+margin_top = 70.0
+margin_right = 128.0
+margin_bottom = 93.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Back"
+
+[node name="StartButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -236.0
+margin_right = -284.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Start Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -204.0
+margin_right = -288.0
+margin_bottom = -180.0
+custom_styles/normal = ExtResource( 4 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "    Players:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="PlayerLabel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = 20.0
+texture_normal = ExtResource( 7 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -181.0
+margin_right = -288.0
+margin_bottom = 203.0
+custom_styles/bg = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 2.0
+margin_bottom = 2.0
+
+[node name="LeaveButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = 212.0
+margin_right = -284.0
+margin_bottom = 235.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Leave Lobby"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 288.0
+margin_top = -236.0
+margin_right = 448.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="PlayerLabel/TextureButton" to="." method="lockButtonPressed"]
