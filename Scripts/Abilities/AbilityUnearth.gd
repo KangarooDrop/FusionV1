@@ -21,11 +21,6 @@ func slotClicked(slot : CardSlot):
 				slot = board.graveCards[p.UUID][randi() % board.graveCards[p.UUID].size()].cardNode.slot
 				break
 	
-	if slot.currentZone == CardSlot.ZONES.GRAVE:
-		var g = board.graveDisplays[slot.playerID]
-		if g.slots.size() > 0:
-			slot = g.slots[g.slots.size()-1]
-	
 	if slot.currentZone == CardSlot.ZONES.GRAVE_CARD:
 		slot.cardNode.select()
 		if not graveCards.has(slot.cardNode.card):
