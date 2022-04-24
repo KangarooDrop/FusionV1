@@ -30,7 +30,6 @@ func joinButtonPressed():
 func ipBackButtonPressed():
 	$IPSet.visible = false
 	openFileSelector()
-	
 		
 func backButtonPressed():
 	Server.host = false

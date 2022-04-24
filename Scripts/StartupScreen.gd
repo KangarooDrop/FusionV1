@@ -95,6 +95,6 @@ func _input(event):
 
 
 func _on_Button_pressed():
-	var error = get_tree().change_scene("res://Scenes/Networking/NAT.tscn")
+	var error = get_tree().change_scene("res://Scenes/Networking/LobbyX.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))

@@ -34,7 +34,7 @@ func holepunch_success(self_port, host_ip, host_port):
 	if host_ip == null:
 		start_server(self_port, 2)
 	else:
-		connect_to_server(host_ip, host_port)
+		connect_to_server(self_port, host_ip, host_port)
 
 var network
 
@@ -47,10 +47,10 @@ func start_server(port, peers):
 	else:
 		print("Server could not be started")
 
-func connect_to_server(host_ip, host_port):
+func connect_to_server(self_port, host_ip, host_port):
 	network = NetworkedMultiplayerENet.new()
 	
-	var errorStatus = network.create_client(host_ip, host_port)
+	var errorStatus = network.create_client(host_ip, host_port, 0, 0, self_port)
 	print("Trying to connect results in code #" + str(errorStatus))
 	get_tree().set_network_peer(network)
 

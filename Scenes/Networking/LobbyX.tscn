@@ -6,9 +6,9 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=4]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
 [ext_resource path="res://Scripts/Networking/LobbyX.gd" type="Script" id=6]
-[ext_resource path="res://Art/UI/unlock.png" type="Texture" id=7]
+[ext_resource path="res://addons/rabidholepuncher/RabidHolePuncher.tscn" type="PackedScene" id=7]
 
-[node name="LobbyX" type="Control"]
+[node name="Lobby" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 6 )
@@ -16,89 +16,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HostJoin" type="Control" parent="."]
+[node name="RabidHolePuncher" parent="." instance=ExtResource( 7 )]
+relay_server_address = "54.147.182.208"
+relay_server_port = 25565
+
+[node name="Lobby" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="StartButton" type="Button" parent="Lobby"]
 visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -80.0
-margin_top = -64.0
-margin_right = 80.0
-margin_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NinePatchRect" type="NinePatchRect" parent="HostJoin"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 1 )
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HostJoin"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -64.0
-margin_top = -42.5
-margin_right = 64.0
-margin_bottom = 42.5
-grow_horizontal = 2
-grow_vertical = 2
-custom_constants/separation = 12
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CreateButton" type="Button" parent="HostJoin/VBoxContainer"]
-margin_right = 128.0
-margin_bottom = 23.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 5 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Create Lobby"
-
-[node name="JoinButton" type="Button" parent="HostJoin/VBoxContainer"]
-margin_top = 35.0
-margin_right = 128.0
-margin_bottom = 58.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 5 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Join Lobby"
-
-[node name="BackButton" type="Button" parent="HostJoin/VBoxContainer"]
-margin_top = 70.0
-margin_right = 128.0
-margin_bottom = 93.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 5 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Back"
-
-[node name="StartButton" type="Button" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -120,7 +53,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerLabel" type="Label" parent="."]
+[node name="PlayerLabel" type="Label" parent="Lobby"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -138,16 +71,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureButton" type="TextureButton" parent="PlayerLabel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -20.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = 20.0
-texture_normal = ExtResource( 7 )
-
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="Lobby"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -161,13 +85,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Lobby/ScrollContainer"]
 margin_left = 2.0
 margin_top = 2.0
 margin_right = 2.0
 margin_bottom = 2.0
 
-[node name="LeaveButton" type="Button" parent="."]
+[node name="LeaveButton" type="Button" parent="Lobby"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -184,12 +108,12 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Leave Lobby"
+text = "Main Menu"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SettingsButton" type="Button" parent="."]
+[node name="SettingsButton" type="Button" parent="Lobby"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -211,4 +135,136 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="PlayerLabel/TextureButton" to="." method="lockButtonPressed"]
+[node name="JoinButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 95.0629
+margin_top = -208.636
+margin_right = 259.063
+margin_bottom = -185.636
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Join Lobby"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 96.0
+margin_top = -236.0
+margin_right = 260.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Create Server"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="Lobby"]
+margin_left = -128.36
+margin_top = -203.333
+margin_right = 81.6403
+margin_bottom = -179.333
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Lobby"]
+margin_left = -245.0
+margin_top = -206.0
+margin_right = -120.0
+margin_bottom = -176.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Room Key:"
+align = 1
+valign = 1
+
+[node name="DeckSelector" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="NinePatchRect" parent="DeckSelector"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 1 )
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeckSelector"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DeckSelector/VBoxContainer"]
+margin_right = 107.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Select Deck"
+align = 1
+
+[node name="BackButton" type="Button" parent="DeckSelector/VBoxContainer"]
+margin_top = 23.0
+margin_right = 107.0
+margin_bottom = 46.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Back"
+
+[node name="PopupHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[connection signal="pressed" from="Lobby/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="Lobby/LeaveButton" to="." method="_on_LeaveButton_pressed"]
+[connection signal="pressed" from="Lobby/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="Lobby/HostButton" to="." method="_on_HostButton_pressed"]

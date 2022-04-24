@@ -28,13 +28,13 @@ func _ready():
 
 ####################################################################
 
-func startServer():
+func startServer(self_port=DEFAULT_PORT):
 	var peers = MAX_PEERS
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
 		peers = 1
 		
 	network = NetworkedMultiplayerENet.new()
-	var ok = network.create_server(DEFAULT_PORT, peers)
+	var ok = network.create_server(self_port, peers)
 	if ok == OK:
 		get_tree().set_network_peer(network)
 		print("Server started")
@@ -45,23 +45,24 @@ func startServer():
 	if Server.host:
 		playersReady[1] = false
 
-func connectToServer():
+func connectToServer(host_ip=ip, host_port=DEFAULT_PORT, self_port=0):
 	network = NetworkedMultiplayerENet.new()
 	
-	var errorStatus = network.create_client(ip, DEFAULT_PORT)
+	var errorStatus = network.create_client(host_ip, host_port, 0, 0, self_port)
 	print("Trying to connect results in code #" + str(errorStatus))
 	get_tree().set_network_peer(network)
 	
 func closeServer():
-	print("Terminating connection")
-	network.close_connection()
-	online = false
-	host = false
-	opponentID = -1
-	playerIDs.clear()
-	playerNames.clear()
-	playersReady.clear()
-	gmData.clear()
+	if network != null:
+		print("Terminating connection")
+		network.close_connection()
+		online = false
+		host = false
+		opponentID = -1
+		playerIDs.clear()
+		playerNames.clear()
+		playersReady.clear()
+		gmData.clear()
 	
 ####################################################################
 

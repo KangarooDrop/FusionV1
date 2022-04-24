@@ -53,3 +53,7 @@ func setLineEditParams(lineEdit : LineEdit):
 	lineEdit.set("custom_styles/pressed", bPressed)
 	lineEdit.set("custom_styles/normal", bNormal)
 	
+func setLabelParams(label : Label):
+	label.set("custom_colors/font_color", Color(0, 0, 0))
+	label.set("custom_fonts/font", fontTRES)
+	
