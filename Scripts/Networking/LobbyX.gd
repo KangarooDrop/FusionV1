@@ -2,13 +2,34 @@ extends Node
 
 var inLobby = false
 
+var players := []
+
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
 func _ready():
-	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
+	Settings.gameMode = Settings.GAME_MODE.LOBBY_DRAFT
+	
 	$RabidHolePuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
 	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
 	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
+
+func startDraft():
+#	if $DraftTypeButton.selected == 2 and ids.size() != 2:
+#		var pop = popupUI.instance()
+#		pop.init("Solomon Draft", "There must be exactly 2 players to have a Solomon Draft", [["Close", pop, "close", []]])
+#		$PopupCenter.add_child(pop)
+#		return
+#	
+#	if int($GPM/LineEdit.text) < 1 or int($GPM/LineEdit.text) % 2 == 0:
+#		var pop = popupUI.instance()
+#		pop.init("Games Per Match Error", "The number of games per match must be odd and greater than zero", [["Close", pop, "close", []]])
+#		$PopupCenter.add_child(pop)
+#		return
+	
+	
+	Server.setGamesPerMatch(3)
+	var params = {"num_boosters":3}
+	Server.startDraft(1, params)
 
 func setInLobby():
 	if not inLobby:
@@ -34,6 +55,7 @@ func holepunch_progress_update(type, session_name, player_names):
 			label.text = name
 			NodeLoc.setLabelParams(label)
 			vbox.add_child(label)
+			players.append(name)
 	
 	if type == "starting_session":
 		$Lobby/StartButton.visible = false
@@ -42,6 +64,7 @@ func clearPlayers():
 	var vbox = $Lobby/ScrollContainer/VBoxContainer
 	for c in vbox.get_children():
 		c.queue_free()
+	players.clear()
 	
 
 func holepunch_failure(error):
@@ -63,6 +86,13 @@ func holepunch_success(self_port, host_ip, host_port):
 	if host_ip == null:
 		Server.host = true
 		Server.startServer(self_port)
+		var ready = false
+		while not ready:
+			ready = Server.playerIDs.size() == players.size()-1
+			yield(get_tree().create_timer(1), "timeout")
+			print("not ready", Server.playerIDs.size(), "  ", players.size()-1)
+		startDraft()
+		
 	else:
 		Server.connectToServer(host_ip, host_port, self_port)
 
@@ -100,7 +130,14 @@ func _on_JoinButton_pressed():
 		holepunch_success(0, "127.0.0.1", 25565)
 
 func _on_StartButton_pressed():
-	$RabidHolePuncher.start_session()
+	if players.size() > 1:
+		$RabidHolePuncher.start_session()
+	else:
+		print("Failure: Not enough players")
+		var pop = popupUI.instance()
+		pop.init("Error Creating Lobby", "Failure: error:not_enough_players", [["Close", pop, "close", []]])
+		$PopupHolder.add_child(pop)
+		pop.options[0].grab_focus()
 
 func _on_LeaveButton_pressed():
 	if inLobby:
@@ -177,6 +214,11 @@ func onFileButtonClicked(fileName : String):
 	
 	Settings.selectedDeck = fileName
 	
-	var error = get_tree().change_scene("res://Scenes/main.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+func addPlayer(player_id, username):
+	pass
+
+func removePlayer(player_id):
+	pass
+
+func joinedLobby(numMaxPlayers : int):
+	pass
