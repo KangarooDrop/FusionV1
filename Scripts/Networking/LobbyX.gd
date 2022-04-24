@@ -190,6 +190,16 @@ func _on_StartButton_pressed():
 				createPopup("Error Creating Lobby", "Failure: This game mode can only be played with exactly 2 players")
 				return
 		
+		if params.has("games_per_match") and (params["games_per_match"] < 1 or params["games_per_match"] % 2 == 0):
+			print("Failure: Bad games per match")
+			createPopup("Error Creating Lobby", "Failure: The number of games per match must be greater than 0 and odd")
+			return
+		
+		if params.has("num_boosters") and params["num_boosters"] < 3:
+			print("Failure: Bad num boosters")
+			createPopup("Error Creating Lobby", "Failure: Must draft with at least 3 booster packs")
+			return
+		
 		$RabidHolePuncher.start_session()
 	else:
 		print("Failure: Not enough players")

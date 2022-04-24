@@ -128,6 +128,9 @@ remote func receiveConfirmJoin():
 	
 	var params = get_node("/root/LobbyX").getGameParams()
 	
+	if params.has("games_per_match"):
+		Tournament.gamesPerMatch = params["games_per_match"]
+	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		Settings.gameMode = Settings.GAME_MODE.DRAFTING
 		
