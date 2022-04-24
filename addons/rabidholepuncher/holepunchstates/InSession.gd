@@ -6,6 +6,7 @@ const PING_PREFIX: String = "p"
 const KICK_PREFIX: String = "k"
 const CONFIRM_PREFIX: String = "y"
 const EXIT_PREFIX: String = "x"
+const CHAT_PREFIX: String = "m"
 
 var _server: PacketPeerUDP
 var _init_message: String
@@ -86,6 +87,8 @@ func process(delta: float) -> void:
 												"port" : int(player_data[2]),
 												"is_host" : is_host}
 			_state_machine.transition_to("ServerFinishWait", all_addresses)
+		elif packet_string.begins_with(CHAT_PREFIX):
+			print("CHAT MESSAGE RECEIVED: ", packet_string.split(":", true, 2))
 
 
 func kick_player(player_name: String) -> void:
@@ -95,6 +98,15 @@ func kick_player(player_name: String) -> void:
 											hole_puncher._session_name, 
 											player_name]).join(":")
 		send_message(kick_message, _server, hole_puncher.relay_server_address, 
+					hole_puncher.relay_server_port)
+
+
+func send_chat(chat : String) -> void:
+	info("Sent message to players: " + chat)
+	var chat_message = PoolStringArray([CHAT_PREFIX,
+										hole_puncher._session_name,
+										chat]).join(":")
+	send_message(chat_message, _server, hole_puncher.relay_server_address,
 					hole_puncher.relay_server_port)
 
 

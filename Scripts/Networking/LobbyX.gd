@@ -312,3 +312,8 @@ func createPopup(title : String, desc : String):
 	pop.init(title, desc, [["Close", pop, "close", []]])
 	$PopupHolder.add_child(pop)
 	pop.options[0].grab_focus()
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed() and event.scancode == KEY_F5 and not event.is_echo():
+		$RabidHolePuncher.send_chat("Testchat")
+		#Server.username + " - " + 

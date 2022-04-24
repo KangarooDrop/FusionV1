@@ -111,6 +111,11 @@ func kick_player(player_name: String) -> void:
 		_state_machine.state.kick_player(player_name)
 
 
+func send_chat(chat : String) -> void:
+	if _state_machine.state.name == "InSession":
+		_state_machine.state.send_chat(chat)
+
+
 func start_session() -> void:
 	if _is_host and _state_machine.state.name == "InSession":
 		_state_machine.state.start_session()

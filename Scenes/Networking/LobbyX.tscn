@@ -185,7 +185,7 @@ __meta__ = {
 [node name="LineEdit" type="LineEdit" parent="Lobby"]
 margin_left = -68.36
 margin_top = -188.0
-margin_right = 81.64
+margin_right = 94.64
 margin_bottom = -164.0
 focus_next = NodePath("../Label2")
 focus_previous = NodePath("../LineEdit3")
@@ -244,7 +244,7 @@ valign = 1
 [node name="LineEdit3" type="LineEdit" parent="Lobby"]
 margin_left = -68.36
 margin_top = -216.0
-margin_right = 81.64
+margin_right = 94.64
 margin_bottom = -192.0
 focus_next = NodePath("../LineEdit")
 focus_previous = NodePath("../LineEdit2")
