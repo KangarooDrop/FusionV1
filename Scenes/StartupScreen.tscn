@@ -117,12 +117,6 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Exit"
 
-[node name="Button" type="Button" parent="VBoxContainer"]
-margin_top = 165.0
-margin_right = 122.0
-margin_bottom = 185.0
-text = "PLS IGNORE"
-
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 visible = false
 anchor_left = 0.5
@@ -165,20 +159,6 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Lobby"
-
-[node name="DraftButton" type="Button" parent="VBoxContainer2"]
-margin_top = 70.0
-margin_right = 122.0
-margin_bottom = 95.0
-custom_styles/hover = ExtResource( 7 )
-custom_styles/pressed = ExtResource( 6 )
-custom_styles/normal = ExtResource( 8 )
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Draft"
 
 [node name="BackButton" type="Button" parent="VBoxContainer2"]
 margin_top = 105.0
@@ -336,10 +316,8 @@ visible = false
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
 [connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="onCreditsPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/PracticeButton" to="." method="onPracticePressed"]
-[connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyPressed"]
-[connection signal="pressed" from="VBoxContainer2/DraftButton" to="." method="onDraftPressed"]
+[connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyButtonPressed"]
 [connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="onBackPressed"]
 [connection signal="meta_clicked" from="CreditsLabel" to="CreditsLabel" method="_on_CreditsLabel_meta_clicked"]
 [connection signal="pressed" from="BackButton" to="." method="onBackPressed"]

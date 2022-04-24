@@ -8,7 +8,6 @@ var ip = "127.0.0.1"
 
 var network : NetworkedMultiplayerENet
 const DEFAULT_PORT := 25565
-var MAX_PEERS := 5
 
 var opponentID = -1
 var GM = false
@@ -28,11 +27,8 @@ func _ready():
 
 ####################################################################
 
-func startServer(self_port=DEFAULT_PORT):
-	var peers = MAX_PEERS
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-		peers = 1
-		
+func startServer(self_port=DEFAULT_PORT, peers : int = 1):
+	
 	network = NetworkedMultiplayerENet.new()
 	var ok = network.create_server(self_port, peers)
 	if ok == OK:
@@ -69,9 +65,7 @@ func closeServer():
 func _OnConnectFailed():
 	print("failed to connect to server")
 	
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
-		MessageManager.notify("Error: Connection failed")
-		get_node("/root/DraftLobby").backButtonPressed()
+	get_node("/root/LobbyX").createPopup("Error", "Could not connect to host client")
 	
 func _OnConnectSucceeded():
 	print("connected to server")
@@ -82,62 +76,13 @@ func _Server_Disconnected():
 	
 	MessageManager.notify("Server disconnected")
 	
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
-		get_node("/root/DraftLobby").lobbyBackPressed()
-	elif Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-		get_node("/root/Lobby").disconnected()
-	
 ####################################################################
-
-func getPlayerData(player_id : int):
-	rpc_id(player_id, "receiveGetPlayerData")
-
-remote func receiveGetPlayerData():
-	print("Fetching player data")
-	rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username, Settings.gameMode, Settings.versionID)
-
-remote func receiveSetPlayerData(username : String, gameMode : int, versionID : String):
-	print("Player data received")
-	var player_id = get_tree().get_rpc_sender_id()
-	
-	if Settings.compareVersion(versionID, Settings.versionID) != 0:
-		print("User attempted to connect with wrong version")
-		rpc_id(player_id, "receiveSendMessage", "Notice: Your game versions are not the same; Consider updating")
-		network.disconnect_peer(player_id)
-		return
-	if gameMode != Settings.gameMode:
-		print("User attempted to connect with wrong game mode")
-		rpc_id(player_id, "receiveSendMessage", "Notice: Wrong game modes")
-		network.disconnect_peer(player_id)
-		return
-		
-	
-	for id in playerIDs:
-		rpc_id(id, "addUser", player_id, username)
-		rpc_id(player_id, "addUser", id, playerNames[id])
-	addUser(player_id, username)
-	rpc_id(player_id, "addUser", 1, self.username)
-	rpc_id(player_id, "receiveConfirmJoin")
-		
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-		Settings.gameMode = Settings.GAME_MODE.PLAY
-		get_node("/root/Lobby").startGame()
-		rpc_id(player_id, "serverSetUsername", self.username)
-	else:
-		rpc_id(player_id, "joinedDraftLobby", Server.MAX_PEERS + 1)
-
-remote func receiveConfirmJoin():
-	print("Successfully joined the server")
-	
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-		Settings.gameMode = Settings.GAME_MODE.PLAY
-		get_node("/root/Lobby").startGame()
-		rpc_id(get_tree().get_rpc_sender_id(), "serverSetUsername", username)
 
 func playerConnected(player_id : int):
 	if Server.host:
-		if Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY or Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
-			getPlayerData(player_id)
+		if Settings.gameMode == Settings.GAME_MODE.LOBBY:
+			var gameParams = get_node("/root/LobbyX").getGameParams()
+			sendParams(player_id, gameParams)
 		else:
 			rpc_id(player_id, "receiveSendMessage", "Notice: The game has already begun")
 			network.disconnect_peer(player_id)
@@ -147,7 +92,73 @@ func playerDisconnected(player_id : int):
 		removeUser(player_id)
 		for id in playerIDs:
 			rpc_id(id, "removeUser", player_id)
-			
+
+func sendParams(player_id : int, gameParams):
+	rpc_id(player_id, "receiveSendParams", gameParams)
+
+remote func receiveSendParams(gameParams):
+	if Settings.gameMode == Settings.GAME_MODE.LOBBY:
+		if  gameParams["version"] == Settings.versionID:
+			get_node("/root/LobbyX").setOwnGameParams(gameParams)
+			rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username)
+		else:
+			print("Error: Incompatible game versions")
+			rpc_id(0, "receiveRejectNAT", "error:incompatible_game_version")
+			receiveRejectNAT("error:incompatible_game_version")
+	else:
+		closeServer()
+
+remote func receiveRejectNAT(error_string : String):
+	get_node("/root/LobbyX").holepunch_failure(error_string)
+	closeServer()
+
+remote func receiveSetPlayerData(username : String):
+	print("Player data received")
+	var player_id = get_tree().get_rpc_sender_id()
+	
+	for id in playerIDs:
+		rpc_id(id, "addUser", player_id, username)
+		rpc_id(player_id, "addUser", id, playerNames[id])
+	addUser(player_id, username)
+	rpc_id(player_id, "addUser", 1, self.username)
+	rpc_id(player_id, "receiveConfirmJoin")
+
+remote func receiveConfirmJoin():
+	print("Successfully joined the server")
+	
+	var params = get_node("/root/LobbyX").getGameParams()
+	
+	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
+		Settings.gameMode = Settings.GAME_MODE.DRAFTING
+		
+		var root = get_node("/root")
+		var lobby = root.get_node("LobbyX")
+		var draft
+		match params["draft_type"]:
+			Settings.DRAFT_TYPES.WINSTON:
+				draft = load("res://Scenes/DraftWinston.tscn").instance()
+			Settings.DRAFT_TYPES.BOOSTER:
+				draft = load("res://Scenes/DraftBooster.tscn").instance()
+			Settings.DRAFT_TYPES.SOLOMON:
+				draft = load("res://Scenes/DraftSolomon.tscn").instance()
+			_:
+				MessageManager.notify("Error: Unknown draft type")
+				Server.closeServer()
+				var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+				if error != 0:
+					print("Error loading test1.tscn. Error Code = " + str(error))
+				return
+		
+		draft.setParams(params)
+		root.add_child(draft)
+		get_tree().current_scene = draft
+		
+		root.remove_child(lobby)
+		lobby.queue_free()
+	elif params["game_type"] == Settings.GAME_TYPES.ONE_V_ONE:
+		Settings.gameMode = Settings.GAME_MODE.PLAY
+		
+		get_node("/root/LobbyX").startGame()
 
 ####################################################################
 
@@ -171,10 +182,6 @@ remote func addUser(player_id : int, username : String):
 	playerIDs.append(player_id)
 	playerNames[player_id] = username
 	playersReady[player_id] = false
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
-		get_node("/root/DraftLobby").addPlayer(player_id, username)
-	elif Settings.gameMode == Settings.GAME_MODE.LOBBY_PLAY:
-		pass
 
 remote func removeUser(player_id : int):
 	if playerIDs.has(player_id):
@@ -191,9 +198,6 @@ remote func removeUser(player_id : int):
 	
 	if Settings.gameMode == Settings.GAME_MODE.DRAFTING:
 		get_node("/root/Draft").playerDisconnected(player_id)
-	
-	if Settings.gameMode == Settings.GAME_MODE.LOBBY_DRAFT:
-		get_node("/root/DraftLobby").removePlayer(player_id)
 	
 	playerIDs.erase(player_id)
 	#playerNames.erase(player_id)
@@ -226,42 +230,6 @@ remote func receiveSendMessage(message : String):
 #			rpc_id(id, "sendMessage", "Testing")
 
 ####################################################################
-
-func setDraftType(index : int):
-	for id in Server.playerIDs:
-		rpc_id(id, "receiveSetDraftType", index)
-
-remote func receiveSetDraftType(index : int):
-	get_node("/root/DraftLobby").draftTypeSelected(index)
-
-func setGamesPerMatch(gpm):
-	receiveSetGamesPerMatch(gpm)
-	for player_id in playerIDs:
-		rpc_id(player_id, "receiveSetGamesPerMatch", gpm)
-
-remote func receiveSetGamesPerMatch(gpm):
-	Tournament.gamesPerMatch = gpm
-
-remote func startDraft(index : int, params : Dictionary = {}):
-	if Server.host:
-		for id in Server.playerIDs:
-			Server.rpc_id(id, "startDraft", index, params)
-	
-	Settings.gameMode = Settings.GAME_MODE.DRAFTING
-	
-	var root = get_node("/root")
-	var lobby = root.get_node("DraftLobby")
-	var draft = load(DraftLobby.getDraftTypes()[index][1]).instance()
-	
-	draft.setParams(params)
-	root.add_child(draft)
-	get_tree().current_scene = draft
-	
-	root.remove_child(lobby)
-	lobby.queue_free()
-
-remote func joinedDraftLobby(numMaxPlayers):
-	get_node("/root/DraftLobby").joinedLobby(numMaxPlayers)
 
 func sendDraftData(data : Array):
 	for id in playerIDs:
@@ -376,7 +344,9 @@ remote func receiveSendAllBoosters(boostersData : Array):
 
 
 
-
+func setUsername(player_id : int, username : String):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "serverSetUsername", username)
 
 remote func serverSetUsername(username : String):
 	var board = get_node_or_null("/root/main/CenterControl/Board")
@@ -619,7 +589,15 @@ func solomonSetState(player_id : int, state : int):
 		rpc_id(player_id, "receiveSolomonSetState", state)
 		
 remote func receiveSolomonSetState(state : int):
-	get_node("/root/Draft").setOpponentState(state)
+	var draft = get_node_or_null("/root/Draft")
+	while not is_instance_valid(draft):
+		print("Solomon Draft not ready yet, waiting; active")
+		yield(get_tree().create_timer(0.1), "timeout")
+		draft = get_node_or_null("/root/Draft")
+		if not Server.online:
+			return
+	
+	draft.setOpponentState(state)
 
 func startSolomonBuilding(player_id):
 	rpc_id(player_id, "receivedStartBuilding")

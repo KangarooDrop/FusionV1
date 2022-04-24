@@ -4,8 +4,6 @@ signal settingsClose
 
 func _ready():
 	$VBox/Anims/CheckBox.pressed = Settings.playAnimations
-	$VBox/NumDraft/LineEdit.text = str(Server.MAX_PEERS + 1)
-	$VBox/NumDraft/LineEdit.oldtext = $VBox/NumDraft/LineEdit.text
 	$VBox/Username/LineEdit.text = Server.username
 	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
 	$VBox/MusicSlider/HSlider.value = MusicManager.volume
@@ -16,15 +14,11 @@ func onBackPressed():
 	emit_signal("settingsClose")
 	
 	visible = false
-	setNumDraft($VBox/NumDraft/LineEdit.get_value())
 	setUsername($VBox/Username/LineEdit.text)
 	Settings.writeToSettings()
 
 func setPlayAnims(button_pressed : bool):
 	Settings.playAnimations = button_pressed
-
-func setNumDraft(num : int):
-	Server.MAX_PEERS = num - 1
 	
 func setUsername(username : String):
 	Server.setPlayerName(username)

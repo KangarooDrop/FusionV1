@@ -21,7 +21,7 @@ static func getDraftTypes():
 	]
 
 func _ready():
-	numMaxPlayers = Server.MAX_PEERS + 1
+	numMaxPlayers = 8
 	for s in getDraftTypes():
 		$DraftTypeButton.add_item(s[0] + " Draft")
 	

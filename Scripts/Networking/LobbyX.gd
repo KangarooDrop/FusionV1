@@ -12,7 +12,7 @@ var kickTex = preload("res://Art/UI/kick.png")
 onready var lobbySettings = $LobbySettings
 
 func _ready():
-	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
+	Settings.gameMode = Settings.GAME_MODE.LOBBY
 	BackgroundFusion.stop()
 	MusicManager.playLobbyMusic()
 	
@@ -82,6 +82,8 @@ func clearPlayers():
 	numOfPlayers = 0
 
 func holepunch_failure(error):
+	print("Failure: ", error)
+	
 	if error == "error:unreachable_self" and bypassPunchthrough:
 		if $RabidHolePuncher.is_host():
 			holepunch_success(25565, null, null)
@@ -89,49 +91,51 @@ func holepunch_failure(error):
 			holepunch_success(0, "127.0.0.1", 25565)
 		return
 	
-	if error == "error:unreachable_self":
+	if error == "error:unreachable_self" or error == "error:incompatible_game_version":
 		numOfPlayers -= 1
 		if numOfPlayers == 1:
-			print("Failure: ", error)
-			var pop = popupUI.instance()
-			pop.init("Error Creating Lobby", "Failure: " + str(error), [["Close", pop, "close", []]])
-			$PopupHolder.add_child(pop)
-			pop.options[0].grab_focus()
+			createPopup("Error Creating Lobby", "Failure: " + str(error))
 			
 			$LoadingWindow.visible = false
+			$Lobby/LobbySettingsButton.disabled = false
 			
 			if inLobby:
 				clearPlayers()
 				_on_LeaveButton_pressed()
 			
-			return
+		return
 	
 	if inLobby:
 		clearPlayers()
 		_on_LeaveButton_pressed()
 		
 	if error != "error:player_exited_session":
-		print("Failure: ", error)
-		var pop = popupUI.instance()
-		pop.init("Error Creating Lobby", "Failure: " + str(error), [["Close", pop, "close", []]])
-		$PopupHolder.add_child(pop)
-		pop.options[0].grab_focus()
+		createPopup("Error Creating Lobby", "Failure: " + str(error))
 		
 		$LoadingWindow.visible = false
+		$Lobby/LobbySettingsButton.disabled = false
 
 func holepunch_success(self_port, host_ip, host_port):
 	print("Success: ", self_port, "  ", host_ip, "  ", host_port)
 	
+	$LoadingWindow/Label.text = "Establishing connections"
+	
 	Server.online = true
 	if host_ip == null:
 		Server.host = true
-		Server.startServer(self_port)
+		var numPeers = $Lobby/LineEdit2.get_value() - 1
+		Server.startServer(self_port, numPeers)
 		var ready = false
 		while not ready:
 			ready = Server.playerIDs.size() == numOfPlayers - 1
+			
+			if numOfPlayers == 0:
+				return
+			
 			yield(get_tree().create_timer(1), "timeout")
-			print("not ready", Server.playerIDs.size(), "  ", numOfPlayers - 1)
+			print("not ready  ", Server.playerIDs.size(), "  ", numOfPlayers - 1)
 		
+		Server.receiveConfirmJoin()
 	else:
 		Server.connectToServer(host_ip, host_port, self_port)
 
@@ -159,15 +163,12 @@ func _on_HostButton_pressed():
 	var numPlayers = $Lobby/LineEdit2.get_value()
 	if numPlayers <= 1 or numPlayers > 16:
 		print("Failure: Bad player count")
-		var pop = popupUI.instance()
-		pop.init("Error Creating Lobby", "Failure: Number of players must be at least 2 and fewer than 17", [["Close", pop, "close", []]])
-		$PopupHolder.add_child(pop)
-		pop.options[0].grab_focus()
+		createPopup("Error Creating Lobby", "Failure: Number of players must be at least 2 and fewer than 17")
 		return
 	else:
 		$LoadingWindow.visible = true
 		setInLobby()
-		$RabidHolePuncher.create_session($Lobby/LineEdit.text, Server.username, 3)
+		$RabidHolePuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
 		
 		$LoadingWindow/Label.text = "Connecting to Server"
 
@@ -178,6 +179,7 @@ func _on_JoinButton_pressed():
 	$RabidHolePuncher.join_session($Lobby/LineEdit.text, Server.username)
 	
 	$LoadingWindow/Label.text = "Connecting to Server"
+	$Lobby/LobbySettingsButton.disabled = true
 
 func _on_StartButton_pressed():
 	if numOfPlayers > 1:
@@ -185,19 +187,13 @@ func _on_StartButton_pressed():
 		if params["game_type"] == Settings.GAME_TYPES.ONE_V_ONE or (params["game_type"] == Settings.GAME_TYPES.DRAFT and params["draft_type"] == Settings.DRAFT_TYPES.SOLOMON):
 			if numOfPlayers != 2:
 				print("Failure: Wrong player numbers")
-				var pop = popupUI.instance()
-				pop.init("Error Creating Lobby", "Failure: This game mode can only be played with exactly 2 players", [["Close", pop, "close", []]])
-				$PopupHolder.add_child(pop)
-				pop.options[0].grab_focus()
+				createPopup("Error Creating Lobby", "Failure: This game mode can only be played with exactly 2 players")
 				return
 		
 		$RabidHolePuncher.start_session()
 	else:
 		print("Failure: Not enough players")
-		var pop = popupUI.instance()
-		pop.init("Error Creating Lobby", "Failure: error:not_enough_players", [["Close", pop, "close", []]])
-		$PopupHolder.add_child(pop)
-		pop.options[0].grab_focus()
+		createPopup("Error Creating Lobby", "Failure: error:not_enough_players")
 
 func _on_LeaveButton_pressed():
 	if inLobby:
@@ -220,6 +216,7 @@ func _on_LeaveButton_pressed():
 		checkUsernameChange()
 
 func startGame():
+	$LoadingWindow.visible = false
 	openFileSelector()
 
 func openFileSelector():
@@ -269,18 +266,24 @@ func onFileButtonClicked(fileName : String):
 	var dError = Deck.verifyDeck(dataRead)
 	
 	if dError != OK:
-		var pop = popupUI.instance()
-		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [["Close", pop, "close", []]])
-		$PopupHolder.add_child(pop)
-		pop.options[0].grab_focus()
+		createPopup("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
 		return
 	
 	$DeckSelector.visible = false
 	
 	Settings.selectedDeck = fileName
+	
+	var error = get_tree().change_scene("res://Scenes/main.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+		MessageManager.notify("Error loading main scene")
+		Server.close()
 
 func _on_LobbySettingsButton_pressed():
 	lobbySettings.show()
+
+func setOwnGameParams(gameParams : Dictionary):
+	lobbySettings.setOwnGameParams(gameParams)
 
 func getGameParams() -> Dictionary:
 	return lobbySettings.getGameParams()
@@ -293,3 +296,9 @@ func checkUsernameChange():
 	if new_text != Server.username:
 		Server.username = new_text
 		Settings.writeToSettings()
+
+func createPopup(title : String, desc : String):
+	var pop = popupUI.instance()
+	pop.init(title, desc, [["Close", pop, "close", []]])
+	$PopupHolder.add_child(pop)
+	pop.options[0].grab_focus()

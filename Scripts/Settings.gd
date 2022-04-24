@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.05"
+var versionID = "0.0.3.06"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -9,7 +9,7 @@ var path = "user://decks/"
 
 var dumpPath = "user://dumps/"
 
-enum GAME_MODE {NONE, LOBBY_PLAY, LOBBY_DRAFT, PLAY, PRACTICE, DRAFTING, TOURNAMENT}
+enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT}
 var gameMode : int = 0
 
 var cardSlotScale = 1.5
@@ -31,7 +31,6 @@ func _ready():
 	var ok = verifySettings(settings)
 	
 	Settings.playAnimations = settings["play_anims"]
-	Server.MAX_PEERS = settings["num_draft"] - 1
 	Server.username = settings["username"]
 	Server.ip = settings["ip_saved"]
 	SoundEffectManager.setVolume(settings["sound_volume"])
@@ -45,9 +44,6 @@ func verifySettings(settings : Dictionary) -> bool:
 	var ok = true
 	if not settings.has("play_anims"):
 		settings["play_anims"] = true
-		ok = false
-	if not settings.has("num_draft"):
-		settings["num_draft"] = 8
 		ok = false
 	if not settings.has("username"):
 		settings["username"] = "NO_NAME"
@@ -75,7 +71,6 @@ func writeToSettings():
 func getSettingsDict() -> Dictionary:
 	var rtn := \
 	{
-		"num_draft":Server.MAX_PEERS + 1,
 		"play_anims":playAnimations,
 		"username":Server.username,
 		"ip_saved":Server.ip,

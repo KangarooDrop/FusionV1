@@ -47,18 +47,6 @@ func onPracticePressed():
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
-func onLobbyPressed():
-	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
-	var error = get_tree().change_scene("res://Scenes/Networking/Lobby.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
-
-func onDraftPressed():
-	Settings.gameMode = Settings.GAME_MODE.LOBBY_DRAFT
-	var error = get_tree().change_scene("res://Scenes/Networking/DraftLobby.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
-	
 func onSettingsPressed():
 	$VBoxContainer.visible = false
 	$SettingsPage.visible = true
@@ -84,6 +72,11 @@ func onCreditsPressed():
 	$CreditsLabel.show()
 	$BackButton.show()
 
+func onLobbyButtonPressed():
+	var error = get_tree().change_scene("res://Scenes/Networking/LobbyX.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
 		if $CreditsLabel.visible or $VBoxContainer2.visible:
@@ -92,9 +85,3 @@ func _input(event):
 			$SettingsPage.onShaderBackButtonPressed()
 		elif $SettingsPage.visible:
 			$SettingsPage.onBackPressed()
-
-
-func _on_Button_pressed():
-	var error = get_tree().change_scene("res://Scenes/Networking/LobbyX.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))

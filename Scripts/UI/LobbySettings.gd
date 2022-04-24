@@ -62,11 +62,20 @@ func onBackPressed():
 
 func getGameParams() -> Dictionary:
 	var params = {}
+	params["version"] = Settings.versionID
 	params["game_type"] = $VBoxContainer/GameTypeHbox/OptionButton.selected
 	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		params["draft_type"] = $VBoxContainer/DraftTypeHbox/OptionButton.selected
-		params["num_packs"] = $VBoxContainer/PacksHbox/LineEdit.get_value()
+		params["num_boosters"] = $VBoxContainer/PacksHbox/LineEdit.get_value()
 		params["games_per_match"] = $VBoxContainer/GPMHbox/LineEdit.get_value()
 	
 	return params
+
+func setOwnGameParams(params : Dictionary):
+	$VBoxContainer/GameTypeHbox/OptionButton.select(params["game_type"])
+	
+	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
+		$VBoxContainer/DraftTypeHbox/OptionButton.select(params["draft_type"])
+		$VBoxContainer/PacksHbox/LineEdit.text = str(params["num_boosters"])
+		$VBoxContainer/GPMHbox/LineEdit.text = str(params["games_per_match"])

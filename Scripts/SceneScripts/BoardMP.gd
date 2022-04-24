@@ -1656,6 +1656,9 @@ func setOwnUsername():
 	print("Settings own username")
 	$UsernameLabel.text = Server.username
 	dataLog.append("SET_OWN_USERNAME " + Server.username)
+	
+	if Server.online:
+		Server.setUsername(Server.opponentID, Server.username)
 
 func setOpponentUsername(username : String):
 	print("Settings opponent username")
