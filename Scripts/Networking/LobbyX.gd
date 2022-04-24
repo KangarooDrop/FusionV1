@@ -1,40 +1,33 @@
 extends Node
 
+export(bool) var bypassPunchthrough = false
+
 var inLobby = false
 
-var players := []
+var numOfPlayers := 0
 
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
+var kickTex = preload("res://Art/UI/kick.png")
+
+onready var lobbySettings = $LobbySettings
 
 func _ready():
-	Settings.gameMode = Settings.GAME_MODE.LOBBY_DRAFT
+	Settings.gameMode = Settings.GAME_MODE.LOBBY_PLAY
+	BackgroundFusion.stop()
+	MusicManager.playLobbyMusic()
 	
 	$RabidHolePuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
 	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
 	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
 
-func startDraft():
-#	if $DraftTypeButton.selected == 2 and ids.size() != 2:
-#		var pop = popupUI.instance()
-#		pop.init("Solomon Draft", "There must be exactly 2 players to have a Solomon Draft", [["Close", pop, "close", []]])
-#		$PopupCenter.add_child(pop)
-#		return
-#	
-#	if int($GPM/LineEdit.text) < 1 or int($GPM/LineEdit.text) % 2 == 0:
-#		var pop = popupUI.instance()
-#		pop.init("Games Per Match Error", "The number of games per match must be odd and greater than zero", [["Close", pop, "close", []]])
-#		$PopupCenter.add_child(pop)
-#		return
-	
-	
-	Server.setGamesPerMatch(3)
-	var params = {"num_boosters":3}
-	Server.startDraft(1, params)
+func _process(delta):
+	$LoadingWindow/Sprite.rotation -= delta * PI
 
 func setInLobby():
 	if not inLobby:
 		$Lobby/LeaveButton.text = "Leave Lobby"
 		$Lobby/LineEdit.editable = false
+		$Lobby/LineEdit2.editable = false
 		$Lobby/JoinButton.visible = false
 		$Lobby/HostButton.visible = false
 		
@@ -46,28 +39,70 @@ func holepunch_progress_update(type, session_name, player_names):
 	if type == "session_created":
 		if $RabidHolePuncher.is_host():
 			$Lobby/StartButton.visible = true
+		$LoadingWindow.visible = false
 			
 	if type == "session_created" or type == "session_updated":
 		clearPlayers()
+		numOfPlayers = player_names.size()
+		
 		var vbox = $Lobby/ScrollContainer/VBoxContainer
 		for name in player_names:
 			var label = Label.new()
 			label.text = name
 			NodeLoc.setLabelParams(label)
 			vbox.add_child(label)
-			players.append(name)
+			
+			if $RabidHolePuncher.is_host():
+				if name != Server.username:
+					var tb = TextureButton.new()
+					tb.texture_normal = kickTex
+					tb.texture_pressed = kickTex
+					tb.texture_hover = kickTex
+					label.add_child(tb)
+					tb.rect_position = Vector2($Lobby/ScrollContainer.rect_size.x - kickTex.get_width() - 8, 2)
+					tb.connect("pressed", self, "kickPlayer", [name])
 	
 	if type == "starting_session":
 		$Lobby/StartButton.visible = false
+	
+	if type == "starting_session" or type == "sending_greetings" or type == "sending_confirmations":
+		$LoadingWindow.visible = true
+		$LoadingWindow/Label.text = type.capitalize()
+
+func kickPlayer(name):
+	$RabidHolePuncher.kick_player(name)
 
 func clearPlayers():
 	var vbox = $Lobby/ScrollContainer/VBoxContainer
 	for c in vbox.get_children():
 		c.queue_free()
-	players.clear()
-	
+	numOfPlayers = 0
 
 func holepunch_failure(error):
+	if error == "error:unreachable_self" and bypassPunchthrough:
+		if $RabidHolePuncher.is_host():
+			holepunch_success(25565, null, null)
+		else:
+			holepunch_success(0, "127.0.0.1", 25565)
+		return
+	
+	if error == "error:unreachable_self":
+		numOfPlayers -= 1
+		if numOfPlayers == 1:
+			print("Failure: ", error)
+			var pop = popupUI.instance()
+			pop.init("Error Creating Lobby", "Failure: " + str(error), [["Close", pop, "close", []]])
+			$PopupHolder.add_child(pop)
+			pop.options[0].grab_focus()
+			
+			$LoadingWindow.visible = false
+			
+			if inLobby:
+				clearPlayers()
+				_on_LeaveButton_pressed()
+			
+			return
+	
 	if inLobby:
 		clearPlayers()
 		_on_LeaveButton_pressed()
@@ -78,6 +113,8 @@ func holepunch_failure(error):
 		pop.init("Error Creating Lobby", "Failure: " + str(error), [["Close", pop, "close", []]])
 		$PopupHolder.add_child(pop)
 		pop.options[0].grab_focus()
+		
+		$LoadingWindow.visible = false
 
 func holepunch_success(self_port, host_ip, host_port):
 	print("Success: ", self_port, "  ", host_ip, "  ", host_port)
@@ -88,10 +125,9 @@ func holepunch_success(self_port, host_ip, host_port):
 		Server.startServer(self_port)
 		var ready = false
 		while not ready:
-			ready = Server.playerIDs.size() == players.size()-1
+			ready = Server.playerIDs.size() == numOfPlayers - 1
 			yield(get_tree().create_timer(1), "timeout")
-			print("not ready", Server.playerIDs.size(), "  ", players.size()-1)
-		startDraft()
+			print("not ready", Server.playerIDs.size(), "  ", numOfPlayers - 1)
 		
 	else:
 		Server.connectToServer(host_ip, host_port, self_port)
@@ -116,21 +152,40 @@ func _exit_tree():
 #	Server.closeServer()
 
 func _on_HostButton_pressed():
-	if not Input.is_action_pressed("ui_up"):
+	var numPlayers = $Lobby/LineEdit2.get_value()
+	if numPlayers <= 1 or numPlayers > 16:
+		print("Failure: Bad player count")
+		var pop = popupUI.instance()
+		pop.init("Error Creating Lobby", "Failure: Number of players must be at least 2 and fewer than 17", [["Close", pop, "close", []]])
+		$PopupHolder.add_child(pop)
+		pop.options[0].grab_focus()
+		return
+	else:
+		$LoadingWindow.visible = true
 		setInLobby()
 		$RabidHolePuncher.create_session($Lobby/LineEdit.text, Server.username, 3)
-	else:
-		holepunch_success(25565, null, null)
+		
+		$LoadingWindow/Label.text = "Connecting to Server"
 
 func _on_JoinButton_pressed():
-	if not Input.is_action_pressed("ui_up"):
-		setInLobby()
-		$RabidHolePuncher.join_session($Lobby/LineEdit.text, Server.username, 3)
-	else:
-		holepunch_success(0, "127.0.0.1", 25565)
+	$LoadingWindow.visible = true
+	setInLobby()
+	$RabidHolePuncher.join_session($Lobby/LineEdit.text, Server.username)
+	
+	$LoadingWindow/Label.text = "Connecting to Server"
 
 func _on_StartButton_pressed():
-	if players.size() > 1:
+	if numOfPlayers > 1:
+		var params = getGameParams()
+		if params["game_type"] == Settings.GAME_TYPES.ONE_V_ONE or (params["game_type"] == Settings.GAME_TYPES.DRAFT and params["draft_type"] == Settings.DRAFT_TYPES.SOLOMON):
+			if numOfPlayers != 2:
+				print("Failure: Wrong player numbers")
+				var pop = popupUI.instance()
+				pop.init("Error Creating Lobby", "Failure: This game mode can only be played with exactly 2 players", [["Close", pop, "close", []]])
+				$PopupHolder.add_child(pop)
+				pop.options[0].grab_focus()
+				return
+		
 		$RabidHolePuncher.start_session()
 	else:
 		print("Failure: Not enough players")
@@ -149,6 +204,7 @@ func _on_LeaveButton_pressed():
 		$Lobby/JoinButton.visible = true
 		$Lobby/HostButton.visible = true
 		$Lobby/LineEdit.editable = true
+		$Lobby/LineEdit2.editable = true
 		$Lobby/LeaveButton.text = "Main Menu"
 		inLobby = false
 	else:
@@ -193,8 +249,10 @@ func openFileSelector():
 		$DeckSelector/Background.rect_position = $DeckSelector/VBoxContainer.rect_position - Vector2(30, 10)
 	else:
 		MessageManager.notify("You must create a new deck before playing")
-		$DeckSelector.visible = false
-		$MultiplayerUI.visible = true
+		
+		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+		if error != 0:
+			print("Error loading test1.tscn. Error Code = " + str(error))
 
 	
 func onFileButtonClicked(fileName : String):
@@ -213,12 +271,9 @@ func onFileButtonClicked(fileName : String):
 	$DeckSelector.visible = false
 	
 	Settings.selectedDeck = fileName
-	
-func addPlayer(player_id, username):
-	pass
 
-func removePlayer(player_id):
-	pass
+func _on_LobbySettingsButton_pressed():
+	lobbySettings.show()
 
-func joinedLobby(numMaxPlayers : int):
-	pass
+func getGameParams() -> Dictionary:
+	return lobbySettings.getGameParams()

@@ -588,10 +588,10 @@ func onReadyPressed():
 	if not ready:
 		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
 		if error == Deck.DECK_VALIDITY_TYPE.VALID:
-			ready = not ready
-			$CenterControl/Menu/ReadyButton/Sprite.texture = checkTex if ready else uncheckTex
-			Server.setReady(ready)
-			
+			if startTournament():
+				ready = not ready
+				$CenterControl/Menu/ReadyButton/Sprite.texture = checkTex if ready else uncheckTex
+				Server.setReady(ready)
 		else:
 			var pop = popupUI.instance()
 			pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])

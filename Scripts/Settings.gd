@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.03"
+var versionID = "0.0.3.04"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -18,6 +18,9 @@ var settingsPath = "user:/"
 var settingsName = "settings"
 
 var shaderPath = "user://shaders/"
+
+enum GAME_TYPES {ONE_V_ONE, DRAFT}
+enum DRAFT_TYPES {WINSTON, BOOSTER, SOLOMON}
 
 func _ready():
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")

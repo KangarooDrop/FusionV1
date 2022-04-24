@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
@@ -7,8 +7,11 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
 [ext_resource path="res://Scripts/Networking/LobbyX.gd" type="Script" id=6]
 [ext_resource path="res://addons/rabidholepuncher/RabidHolePuncher.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Art/UI/loading_wheel.png" type="Texture" id=8]
+[ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=9]
+[ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=10]
 
-[node name="DraftLobby" type="Control"]
+[node name="LobbyX" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 6 )
@@ -60,7 +63,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -448.0
 margin_top = -204.0
-margin_right = -288.0
+margin_right = -228.0
 margin_bottom = -180.0
 custom_styles/normal = ExtResource( 4 )
 custom_fonts/font = ExtResource( 2 )
@@ -78,7 +81,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -448.0
 margin_top = -181.0
-margin_right = -288.0
+margin_right = -228.0
 margin_bottom = 203.0
 custom_styles/bg = ExtResource( 4 )
 __meta__ = {
@@ -113,7 +116,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SettingsButton" type="Button" parent="Lobby"]
+[node name="LobbySettingsButton" type="Button" parent="Lobby"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -130,7 +133,7 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Settings"
+text = "Lobby Settings"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -140,10 +143,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 95.0629
-margin_top = -208.636
-margin_right = 259.063
-margin_bottom = -185.636
+margin_left = 96.0
+margin_top = -208.0
+margin_right = 260.0
+margin_bottom = -185.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 5 )
@@ -180,22 +183,45 @@ __meta__ = {
 }
 
 [node name="LineEdit" type="LineEdit" parent="Lobby"]
-margin_left = -128.36
-margin_top = -203.333
-margin_right = 81.6403
-margin_bottom = -179.333
+margin_left = -68.36
+margin_top = -216.0
+margin_right = 81.64
+margin_bottom = -192.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Lobby"]
-margin_left = -245.0
-margin_top = -206.0
-margin_right = -120.0
-margin_bottom = -176.0
+margin_left = -185.0
+margin_top = -218.0
+margin_right = -60.0
+margin_bottom = -188.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Room Key:"
+align = 1
+valign = 1
+
+[node name="LineEdit2" type="LineEdit" parent="Lobby"]
+margin_left = 19.0
+margin_top = -188.0
+margin_right = 82.0
+margin_bottom = -164.0
+text = "2"
+align = 1
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Lobby"]
+margin_left = -185.0
+margin_top = -190.0
+margin_right = 29.0
+margin_bottom = -160.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Number of Players: "
 align = 1
 valign = 1
 
@@ -264,7 +290,76 @@ margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
 
+[node name="LoadingWindow" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MouseDisable" type="ColorRect" parent="LoadingWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1024.0
+margin_top = -1024.0
+margin_right = 984.0
+margin_bottom = 984.0
+rect_min_size = Vector2( 2048, 2048 )
+color = Color( 0.313726, 0.0509804, 0.698039, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NinePatchRect" type="NinePatchRect" parent="LoadingWindow"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -171.5
+margin_top = -28.0
+margin_right = 171.5
+margin_bottom = 28.0
+texture = ExtResource( 1 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LoadingWindow"]
+margin_left = -137.0
+margin_top = 10.0
+margin_right = 138.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 275, 0 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Connecting to Server"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="LoadingWindow"]
+position = Vector2( 159.5, 20 )
+texture = ExtResource( 8 )
+
+[node name="LobbySettings" parent="." instance=ExtResource( 10 )]
+visible = false
+
 [connection signal="pressed" from="Lobby/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Lobby/LeaveButton" to="." method="_on_LeaveButton_pressed"]
+[connection signal="pressed" from="Lobby/LobbySettingsButton" to="." method="_on_LobbySettingsButton_pressed"]
 [connection signal="pressed" from="Lobby/JoinButton" to="." method="_on_JoinButton_pressed"]
 [connection signal="pressed" from="Lobby/HostButton" to="." method="_on_HostButton_pressed"]
+[connection signal="text_changed" from="Lobby/LineEdit2" to="Lobby/LineEdit2" method="_on_LineEdit_text_changed"]
