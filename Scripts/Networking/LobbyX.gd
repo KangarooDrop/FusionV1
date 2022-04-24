@@ -19,6 +19,8 @@ func _ready():
 	$RabidHolePuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
 	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
 	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
+	
+	$Lobby/LineEdit3.text = Server.username
 
 func _process(delta):
 	$LoadingWindow/Sprite.rotation -= delta * PI
@@ -28,6 +30,7 @@ func setInLobby():
 		$Lobby/LeaveButton.text = "Leave Lobby"
 		$Lobby/LineEdit.editable = false
 		$Lobby/LineEdit2.editable = false
+		$Lobby/LineEdit3.editable = false
 		$Lobby/JoinButton.visible = false
 		$Lobby/HostButton.visible = false
 		
@@ -152,6 +155,7 @@ func _exit_tree():
 #	Server.closeServer()
 
 func _on_HostButton_pressed():
+	checkUsernameChange()
 	var numPlayers = $Lobby/LineEdit2.get_value()
 	if numPlayers <= 1 or numPlayers > 16:
 		print("Failure: Bad player count")
@@ -168,6 +172,7 @@ func _on_HostButton_pressed():
 		$LoadingWindow/Label.text = "Connecting to Server"
 
 func _on_JoinButton_pressed():
+	checkUsernameChange()
 	$LoadingWindow.visible = true
 	setInLobby()
 	$RabidHolePuncher.join_session($Lobby/LineEdit.text, Server.username)
@@ -205,12 +210,14 @@ func _on_LeaveButton_pressed():
 		$Lobby/HostButton.visible = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
+		$Lobby/LineEdit3.editable = true
 		$Lobby/LeaveButton.text = "Main Menu"
 		inLobby = false
 	else:
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
+		checkUsernameChange()
 
 func startGame():
 	openFileSelector()
@@ -277,3 +284,12 @@ func _on_LobbySettingsButton_pressed():
 
 func getGameParams() -> Dictionary:
 	return lobbySettings.getGameParams()
+
+func onUsernameLineEditChange(new_text):
+	Server.username = new_text
+
+func checkUsernameChange():
+	var new_text = $Lobby/LineEdit3.text
+	if new_text != Server.username:
+		Server.username = new_text
+		Settings.writeToSettings()
