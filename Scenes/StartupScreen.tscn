@@ -118,14 +118,13 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Exit"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -120.0
+margin_left = -176.0
 margin_top = -93.0
-margin_right = 2.0
+margin_right = -5.0
 margin_bottom = 37.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
@@ -134,8 +133,8 @@ __meta__ = {
 }
 
 [node name="PracticeButton" type="Button" parent="VBoxContainer2"]
-margin_right = 122.0
-margin_bottom = 25.0
+margin_right = 171.0
+margin_bottom = 23.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -147,9 +146,9 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Practice"
 
 [node name="LobbyButton" type="Button" parent="VBoxContainer2"]
-margin_top = 35.0
-margin_right = 122.0
-margin_bottom = 60.0
+margin_top = 33.0
+margin_right = 171.0
+margin_bottom = 56.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -160,10 +159,24 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Lobby"
 
+[node name="DirectButton" type="Button" parent="VBoxContainer2"]
+margin_top = 66.0
+margin_right = 171.0
+margin_bottom = 89.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Direct Connection"
+
 [node name="BackButton" type="Button" parent="VBoxContainer2"]
-margin_top = 105.0
-margin_right = 122.0
-margin_bottom = 130.0
+margin_top = 99.0
+margin_right = 171.0
+margin_bottom = 122.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -318,6 +331,7 @@ visible = false
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
 [connection signal="pressed" from="VBoxContainer2/PracticeButton" to="." method="onPracticePressed"]
 [connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyButtonPressed"]
+[connection signal="pressed" from="VBoxContainer2/DirectButton" to="." method="onDirectButtonPressed"]
 [connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="onBackPressed"]
 [connection signal="meta_clicked" from="CreditsLabel" to="CreditsLabel" method="_on_CreditsLabel_meta_clicked"]
 [connection signal="pressed" from="BackButton" to="." method="onBackPressed"]

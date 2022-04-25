@@ -652,7 +652,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/Holepunch/plugin.cfg", "res://addons/rabidholepuncher/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/rabidholepuncher/plugin.cfg" )
 
 [gdnative]
 

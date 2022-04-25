@@ -9,7 +9,7 @@ var path = "user://decks/"
 
 var dumpPath = "user://dumps/"
 
-enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT}
+enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT}
 var gameMode : int = 0
 
 var cardSlotScale = 1.5

@@ -77,6 +77,11 @@ func onLobbyButtonPressed():
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 
+func onDirectButtonPressed():
+	var error = get_tree().change_scene("res://Scenes/Networking/LobbyDirect.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
 		if $CreditsLabel.visible or $VBoxContainer2.visible:
@@ -85,3 +90,4 @@ func _input(event):
 			$SettingsPage.onShaderBackButtonPressed()
 		elif $SettingsPage.visible:
 			$SettingsPage.onBackPressed()
+

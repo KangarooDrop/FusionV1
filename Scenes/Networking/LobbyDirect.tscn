@@ -1,0 +1,391 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Networking/LobbyDirect.gd" type="Script" id=2]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=3]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=4]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
+[ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Art/UI/hover.png" type="Texture" id=8]
+
+[node name="LobbyX" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lobby" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="StartButton" type="Button" parent="Lobby"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -236.0
+margin_right = -284.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Start Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerLabel" type="Label" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -204.0
+margin_right = -228.0
+margin_bottom = -180.0
+custom_styles/normal = ExtResource( 4 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "    Players:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = -181.0
+margin_right = -228.0
+margin_bottom = 203.0
+custom_styles/bg = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Lobby/ScrollContainer"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 2.0
+margin_bottom = 2.0
+
+[node name="LeaveButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = 212.0
+margin_right = -284.0
+margin_bottom = 235.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Main Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LobbySettingsButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 288.0
+margin_top = -236.0
+margin_right = 448.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Lobby Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JoinButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 96.0
+margin_top = -208.0
+margin_right = 260.0
+margin_bottom = -185.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Join Lobby"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostButton" type="Button" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 96.0
+margin_top = -236.0
+margin_right = 260.0
+margin_bottom = -213.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Create Server"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="Lobby"]
+margin_left = -68.36
+margin_top = -188.0
+margin_right = 94.64
+margin_bottom = -164.0
+focus_next = NodePath("../Label2")
+focus_previous = NodePath("../LineEdit3")
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0.168627, 0.168627, 0.168627, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Lobby"]
+margin_left = -185.0
+margin_top = -190.0
+margin_right = -60.0
+margin_bottom = -160.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Host IP:"
+align = 1
+valign = 1
+
+[node name="LineEdit2" type="LineEdit" parent="Lobby"]
+margin_left = 19.0
+margin_top = -160.0
+margin_right = 95.0
+margin_bottom = -136.0
+focus_next = NodePath("../LineEdit3")
+focus_previous = NodePath("../LineEdit")
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "2"
+align = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Lobby"]
+margin_left = -185.0
+margin_top = -162.0
+margin_right = 29.0
+margin_bottom = -132.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Number of Players: "
+align = 1
+valign = 1
+
+[node name="LineEdit3" type="LineEdit" parent="Lobby"]
+margin_left = -68.36
+margin_top = -216.0
+margin_right = 94.64
+margin_bottom = -192.0
+focus_next = NodePath("../LineEdit")
+focus_previous = NodePath("../LineEdit2")
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0.168627, 0.168627, 0.168627, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Lobby"]
+margin_left = -185.0
+margin_top = -218.0
+margin_right = -60.0
+margin_bottom = -188.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Username:"
+align = 1
+valign = 1
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -197.0
+margin_top = -138.0
+margin_right = 444.0
+margin_bottom = 202.0
+custom_styles/bg = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Lobby/ScrollContainer2"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 2.0
+margin_bottom = 2.0
+
+[node name="SendChatButton" type="Button" parent="Lobby"]
+margin_left = -177.0
+margin_top = 232.0
+margin_right = -39.0
+margin_bottom = 257.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Send Message"
+
+[node name="LineEdit4" type="LineEdit" parent="Lobby"]
+margin_left = -31.0
+margin_top = 232.0
+margin_right = 464.0
+margin_bottom = 256.0
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeckSelector" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="NinePatchRect" parent="DeckSelector"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 8 )
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeckSelector"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DeckSelector/VBoxContainer"]
+margin_right = 107.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Select Deck"
+align = 1
+
+[node name="BackButton" type="Button" parent="DeckSelector/VBoxContainer"]
+margin_top = 23.0
+margin_right = 107.0
+margin_bottom = 46.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Back"
+
+[node name="PopupHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="LobbySettings" parent="." instance=ExtResource( 7 )]
+visible = false
+
+[connection signal="pressed" from="Lobby/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="Lobby/LeaveButton" to="." method="_on_LeaveButton_pressed"]
+[connection signal="pressed" from="Lobby/LobbySettingsButton" to="." method="_on_LobbySettingsButton_pressed"]
+[connection signal="pressed" from="Lobby/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="Lobby/HostButton" to="." method="_on_HostButton_pressed"]
+[connection signal="text_changed" from="Lobby/LineEdit2" to="Lobby/LineEdit2" method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="Lobby/SendChatButton" to="." method="sendMessage"]
+[connection signal="text_entered" from="Lobby/LineEdit4" to="." method="sendMessage"]
