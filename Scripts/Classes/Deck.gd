@@ -49,6 +49,21 @@ func draw(count : int) -> Array:
 			pass
 	return c
 
+func tutor(cardID : int) -> Card:
+	var indexes = []
+	for i in range(cards.size()):
+		if cards[i].UUID == cardID:
+			indexes.append(i)
+	
+	var card = null
+	
+	if indexes.size() > 0:
+		var ind = indexes[randi() % indexes.size()]
+		card = cards[ind]
+		cards.remove(ind)
+	
+	return card
+
 func serialize() -> Array:
 	var data = []
 	for c in cards:

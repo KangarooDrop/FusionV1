@@ -46,7 +46,9 @@ func setCards():
 	if Settings.gameMode == Settings.GAME_MODE.NONE:
 		for i in range(ListOfCards.cardList.size()):
 			if ListOfCards.cardList[i].tier == 1:
-				if ListOfCards.cardList[i].rarity == Card.RARITY.COMMON:
+				if ListOfCards.cardList[i].rarity == Card.RARITY.BASIC:
+					availableCardCount[i] = -1
+				elif ListOfCards.cardList[i].rarity == Card.RARITY.COMMON:
 					availableCardCount[i] = 4
 				elif ListOfCards.cardList[i].rarity == Card.RARITY.LEGENDARY:
 					availableCardCount[i] = 1
@@ -295,7 +297,7 @@ func onMouseDown(slot : CardSlot, button_index : int):
 			var countCheck = true
 			for i in $CenterControl/DeckDisplay.data.size():
 				if $CenterControl/DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
-					countCheck = $CenterControl/DeckDisplay.data[i].count < availableCardCount[slot.cardNode.card.UUID]
+					countCheck = availableCardCount[slot.cardNode.card.UUID] == -1 or $CenterControl/DeckDisplay.data[i].count < availableCardCount[slot.cardNode.card.UUID]
 					break
 			
 			if slot.cardNode != null and slotViewing == null and countCheck:
@@ -319,7 +321,9 @@ func updateSlotCount(slot : CardSlot):
 		if $CenterControl/DeckDisplay.data[i].card.UUID == slot.cardNode.card.UUID:
 			index = i
 			break
-	if index >= 0:
+	if availableCardCount[slot.cardNode.card.UUID] == -1:
+		slot.get_node("Label").text = ""
+	elif index >= 0:
 		slot.get_node("Label").text = str($CenterControl/DeckDisplay.data[index].count) + "/" + str(availableCardCount[slot.cardNode.card.UUID])
 	else:
 		slot.get_node("Label").text = "0/" + str(availableCardCount[slot.cardNode.card.UUID])
@@ -672,7 +676,7 @@ func randomizeDeck(popup=null):
 		for i in $CenterControl/DeckDisplay.data.size():
 			if $CenterControl/DeckDisplay.data[i].card.UUID == id:
 				if card.rarity == Card.RARITY.COMMON:
-					countCheck = $CenterControl/DeckDisplay.data[i].count < availableCardCount[id]
+					countCheck = availableCardCount[id] == -1 or $CenterControl/DeckDisplay.data[i].count < availableCardCount[id]
 				else:
 					countCheck = false
 				break

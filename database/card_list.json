@@ -1107,5 +1107,146 @@
       "AbilityFledge"
     ],
     "rarity": "COMMON"
+  },
+  "86": {
+    "name": "Lurker",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 1,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      
+    ],
+    "rarity": "BASIC"
+  },
+  "87": {
+    "name": "Infernal",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 4,
+    "toughness": 1,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityCombustion"
+    ],
+    "rarity": "COMMON"
+  },
+  "88": {
+    "name": "Trampling Wildebeest",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 2,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityStampede"
+    ],
+    "rarity": "COMMON"
+  },
+  "89": {
+    "name": "Wolf",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPackTactics"
+    ],
+    "rarity": "COMMON"
+  },
+  "90": {
+    "name": "Sand Shifter",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityTransform"
+    ],
+    "rarity": "COMMON"
+  },
+  "91": {
+    "name": "Avalanche",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      4
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityLandslide"
+    ],
+    "rarity": "COMMON"
+  },
+  "92": {
+    "name": "Centurion",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 2,
+    "creature_type": [
+      1
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityLimitBreak"
+    ],
+    "rarity": "LEGENDARY"
+  },
+  "93": {
+    "name": "Scorpio",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityPierce"
+    ],
+    "rarity": "COMMON"
+  },
+  "94": {
+    "name": "Flak Cannon",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 3,
+    "toughness": 2,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityShrapnel"
+    ],
+    "rarity": "COMMON"
+  },
+  "95": {
+    "name": "Caltrops",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 1,
+    "creature_type": [
+      6
+    ],
+    "tier": 0,
+    "abilities": [
+      "AbilityPacifism",
+      "AbilityLacerate"
+    ],
+    "rarity": "COMMON"
   }
 }

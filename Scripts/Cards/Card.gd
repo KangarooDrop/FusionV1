@@ -4,7 +4,7 @@ class_name Card
 var cardNodeScene = load("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
-enum RARITY {NONE, COMMON, LEGENDARY, VANGUARD}
+enum RARITY {NONE, COMMON, LEGENDARY, VANGUARD, BASIC}
 
 var UUID = -1
 

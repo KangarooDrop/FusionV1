@@ -1122,7 +1122,11 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						selectedCard.cardNode.select()
 						selectedCard = null
 					
-					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed > 0:
+					var holdingCost = 0
+					for sl in cardsHolding:
+						holdingCost += getCardCost(sl.cardNode.card)
+					
+					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed - holdingCost >= getCardCost(slot.cardNode.card) - 1:
 						if cardsHolding.has(slot):
 							SoundEffectManager.playUnselectSound()
 							cardsHolding.erase(slot)
@@ -1131,7 +1135,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 								onSlotExit(slot)
 							slot.cardNode.position.y = slot.position.y
 						else:
-							if cardsPerTurn - cardsPlayed - cardsHolding.size() > getCardCost(slot.cardNode.card) - 1:
+							if cardsPerTurn - cardsPlayed - holdingCost > getCardCost(slot.cardNode.card) - 1:
 								if slot.cardNode.card.canBePlayed:
 									SoundEffectManager.playSelectSound()
 									cardsHolding.append(slot)
@@ -1506,7 +1510,7 @@ func getCardCost(card) -> int:
 	for c in crs:
 		cost += c.onAdjustCost(card, cost)
 	
-	return cost
+	return int(max(cost, 0))
 
 func getAllCards() -> Array:
 	var cards := []

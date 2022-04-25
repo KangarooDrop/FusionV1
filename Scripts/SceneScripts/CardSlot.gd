@@ -72,6 +72,22 @@ func getNeighbors() -> Array:
 			neighbors.append(c)
 	return neighbors
 
+func getAcross():
+	if currentZone == ZONES.CREATURE and playerID >= 0:
+		var board = NodeLoc.getBoard()
+		var selfCreatures
+		var otherCreatures
+		for p in board.players:
+			if p.UUID == playerID:
+				selfCreatures = board.creatures[p.UUID]
+			else:
+				otherCreatures = board.creatures[p.UUID]
+		if selfCreatures != null and otherCreatures != null:
+			var index = selfCreatures.find(self)
+			return otherCreatures[index]
+	return null
+		
+
 func setHighlight(isHighlighted : bool):
 	if isHighlighted:
 		$SpotSprite.texture = highlightOnSprite
