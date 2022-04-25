@@ -137,7 +137,10 @@ func getFileName():
 	return self.get_script().get_path().get_file().get_basename()
 	
 func _to_string():
-	return "[color=#" + c.to_html(false) +"][url=" + getFileName() + "||" + str(count) +"]" + name + (" "+str(count) if (showCount) else "") +"[/url][/color]"
+	var cardString = ""
+	if card != null:
+		cardString += "||" + str(card.UUID)
+	return "[color=#" + c.to_html(false) +"][url=" + getFileName() + "||" + str(count) + cardString + "]" + name + (" "+str(count) if (showCount) else "") +"[/url][/color]"
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)

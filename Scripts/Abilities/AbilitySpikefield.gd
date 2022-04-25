@@ -17,4 +17,4 @@ func onEffect(params):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Whenever a creature you control enters the battlefield, it takes " + str(count) + " damage"
+	return .genDescription() + "Whenever a creature you control enters the battlefield, you take " + str(count) + " damage"

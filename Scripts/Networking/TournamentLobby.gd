@@ -46,7 +46,7 @@ func generateBracket():
 	for c in $BracketHolder.get_children():
 		$BracketHolder.remove_child(c)
 	
-	var screenSize = get_viewport().size
+	var screenSize = get_viewport().get_visible_rect().size
 	var bracketSize = screenSize * 0.6
 	
 	var rr = ReferenceRect.new()

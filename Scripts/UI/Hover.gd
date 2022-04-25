@@ -61,6 +61,9 @@ func handle(meta : String):
 	var spl = meta.split("||")
 	var fileName = spl[0]
 	var count = int(spl[1])
+	var card = null
+	if spl.size() >= 3:
+		card = ListOfCards.getCard(int(spl[2]))
 	
 	var abl = null
 	for data in ProjectSettings.get_setting("_global_script_classes"):
@@ -68,9 +71,7 @@ func handle(meta : String):
 			abl = load(data["path"])
 			break
 	if abl != null:
-		var ability = abl.new(null)
-		for i in range(count - 1):
-			ability.combine(abl.new(null))
+		var ability = abl.new(card).setCount(count)
 		
 		closeChildrenFirst = true
 		

@@ -19,6 +19,6 @@ static func onEffect(params):
 
 func genDescription(subCount = 0) -> String:
 	if count > 1:
-		return  .genDescription() + "At the start of your turn, create another " + str(count) + " " + str(TextGreyGoo.new(null)) + " creatures" + ". If you cannot, take 1 damage"
+		return  .genDescription() + "At the start of your turn, create another " + str(count) + " " + str(TextCard.new(ListOfCards.getCard(56))) + " creatures" + ". If you cannot, take 1 damage"
 	else:
-		return  .genDescription() + "At the start of your turn, create another " + str(TextGreyGoo.new(null)) + " creatures" + ". If you cannot, take 1 damage"
+		return  .genDescription() + "At the start of your turn, create another " + str(TextCard.new(ListOfCards.getCard(56))) + " creatures" + ". If you cannot, take 1 damage"

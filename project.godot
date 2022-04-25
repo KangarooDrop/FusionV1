@@ -450,9 +450,9 @@ _global_script_classes=[ {
 "path": "res://Scripts/AbilityText/TextArmor.gd"
 }, {
 "base": "Ability",
-"class": "TextGreyGoo",
+"class": "TextCard",
 "language": "GDScript",
-"path": "res://Scripts/AbilityText/TextGreyGoo.gd"
+"path": "res://Scripts/AbilityText/TextCard.gd"
 }, {
 "base": "Ability",
 "class": "TextRarity",
@@ -463,11 +463,6 @@ _global_script_classes=[ {
 "class": "TextScrapyard",
 "language": "GDScript",
 "path": "res://Scripts/AbilityText/TextScrapyard.gd"
-}, {
-"base": "Ability",
-"class": "TextSkinShedder",
-"language": "GDScript",
-"path": "res://Scripts/AbilityText/TextSkinShedder.gd"
 }, {
 "base": "Node",
 "class": "TournamentLobby",
@@ -563,10 +558,9 @@ _global_script_class_icons={
 "Player": "",
 "PopupUI": "",
 "TextArmor": "",
-"TextGreyGoo": "",
+"TextCard": "",
 "TextRarity": "",
 "TextScrapyard": "",
-"TextSkinShedder": "",
 "TournamentLobby": ""
 }
 
