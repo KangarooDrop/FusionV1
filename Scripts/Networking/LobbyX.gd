@@ -11,6 +11,8 @@ var kickTex = preload("res://Art/UI/kick.png")
 
 onready var lobbySettings = $LobbySettings
 
+var messageTimer = 0
+
 func _ready():
 	Settings.gameMode = Settings.GAME_MODE.LOBBY
 	BackgroundFusion.stop()
@@ -19,11 +21,15 @@ func _ready():
 	$RabidHolePuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
 	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
 	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
+	$RabidHolePuncher.connect("holepunch_chat", self, "holepunch_chat")
 	
 	$Lobby/LineEdit3.text = Server.username
 
 func _process(delta):
 	$LoadingWindow/Sprite.rotation -= delta * PI
+	
+	if messageTimer > 0:
+		messageTimer -= delta
 
 func setInLobby():
 	if not inLobby:
@@ -139,6 +145,17 @@ func holepunch_success(self_port, host_ip, host_port):
 	else:
 		Server.connectToServer(host_ip, host_port, self_port)
 
+func holepunch_chat(chat):
+	var label = Label.new()
+	NodeLoc.setLabelParams(label)
+	var s_split = chat.split(':', 2)
+	label.text = s_split[1] + ": " + s_split[2]
+	$Lobby/ScrollContainer2/VBoxContainer.add_child(label)
+	var scrollToBottom = ($Lobby/ScrollContainer2.get_v_scrollbar().max_value - $Lobby/ScrollContainer2.rect_size.y) - $Lobby/ScrollContainer2.scroll_vertical < 3
+	if scrollToBottom:
+		yield(get_tree(), "idle_frame")
+		$Lobby/ScrollContainer2.scroll_vertical = $Lobby/ScrollContainer2.get_v_scrollbar().max_value
+
 func playerConnected(player_id : int):
 	print("player connected: ", player_id)
 	
@@ -171,6 +188,8 @@ func _on_HostButton_pressed():
 		$RabidHolePuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
 		
 		$LoadingWindow/Label.text = "Connecting to Server"
+		
+		clearMessages()
 
 func _on_JoinButton_pressed():
 	checkUsernameChange()
@@ -180,6 +199,8 @@ func _on_JoinButton_pressed():
 	
 	$LoadingWindow/Label.text = "Connecting to Server"
 	$Lobby/LobbySettingsButton.disabled = true
+	
+	clearMessages()
 
 func _on_StartButton_pressed():
 	if numOfPlayers > 1:
@@ -313,7 +334,21 @@ func createPopup(title : String, desc : String):
 	$PopupHolder.add_child(pop)
 	pop.options[0].grab_focus()
 
-func _input(event):
-	if event is InputEventKey and event.is_pressed() and event.scancode == KEY_F5 and not event.is_echo():
-		$RabidHolePuncher.send_chat("Testchat")
-		#Server.username + " - " + 
+func clearMessages():
+	for c in $Lobby/ScrollContainer2/VBoxContainer.get_children():
+		c.queue_free()
+
+func sendMessage(text = null):
+	if text == null:
+		text = $Lobby/LineEdit4.text
+		
+	if messageTimer >= 3:
+		createPopup("Warning", "Slow down there, buckaroo! You're sending messages way too fast")
+		return
+	
+	if text == "":
+		return
+	
+	messageTimer += 1
+	$RabidHolePuncher.send_chat(Server.username + ":" + text)
+	$Lobby/LineEdit4.text = ""

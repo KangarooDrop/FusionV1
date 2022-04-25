@@ -269,6 +269,56 @@ text = "Username:"
 align = 1
 valign = 1
 
+[node name="ScrollContainer2" type="ScrollContainer" parent="Lobby"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -197.0
+margin_top = -138.0
+margin_right = 444.0
+margin_bottom = 202.0
+custom_styles/bg = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Lobby/ScrollContainer2"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 2.0
+margin_bottom = 2.0
+
+[node name="SendChatButton" type="Button" parent="Lobby"]
+margin_left = -177.0
+margin_top = 232.0
+margin_right = -39.0
+margin_bottom = 257.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Send Message"
+
+[node name="LineEdit4" type="LineEdit" parent="Lobby"]
+margin_left = -31.0
+margin_top = 232.0
+margin_right = 464.0
+margin_bottom = 256.0
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="DeckSelector" type="Control" parent="."]
 visible = false
 anchor_left = 0.5
@@ -407,3 +457,5 @@ visible = false
 [connection signal="pressed" from="Lobby/JoinButton" to="." method="_on_JoinButton_pressed"]
 [connection signal="pressed" from="Lobby/HostButton" to="." method="_on_HostButton_pressed"]
 [connection signal="text_changed" from="Lobby/LineEdit2" to="Lobby/LineEdit2" method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="Lobby/SendChatButton" to="." method="sendMessage"]
+[connection signal="text_entered" from="Lobby/LineEdit4" to="." method="sendMessage"]

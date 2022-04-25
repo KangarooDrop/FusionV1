@@ -5,6 +5,7 @@ signal holepunch_progress_update(type, session_name, player_names)
 signal holepunch_failure(error)
 # Host_ip and host_port are null if you are host
 signal holepunch_success(self_port, host_ip, host_port)
+signal holepunch_chat(chat)
 
 export var relay_server_address: String = "127.0.0.1"
 export var relay_server_port: int = 57775

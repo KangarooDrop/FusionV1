@@ -88,7 +88,7 @@ func process(delta: float) -> void:
 												"is_host" : is_host}
 			_state_machine.transition_to("ServerFinishWait", all_addresses)
 		elif packet_string.begins_with(CHAT_PREFIX):
-			print("CHAT MESSAGE RECEIVED: ", packet_string.split(":", true, 2))
+			hole_puncher.emit_signal("holepunch_chat", packet_string)
 
 
 func kick_player(player_name: String) -> void:
