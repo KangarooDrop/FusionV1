@@ -8,48 +8,12 @@ var shadObj
 
 signal shaderChange
 
-var verifiedShaderData : Array = \
+var verifiedShaders : Array = \
 [
-	["default", getDefaultCode()],
-	["invert", getInvertCode()],
-	["muttled", getMuttledCode()]
+	"res://Shaders/Default.shader",
+	"res://Shaders/Invert.shader",
+	"res://Shaders/LowLight.shader"
 ]
-
-func getDefaultCode():
-	return """shader_type canvas_item;
-render_mode unshaded;
-
-void fragment()
-{
-	COLOR.rgba = vec4(0, 0, 0, 0);
-}
-"""
-
-func getInvertCode():
-	return """shader_type canvas_item;
-render_mode unshaded;
-
-void fragment()
-{
-	vec4 c = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgba;
-	c.r = 1.0 - c.r;
-	c.g = 1.0 - c.g;
-	c.b = 1.0 - c.b;
-	COLOR.rgba = c;
-}
-"""
-
-func getMuttledCode():
-	return """shader_type canvas_item;
-render_mode unshaded;
-
-uniform float mullAmt = 0.5;
-
-void fragment()
-{
-	COLOR.rgba = vec4(mullAmt, mullAmt, mullAmt, mullAmt);
-}
-"""
 
 func _ready():
 	verifyShaders()
@@ -76,24 +40,25 @@ func _ready():
 
 func verifyShaders():
 	
-	for data in verifiedShaderData:
-		var fileName = data[0]
+	for path in verifiedShaders:
+		var fileName = path.get_file()
 		
 		var file = File.new()
-		
-		print(Settings.shaderPath + fileName + ".shader")
-		if not file.file_exists(Settings.shaderPath + fileName + ".shader"):
+		if not file.file_exists(Settings.shaderPath + fileName):
 			var directory = Directory.new( )
 			directory.make_dir_recursive(Settings.shaderPath)
 			
-			var error = file.open(Settings.shaderPath + fileName + ".shader", File.WRITE)
-			file.store_string(data[1])
+			var vs = load(path)
+			var code = vs.code
+			
+			var error = file.open(Settings.shaderPath + fileName, File.WRITE)
+			file.store_string(code)
 			
 		file.close()
 
-var currentShader = "default.json"
+var currentShader = "Default.shader"
 func setShader(path : String, writeToSettings : bool = true):
-	if path != Settings.shaderPath + "default.shader":
+	if path != Settings.shaderPath + "Default.shader":
 		makeWarning()
 	
 	currentShader = path
@@ -107,7 +72,7 @@ func setShader(path : String, writeToSettings : bool = true):
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_F2:
-		ShaderHandler.setShader(Settings.shaderPath + verifiedShaderData[0][0] + ".shader")
+		ShaderHandler.setShader(Settings.shaderPath + verifiedShaders[0].get_file())
 
 var warning = null
 func makeWarning():
