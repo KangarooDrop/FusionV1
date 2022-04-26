@@ -13,16 +13,18 @@ onready var lobbySettings = $LobbySettings
 
 var messageTimer = 0
 
+onready var holepuncher = $RabidHolePuncher
+
 func _ready():
 	Settings.gameMode = Settings.GAME_MODE.LOBBY
 	BackgroundFusion.stop()
 	MusicManager.playLobbyMusic()
 	
-	$RabidHolePuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
-	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
-	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
-	$RabidHolePuncher.connect("holepunch_chat", self, "holepunch_chat")
-	$RabidHolePuncher.connect("set_host", self, "set_host")
+	holepuncher.connect("holepunch_progress_update", self, "holepunch_progress_update")
+	holepuncher.connect("holepunch_failure", self, "holepunch_failure")
+	holepuncher.connect("holepunch_success", self, "holepunch_success")
+	holepuncher.connect("holepunch_chat", self, "holepunch_chat")
+	holepuncher.connect("set_host", self, "set_host")
 	
 	$Lobby/LineEdit3.text = Server.username
 
@@ -47,12 +49,12 @@ func setInLobby():
 func holepunch_progress_update(type, session_name, player_names):
 	print(type, "  ", session_name, "  ", player_names)
 	
-	if type == "session_created":
-		if $RabidHolePuncher.is_host():
+	if type == holepuncher.STATUS_SESSION_CREATED:
+		if holepuncher.is_host():
 			$Lobby/StartButton.disabled = false
 		$LoadingWindow.visible = false
 			
-	if type == "session_created" or type == "session_updated":
+	if type == holepuncher.STATUS_SESSION_CREATED or type == holepuncher.STATUS_SESSION_UPDATED:
 		clearPlayers()
 		numOfPlayers = player_names.size()
 		
@@ -63,7 +65,7 @@ func holepunch_progress_update(type, session_name, player_names):
 			NodeLoc.setLabelParams(label)
 			vbox.add_child(label)
 			
-			if $RabidHolePuncher.is_host():
+			if holepuncher.is_host():
 				if name != Server.username:
 					var tb = TextureButton.new()
 					tb.texture_normal = kickTex
@@ -73,15 +75,15 @@ func holepunch_progress_update(type, session_name, player_names):
 					tb.rect_position = Vector2($Lobby/ScrollContainer.rect_size.x - kickTex.get_width() - 8, 2)
 					tb.connect("pressed", self, "kickPlayer", [name])
 	
-	if type == "starting_session":
+	if type == holepuncher.STATUS_STARTING_SESSION:
 		$Lobby/StartButton.disabled = true
 	
-	if type == "starting_session" or type == "sending_greetings" or type == "sending_confirmations":
+	if type == holepuncher.STATUS_STARTING_SESSION or type == holepuncher.STATUS_SENDING_GREETINGS or type == holepuncher.STATUS_SENDING_CONFIRMATIONS:
 		$LoadingWindow.visible = true
 		$LoadingWindow/Label.text = type.capitalize()
 
 func kickPlayer(name):
-	$RabidHolePuncher.kick_player(name)
+	holepuncher.kick_player(name)
 
 func clearPlayers():
 	var vbox = $Lobby/ScrollContainer/VBoxContainer
@@ -92,14 +94,14 @@ func clearPlayers():
 func holepunch_failure(error):
 	print("Failure: ", error)
 	
-	if error == "error:unreachable_self" and bypassPunchthrough:
-		if $RabidHolePuncher.is_host():
+	if error == holepuncher.ERR_UNREACHABLE_SELF and bypassPunchthrough:
+		if holepuncher.is_host():
 			holepunch_success(25565, null, null)
 		else:
 			holepunch_success(0, "127.0.0.1", 25565)
 		return
 	
-	if error == "error:unreachable_self" or error == "error:incompatible_game_version":
+	if error == holepuncher.ERR_UNREACHABLE_SELF or error == "error:incompatible_game_version":
 		numOfPlayers -= 1
 		if numOfPlayers == 1:
 			createPopup("Error Creating Lobby", "Failure: " + str(error))
@@ -117,7 +119,7 @@ func holepunch_failure(error):
 		clearPlayers()
 		_on_LeaveButton_pressed()
 	
-	if error != "error:player_exited_session":
+	if error != holepuncher.ERR_SESSION_PLAYER_EXIT:
 		createPopup("Error Creating Lobby", "Failure: " + str(error))
 		
 		$LoadingWindow.visible = false
@@ -159,7 +161,7 @@ func holepunch_chat(chat):
 		$Lobby/ScrollContainer2.scroll_vertical = $Lobby/ScrollContainer2.get_v_scrollbar().max_value
 
 func set_host():
-	if $RabidHolePuncher.is_host():
+	if holepuncher.is_host():
 		$Lobby/StartButton.disabled = false
 
 func playerConnected(player_id : int):
@@ -178,7 +180,7 @@ func _Server_Disconnected():
 	print("Server diconnected")
 
 func _exit_tree():
-	$RabidHolePuncher.exit_session()
+	holepuncher.exit_session()
 #	Server.closeServer()
 
 func _on_HostButton_pressed():
@@ -191,7 +193,7 @@ func _on_HostButton_pressed():
 	else:
 		$LoadingWindow.visible = true
 		setInLobby()
-		$RabidHolePuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
+		holepuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
 		
 		$LoadingWindow/Label.text = "Connecting to Server"
 		
@@ -201,7 +203,7 @@ func _on_JoinButton_pressed():
 	checkUsernameChange()
 	$LoadingWindow.visible = true
 	setInLobby()
-	$RabidHolePuncher.join_session($Lobby/LineEdit.text, Server.username)
+	holepuncher.join_session($Lobby/LineEdit.text, Server.username)
 	
 	$LoadingWindow/Label.text = "Connecting to Server"
 	$Lobby/LobbySettingsButton.disabled = true
@@ -227,10 +229,10 @@ func _on_StartButton_pressed():
 			createPopup("Error Creating Lobby", "Failure: Must draft with at least 3 booster packs")
 			return
 		
-		$RabidHolePuncher.start_session()
+		holepuncher.start_session()
 	else:
 		print("Failure: Not enough players")
-		createPopup("Error Creating Lobby", "Failure: error:not_enough_players")
+		createPopup("Error Creating Lobby", "Failure: " + holepuncher.ERR_SESSION_SINGLE_PLAYER)
 
 func _on_LeaveButton_pressed():
 	if inLobby:
@@ -359,7 +361,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	$RabidHolePuncher.send_chat(Server.username + ":" + text)
+	holepuncher.send_chat(Server.username + ":" + text)
 	$Lobby/LineEdit4.text = ""
 
 

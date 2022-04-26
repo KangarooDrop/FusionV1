@@ -37,14 +37,12 @@ func onGameTypeSelected(index):
 		
 		$VBoxContainer/DraftTypeHbox.visible = false
 		$VBoxContainer/PacksHbox.visible = false
-		$VBoxContainer/GPMHbox.visible = false
 	elif index == Settings.GAME_TYPES.DRAFT:
 		Settings.selectedDeck = ".draft.json"
 		onDraftTypeSelected($VBoxContainer/DraftTypeHbox/OptionButton.selected)
 		
 		$VBoxContainer/DraftTypeHbox.visible = true
 		$VBoxContainer/PacksHbox.visible = true
-		$VBoxContainer/GPMHbox.visible = true
 		
 	resizeSelf()
 
@@ -64,6 +62,10 @@ func onDraftTypeSelected(index):
 
 func onMatchTypeSelected(index):
 	Settings.matchType = index
+	if index == Settings.MATCH_TYPE.TOURNAMENT:
+		$VBoxContainer/GPMHbox.visible = true
+	else:
+		$VBoxContainer/GPMHbox.visible = false
 	resizeSelf()
 
 func onBackPressed():
@@ -76,10 +78,12 @@ func getGameParams() -> Dictionary:
 	params["game_type"] = $VBoxContainer/GameTypeHbox/OptionButton.selected
 	params["match_type"] = $VBoxContainer/MatchTypeHbox/OptionButton.selected
 	
+	if params["match_type"] == Settings.MATCH_TYPE.TOURNAMENT:
+		params["games_per_match"] = $VBoxContainer/GPMHbox/LineEdit.get_value()
+	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		params["draft_type"] = $VBoxContainer/DraftTypeHbox/OptionButton.selected
 		params["num_boosters"] = $VBoxContainer/PacksHbox/LineEdit.get_value()
-		params["games_per_match"] = $VBoxContainer/GPMHbox/LineEdit.get_value()
 	
 	return params
 
@@ -89,10 +93,13 @@ func setOwnGameParams(params : Dictionary):
 	$VBoxContainer/MatchTypeHbox/OptionButton.select(params["match_type"])
 	onMatchTypeSelected(params["match_type"])
 	
+	if params["match_type"] == Settings.MATCH_TYPE.TOURNAMENT:
+		$VBoxContainer/GPMHbox/LineEdit.text = str(params["games_per_match"])
+		Tournament.gamesPerMatch = params["games_per_match"]
+	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		$VBoxContainer/DraftTypeHbox/OptionButton.select(params["draft_type"])
 		onDraftTypeSelected(params["draft_type"])
 		$VBoxContainer/PacksHbox/LineEdit.text = str(params["num_boosters"])
-		$VBoxContainer/GPMHbox/LineEdit.text = str(params["games_per_match"])
 		
 		Settings.selectedDeck = ".draft.json"

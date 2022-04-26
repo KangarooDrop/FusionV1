@@ -168,11 +168,20 @@ func _ready():
 		print("GM SETTINGS SEED: ", gameSeed)
 	
 	if not Server.online or Server.GM:
-		var startingPlayerIndex = randi() % 2
-		setStartingPlayer((startingPlayerIndex + 1) % 2)
+		var startingPlayerIndex = -1
+		
+		if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+			if Tournament.lastGameLoss:
+				startingPlayerIndex = 0
+			elif Tournament.lastGameWin:
+				startingPlayerIndex = 1
+		if startingPlayerIndex == -1:
+			startingPlayerIndex = randi() % 2
+		
+		setStartingPlayer(startingPlayerIndex)
 		print("Send: Starting player")
-		dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
-		Server.setActivePlayer(Server.opponentID, startingPlayerIndex)
+		dataLog.append("SET_PLAYER " + str(startingPlayerIndex))
+		Server.setActivePlayer(Server.opponentID, (startingPlayerIndex + 1) % 2)
 		hasStartingPlayer = true
 	
 	initCardsLeftIndicator()
@@ -403,6 +412,9 @@ func onGameStart():
 	readyToStart = true
 
 func setStartingPlayer(playerIndex : int):
+	Tournament.lastGameLoss = false
+	Tournament.lastGameWin  = false
+	
 	print("Receive: Starting player")
 	dataLog.append("SET_PLAYER " + str(playerIndex))
 	activePlayer = playerIndex

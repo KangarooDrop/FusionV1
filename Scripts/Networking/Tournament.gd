@@ -7,6 +7,9 @@ var currentWins : int = 0
 var currentLosses : int = 0
 var gamesPerMatch : int = 3
 
+var lastGameLoss : bool = false
+var lastGameWin  : bool = false
+
 var hasLost = false
 
 func startTournament(order):
@@ -14,11 +17,13 @@ func startTournament(order):
 	tree = TTree.new(order)
 
 func addWin():
+	lastGameWin = true
 	currentWins += 1
 	if (currentWins * 2) / gamesPerMatch > 0:
 		Server.setTournamentWinner(get_tree().get_network_unique_id())
 
 func addLoss():
+	lastGameLoss = true
 	currentLosses += 1
 	if (currentLosses * 2) / gamesPerMatch > 0:
 		hasLost = true
