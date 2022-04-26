@@ -66,7 +66,7 @@ func process(delta: float) -> void:
 											"session_name", _players)
 				if not hole_puncher._is_host and hole_puncher._player_name == _players[0]:
 					info("Host died, so now you are host")
-					hole_puncher._is_host = true # Host died, so you are now the new host
+					hole_puncher.set_host(true) # Host died, so you are now the new host
 		elif packet_string.begins_with(START_PREFIX):
 			# s:<ownport>:<otherplayername>:<otherplayerip>:<otherplayerport>;...
 			info("Received start session message " + packet_string)

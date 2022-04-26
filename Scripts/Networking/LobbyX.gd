@@ -22,6 +22,7 @@ func _ready():
 	$RabidHolePuncher.connect("holepunch_failure", self, "holepunch_failure")
 	$RabidHolePuncher.connect("holepunch_success", self, "holepunch_success")
 	$RabidHolePuncher.connect("holepunch_chat", self, "holepunch_chat")
+	$RabidHolePuncher.connect("set_host", self, "set_host")
 	
 	$Lobby/LineEdit3.text = Server.username
 
@@ -37,8 +38,9 @@ func setInLobby():
 		$Lobby/LineEdit.editable = false
 		$Lobby/LineEdit2.editable = false
 		$Lobby/LineEdit3.editable = false
-		$Lobby/JoinButton.visible = false
-		$Lobby/HostButton.visible = false
+		$Lobby/JoinButton.disabled = true
+		$Lobby/HostButton.disabled = true
+		$Lobby/SendChatButton.disabled = false
 		
 		inLobby = true
 
@@ -47,7 +49,7 @@ func holepunch_progress_update(type, session_name, player_names):
 	
 	if type == "session_created":
 		if $RabidHolePuncher.is_host():
-			$Lobby/StartButton.visible = true
+			$Lobby/StartButton.disabled = false
 		$LoadingWindow.visible = false
 			
 	if type == "session_created" or type == "session_updated":
@@ -72,7 +74,7 @@ func holepunch_progress_update(type, session_name, player_names):
 					tb.connect("pressed", self, "kickPlayer", [name])
 	
 	if type == "starting_session":
-		$Lobby/StartButton.visible = false
+		$Lobby/StartButton.disabled = true
 	
 	if type == "starting_session" or type == "sending_greetings" or type == "sending_confirmations":
 		$LoadingWindow.visible = true
@@ -114,7 +116,7 @@ func holepunch_failure(error):
 	if inLobby:
 		clearPlayers()
 		_on_LeaveButton_pressed()
-		
+	
 	if error != "error:player_exited_session":
 		createPopup("Error Creating Lobby", "Failure: " + str(error))
 		
@@ -155,6 +157,10 @@ func holepunch_chat(chat):
 	if scrollToBottom:
 		yield(get_tree(), "idle_frame")
 		$Lobby/ScrollContainer2.scroll_vertical = $Lobby/ScrollContainer2.get_v_scrollbar().max_value
+
+func set_host():
+	if $RabidHolePuncher.is_host():
+		$Lobby/StartButton.disabled = false
 
 func playerConnected(player_id : int):
 	print("player connected: ", player_id)
@@ -232,9 +238,10 @@ func _on_LeaveButton_pressed():
 		_exit_tree()
 		if Server.online:
 			Server.closeServer()
-		$Lobby/StartButton.visible = false
-		$Lobby/JoinButton.visible = true
-		$Lobby/HostButton.visible = true
+		$Lobby/StartButton.disabled = true
+		$Lobby/JoinButton.disabled = false
+		$Lobby/HostButton.disabled = false
+		$Lobby/SendChatButton.disabled = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
 		$Lobby/LineEdit3.editable = true
@@ -348,7 +355,7 @@ func sendMessage(text = null):
 		createPopup("Warning", "Slow down there, buckaroo! You're sending messages way too fast")
 		return
 	
-	if text == "":
+	if text == "" or $Lobby/SendChatButton.disabled:
 		return
 	
 	messageTimer += 1

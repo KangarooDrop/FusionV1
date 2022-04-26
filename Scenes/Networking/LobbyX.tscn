@@ -36,7 +36,6 @@ margin_bottom = 20.0
 mouse_filter = 2
 
 [node name="StartButton" type="Button" parent="Lobby"]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -53,6 +52,7 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
 text = "Start Game"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -304,7 +304,11 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
 text = "Send Message"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LineEdit4" type="LineEdit" parent="Lobby"]
 margin_left = -31.0

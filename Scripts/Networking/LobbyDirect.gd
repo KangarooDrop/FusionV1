@@ -31,8 +31,9 @@ func setInLobby():
 		$Lobby/LineEdit.editable = false
 		$Lobby/LineEdit2.editable = false
 		$Lobby/LineEdit3.editable = false
-		$Lobby/JoinButton.visible = false
-		$Lobby/HostButton.visible = false
+		$Lobby/JoinButton.disabled = true
+		$Lobby/HostButton.disabled = true
+		$Lobby/SendChatButton.disabled = false
 		
 		inLobby = true
 
@@ -81,7 +82,7 @@ func _on_HostButton_pressed():
 	var peers = $Lobby/LineEdit2.get_value()
 	Server.startServer(Server.DEFAULT_PORT, peers)
 	setInLobby()
-	$Lobby/StartButton.visible = true
+	$Lobby/StartButton.disabled = false
 	addUser(1, Server.username)
 	clearMessages()
 
@@ -121,9 +122,10 @@ func _on_LeaveButton_pressed():
 		clearPlayers()
 		if Server.online:
 			Server.closeServer()
-		$Lobby/StartButton.visible = false
-		$Lobby/JoinButton.visible = true
-		$Lobby/HostButton.visible = true
+		$Lobby/StartButton.disabled = true
+		$Lobby/JoinButton.disabled = false
+		$Lobby/HostButton.disabled = false
+		$Lobby/SendChatButton.disabled = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
 		$Lobby/LineEdit3.editable = true
@@ -145,7 +147,7 @@ func sendMessage(text = null):
 		createPopup("Warning", "Slow down there, buckaroo! You're sending messages way too fast")
 		return
 	
-	if text == "":
+	if text == "" or $Lobby/SendChatButton.disabled:
 		return
 	
 	messageTimer += 1

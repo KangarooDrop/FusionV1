@@ -6,6 +6,7 @@ signal holepunch_failure(error)
 # Host_ip and host_port are null if you are host
 signal holepunch_success(self_port, host_ip, host_port)
 signal holepunch_chat(chat)
+signal set_host()
 
 export var relay_server_address: String = "127.0.0.1"
 export var relay_server_port: int = 57775
@@ -123,7 +124,7 @@ func start_session() -> void:
 
 
 func exit_session() -> void:
-	if _is_host and _state_machine.state.name == "InSession":
+	if _state_machine.state.name == "InSession":
 		_state_machine.state.exit_session()
 
 
@@ -133,3 +134,8 @@ func is_host() -> bool:
 
 func get_player_name() -> String:
 	return _player_name
+
+
+func set_host(val : bool):
+	_is_host = val
+	emit_signal("set_host")
