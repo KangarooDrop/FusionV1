@@ -16,6 +16,7 @@ var gmSet = false
 var playerIDs := []
 var playerNames := {}
 var playersReady := {}
+var playersChallenged := {}
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "playerConnected")
@@ -65,6 +66,7 @@ func closeServer():
 		playerIDs.clear()
 		playerNames.clear()
 		playersReady.clear()
+		playersChallenged.clear()
 		gmData.clear()
 	
 ####################################################################
@@ -108,7 +110,7 @@ remote func receiveConfirmVersion(versionID):
 		get_node("/root/LobbyX")._on_LeaveButton_pressed()
 
 func playerDisconnected(player_id : int):
-	if Server.host:
+	if Server.host and playerIDs.has(player_id):
 		removeUser(player_id)
 		for id in playerIDs:
 			rpc_id(id, "removeUser", player_id)
@@ -189,7 +191,7 @@ remote func receiveConfirmJoin():
 			
 			root.remove_child(lobby)
 			lobby.queue_free()
-		elif params["game_type"] == Settings.GAME_TYPES.ONE_V_ONE:
+		elif params["game_type"] == Settings.GAME_TYPES.CONSTRUCTED:
 			Settings.gameMode = Settings.GAME_MODE.PLAY
 			
 			get_node("/root/LobbyX").startGame()
@@ -219,6 +221,7 @@ remote func addUser(player_id : int, username : String):
 	playerIDs.append(player_id)
 	playerNames[player_id] = username
 	playersReady[player_id] = false
+	playersChallenged[player_id] = false
 	
 	if Settings.gameMode == Settings.GAME_MODE.DIRECT:
 		get_node("/root/LobbyX").addUser(player_id, username)
@@ -245,13 +248,18 @@ remote func removeUser(player_id : int):
 	playerIDs.erase(player_id)
 	#playerNames.erase(player_id)
 	playersReady.erase(player_id)
+	playersChallenged.erase(player_id)
 	print(Server.host, "  ", Settings.gameMode, "  ", Settings.GAME_MODE.TOURNAMENT, "  ", Tournament.tree)
 	if Server.host and get_node_or_null("/root/DeckEditor") != null and Tournament.tree == null:
 		checkReady()
 	
+	receiveOpponentLeave(player_id)
+	
+remote func receiveOpponentLeave(player_id):
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
-		if playerIDs.size() == 0:
+		if player_id == opponentID:
 			get_node("/root/main/CenterControl/Board").gameOver = true
+			opponentID = -1
 #			closeServer()
 	
 
@@ -446,6 +454,48 @@ remote func serverOnGameStart():
 	board.onGameStart()
 
 ####################################################################
+
+func challengeOpponent(player_id):
+	Server.playersChallenged[player_id] = true
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveChallengeOpponent")
+
+
+remote func receiveChallengeOpponent():
+	var player_id = get_tree().get_rpc_sender_id()
+	MessageManager.notify(playerNames[player_id] + " has challenged you to a game")
+	
+	checkChallenge(player_id)
+
+
+func checkChallenge(player_id):
+	if playersChallenged[player_id]:
+		receiveChallengeAccepted(player_id)
+		rpc_id(player_id, "receiveChallengeAccepted", get_tree().get_network_unique_id())
+
+
+remote func receiveChallengeAccepted(player_id):
+	for pID in playersChallenged.keys():
+		playersChallenged[pID] = false
+	
+	var board = get_node_or_null("/root/main/CenterControl/Board")
+	if board != null:
+		if playerIDs.has(opponentID):
+			rpc_id(opponentID, "receiveOpponentLeave", get_tree().get_network_unique_id())
+			
+	opponentID = player_id
+	
+	var error = get_tree().change_scene("res://Scenes/main.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+		MessageManager.notify("Error loading main scene")
+		Server.close()
+	
+	
+
+
+####################################################################
+
 
 remote func slotClicked(player_id : int, isOpponent : bool, slotZone : int, slotID : int, button_index : int):
 	if playerIDs.has(player_id):
@@ -678,10 +728,21 @@ func checkReady():
 		if not playersReady[player_id]:
 			return
 	
+	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+		startTournament()
+	elif Settings.matchType == Settings.MATCH_TYPE.FREE_PLAY:
+		startFreePlay()
+
+func startTournament():
 	var bracket = Tournament.genTournamentOrder(playersReady.keys())
 	receiveSetBracket(bracket)
 	for player_id in playerIDs:
 		rpc_id(player_id, "receiveSetBracket", bracket)
+
+func startFreePlay():
+	receiveStartFreePlay()
+	for player_id in playerIDs:
+		rpc_id(player_id, "receiveStartFreePlay")
 
 remote func receiveSetBracket(bracket):
 	Tournament.startTournament(bracket)
@@ -689,6 +750,11 @@ remote func receiveSetBracket(bracket):
 	print("TOURNAMENT = ", Tournament.tree)
 	
 	var error = get_tree().change_scene("res://Scenes/Networking/TournamentLobby.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+
+remote func receiveStartFreePlay():
+	var error = get_tree().change_scene("res://Scenes/UI/FreePlayList.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 
@@ -712,8 +778,6 @@ remote func receiveSetTournamentWinner(player_id):
 	var selfID = get_tree().get_network_unique_id()
 	if Tournament.getOpponent(player_id) == selfID or selfID == player_id:
 		onPlaying = true
-		gmSet = false
-		GM = false
 		Tournament.currentWins = 0
 		Tournament.currentLosses = 0
 		print("Clearing tournament game data")
@@ -747,15 +811,23 @@ remote func receiveRequestGM(p1, p2):
 			gm = p2
 		gmData[[p1, p2]] = gm
 		
-		if Server.host and p1 == 1:
-			receiveSetGM(gm == p1)
-		else:
-			rpc_id(p1, "receiveSetGM", gm == p1)
-		
-		if Server.host and p2 == 1:
-			receiveSetGM(gm == p2)
-		else:
-			rpc_id(p2, "receiveSetGM", gm == p2)
+		print("GM = ", gm, ":", username if gm == 1 else playerNames[gm])
+	
+	var gm
+	if gmData.has([p1, p2]):
+		gm = gmData[[p1, p2]]
+	elif gmData.has([p2, p1]):
+		gm = gmData[[p2, p1]]
+	
+	if Server.host and p1 == 1:
+		receiveSetGM(gm == p1)
+	else:
+		rpc_id(p1, "receiveSetGM", gm == p1)
+	
+	if Server.host and p2 == 1:
+		receiveSetGM(gm == p2)
+	else:
+		rpc_id(p2, "receiveSetGM", gm == p2)
 
 remote func receiveSetGM(isGM):
 	GM = isGM

@@ -5,6 +5,8 @@ signal close
 func _ready():
 	for k in Settings.GAME_TYPES.keys():
 		$VBoxContainer/GameTypeHbox/OptionButton.add_item(k.capitalize())
+	for k in Settings.MATCH_TYPE.keys():
+		$VBoxContainer/MatchTypeHbox/OptionButton.add_item(k.capitalize())
 	for k in Settings.DRAFT_TYPES.keys():
 		$VBoxContainer/DraftTypeHbox/OptionButton.add_item(k.capitalize())
 	
@@ -13,6 +15,9 @@ func _ready():
 	
 	$VBoxContainer/DraftTypeHbox/OptionButton.select(0)
 	$VBoxContainer/DraftTypeHbox/OptionButton.emit_signal("item_selected", 0)
+	
+	$VBoxContainer/MatchTypeHbox/OptionButton.select(0)
+	$VBoxContainer/MatchTypeHbox/OptionButton.emit_signal("item_selected", 0)
 
 func resizeSelf():
 	$VBoxContainer.rect_size = Vector2(0, 0)
@@ -27,13 +32,14 @@ func show():
 	.show()
 
 func onGameTypeSelected(index):
-	if index == Settings.GAME_TYPES.ONE_V_ONE:
+	if index == Settings.GAME_TYPES.CONSTRUCTED:
 		$VBoxContainer/PlayerNum.text = "Players Required: 2"
 		
 		$VBoxContainer/DraftTypeHbox.visible = false
 		$VBoxContainer/PacksHbox.visible = false
 		$VBoxContainer/GPMHbox.visible = false
 	elif index == Settings.GAME_TYPES.DRAFT:
+		Settings.selectedDeck = ".draft.json"
 		onDraftTypeSelected($VBoxContainer/DraftTypeHbox/OptionButton.selected)
 		
 		$VBoxContainer/DraftTypeHbox.visible = true
@@ -56,6 +62,10 @@ func onDraftTypeSelected(index):
 	
 	resizeSelf()
 
+func onMatchTypeSelected(index):
+	Settings.matchType = index
+	resizeSelf()
+
 func onBackPressed():
 	emit_signal("close")
 	hide()
@@ -64,6 +74,7 @@ func getGameParams() -> Dictionary:
 	var params = {}
 	params["version"] = Settings.versionID
 	params["game_type"] = $VBoxContainer/GameTypeHbox/OptionButton.selected
+	params["match_type"] = $VBoxContainer/MatchTypeHbox/OptionButton.selected
 	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		params["draft_type"] = $VBoxContainer/DraftTypeHbox/OptionButton.selected
@@ -74,8 +85,14 @@ func getGameParams() -> Dictionary:
 
 func setOwnGameParams(params : Dictionary):
 	$VBoxContainer/GameTypeHbox/OptionButton.select(params["game_type"])
+	onGameTypeSelected(params["game_type"])
+	$VBoxContainer/MatchTypeHbox/OptionButton.select(params["match_type"])
+	onMatchTypeSelected(params["match_type"])
 	
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		$VBoxContainer/DraftTypeHbox/OptionButton.select(params["draft_type"])
+		onDraftTypeSelected(params["draft_type"])
 		$VBoxContainer/PacksHbox/LineEdit.text = str(params["num_boosters"])
 		$VBoxContainer/GPMHbox/LineEdit.text = str(params["games_per_match"])
+		
+		Settings.selectedDeck = ".draft.json"

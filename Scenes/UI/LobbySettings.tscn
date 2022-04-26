@@ -113,10 +113,37 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
-[node name="DraftTypeHbox" type="HBoxContainer" parent="VBoxContainer"]
+[node name="MatchTypeHbox" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 58.0
 margin_right = 250.0
 margin_bottom = 81.0
+
+[node name="Label" type="Label" parent="VBoxContainer/MatchTypeHbox"]
+margin_top = 2.0
+margin_right = 118.0
+margin_bottom = 21.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Match Type: "
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/MatchTypeHbox"]
+margin_left = 122.0
+margin_right = 140.0
+margin_bottom = 23.0
+theme = SubResource( 1 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+
+[node name="DraftTypeHbox" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 89.0
+margin_right = 250.0
+margin_bottom = 112.0
 
 [node name="Label" type="Label" parent="VBoxContainer/DraftTypeHbox"]
 margin_top = 2.0
@@ -141,9 +168,9 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="PacksHbox" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 89.0
+margin_top = 120.0
 margin_right = 250.0
-margin_bottom = 112.0
+margin_bottom = 143.0
 
 [node name="Label" type="Label" parent="VBoxContainer/PacksHbox"]
 margin_top = 2.0
@@ -166,9 +193,9 @@ align = 1
 script = ExtResource( 2 )
 
 [node name="GPMHbox" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 120.0
+margin_top = 151.0
 margin_right = 250.0
-margin_bottom = 143.0
+margin_bottom = 174.0
 
 [node name="Label" type="Label" parent="VBoxContainer/GPMHbox"]
 margin_top = 2.0
@@ -191,9 +218,9 @@ align = 1
 script = ExtResource( 2 )
 
 [node name="Control" type="Control" parent="VBoxContainer"]
-margin_top = 151.0
+margin_top = 182.0
 margin_right = 250.0
-margin_bottom = 183.0
+margin_bottom = 214.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Button" type="Button" parent="VBoxContainer/Control"]
@@ -219,6 +246,7 @@ __meta__ = {
 }
 
 [connection signal="item_selected" from="VBoxContainer/GameTypeHbox/OptionButton" to="." method="onGameTypeSelected"]
+[connection signal="item_selected" from="VBoxContainer/MatchTypeHbox/OptionButton" to="." method="onMatchTypeSelected"]
 [connection signal="item_selected" from="VBoxContainer/DraftTypeHbox/OptionButton" to="." method="onDraftTypeSelected"]
 [connection signal="text_changed" from="VBoxContainer/PacksHbox/LineEdit" to="VBoxContainer/PacksHbox/LineEdit" method="_on_LineEdit_text_changed"]
 [connection signal="text_changed" from="VBoxContainer/GPMHbox/LineEdit" to="VBoxContainer/GPMHbox/LineEdit" method="_on_LineEdit_text_changed"]

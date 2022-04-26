@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Art/UI/loading_wheel.png" type="Texture" id=8]
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=9]
 [ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=11]
 
 [node name="LobbyX" type="Control"]
 anchor_right = 1.0
@@ -32,6 +33,7 @@ margin_left = -20.0
 margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
+mouse_filter = 2
 
 [node name="StartButton" type="Button" parent="Lobby"]
 visible = false
@@ -374,16 +376,6 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
-[node name="PopupHolder" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
-
 [node name="LoadingWindow" type="Control" parent="."]
 visible = false
 anchor_left = 0.5
@@ -394,6 +386,7 @@ margin_left = -20.0
 margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -451,6 +444,45 @@ texture = ExtResource( 8 )
 [node name="LobbySettings" parent="." instance=ExtResource( 10 )]
 visible = false
 
+[node name="OpponentList" parent="." instance=ExtResource( 11 )]
+visible = false
+
+[node name="LeaveButton" type="Button" parent="OpponentList"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -448.0
+margin_top = 212.0
+margin_right = -284.0
+margin_bottom = 235.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Main Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="Lobby/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Lobby/LeaveButton" to="." method="_on_LeaveButton_pressed"]
 [connection signal="pressed" from="Lobby/LobbySettingsButton" to="." method="_on_LobbySettingsButton_pressed"]
@@ -459,3 +491,4 @@ visible = false
 [connection signal="text_changed" from="Lobby/LineEdit2" to="Lobby/LineEdit2" method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Lobby/SendChatButton" to="." method="sendMessage"]
 [connection signal="text_entered" from="Lobby/LineEdit4" to="." method="sendMessage"]
+[connection signal="pressed" from="OpponentList/LeaveButton" to="." method="_on_OpponentLeaveButton_pressed"]

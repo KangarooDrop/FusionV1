@@ -115,10 +115,13 @@ func _ready():
 	
 	BackgroundFusion.stop()
 	MusicManager.playBoardMusic()
+
+	Server.fetchVersion(Server.opponentID)
+	
+	setOwnUsername()
 	
 	if Settings.gameMode != Settings.GAME_MODE.TOURNAMENT:
-		Server.GM = Server.host
-		Server.gmSet = true
+		pass
 	else:
 		$MatchInfo.text = "Game: " + str(Tournament.currentWins + Tournament.currentLosses) + "/" + str(Tournament.gamesPerMatch) + "\n"
 		$MatchInfo.text += str(Tournament.currentWins) + " wins \n" + str(Tournament.currentLosses) + " losses"
@@ -149,9 +152,14 @@ func _ready():
 	initZones()
 	initHands()
 	
-	if Server.opponentID == -1:
-		if Server.playerIDs.size() > 0:
-			Server.opponentID = Server.playerIDs[0]
+	
+	Server.gmSet = false
+	Server.GM = false
+	if Settings.gameMode != Settings.GAME_MODE.PRACTICE:
+		Server.requestGM(get_tree().get_network_unique_id(), Server.opponentID)
+		while not Server.gmSet:
+			yield(get_tree().create_timer(1), "timeout")
+	
 	
 	print("GM=", Server.GM, "  Online=", Server.online)
 	if not Server.online or Server.GM:
@@ -166,10 +174,6 @@ func _ready():
 		dataLog.append("SET_PLAYER " + str((startingPlayerIndex + 1) % 2))
 		Server.setActivePlayer(Server.opponentID, startingPlayerIndex)
 		hasStartingPlayer = true
-
-	Server.fetchVersion(Server.opponentID)
-	
-	setOwnUsername()
 	
 	initCardsLeftIndicator()
 
@@ -982,9 +986,9 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = $GraveHolder/GraveHolder_B
 		CardSlot.ZONES.GRAVE_CARD:
 			if playerIndex == 0:
-				parent = $GraveDisplay_A
-			else:
 				parent = $GraveDisplay_B
+			else:
+				parent = $GraveDisplay_A
 	#	yield(get_tree().create_timer(0.02), "timeout")
 	
 	if parent != null:
@@ -1126,7 +1130,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					for sl in cardsHolding:
 						holdingCost += getCardCost(sl.cardNode.card)
 					
-					if is_instance_valid(slot.cardNode) and cardsPerTurn - cardsPlayed - holdingCost >= getCardCost(slot.cardNode.card) - 1:
+					
+					if is_instance_valid(slot.cardNode):
 						if cardsHolding.has(slot):
 							SoundEffectManager.playUnselectSound()
 							cardsHolding.erase(slot)
@@ -1158,11 +1163,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 							$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
 						else:
 							$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
-					else:
-						if cardsShaking.has(slot):
-							MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
-						cardsShaking[slot] = shakeMaxTime
-						return false
+							
 			elif slot.currentZone == CardSlot.ZONES.CREATURE:
 				if cardsHolding.size() > 0 and cardNodesFusing.size() == 0:
 					#PUTTING A CREATURE ONTO THE FIELD

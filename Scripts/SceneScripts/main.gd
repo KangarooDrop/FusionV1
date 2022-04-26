@@ -17,6 +17,12 @@ func _input(event):
 				$CenterControl/PauseNode/PauseMenu/SettingsPage.onShaderBackButtonPressed()
 			elif $CenterControl/PauseNode/PauseMenu/SettingsPage.visible:
 				$CenterControl/PauseNode/PauseMenu/SettingsPage.onBackPressed()
+			elif $CenterControl/PauseNode/PauseMenu/OpponentList.visible:
+				$CenterControl/PauseNode/PauseMenu/OpponentList.hide()
+			elif $CenterControl/PauseNode/PauseMenu/OpponentList.visible:
+				$CenterControl/PauseNode/PauseMenu/OpponentList.hide()
+			elif is_instance_valid($CenterControl/PauseNode/PauseMenu.mmPop):
+				$CenterControl/PauseNode/PauseMenu.mmPop.close()
 			else:
 				if $CenterControl/PauseNode/PauseMenu.visible:
 					$CenterControl/PauseNode/PauseMenu.hide()

@@ -205,7 +205,7 @@ func _on_JoinButton_pressed():
 func _on_StartButton_pressed():
 	if numOfPlayers > 1:
 		var params = getGameParams()
-		if params["game_type"] == Settings.GAME_TYPES.ONE_V_ONE or (params["game_type"] == Settings.GAME_TYPES.DRAFT and params["draft_type"] == Settings.DRAFT_TYPES.SOLOMON):
+		if params["game_type"] == Settings.GAME_TYPES.DRAFT and params["draft_type"] == Settings.DRAFT_TYPES.SOLOMON:
 			if numOfPlayers != 2:
 				print("Failure: Wrong player numbers")
 				createPopup("Error Creating Lobby", "Failure: This game mode can only be played with exactly 2 players")
@@ -304,11 +304,13 @@ func onFileButtonClicked(fileName : String):
 	
 	Settings.selectedDeck = fileName
 	
-	var error = get_tree().change_scene("res://Scenes/main.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
-		MessageManager.notify("Error loading main scene")
-		Server.close()
+	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+		Server.setReady(true)
+		$LoadingWindow.visible = true
+		$LoadingWindow/Label.text = "Waiting for opponents"
+	
+	elif Settings.matchType == Settings.MATCH_TYPE.FREE_PLAY:
+		$OpponentList.show()
 
 func _on_LobbySettingsButton_pressed():
 	lobbySettings.show()
@@ -352,3 +354,17 @@ func sendMessage(text = null):
 	messageTimer += 1
 	$RabidHolePuncher.send_chat(Server.username + ":" + text)
 	$Lobby/LineEdit4.text = ""
+
+
+func _on_OpponentLeaveButton_pressed():
+	var pop = popupUI.instance()
+	pop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
+	$PopupHolder.add_child(pop)
+	pop.options[1].grab_focus()
+	
+func toMainMenu():
+	if Server.online:
+		Server.closeServer()
+	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))

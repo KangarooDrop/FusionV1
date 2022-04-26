@@ -17,9 +17,8 @@ var discardQueue := []
 var discardTimers := []
 var discardPositions := []
 
-export var handSize := 5
-export var isOpponent = false
-export var handVisible := true
+export(int) var handSize := 5
+export(bool) var handVisible := true
 var mulliganCount = 0
 
 var drawWaitTimer = 0

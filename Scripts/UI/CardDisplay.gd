@@ -25,13 +25,14 @@ var mouseDown = false
 var clickTimer = 0
 var clickMaxTime = 0.18
 
-export var viewMul = 0.75
+export(float) var viewMul = 0.75
 
 var movingCards := []
-export var moveSpeed : int = 800
+export(int) var moveSpeed : int = 800
 
-export var z_index = 0
+export(int) var z_index = 0
 export(CardSlot.ZONES) var currentZone : int = CardSlot.ZONES.NONE
+export(bool) var isOpponent = false
 
 func _ready():
 	myfunc()

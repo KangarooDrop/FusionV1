@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/UI/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=5]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=6]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=8]
 
 [node name="PauseMenu" type="Control"]
 visible = false
@@ -65,9 +66,8 @@ __meta__ = {
 }
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
-margin_top = 6.0
 margin_right = 144.0
-margin_bottom = 29.0
+margin_bottom = 23.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -78,10 +78,10 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
-margin_top = 39.0
+[node name="OpponentsButton" type="Button" parent="VBoxContainer"]
+margin_top = 66.0
 margin_right = 144.0
-margin_bottom = 62.0
+margin_bottom = 89.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -90,40 +90,12 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Restart"
-
-[node name="ConcedeButton" type="Button" parent="VBoxContainer"]
-margin_top = 72.0
-margin_right = 144.0
-margin_bottom = 95.0
-custom_styles/hover = ExtResource( 5 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 6 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Concede"
-
-[node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 105.0
-margin_right = 144.0
-margin_bottom = 128.0
-custom_styles/hover = ExtResource( 5 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 6 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Settings"
+text = "Opponents"
 
 [node name="ChangeDeckButton" type="Button" parent="VBoxContainer"]
-margin_top = 138.0
+margin_top = 165.0
 margin_right = 144.0
-margin_bottom = 161.0
+margin_bottom = 188.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -134,10 +106,52 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Change Deck"
 
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
-margin_top = 171.0
+[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+margin_top = 132.0
 margin_right = 144.0
-margin_bottom = 194.0
+margin_bottom = 155.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Settings"
+
+[node name="ConcedeButton" type="Button" parent="VBoxContainer"]
+margin_top = 99.0
+margin_right = 144.0
+margin_bottom = 122.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Concede"
+
+[node name="RestartButton" type="Button" parent="VBoxContainer"]
+margin_top = 33.0
+margin_right = 144.0
+margin_bottom = 56.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Restart"
+
+[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
+margin_top = 198.0
+margin_right = 144.0
+margin_bottom = 221.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -151,10 +165,15 @@ text = "To Main Menu"
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
 
+[node name="OpponentList" parent="." instance=ExtResource( 8 )]
+visible = false
+
 [connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]
-[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
-[connection signal="pressed" from="VBoxContainer/ConcedeButton" to="." method="onConcedePressed"]
-[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsButtonClicked"]
+[connection signal="pressed" from="VBoxContainer/OpponentsButton" to="." method="onOpponentsPressed"]
 [connection signal="pressed" from="VBoxContainer/ChangeDeckButton" to="." method="onChangeDeckPressed"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsButtonClicked"]
+[connection signal="pressed" from="VBoxContainer/ConcedeButton" to="." method="onConcedePressed"]
+[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="onRestartPressed"]
 [connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="onMainMenuPressed"]
 [connection signal="settingsClose" from="SettingsPage" to="." method="onSettingsClose"]
+[connection signal="close" from="OpponentList" to="." method="onOpponentsClose"]

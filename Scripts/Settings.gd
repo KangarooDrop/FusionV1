@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.08"
+var versionID = "0.0.3.10"
 
 var playAnimations = true
 var selectedDeck = ""
@@ -10,7 +10,9 @@ var path = "user://decks/"
 var dumpPath = "user://dumps/"
 
 enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT}
+
 var gameMode : int = 0
+var matchType : int = 0
 
 var cardSlotScale = 1.5
 
@@ -19,7 +21,8 @@ var settingsName = "settings"
 
 var shaderPath = "user://shaders/"
 
-enum GAME_TYPES {ONE_V_ONE, DRAFT}
+enum GAME_TYPES {CONSTRUCTED, DRAFT}
+enum MATCH_TYPE {FREE_PLAY, TOURNAMENT}
 enum DRAFT_TYPES {WINSTON, BOOSTER, SOLOMON}
 
 func _ready():

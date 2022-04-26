@@ -153,12 +153,6 @@ func checkNextGame():
 		$Label.text = "Setting Up Next Game"
 	
 		Settings.gameMode = Settings.GAME_MODE.TOURNAMENT
-		Settings.selectedDeck = ".draft.json"
-		
-		Server.requestGM(id, opponentID)
-		
-		while not Server.gmSet:
-			yield(get_tree().create_timer(1), "timeout")
 		
 		if NodeLoc.getBoard() is get_script():
 			print("Starting new tournament match")

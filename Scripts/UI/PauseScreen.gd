@@ -2,12 +2,19 @@ extends Control
 
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
+var mmPop
+
 func _ready():
-	if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
-		$VBoxContainer/RestartButton.visible = false
-		$VBoxContainer/ChangeDeckButton.visible = false
-	else:
+	if not Server.online:
+		$VBoxContainer/OpponentsButton.visible = false
+	
+	if Settings.matchType == Settings.MATCH_TYPE.FREE_PLAY:
 		$VBoxContainer/ConcedeButton.visible = false
+		
+	elif Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+		$VBoxContainer/ChangeDeckButton.visible = false
+		$VBoxContainer/RestartButton.visible = false
+		$VBoxContainer/OpponentsButton.visible = false
 
 func onRestartPressed():
 	if Server.online or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
@@ -19,6 +26,15 @@ func onRestartPressed():
 	else:
 		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()
+
+func onOpponentsPressed():
+	$NinePatchRect.visible = false
+	$VBoxContainer.visible = false
+	$OpponentList.show()
+
+func onOpponentsClose():
+	$NinePatchRect.visible = true
+	$VBoxContainer.visible = true
 
 func onChangeDeckPressed():
 	get_node("/root/main").onDeckChangePressed()
@@ -33,9 +49,9 @@ func onBackPressed():
 	visible = false
 
 func onMainMenuPressed():
-	var pop = popupUI.instance()
-	pop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
-	get_parent().add_child(pop)
+	mmPop = popupUI.instance()
+	mmPop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", mmPop, "close", []]])
+	get_parent().add_child(mmPop)
 	
 func toMainMenu():
 	if Server.online:

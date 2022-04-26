@@ -71,6 +71,7 @@ currentZone = 6
 visible = false
 z_index = 16
 currentZone = 6
+isOpponent = true
 
 [node name="Hand_A" type="Control" parent="."]
 anchor_left = 0.5
