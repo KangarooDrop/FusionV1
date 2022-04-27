@@ -29,8 +29,6 @@ func _ready():
 	$Lobby/LineEdit3.text = Server.username
 
 func _process(delta):
-	$LoadingWindow/Sprite.rotation -= delta * PI
-	
 	if messageTimer > 0:
 		messageTimer -= delta
 

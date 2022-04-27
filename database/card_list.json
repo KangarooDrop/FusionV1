@@ -1054,7 +1054,7 @@
   },
   "82": {
     "name": "Boney McFingies",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_BONEY.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -1124,7 +1124,7 @@
   },
   "87": {
     "name": "Infernal",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_INFERNAL.png",
     "power": 4,
     "toughness": 1,
     "creature_type": [
@@ -1180,7 +1180,7 @@
   },
   "91": {
     "name": "Avalanche",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_AVALANCHE.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -1208,7 +1208,7 @@
   },
   "93": {
     "name": "Scorpio",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_SCORPIO.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [

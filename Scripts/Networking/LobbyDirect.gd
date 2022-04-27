@@ -19,8 +19,6 @@ func _ready():
 
 
 func _process(delta):
-	$LoadingWindow/Sprite.rotation -= delta * PI
-	
 	if messageTimer > 0:
 		messageTimer -= delta
 

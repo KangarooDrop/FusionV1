@@ -5,6 +5,7 @@ class_name BoardMP
 
 var deadPlayers = []
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
@@ -176,25 +177,35 @@ func _ready():
 		setGameSeed(OS.get_system_time_msecs())
 		Server.setGameSeed(Server.opponentID, gameSeed + 1)
 		print("GM SETTINGS SEED: ", gameSeed)
+		
+	var startingPlayerChoice = false
+	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+		startingPlayerChoice = Tournament.lastGameLoss or Tournament.lastGameWin
+			
+		if Tournament.lastGameLoss:
+			var pop = popupUI.instance()
+			pop.init("Choose Starting Player", "", [[Server.username, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
+			$PopupHolder.add_child(pop)
+			pop.options[0].grab_focus()
+		elif Tournament.lastGameWin:
+			$LoadingWindow.visible = true
+			$LoadingWindow/Label.text = "Opponent is choosing\nthe starting player"
 	
 	if not Server.online or Server.GM:
-		var startingPlayerIndex = -1
+		if not startingPlayerChoice:
+			var startingPlayerIndex = randi() % 2
 		
-		if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
-			if Tournament.lastGameLoss:
-				startingPlayerIndex = 0
-			elif Tournament.lastGameWin:
-				startingPlayerIndex = 1
-		if startingPlayerIndex == -1:
-			startingPlayerIndex = randi() % 2
+			setStartingPlayer(startingPlayerIndex)
+			print("Send: Starting player")
+			Server.setActivePlayer(Server.opponentID, (startingPlayerIndex + 1) % 2)
 		
-		setStartingPlayer(startingPlayerIndex)
-		print("Send: Starting player")
-		dataLog.append("SET_PLAYER " + str(startingPlayerIndex))
-		Server.setActivePlayer(Server.opponentID, (startingPlayerIndex + 1) % 2)
-		hasStartingPlayer = true
-	
-	initCardsLeftIndicator()
+			initCardsLeftIndicator()
+
+func chooseStartingPlayer(index : int, pop):
+	setStartingPlayer(index)
+	print("Send: Starting player")
+	Server.setActivePlayer(Server.opponentID, (index + 1) % 2)
+	pop.close()
 
 func matchInfoFadeIn():
 	yield(get_tree().create_timer(2), "timeout")
@@ -422,6 +433,11 @@ func onGameStart():
 	readyToStart = true
 
 func setStartingPlayer(playerIndex : int):
+	$LoadingWindow.visible = false
+	
+	$KeepButton.visible = true
+	$MulliganButton.visible = true
+		
 	Tournament.lastGameLoss = false
 	Tournament.lastGameWin  = false
 	

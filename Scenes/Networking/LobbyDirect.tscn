@@ -8,7 +8,7 @@
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=8]
-[ext_resource path="res://Art/UI/loading_wheel.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=10]
 
 [node name="LobbyX" type="Control"]
@@ -377,70 +377,7 @@ text = "Back"
 [node name="LobbySettings" parent="." instance=ExtResource( 7 )]
 visible = false
 
-[node name="LoadingWindow" type="Control" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MouseDisable" type="ColorRect" parent="LoadingWindow"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1024.0
-margin_top = -1024.0
-margin_right = 984.0
-margin_bottom = 984.0
-rect_min_size = Vector2( 2048, 2048 )
-color = Color( 0.313726, 0.0509804, 0.698039, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NinePatchRect" type="NinePatchRect" parent="LoadingWindow"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -171.5
-margin_top = -28.0
-margin_right = 171.5
-margin_bottom = 28.0
-texture = ExtResource( 8 )
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="LoadingWindow"]
-margin_left = -137.0
-margin_top = 10.0
-margin_right = 138.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 275, 0 )
-custom_fonts/font = ExtResource( 6 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Connecting to Server"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Sprite" type="Sprite" parent="LoadingWindow"]
-position = Vector2( 159.5, 20 )
-texture = ExtResource( 9 )
+[node name="LoadingWindow" parent="." instance=ExtResource( 9 )]
 
 [node name="OpponentList" parent="." instance=ExtResource( 10 )]
 visible = false
