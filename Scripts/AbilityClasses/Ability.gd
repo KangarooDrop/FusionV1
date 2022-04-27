@@ -144,7 +144,7 @@ func _to_string():
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
-	abl.count = count
+	abl.setCount(count)
 	return abl
 
 func genDescription(subCount = 0) -> String:
@@ -163,3 +163,8 @@ func addToStack(funcName : String, params : Array, forceWait = false, canAttack 
 	NodeLoc.getBoard().abilityStack.add(data)
 	if forceWait:
 		NodeLoc.getBoard().waitingAbilities.append(cl)
+
+func addDelayedAbility():
+	var board = NodeLoc.getBoard()
+	var card = board.delayedAbilityCards[self.card.playerID]
+	card.addAbility(clone(card))

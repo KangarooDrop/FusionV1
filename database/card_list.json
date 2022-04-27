@@ -1248,5 +1248,19 @@
       "AbilityLacerate"
     ],
     "rarity": "COMMON"
+  },
+  "96": {
+    "name": "River Weaver",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityTrickledown"
+    ],
+    "rarity": "COMMON"
   }
 }

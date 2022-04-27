@@ -14,6 +14,7 @@ var fadingScene = preload("res://Scenes/UI/FadingNode.tscn")
 
 var cardDists = 16
 
+var delayedAbilityCards : Dictionary
 var creatures : Dictionary
 var decks : Dictionary
 var graves : Dictionary
@@ -144,10 +145,19 @@ func _ready():
 	
 	players.append(Player.new($HealthNode, $ArmourNode))
 	creatures[players[0].UUID] = []
+	var dc = ListOfCards.getCard(0)
+	dc.playerID = players[0].UUID
+	dc.ownerID = players[0].UUID
+	delayedAbilityCards[players[0].UUID] = dc
+	
 	players.append(Player.new($HealthNode2, $ArmourNode2))
 	players[1].isOpponent = true
 	players[1].isPractice = Settings.gameMode == Settings.GAME_MODE.PRACTICE
 	creatures[players[1].UUID] = []
+	dc = ListOfCards.getCard(0)
+	dc.playerID = players[1].UUID
+	dc.ownerID = players[1].UUID
+	delayedAbilityCards[players[1].UUID] = dc
 	
 	initZones()
 	initHands()
@@ -249,7 +259,6 @@ func onMulliganButtonPressed():
 			
 			Server.sendDeck(Server.opponentID)
 			
-			card_A_Holder.rect_position.y = oldHandPos
 			players[0].hand.drawHand()
 			mulliganDone = true
 			
@@ -261,6 +270,7 @@ func onMulliganButtonPressed():
 				players[0].hand.slots.remove(0)
 			Server.requestMulligan(Server.opponentID)
 		
+		card_A_Holder.rect_position.y = oldHandPos
 		$KeepButton.visible = false
 		$MulliganButton.visible = false
 		Server.mulliganDone(Server.opponentID)
@@ -613,6 +623,7 @@ func _physics_process(delta):
 					isFusingToHand = false
 					cardNodesFusing[0].queue_free()
 					cardNodesFusing.clear()
+					checkState()
 				else:
 					fuseReturnTimer += delta
 					cardNodesFusing[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
@@ -638,8 +649,9 @@ func _physics_process(delta):
 								if c != cardNode.card:
 									c.onOtherEnterFromFusion(fuseEndSlot)
 							cardNode.card.onEnterFromFusion(fuseEndSlot)
+						
+						checkState()
 					
-					checkState()
 					
 	if millQueue.size() > 0:
 		if millWaitTimer == 0:
@@ -1543,7 +1555,9 @@ func getAllCards() -> Array:
 			cards.append(cn.card)
 		for c in graveCards[p.UUID]:
 			cards.append(c)
-	
+		
+		cards.append(delayedAbilityCards[p.UUID])
+		
 	cards.invert()
 	return cards
 
@@ -1577,11 +1591,13 @@ func nextTurn():
 		selectedCard = null
 		
 	checkState()
-		
+	
+	
 	######################	ON END OF TURN EFFECTS
 	for c in getAllCards():
 		c.onEndOfTurn()
 	######################
+	
 	
 	while abilityStack.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
@@ -1596,11 +1612,22 @@ func nextTurn():
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
 		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
-		
+	
+	
 	######################	ON START OF TURN EFFECTS
 	for c in getAllCards():
 		c.onStartOfTurn()
+	
+	
 	######################
+
+func addCardsPerTurn(inc : int):
+	cardsPerTurn += inc
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+	else:
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+	
 
 func checkState():
 	var boardState = []

@@ -646,7 +646,6 @@ remote func receiveSendMulliganDeck(order : Array):
 	board.players[0].deck.setCards(cards, board.players[0].UUID)
 	board.players[0].hand.drawHand()
 	board.mulliganDone = true
-	board.handMoving = true
 
 ####################################################################
 
