@@ -1251,7 +1251,7 @@
   },
   "96": {
     "name": "River Weaver",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_RIVER_WEAVER.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
