@@ -1026,9 +1026,9 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = $GraveHolder/GraveHolder_B
 		CardSlot.ZONES.GRAVE_CARD:
 			if playerIndex == 0:
-				parent = $GraveDisplay_B
-			else:
 				parent = $GraveDisplay_A
+			else:
+				parent = $GraveDisplay_B
 	#	yield(get_tree().create_timer(0.02), "timeout")
 	
 	if parent != null:

@@ -24,7 +24,7 @@ func onEffect(card):
 	
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			p.hand.addCardToHand([cardNew, true, false])
+			p.hand.addCardToHand([cardNew, true, true])
 			break
 
 func genDescription(subCount = 0) -> String:

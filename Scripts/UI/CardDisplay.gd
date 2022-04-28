@@ -99,6 +99,7 @@ func addCard(card : Card) -> CardNode:
 
 func addCardNode(cardNode : CardNode, moveIntoDisplay = false) -> CardNode:
 	var cardSlot = cardSlotScene.instance()
+	cardSlot.isOpponent = isOpponent
 	cardSlot.currentZone = currentZone
 	var lastPos = null
 	if cardNode.is_inside_tree():
@@ -235,6 +236,7 @@ func _physics_process(delta):
 		
 		for i in range(indexes.size()):
 			nodes[indexes[i]].z_index = i + z_index
+			slots[indexes[i]].z_index = i + z_index
 
 func onSlotEnter(slot : CardSlot):
 	get_parent().onSlotEnter(slot)

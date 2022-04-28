@@ -46,6 +46,10 @@ func _ready():
 				board.onSlotBeingClicked(self, event.button_index)
 	"""
 
+func shownToOpponent():
+	if not isOpponent and currentZone == ZONES.HAND:
+		$EyeSprite.visible = true
+
 func mouseEnter():
 	if not disabled:
 		if get_parent() is cardDisplay:

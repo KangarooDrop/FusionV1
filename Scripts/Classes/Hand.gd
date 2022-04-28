@@ -41,6 +41,7 @@ func reveal():
 	for c in nodes:
 		if not c.getCardVisible():
 			c.flip()
+		c.slot.shownToOpponent()
 
 func _physics_process(delta):
 	if discardQueue.size() > 0:
@@ -95,6 +96,9 @@ func _physics_process(delta):
 			
 			slotInst.cardNode = cardInst
 			slotInst.cardNode.slot = slotInst
+			
+			if drawQueue[0][2]:
+				slotInst.shownToOpponent()
 			
 			if drawQueue[0][1]:
 				cardInst.global_position = slotInst.global_position
