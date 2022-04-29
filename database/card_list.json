@@ -801,7 +801,7 @@
   },
   "64": {
     "name": "Chupacabra",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_CHUPACABRA.png",
     "power": 3,
     "toughness": 3,
     "creature_type": [

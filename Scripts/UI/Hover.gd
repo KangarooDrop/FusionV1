@@ -79,8 +79,9 @@ func handle(meta : String):
 		hoverInst.z_index = z_index + 1
 		get_parent().add_child(hoverInst)
 		hoverInst.flipped = flipped
+		yield(get_tree(), "idle_frame")
 		hoverInst.setText(ability.genDescription())
-		hoverInst.global_position = get_global_mouse_position() + Vector2(3, 0) * (1 if flipped else -1)# * Vector2(0, hoverInst.get_node("HoverBack").rect_size.y / 2)
+		hoverInst.global_position = get_global_mouse_position() + (Vector2(3, 0) + Vector2(hoverInst.get_node("HoverBack").rect_size.x / 2, 0)) * (1 if flipped else -1) + Vector2(0, -hoverInst.get_node("HoverBack").rect_size.y / 4)
 		
 		spawnedWindows.append(hoverInst)
 		hoverInst.parentWindow = self

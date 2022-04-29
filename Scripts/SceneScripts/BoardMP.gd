@@ -1251,6 +1251,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					var cardList = []
 						
 					for c in cardsHolding:
+						if hoveringWindowSlot == c:
+							if hoveringWindow.close(true):
+								hoveringWindowSlot = null
 						cardList.append(c.cardNode.card)
 						
 					var cost = 0
