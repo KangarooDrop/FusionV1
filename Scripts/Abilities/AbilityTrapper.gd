@@ -1,8 +1,8 @@
 extends Ability
 
-class_name AbilityShrapnel
+class_name AbilityTrapper
 
-func _init(card : Card).("Shrapnel", card, Color.gray, false,Vector2(0, 64)):
+func _init(card : Card).("Trapper", card, Color.gray, false, Vector2(0, 64)):
 	pass
 
 func onKill(slot):

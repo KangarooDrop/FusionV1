@@ -34,6 +34,9 @@ margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
 mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="StartButton" type="Button" parent="Lobby"]
 anchor_left = 0.5
@@ -382,6 +385,7 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
 [node name="LoadingWindow" parent="." instance=ExtResource( 8 )]
+visible = false
 
 [node name="LobbySettings" parent="." instance=ExtResource( 10 )]
 visible = false

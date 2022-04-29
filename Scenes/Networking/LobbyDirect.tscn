@@ -379,6 +379,7 @@ text = "Back"
 visible = false
 
 [node name="LoadingWindow" parent="." instance=ExtResource( 9 )]
+visible = false
 
 [node name="OpponentList" parent="." instance=ExtResource( 10 )]
 visible = false

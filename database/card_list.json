@@ -7,7 +7,7 @@
     "creature_type": [
       1
     ],
-    "tier": 1,
+    "tier": 0,
     "rarity": "COMMON"
   },
   "1": {
@@ -1068,7 +1068,7 @@
   },
   "83": {
     "name": "Death Cable",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_DEATH_CABLE.png",
     "power": 0,
     "toughness": 2,
     "creature_type": [
@@ -1082,11 +1082,11 @@
   },
   "84": {
     "name": "Ooze",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_OOZE.png",
     "power": 0,
     "toughness": 0,
     "creature_type": [
-      4, 7
+      1
     ],
     "tier": 0,
     "abilities": [
@@ -1096,7 +1096,7 @@
   },
   "85": {
     "name": "Fledgling Conjurer",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_CONJURER_2.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -1109,10 +1109,10 @@
     "rarity": "COMMON"
   },
   "86": {
-    "name": "Lurker",
-    "tex": "res://Art/portraits/card_WIP.png",
-    "power": 1,
-    "toughness": 1,
+    "name": "Primordial Ooze",
+    "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
+    "power": 2,
+    "toughness": 2,
     "creature_type": [
       1
     ],
@@ -1138,7 +1138,7 @@
   },
   "88": {
     "name": "Trampling Wildebeest",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_WILDEBEEST.png",
     "power": 1,
     "toughness": 2,
     "creature_type": [
@@ -1151,8 +1151,8 @@
     "rarity": "COMMON"
   },
   "89": {
-    "name": "Wolf",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Riotus Vines",
+    "tex": "res://Art/portraits/card_VINES.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -1160,13 +1160,13 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityPackTactics"
+      "AbilityOvergrowth"
     ],
     "rarity": "COMMON"
   },
   "90": {
     "name": "Sand Shifter",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_SAND_SHIFTER.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -1194,7 +1194,7 @@
   },
   "92": {
     "name": "Centurion",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_CENTURION.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
@@ -1221,8 +1221,8 @@
     "rarity": "COMMON"
   },
   "94": {
-    "name": "Flak Cannon",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Trapper Engine",
+    "tex": "res://Art/portraits/card_TRAPPER_ENGINE.png",
     "power": 3,
     "toughness": 2,
     "creature_type": [
@@ -1230,13 +1230,13 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityShrapnel"
+      "AbilityTrapper"
     ],
     "rarity": "COMMON"
   },
   "95": {
-    "name": "Caltrops",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Trap",
+    "tex": "res://Art/portraits/card_TRAP.png",
     "power": 0,
     "toughness": 1,
     "creature_type": [

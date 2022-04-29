@@ -11,15 +11,12 @@ func onFusion(card):
 		onEffect(card)
 
 func onEffect(card):
-	var cardNew = ListOfCards.getCard(card.UUID)
-	cardNew.abilities.clear()
+	var cardNew = card.clone()
 	cardNew.power = 1
 	cardNew.toughness = 1
 	
-	for abl in card.abilities + card.removedAbilities:
-		if not abl is get_script():
-			cardNew.addAbility(abl.get_script().new(cardNew).setCount(abl.count))
-		elif card.abilities.has(abl):
+	for abl in card.abilities:
+		if abl is get_script():
 			card.removeAbility(abl)
 	
 	for p in NodeLoc.getBoard().players:

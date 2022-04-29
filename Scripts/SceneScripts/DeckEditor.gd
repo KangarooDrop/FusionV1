@@ -721,7 +721,8 @@ func _input(event):
 						if is_instance_valid(infoWindow) and infoWindow.spawnedWindows.size() > 0:
 							infoWindow.close()
 						else:
-							infoWindow.close(true)
+							if is_instance_valid(infoWindow):
+								infoWindow.close(true)
 							slotReturning = slotViewing
 							slotViewing.cardNode.z_index -= 1
 							slotViewing = null

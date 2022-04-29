@@ -49,7 +49,7 @@ func draw(count : int) -> Array:
 			pass
 	return c
 
-func tutor(cardID : int) -> Card:
+func tutorByID(cardID : int) -> Card:
 	var indexes = []
 	for i in range(cards.size()):
 		if cards[i].UUID == cardID:
@@ -63,6 +63,43 @@ func tutor(cardID : int) -> Card:
 		cards.remove(ind)
 	
 	return card
+
+func tutorByType(creatureTypes : Array, requireAll : bool = false) -> Card:
+	var indexes = []
+	for i in range(cards.size()):
+		if requireAll:
+			if cards[i].createType == creatureTypes:
+				indexes.append(i)
+		else:
+			for c in creatureTypes:
+				if cards[i].has(c):
+					indexes.append(i)
+					break
+	
+	var card = null
+	
+	if indexes.size() > 0:
+		var ind = indexes[randi() % indexes.size()]
+		card = cards[ind]
+		cards.remove(ind)
+	
+	return card
+
+func tutorByAbility(ability) -> Card:
+	var indexes = []
+	for i in range(cards.size()):
+		if ListOfCards.hasAbility(cards[i], ability):
+			indexes.append(i)
+	
+	var card = null
+	
+	if indexes.size() > 0:
+		var ind = indexes[randi() % indexes.size()]
+		card = cards[ind]
+		cards.remove(ind)
+	
+	return card
+	
 
 func serialize() -> Array:
 	var data = []

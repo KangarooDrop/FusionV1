@@ -4,7 +4,7 @@ class_name Card
 var cardNodeScene = load("res://Scenes/CardNode.tscn")
 
 enum CREATURE_TYPE {None, Null, Fire, Water, Earth, Beast, Mech, Necro}
-enum RARITY {NONE, COMMON, LEGENDARY, VANGUARD, BASIC}
+enum RARITY {NONE, BASIC, COMMON, LEGENDARY, VANGUARD}
 
 var UUID = -1
 
@@ -318,6 +318,7 @@ func clone() -> Card:
 	c.toughness = toughness
 	c.creatureType = creatureType
 	c.maxToughness = maxToughness
+	c.rarity = rarity
 	for abl in abilities:
 		c.addAbility(abl.clone(c))
 	for abl in removedAbilities:

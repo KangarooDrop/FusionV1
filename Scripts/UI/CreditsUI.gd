@@ -9,7 +9,9 @@ var speed = 20
 var waitTimer = 0
 var waitMaxTime = 3
 
-var distPerTick = 10
+var distPerTick = 25
+var distToMove = 0
+var moveRate = 10
 
 func show():
 	.show()
@@ -34,6 +36,11 @@ func _physics_process(delta):
 			if rect_position.y >= 0:
 				panning = PANNING_DIR.UP
 				waitTimer = 0
+	
+	if distToMove != 0:
+		var dist = distToMove * min(delta * moveRate, 1)
+		rect_position.y = min(max(rect_position.y + dist, -totalDelta), 0)
+		distToMove -= dist
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -49,7 +56,7 @@ func _input(event):
 				shift(distPerTick)
 
 func shift(dist):
-	rect_position.y = min(max(rect_position.y + dist, -totalDelta), 0)
+	distToMove += dist
 
 func _on_CreditsLabel_meta_clicked(meta):
 	OS.shell_open(meta)

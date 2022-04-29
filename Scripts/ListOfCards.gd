@@ -19,7 +19,7 @@ var creatureTypeImageList = [null,
 
 var fusionList := \
 [
-		0,
+		86,
 		
 		
 		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
@@ -178,6 +178,8 @@ func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
 	
 	cardNew.cardNode = cardNode
+	
+	cardNew.rarity = max(cardA.rarity, cardB.rarity)
 	
 	cardA.onFusion(cardNew)
 	cardB.onFusion(cardNew)
