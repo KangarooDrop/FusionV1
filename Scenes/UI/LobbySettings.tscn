@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/UI/LobbySettings.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=5]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=6]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=7]
+[ext_resource path="res://Art/UI/drop_down.png" type="Texture" id=8]
 
 [sub_resource type="Theme" id=1]
 PopupMenu/colors/font_color = Color( 0, 0, 0, 1 )
@@ -102,9 +103,10 @@ text = "Game Type: "
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/GameTypeHbox"]
 margin_left = 112.0
-margin_right = 130.0
+margin_right = 134.0
 margin_bottom = 23.0
 theme = SubResource( 1 )
+custom_icons/arrow = ExtResource( 8 )
 custom_styles/hover = ExtResource( 6 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 7 )
@@ -129,9 +131,10 @@ text = "Match Type: "
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/MatchTypeHbox"]
 margin_left = 122.0
-margin_right = 140.0
+margin_right = 144.0
 margin_bottom = 23.0
 theme = SubResource( 1 )
+custom_icons/arrow = ExtResource( 8 )
 custom_styles/hover = ExtResource( 6 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 7 )
@@ -156,9 +159,10 @@ text = "Draft Type: "
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/DraftTypeHbox"]
 margin_left = 116.0
-margin_right = 134.0
+margin_right = 138.0
 margin_bottom = 23.0
 theme = SubResource( 1 )
+custom_icons/arrow = ExtResource( 8 )
 custom_styles/hover = ExtResource( 6 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 7 )

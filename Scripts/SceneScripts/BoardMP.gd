@@ -1495,7 +1495,7 @@ func isMyTurn() -> bool:
 
 func passMyTurn():
 	if isMyTurn():
-		if not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible:
+		if (not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible) or (activePlayer == 0 and timers[players[0].UUID].turnTimer <= 0):
 			if not gameOver and gameStarted:
 				var waiting = true
 				while waiting:
