@@ -379,7 +379,8 @@ func setDeckData(data, order):
 			print("Error loading test1.tscn. Error Code = " + str(sceneError))
 	
 	print("Send: Game start signal")
-	Server.onGameStart(Server.opponentID)
+	if not deckDataSet:
+		Server.onGameStart(Server.opponentID)
 	deckDataSet = true
 
 func verifyDeckData(data, order) -> bool:

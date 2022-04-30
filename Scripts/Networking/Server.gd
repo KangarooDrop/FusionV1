@@ -410,7 +410,7 @@ func setUsername(player_id : int, username : String):
 remote func serverSetUsername(username : String):
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 1")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -427,7 +427,7 @@ remote func sendDeck(player_id : int):
 remote func serverSendDeck(data, order):
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 2")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -446,7 +446,7 @@ remote func serverOnGameStart():
 	
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or not board is BoardMP or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 3")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -555,7 +555,7 @@ remote func serverSetActivePlayer(index : int):
 	var player_id = get_tree().get_rpc_sender_id()
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 4")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -589,7 +589,7 @@ func setGameSeed(player_id : int, gameSeed : int):
 remote func receiveSetGameSeed(gameSeed):
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 5")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -603,7 +603,7 @@ func mulliganDone(player_id : int):
 remote func receiveMulliganDone():
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 6")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -617,7 +617,7 @@ func requestMulligan(player_id : int):
 remote func receiveRequestMulligan():
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 7")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -637,7 +637,7 @@ remote func receiveSendMulliganDeck(order : Array):
 		
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 8")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
@@ -849,7 +849,7 @@ remote func serverFetchVersion():
 remote func returnVersion(version):
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active")
+		print("Board not ready yet, waiting; active 9")
 		yield(get_tree().create_timer(0.1), "timeout")
 		board = get_node_or_null("/root/main/CenterControl/Board")
 		if not Server.online:
