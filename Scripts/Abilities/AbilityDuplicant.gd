@@ -19,6 +19,12 @@ func onEffect(card):
 		if abl is get_script():
 			card.removeAbility(abl)
 	
+	for abl in cardNew.abilities:
+		if abl is get_script():
+			cardNew.abilities.erase(abl)
+		elif abl is AbilityETB:
+			abl.timesApplied = 0
+	
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
 			p.hand.addCardToHand([cardNew, true, true])

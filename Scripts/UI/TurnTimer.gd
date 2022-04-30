@@ -99,8 +99,8 @@ func intToTime(num : int) -> String:
 	var minutesString = str(minutes)
 	var secondsString = str(seconds)
 	
-	if minutes > 0 and minutesString.length() == 1:
-		minutesString = "0" + minutesString
+#	if minutes > 0 and minutesString.length() == 1:
+#		minutesString = "0" + minutesString
 	if secondsString.length() == 1:
 		secondsString = "0" + secondsString
 	

@@ -1204,12 +1204,12 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 									slot.position.y -= cardDists
 									slot.cardNode.position.y = slot.position.y
 								else:
-									if cardsShaking.has(slot):
+									if cardsShaking.has(slot) and not fromServer:
 										MessageManager.notify("This card cannot be played")
 									cardsShaking[slot] = shakeMaxTime
 									return false
 							else:
-								if cardsShaking.has(slot):
+								if cardsShaking.has(slot) and not fromServer:
 									MessageManager.notify("You may only play " + str(cardsPerTurn) + " per turn")
 								cardsShaking[slot] = shakeMaxTime
 								return false
@@ -1228,7 +1228,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						return false
 					
 					if is_instance_valid(slot.cardNode) and not slot.cardNode.card.canFuseThisTurn:
-						if cardsShaking.has(slot):
+						if cardsShaking.has(slot) and not fromServer:
 							MessageManager.notify("This creature cannot be fused this turn")
 						cardsShaking[slot] = shakeMaxTime
 						return false
@@ -1240,13 +1240,13 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						cardsToCheck.append(s.cardNode.card)
 					if not ListOfCards.canFuseCards(cardsToCheck):
 						if is_instance_valid(slot.cardNode):
-							if cardsShaking.has(slot):
+							if cardsShaking.has(slot) and not fromServer:
 								MessageManager.notify("A creature can have at most two creature types")
 							cardsShaking[slot] = shakeMaxTime
 						else:
 							var shownMessage = false
 							for s in cardsHolding:
-								if cardsShaking.has(s) and not shownMessage:
+								if cardsShaking.has(s) and not shownMessage and not fromServer:
 									shownMessage = true
 									MessageManager.notify("A creature can have at most two creature types")
 								cardsShaking[s] = shakeMaxTime
@@ -1315,7 +1315,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 								selectedCard = slot
 								selectedCard.cardNode.select()
 							else:
-								if cardsShaking.has(slot):
+								if cardsShaking.has(slot) and not fromServer:
 									MessageManager.notify("This creature cannot attack")
 								cardsShaking[slot] = shakeMaxTime
 								return false
@@ -1345,7 +1345,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 									highlightedSlots.clear()
 			
 							else:
-								if cardsShaking.has(slot):
+								if cardsShaking.has(slot) and not fromServer:
 									MessageManager.notify("A creature with taunt must be attacked first")
 								cardsShaking[slot] = shakeMaxTime
 								return false
@@ -1759,12 +1759,13 @@ func onLoss(player : Player):
 		deadPlayers.append(player)
 
 func startTimer(playerNum):
-	timers[players[playerNum].UUID].startTurnTimer()
-	
-	if playerNum == 0:
-		Server.sendStartTimer(Server.opponentID)
-	
-	timerPlayer = playerNum
+	if not gameOver:
+		timers[players[playerNum].UUID].startTurnTimer()
+		
+		if playerNum == 0:
+			Server.sendStartTimer(Server.opponentID)
+		
+		timerPlayer = playerNum
 
 func endTimer(playerNum):
 	timers[players[playerNum].UUID].stopTurnTimer()
@@ -1775,10 +1776,11 @@ func endTimer(playerNum):
 	timerPlayer = -1
 
 func resetTimer(playerNum):
-	timers[players[playerNum].UUID].resetTurnTimer()
-	
-	if playerNum == 0:
-		Server.sendResetTimer(Server.opponentID)
+	if not gameOver:
+		timers[players[playerNum].UUID].resetTurnTimer()
+		
+		if playerNum == 0:
+			Server.sendResetTimer(Server.opponentID)
 
 func onTurnTimerEnd():
 	passMyTurn()

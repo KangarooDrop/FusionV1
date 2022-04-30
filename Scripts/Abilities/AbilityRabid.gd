@@ -22,4 +22,4 @@ func checkWaiting() -> bool:
 	return true
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When another creature is played, this creature automatically attacks it"
+	return .genDescription() + "When another creature is played, this creature automatically attacks it if able"
