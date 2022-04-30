@@ -512,17 +512,16 @@ __meta__ = {
 }
 
 [node name="SortLabel" type="Label" parent="CenterControl/SortNode/HBoxContainer"]
-margin_left = 3.0
 margin_top = 6.0
-margin_right = 111.0
+margin_right = 108.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Sort Order: "
 
 [node name="SortButton" type="OptionButton" parent="CenterControl/SortNode/HBoxContainer"]
-margin_left = 115.0
-margin_right = 255.0
+margin_left = 112.0
+margin_right = 252.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 140, 32 )
 theme = SubResource( 11 )

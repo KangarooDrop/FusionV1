@@ -1,6 +1,5 @@
 extends Node2D
 
-var fontTRES = preload("res://Fonts/FontNormal.tres")
 var deckDisplayData = preload("res://Scenes/UI/DeckDisplayDataX.tscn")
 var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
@@ -47,15 +46,19 @@ func _physics_process(delta):
 
 func checkMove():
 	var pos = buttonDownOn.rect_position
+	var extents = buttonDownOn.get_node("Area2D/CollisionShape2D").shape.extents
 	var total = 0
 	var index = 0
+	var dataIndex = 0
+	var lastIndex = data.find(buttonDownOn)
 	var children = $Holder.get_children()
 	for i in range(children.size()):
-		if total >= pos.y and (index > 0) and children[i].visible:
+		if total >= pos.y - extents.y*2 and (index > 0) and children[i].visible:
 			if index == 1 and $Holder.get_child(1) is DeckDisplayDataX:
 				if buttonDownOn.card.rarity == Card.RARITY.VANGUARD:
 					$Holder.move_child($Holder.get_child(1), 3)
 					$Holder.move_child(buttonDownOn, 1)
+					swapData(dataIndex, lastIndex)
 					centerChildren()
 					break
 			else:
@@ -64,19 +67,28 @@ func checkMove():
 					indexCheck = 2
 				if index != indexCheck or buttonDownOn.card.rarity == Card.RARITY.VANGUARD:
 					$Holder.move_child(buttonDownOn, index)
+					swapData(dataIndex, lastIndex)
 					centerChildren()
 					break
 		if children[i] != label and children[i] != vanguardLabel:
 			total += children[i].get_node("NinePatchRect").rect_size.y + margin
 			index += 1
+			dataIndex += 1
 		else:
 			total += children[i].rect_size.y + margin
 			index += 1
 		
 		if i == children.size() - 1:
 			$Holder.move_child(buttonDownOn, index)
+			swapData(dataIndex, lastIndex)
 			centerChildren()
 			break
+
+func swapData(index1 : int, index2 : int):
+	if index1 >= 0 and index2 >= 0 and index1 < data.size() and index2 < data.size() and index1 != index2:
+		var d1 = data[index1]
+		data[index1] = data[index2]
+		data[index2] = d1
 
 func clearData():
 	while(data.size() > 0):
