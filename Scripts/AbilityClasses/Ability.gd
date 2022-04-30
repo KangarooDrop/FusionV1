@@ -119,13 +119,13 @@ func checkWaiting() -> bool:
 func combine(abl : Ability):
 	setCount(count + abl.count)
 
-static func discardSelf(card):
+static func discardSelf(card, addCardToGrave = true):
 	for i in range(NodeLoc.getBoard().players.size()):
 		var p = NodeLoc.getBoard().players[i]
 		if p.UUID == card.playerID:
 			for j in range(p.hand.nodes.size()):
 				if p.hand.nodes[j].card == card:
-					p.hand.discardIndex(j)
+					p.hand.discardIndex(j, addCardToGrave)
 					break
 			break
 

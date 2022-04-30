@@ -763,9 +763,12 @@ func onConcede(player_id):
 
 remote func receiveOnConcede():
 	var board = NodeLoc.getBoard()
-	board.playerRestart = true
-	board.opponentRestart = true
-	Tournament.addWin()
+	board.deadPlayers.append(board.players[1])
+	
+	if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
+		board.playerRestart = true
+		board.opponentRestart = true
+		Tournament.addWin()
 
 func setTournamentWinner(player_id):
 	receiveSetTournamentWinner(player_id)
@@ -853,3 +856,31 @@ remote func returnVersion(version):
 			return
 	board.compareVersion(version)
 
+
+func sendStartTimer(player_id : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendStartTimer")
+
+remote func receiveSendStartTimer():
+	if get_tree().get_rpc_sender_id() == opponentID:
+		var board = NodeLoc.getBoard()
+		board.startTimer(1)
+
+func sendEndTimer(player_id : int, gameTimer : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendEndTimer", gameTimer)
+
+remote func receiveSendEndTimer(gameTimer):
+	if get_tree().get_rpc_sender_id() == opponentID:
+		var board = NodeLoc.getBoard()
+		board.endTimer(1)
+		board.timers[board.players[1].UUID].gameTimer = gameTimer
+
+func sendResetTimer(player_id):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveSendResetTimer")
+
+remote func receiveSendResetTimer():
+	if get_tree().get_rpc_sender_id() == opponentID:
+		var board = NodeLoc.getBoard()
+		board.resetTimer(1)

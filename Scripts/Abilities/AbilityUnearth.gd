@@ -19,6 +19,7 @@ func slotClicked(slot : CardSlot):
 		for p in board.players:
 			if board.graveCards[p.UUID].size() > 0:
 				slot = board.graveCards[p.UUID][randi() % board.graveCards[p.UUID].size()].cardNode.slot
+				Server.slotClicked(Server.opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), 1)
 				break
 	
 	if slot.currentZone == CardSlot.ZONES.GRAVE_CARD:

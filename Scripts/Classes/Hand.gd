@@ -47,7 +47,7 @@ func _physics_process(delta):
 	if discardQueue.size() > 0:
 		var toRemove = []
 		for i in range(discardQueue.size()):
-			discardQueue[i].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i].global_position.y)), discardTimers[i] / discardMaxTime)
+			discardQueue[i][0].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i][0].global_position.y)), discardTimers[i] / discardMaxTime)
 			discardTimers[i] += delta
 			if discardTimers[i] >= discardMaxTime:
 				toRemove.append(i)
@@ -56,13 +56,14 @@ func _physics_process(delta):
 			for i in range(toRemove.size()):
 				var index = toRemove[i]
 				
-				nodes.erase(discardQueue[index].cardNode)
-				slots.erase(discardQueue[index])
+				nodes.erase(discardQueue[index][0].cardNode)
+				slots.erase(discardQueue[index][0])
 				
-				NodeLoc.getBoard().addCardToGrave(player.UUID, discardQueue[index].cardNode.card)
+				if discardQueue[index][1]:
+					NodeLoc.getBoard().addCardToGrave(player.UUID, discardQueue[index][0].cardNode.card)
 				
-				discardQueue[index].cardNode.queue_free()
-				discardQueue[index].queue_free()
+				discardQueue[index][0].cardNode.queue_free()
+				discardQueue[index][0].queue_free()
 				
 				discardQueue.remove(index)
 				discardTimers.remove(index)
@@ -146,12 +147,12 @@ func drawCard():
 	#	addCardToHand([ListOfCards.getCard(0), true, true])
 
 #[Card, drawFromDeck, takeDamage]
-func discardIndex(index : int):
+func discardIndex(index : int, addCardToGrave=true):
 	if index >= 0 and index < slots.size():
 		slots[index].disabled = true
 		
 		slots[index].cardNode.setCardVisible(true)
-		discardQueue.append(slots[index])
+		discardQueue.append([slots[index], addCardToGrave])
 		discardPositions.append(slots[index].position)
 		discardTimers.append(0)
 

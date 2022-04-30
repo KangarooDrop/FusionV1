@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/BoardMP.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Classes/Hand.gd" type="Script" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=12]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=13]
 [ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Scenes/UI/TurnTimer.tscn" type="PackedScene" id=15]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -192,7 +193,7 @@ script = ExtResource( 6 )
 [node name="FadingNode" parent="TurnIndicator" instance=ExtResource( 7 )]
 
 [node name="TI" type="Node2D" parent="."]
-position = Vector2( -475, -39.5 )
+position = Vector2( -475, -32 )
 
 [node name="Label" type="Label" parent="TI"]
 anchor_left = 0.5
@@ -308,6 +309,18 @@ __meta__ = {
 
 [node name="LoadingWindow" parent="." instance=ExtResource( 14 )]
 visible = false
+
+[node name="TurnTimer_A" parent="." instance=ExtResource( 15 )]
+margin_left = -525.0
+margin_top = 125.0
+margin_right = -525.0
+margin_bottom = 125.0
+
+[node name="TurnTimer_B" parent="." instance=ExtResource( 15 )]
+margin_left = -525.0
+margin_top = -125.0
+margin_right = -525.0
+margin_bottom = -125.0
 
 [connection signal="pressed" from="KeepButton" to="." method="onKeepButtonPressed"]
 [connection signal="pressed" from="MulliganButton" to="." method="onMulliganButtonPressed"]

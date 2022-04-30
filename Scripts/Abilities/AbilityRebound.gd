@@ -35,6 +35,7 @@ func slotClicked(slot : CardSlot):
 				if is_instance_valid(s.cardNode):
 					creatureSlots.append(s)
 		slot = creatureSlots[randi() % creatureSlots.size()]
+		Server.slotClicked(Server.opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), 1)
 	
 	if slot.currentZone == CardSlot.ZONES.CREATURE and is_instance_valid(slot.cardNode) and slot.cardNode.card != self.card:
 		slot.cardNode.select()

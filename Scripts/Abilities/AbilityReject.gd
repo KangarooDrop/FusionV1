@@ -15,6 +15,7 @@ func slotClicked(slot : CardSlot):
 		for p in NodeLoc.getBoard().players:
 			if p.UUID == card.playerID:
 				slot = p.hand.slots[randi() % p.hand.slots.size()]
+				Server.slotClicked(Server.opponentID, slot.isOpponent, slot.currentZone, slot.get_index(), 1)
 				break
 	
 	if slot.currentZone == CardSlot.ZONES.HAND and slot.playerID == card.playerID:

@@ -15,6 +15,8 @@ var fadingScene = preload("res://Scenes/UI/FadingNode.tscn")
 
 var cardDists = 16
 
+var timerPlayer : int = -1
+var timers : Dictionary
 var delayedAbilityCards : Dictionary
 var creatures : Dictionary
 var decks : Dictionary
@@ -117,7 +119,7 @@ func _ready():
 	
 	BackgroundFusion.stop()
 	MusicManager.playBoardMusic()
-
+	
 	Server.fetchVersion(Server.opponentID)
 	
 	setOwnUsername()
@@ -146,6 +148,9 @@ func _ready():
 	
 	players.append(Player.new($HealthNode, $ArmourNode))
 	creatures[players[0].UUID] = []
+	timers[players[0].UUID] = $TurnTimer_A
+	$TurnTimer_A.connect("onTurnTimerEnd", self, "onTurnTimerEnd")
+	$TurnTimer_A.connect("onGameTimerEnd", self, "onGameTimerEnd")
 	var dc = ListOfCards.getCard(0)
 	dc.playerID = players[0].UUID
 	dc.ownerID = players[0].UUID
@@ -155,6 +160,7 @@ func _ready():
 	players[1].isOpponent = true
 	players[1].isPractice = Settings.gameMode == Settings.GAME_MODE.PRACTICE
 	creatures[players[1].UUID] = []
+	timers[players[1].UUID] = $TurnTimer_B
 	dc = ListOfCards.getCard(0)
 	dc.playerID = players[1].UUID
 	dc.ownerID = players[1].UUID
@@ -460,10 +466,13 @@ func onRestartPressed():
 	opponentRestart = true
 
 func onConcede():
-	Tournament.addLoss()
-	if (Tournament.currentLosses * 2) / Tournament.gamesPerMatch <= 0:
-		playerRestart = true
-		opponentRestart = true
+	if Settings.gameMode == Settings.GAME_MODE.TOURNAMENT:
+		Tournament.addLoss()
+		if (Tournament.currentLosses * 2) / Tournament.gamesPerMatch <= 0:
+			playerRestart = true
+			opponentRestart = true
+	
+	gameOver = true
 	Server.onConcede(Server.opponentID)
 
 func startGame():
@@ -478,6 +487,9 @@ func startGame():
 	dataLog.append("GAME_START")
 	
 	setTurnText()
+	
+	if activePlayer == 0 or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		startTimer(activePlayer)
 
 func setTurnText():
 	if activePlayer == 0:
@@ -504,6 +516,10 @@ func _physics_process(delta):
 	
 	if not gameOver and deadPlayers.size() > 0:
 		gameOver = true
+		
+		for k in timers.keys():
+			timers[k].stopTurnTimer()
+		
 		var out
 		if deadPlayers.size() == 1:
 			if deadPlayers[0] == players[0]:
@@ -745,7 +761,7 @@ func _physics_process(delta):
 			serverCheckTimer = 0
 	
 	if gameStarted:
-		if selectingSlot and selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		if selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnTimer <= 0)):
 			selectingSource.slotClicked(null)
 		
 		if not selectingSlot and cardNodesFusing.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
@@ -1343,7 +1359,7 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	
 	return true
 
-func fuseToSlot(slot : CardSlot, cards : Array):
+func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer].UUID):
 	isEntering = not is_instance_valid(slot.cardNode)
 	
 	if not isEntering:
@@ -1379,7 +1395,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 			card_B_Holder.nodes.erase(cn)
 		
 		for i in range(0 if isEntering else 1, cardNodesFusing.size()):
-			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
+			addCardToGrave(graveOwner, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
 		
 		fuseStartPos = cardNodesFusing[0].global_position
 		fuseEndSlot = slot
@@ -1390,7 +1406,7 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		fuseWaitTimer = 0
 	else:
 		for i in range(0 if isEntering else 1, cards.size()):
-			addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cards[i].UUID))
+			addCardToGrave(graveOwner, ListOfCards.getCard(cards[i].UUID))
 		
 		var newCard = ListOfCards.fuseCards(cards)
 		var cardPlacing = cardNode.instance()
@@ -1608,9 +1624,9 @@ func nextTurn():
 	if is_instance_valid(selectedCard):
 		selectedCard.cardNode.select()
 		selectedCard = null
-		
-	checkState()
 	
+	
+	checkState()
 	
 	######################	ON END OF TURN EFFECTS
 	for c in getAllCards():
@@ -1620,6 +1636,11 @@ func nextTurn():
 	
 	while abilityStack.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
+	
+	if activePlayer == 0 or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		endTimer(activePlayer)
+		resetTimer(activePlayer)
+	
 	
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
@@ -1637,8 +1658,14 @@ func nextTurn():
 	for c in getAllCards():
 		c.onStartOfTurn()
 	
-	
 	######################
+	
+	while abilityStack.size() > 0:
+		yield(get_tree().create_timer(0.1), "timeout")
+	
+	if activePlayer == 0 or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		startTimer(activePlayer)
+		resetTimer(activePlayer)
 
 func addCardsPerTurn(inc : int):
 	cardsPerTurn += inc
@@ -1701,6 +1728,13 @@ func getSlot(source, selectingUUID : int):
 	selectingSource = source
 	self.selectingUUID = selectingUUID
 	stackTimer = 0
+	
+	endTimer(timerPlayer)
+	
+	if players[0].UUID == selectingUUID:
+		startTimer(0)
+	elif players[1].UUID == selectingUUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		startTimer(1)
 
 func endGetSlot():
 	selectingSlot = false
@@ -1709,11 +1743,48 @@ func endGetSlot():
 	if abilityStack.size() > 0:
 		stackTimer = stackMaxTime
 	currentAbility = null
+	
+	if players[0].UUID == selectingUUID:
+		endTimer(0)
+	elif players[1].UUID == selectingUUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		endTimer(1)
+		
+	startTimer(activePlayer)
+	
 	checkState()
 
 func onLoss(player : Player):
 	if not gameOver and not deadPlayers.has(player):
 		deadPlayers.append(player)
+
+func startTimer(playerNum):
+	timers[players[playerNum].UUID].startTurnTimer()
+	
+	if playerNum == 0:
+		Server.sendStartTimer(Server.opponentID)
+	
+	timerPlayer = playerNum
+
+func endTimer(playerNum):
+	timers[players[playerNum].UUID].stopTurnTimer()
+	
+	if playerNum == 0:
+		Server.sendEndTimer(Server.opponentID, timers[players[0].UUID].gameTimer)
+	
+	timerPlayer = -1
+
+func resetTimer(playerNum):
+	timers[players[playerNum].UUID].resetTurnTimer()
+	
+	if playerNum == 0:
+		Server.sendResetTimer(Server.opponentID)
+
+func onTurnTimerEnd():
+	passMyTurn()
+
+func onGameTimerEnd():
+	onLoss(players[0])
+	Server.onConcede(Server.opponentID)
 
 func setOwnUsername():
 	print("Settings own username")
