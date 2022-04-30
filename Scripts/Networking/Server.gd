@@ -782,6 +782,8 @@ remote func receiveSetTournamentWinner(player_id):
 		onPlaying = true
 		Tournament.currentWins = 0
 		Tournament.currentLosses = 0
+		Tournament.lastGameLoss = false
+		Tournament.lastGameWin = false
 		print("Clearing tournament game data")
 		
 		if Tournament.getOpponent(player_id) == selfID:
