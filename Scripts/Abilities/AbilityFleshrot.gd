@@ -11,7 +11,7 @@ func onKilledBy(slot):
 	addToStack("onEffect", [slot.cardNode.card])
 
 static func onEffect(params):
-	params[0].toughness = -INF
+	params[0].isDying = true
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is killed in combat, the other creature dies as well"

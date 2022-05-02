@@ -18,4 +18,4 @@ func onAfterDamage(attacker, blocker):
 		card.power -= count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "While attacking another creature, this creature has +" + str(count) + " power"
+	return .genDescription() + "While fighting another creature, this creature has +" + str(count) + " power"

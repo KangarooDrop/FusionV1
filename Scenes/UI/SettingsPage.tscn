@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
+[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/UI/SettingsPage.gd" type="Script" id=2]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=4]
@@ -283,8 +284,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDisplay" type="Control" parent="."]
-visible = false
+[node name="FDCenter" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -293,77 +293,13 @@ margin_left = -20.0
 margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MouseDisable" type="ColorRect" parent="FileDisplay"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1024.0
-margin_top = -1024.0
-margin_right = 1024.0
-margin_bottom = 1024.0
-rect_min_size = Vector2( 2048, 2048 )
-color = Color( 0.313726, 0.0509804, 0.698039, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="NinePatchRect" parent="FileDisplay"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -150.0
-margin_top = -50.0
-margin_right = -14.0
-margin_bottom = 3.0
-texture = ExtResource( 4 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonHolder" type="VBoxContainer" parent="FileDisplay"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -160.0
-margin_top = -65.0
-margin_right = 120.0
-margin_bottom = 25.0
-custom_constants/separation = 8
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="FileDisplay/ButtonHolder"]
-margin_top = 19.0
-margin_right = 280.0
-margin_bottom = 38.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-align = 1
-
-[node name="BackButton" type="Button" parent="FileDisplay/ButtonHolder"]
-margin_top = 46.0
-margin_right = 280.0
-margin_bottom = 71.0
-custom_styles/hover = ExtResource( 7 )
-custom_styles/pressed = ExtResource( 6 )
-custom_styles/focus = ExtResource( 7 )
-custom_styles/disabled = ExtResource( 8 )
-custom_styles/normal = ExtResource( 8 )
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Back"
+[node name="FileDisplay" parent="FDCenter" instance=ExtResource( 1 )]
+visible = false
 
 [connection signal="value_changed" from="VBox/SoundSlider/HSlider" to="." method="onSoundVolumeChange"]
 [connection signal="value_changed" from="VBox/MusicSlider/HSlider" to="." method="onMusicVolumeChange"]
@@ -371,4 +307,3 @@ text = "Back"
 [connection signal="pressed" from="VBox/Shaders/SelectShaderButton" to="." method="shaderButtonPressed"]
 [connection signal="pressed" from="VBox/Shaders/ShaderFolderButton" to="." method="openShaderFolder"]
 [connection signal="pressed" from="VBox/BackButton" to="." method="onBackPressed"]
-[connection signal="pressed" from="FileDisplay/ButtonHolder/BackButton" to="." method="onShaderBackButtonPressed"]

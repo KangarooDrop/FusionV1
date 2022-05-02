@@ -14,4 +14,4 @@ static func onEffect(params):
 			p.addArmour(params[1])
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, gain " + str(count - subCount) + " " + str(TextArmor.new(null))
+	return .genDescription() + "When this creature is played, its controller gains " + str(count - subCount) + " " + str(TextArmor.new(null))

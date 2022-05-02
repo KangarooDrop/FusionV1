@@ -67,7 +67,7 @@ func slotClicked(slot : CardSlot):
 func genDescription(subCount = 0) -> String:
 	var s = ""
 	if count - subCount > 1:
-		s = "When this creature is played, choose " + str(count - subCount) + " other creatures and return them to their owners' hands"
+		s = "When this creature is played, choose " + str(count - subCount) + " other creatures and return them to their controllers' hands"
 	else:
-		s = "When this creature is played, choose another creature and return it to its owner's hand"
+		s = "When this creature is played, choose another creature and return it to its controller's hand"
 	return .genDescription() + s

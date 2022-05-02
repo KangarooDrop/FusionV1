@@ -21,7 +21,8 @@ func onEffect(params):
 			params[0].toughness += params[1].toughness
 			params[0].maxToughness += params[1].maxToughness
 			buffsAppliedVec.y += params[1].toughness
-		params[1].toughness = -INF
+		
+		params[1].isDying = true
 
 func clone(card):
 	var abl = .clone(card)

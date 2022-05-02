@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DeckEditor.gd" type="Script" id=1]
 [ext_resource path="res://Art/UI/un_check.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=8]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=9]
 [ext_resource path="res://Art/UI/drop_down.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=11]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -422,76 +423,8 @@ margin_bottom = 32.0
 custom_fonts/font = ExtResource( 5 )
 text = "Rarity"
 
-[node name="FileDisplay" type="Node2D" parent="CenterControl"]
+[node name="FileDisplay" parent="CenterControl" instance=ExtResource( 11 )]
 visible = false
-position = Vector2( 20, 20 )
-z_index = 11
-
-[node name="MouseDisable" type="ColorRect" parent="CenterControl/FileDisplay"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1024.0
-margin_top = -1024.0
-margin_right = 1024.0
-margin_bottom = 1024.0
-rect_min_size = Vector2( 2048, 2048 )
-color = Color( 0.313726, 0.0509804, 0.698039, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="NinePatchRect" parent="CenterControl/FileDisplay"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -150.0
-margin_top = -50.0
-margin_right = -14.0
-margin_bottom = 3.0
-texture = ExtResource( 3 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonHolder" type="VBoxContainer" parent="CenterControl/FileDisplay"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -140.0
-margin_top = -45.0
-margin_right = 140.0
-margin_bottom = 45.0
-custom_constants/separation = 8
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CenterControl/FileDisplay/ButtonHolder"]
-margin_top = 19.0
-margin_right = 280.0
-margin_bottom = 38.0
-custom_fonts/font = ExtResource( 5 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-align = 1
-
-[node name="BackButton" type="Button" parent="CenterControl/FileDisplay/ButtonHolder"]
-margin_top = 46.0
-margin_right = 280.0
-margin_bottom = 71.0
-custom_styles/hover = ExtResource( 8 )
-custom_styles/pressed = ExtResource( 7 )
-custom_styles/normal = ExtResource( 9 )
-custom_fonts/font = ExtResource( 5 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Back"
 
 [node name="SortNode" type="Node2D" parent="CenterControl"]
 position = Vector2( -96, -204 )
@@ -555,5 +488,4 @@ __meta__ = {
 [connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/PowerButton" to="." method="setSortOrder" binds= [ 1 ]]
 [connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/ToughnessButton" to="." method="setSortOrder" binds= [ 2 ]]
 [connection signal="pressed" from="CenterControl/SortButtons/HBoxContainer/RarityButton" to="." method="setSortOrder" binds= [ 3 ]]
-[connection signal="pressed" from="CenterControl/FileDisplay/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
 [connection signal="item_selected" from="CenterControl/SortNode/HBoxContainer/SortButton" to="." method="setSortOrder"]

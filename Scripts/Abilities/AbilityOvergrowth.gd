@@ -17,4 +17,4 @@ static func onEffect(params):
 				p.hand.addCardToHand([card, true, true])
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, draw another card with " + str(get_script().new(null)) + " from your deck"
+	return .genDescription() + "When this creature is played, its controller draws another card with " + str(get_script().new(null)) + " from their deck"

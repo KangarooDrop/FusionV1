@@ -13,6 +13,7 @@ export var deckMax = -1
 
 var parent
 
+onready var holder = $Holder
 onready var label = $Holder/Label
 onready var vanguardLabel = $Holder/VanguardLabel
 
@@ -28,9 +29,14 @@ var moveTimeMax = 0.2
 
 var margin = 4
 
+var canScroll = true
+export(int) var maxHeight = 455
+var currentHeight = 0
+
 func _ready():
 	setTotal(0)
 	centerChildren()
+	$ColorRect.rect_position.y = maxHeight
 
 func _physics_process(delta):
 	lastClosedHover = null
@@ -51,22 +57,22 @@ func checkMove():
 	var index = 0
 	var dataIndex = 0
 	var lastIndex = data.find(buttonDownOn)
-	var children = $Holder.get_children()
+	var children = holder.get_children()
 	for i in range(children.size()):
 		if total >= pos.y - extents.y*2 and (index > 0) and children[i].visible:
-			if index == 1 and $Holder.get_child(1) is DeckDisplayDataX:
+			if index == 1 and holder.get_child(1) is DeckDisplayDataX:
 				if buttonDownOn.card.rarity == Card.RARITY.VANGUARD:
-					$Holder.move_child($Holder.get_child(1), 3)
-					$Holder.move_child(buttonDownOn, 1)
+					holder.move_child(holder.get_child(1), 3)
+					holder.move_child(buttonDownOn, 1)
 					swapData(dataIndex, lastIndex)
 					centerChildren()
 					break
 			else:
 				var indexCheck = 1
-				if $Holder.get_child(1) is DeckDisplayDataX:
+				if holder.get_child(1) is DeckDisplayDataX:
 					indexCheck = 2
 				if index != indexCheck or buttonDownOn.card.rarity == Card.RARITY.VANGUARD:
-					$Holder.move_child(buttonDownOn, index)
+					holder.move_child(buttonDownOn, index)
 					swapData(dataIndex, lastIndex)
 					centerChildren()
 					break
@@ -79,7 +85,7 @@ func checkMove():
 			index += 1
 		
 		if i == children.size() - 1:
-			$Holder.move_child(buttonDownOn, index)
+			holder.move_child(buttonDownOn, index)
 			swapData(dataIndex, lastIndex)
 			centerChildren()
 			break
@@ -124,24 +130,25 @@ func addCard(id : int) -> bool:
 	var d = deckDisplayData.instance()
 	d.card = ListOfCards.getCard(id)
 	d.count = 1
-	$Holder.add_child(d)
+	holder.add_child(d)
 	data.append(d)
 	d.get_node("Area2D").connect("input_event", self, "_on_Area2D_input_event", [d])
 	setTotal(getTotal() + 1)
 	
-	if not $Holder.get_child(1) is DeckDisplayDataX and d.card.rarity == Card.RARITY.VANGUARD:
-		$Holder.move_child(d, 1)
+	if not holder.get_child(1) is DeckDisplayDataX and d.card.rarity == Card.RARITY.VANGUARD:
+		holder.move_child(d, 1)
 	
 	centerChildren()
 	return true
 
 func centerChildren():
 	var total = 0
-	if $Holder.get_child(1) is DeckDisplayDataX:
-		$Holder/VanguardLabel.visible = true
+	if holder.get_child(1) is DeckDisplayDataX:
+		vanguardLabel.visible = true
 	else:
-		$Holder/VanguardLabel.visible = false
-	for c in $Holder.get_children():
+		vanguardLabel.visible = false
+	
+	for c in holder.get_children():
 		if c != label and c != vanguardLabel and c.visible:
 			if c != buttonDownOn:
 				c.rect_position.y = total + c.get_node("NinePatchRect").rect_size.y / 2
@@ -151,6 +158,8 @@ func centerChildren():
 			c.rect_position.y = total
 			c.rect_position.x = 0
 			total += c.rect_size.y + margin
+	
+	currentHeight = total
 
 func _on_Area2D_input_event(viewport, event, shape_idx, d):
 	onDeckDataClicked(event, d)
@@ -188,11 +197,14 @@ func removeCard(index : int) -> bool:
 			if hoveringOn == data[index]:
 				closeDeckDisplayHover()
 			data[index].queue_free()
-			$Holder.remove_child(data[index])
+			holder.remove_child(data[index])
 			data.remove(index)
 		setTotal(getTotal() - 1)
 		
 		centerChildren()
+		
+		holder.rect_position.y = max(holder.rect_position.y, maxHeight - currentHeight - 16)
+		holder.rect_position.y = min(holder.rect_position.y, 0)
 		
 		return true
 	return false
@@ -210,6 +222,16 @@ func _input(event):
 		moveTimer = 0
 		moving = false
 		centerChildren()
+	
+	if canScroll:
+		if event is InputEventMouseButton and event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_DOWN:
+				if currentHeight + holder.rect_position.y > maxHeight - 16:
+					holder.rect_position.y = max(holder.rect_position.y - 10, maxHeight - currentHeight - 16)
+					
+			elif event.button_index == BUTTON_WHEEL_UP:
+				if holder.rect_position.y < 0:
+					holder.rect_position.y = min(holder.rect_position.y + 10, 0)
 
 func openDeckDisplayHover(button):
 	hoveringOn = button

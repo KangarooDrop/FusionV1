@@ -43,4 +43,4 @@ func onEffect(params):
 			return
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, fuse all cards with " + str(self) + " to it that are able to"
+	return .genDescription() + "When this creature is played, fuse all cards with " + str(self) + " from its controller's hand to it that are able"

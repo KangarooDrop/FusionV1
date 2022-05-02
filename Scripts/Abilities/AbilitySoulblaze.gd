@@ -17,7 +17,7 @@ func onEffect(params):
 			if p.UUID == params[1]:
 				p.takeDamage(d, params[0])
 				
-		params[0].toughness -= d
+		params[0].isDying = true
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "At the end of your turn, this creature and its controller take damage equal to its toughness"
+	return .genDescription() + "At the end of its controller's turn, destroy this creature and its controller takes damage equal to its toughness"

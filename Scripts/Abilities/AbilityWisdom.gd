@@ -16,4 +16,4 @@ static func onEffect(params : Array):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, draw " + str(count - subCount) + (" cards" if count - subCount > 1 else " card")
+	return .genDescription() + "When this creature is played, its controller draws " + str(count - subCount) + (" cards" if count - subCount > 1 else " card")

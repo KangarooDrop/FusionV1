@@ -49,4 +49,4 @@ func slotClicked(slot : CardSlot):
 			NodeLoc.getBoard().endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + ("When this creature attacks, choose and discard " + str(count) + " card") + ("s" if count > 1 else "")
+	return .genDescription() + ("When this creature attacks, its controller chooses and discards " + str(count) + " card") + ("s" if count > 1 else "")

@@ -17,6 +17,7 @@ var creatureType := []
 var power : int
 var toughness : int
 var maxToughness : int
+var isDying : bool = false
 
 var rarity : int
 
@@ -136,10 +137,11 @@ func onLeave():
 		abl.onLeave()
 	
 func onStartOfTurn():
-	if NodeLoc.getBoard().isOnBoard(self) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == playerID:
+	if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == playerID:
 		hasAttacked = false
-		canFuseThisTurn = true
-		playedThisTurn = false
+		if NodeLoc.getBoard().isOnBoard(self):
+			canFuseThisTurn = true
+			playedThisTurn = false
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
@@ -320,11 +322,11 @@ func clone() -> Card:
 	c.maxToughness = maxToughness
 	c.rarity = rarity
 	for abl in abilities:
-		c.addAbility(abl.clone(c))
+		c.addAbility(abl.cloneBase(c))
 	for abl in removedAbilities:
-		c.removedAbilities.append(abl.clone(c))
+		c.removedAbilities.append(abl.cloneBase(c))
 	return c
-	
+
 func copyBase() -> Card:
 	return get_script().new(null)
 	

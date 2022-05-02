@@ -20,4 +20,4 @@ static func onEffect(params : Array):
 			break
 	
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, discard your hand and then draw that many cards"
+	return .genDescription() + "When this creature is played, its controller discards their hand and then draws that many cards"

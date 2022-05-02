@@ -9,11 +9,7 @@ func onEnterFromFusion(slot):
 	addToStack("onEffect", [card])
 	
 func onEffect(params):
-	params[0].toughness -= INF
-	
-	for abl in params[0].abilities:
-		if abl is get_script():
-			params[0].removeAbility(abl)
+	params[0].isDying = true
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "On fusion, destroys this creature. Removes this ability"
+	return .genDescription() + "On fusion, destroys this creature"

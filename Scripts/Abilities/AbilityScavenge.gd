@@ -14,4 +14,4 @@ static func onEffect(params):
 	params[0].toughness += params[1]
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Gain +" + str(count) + "/+" + str(count) + " when another friendly creature dies"
+	return .genDescription() + "When another creature you control dies, gain +" + str(count) + "/+" + str(count)

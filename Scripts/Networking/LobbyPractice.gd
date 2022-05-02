@@ -3,38 +3,12 @@ extends Node
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
 func _ready():
-	var files = []
-	var dir = Directory.new()
-	dir.open(Settings.path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.ends_with("json"):
-			files.append(file)
-	dir.list_dir_end()
-	
-	if files.size() > 0:
-		for c in $DeckSelector/VBoxContainer.get_children():
-			if c is Button and c.name != "BackButton":
-				c.queue_free()
-				c.get_parent().remove_child(c)
-				
-		for i in range(files.size()):
-			var b = Button.new()
-			$DeckSelector/VBoxContainer.add_child(b)
-			b.text = str(files[i].get_basename())
-			NodeLoc.setButtonParams(b)
-			b.connect("pressed", self, "onFileButtonClicked", [files[i]])
-			$DeckSelector/VBoxContainer.move_child(b, i+1)
-		$DeckSelector/VBoxContainer.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-		$DeckSelector/Background.rect_size = $DeckSelector/VBoxContainer.rect_size + Vector2(60, 20)
-		$DeckSelector/Background.rect_position = $DeckSelector/VBoxContainer.rect_position - Vector2(30, 10)
-	else:
+	$FDCenter/FileDisplay.connect("onBackPressed", self, "onBackButtonClicked")
+	$FDCenter/FileDisplay.connect("onFilePressed", self, "onFileButtonClicked")
+	$FDCenter/FileDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	if $FDCenter/FileDisplay.fileList.size() == 0:
 		MessageManager.notify("You must create a new deck before playing")
 		onBackButtonClicked()
-	
 	
 func onFileButtonClicked(fileName : String):
 	

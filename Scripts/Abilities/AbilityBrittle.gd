@@ -10,7 +10,7 @@ func onEndOfTurn():
 		addToStack("onEffect", [card])
 
 static func onEffect(params):
-	params[0].toughness = -INF
+	params[0].isDying = true
 	
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the end of the turn, this creature is destroyed."

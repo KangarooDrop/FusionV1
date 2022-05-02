@@ -7,7 +7,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Art/UI/hover.png" type="Texture" id=8]
+[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=10]
 
@@ -319,8 +319,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeckSelector" type="Control" parent="."]
-visible = false
+[node name="FDCenter" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -329,51 +328,12 @@ margin_left = -20.0
 margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
-mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Background" type="NinePatchRect" parent="DeckSelector"]
-margin_right = 40.0
-margin_bottom = 40.0
-texture = ExtResource( 8 )
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="DeckSelector"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="DeckSelector/VBoxContainer"]
-margin_right = 107.0
-margin_bottom = 19.0
-custom_fonts/font = ExtResource( 6 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Select Deck"
-align = 1
-
-[node name="BackButton" type="Button" parent="DeckSelector/VBoxContainer"]
-margin_top = 23.0
-margin_right = 107.0
-margin_bottom = 46.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 5 )
-custom_fonts/font = ExtResource( 6 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Back"
+[node name="FileDisplay" parent="FDCenter" instance=ExtResource( 8 )]
+visible = false
 
 [node name="LobbySettings" parent="." instance=ExtResource( 7 )]
 visible = false

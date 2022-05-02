@@ -14,4 +14,4 @@ static func onEffect(params):
 		p.takeDamage(params[1], params[0])
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "At the end of your turn, this card deals " + str(count) + " damage to each player"
+	return .genDescription() + "At the end of its controller's turn, this card deals " + str(count) + " damage to each player"

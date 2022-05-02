@@ -1493,19 +1493,24 @@ func centerFusion():
 func isMyTurn() -> bool:
 	return 0 == activePlayer
 
-func passMyTurn():
+func passMyTurn(withBuffer = false):
 	if isMyTurn():
-		if (not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileSelector").visible) or (activePlayer == 0 and timers[players[0].UUID].turnTimer <= 0):
+		if (not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/FileDisplay").visible) or (activePlayer == 0 and timers[players[0].UUID].turnTimer <= 0):
 			if not gameOver and gameStarted:
-				var waiting = true
-				while waiting:
-					waiting = getWaiting()
-							
-					yield(get_tree().create_timer(0.1), "timeout")
-				
-				if isMyTurn():
-					nextTurn()
-					Server.onNextTurn(Server.opponentID)
+				if withBuffer:
+					var waiting = true
+					while waiting:
+						waiting = getWaiting()
+								
+						yield(get_tree().create_timer(0.1), "timeout")
+					
+					if isMyTurn():
+						nextTurn()
+						Server.onNextTurn(Server.opponentID)
+				else:
+					if not getWaiting():
+						nextTurn()
+						Server.onNextTurn(Server.opponentID)
 
 func isDrawing() -> bool:
 	for p in players:
@@ -1690,7 +1695,7 @@ func checkState():
 	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
-				if s.cardNode.card.toughness <= 0:
+				if s.cardNode.card.toughness <= 0 or s.cardNode.card.isDying:
 					creaturesDying.append(s.cardNode)
 				
 	for cardNode in creaturesDying:
@@ -1707,9 +1712,8 @@ func checkState():
 			if c != cardNode.card:
 				c.onOtherLeave(cardNode.slot)
 				c.onOtherDeath(cardNode.slot)
-		if cardNode.card.toughness <= 0:
-			cardNode.slot.cardNode = null
-			cardNode.queue_free()
+		cardNode.slot.cardNode = null
+		cardNode.queue_free()
 
 	var boardStateNew = []
 	for p in getAllPlayers():
@@ -1783,7 +1787,7 @@ func resetTimer(playerNum):
 			Server.sendResetTimer(Server.opponentID)
 
 func onTurnTimerEnd():
-	passMyTurn()
+	passMyTurn(true)
 
 func onGameTimerEnd():
 	onLoss(players[0])

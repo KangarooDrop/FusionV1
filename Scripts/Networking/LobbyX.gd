@@ -27,6 +27,8 @@ func _ready():
 	holepuncher.connect("set_host", self, "set_host")
 	
 	$Lobby/LineEdit3.text = Server.username
+	
+	$FDCenter/FileDisplay.connect("onFilePressed", self, "onFileButtonClicked")
 
 func _process(delta):
 	if messageTimer > 0:
@@ -258,40 +260,12 @@ func startGame():
 	openFileSelector()
 
 func openFileSelector():
-	$DeckSelector.visible = true
-	$Lobby.visible = false
-		
-	var files = []
-	var dir = Directory.new()
-	dir.open(Settings.path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.ends_with("json"):
-			files.append(file)
-	dir.list_dir_end()
-	
-	if files.size() > 0:
-		for c in $DeckSelector/VBoxContainer.get_children():
-			if c is Button and c.name != "BackButton":
-				c.queue_free()
-				c.get_parent().remove_child(c)
-				
-		for i in range(files.size()):
-			var b = Button.new()
-			$DeckSelector/VBoxContainer.add_child(b)
-			b.text = str(files[i].get_basename())
-			NodeLoc.setButtonParams(b)
-			b.connect("pressed", self, "onFileButtonClicked", [files[i]])
-			$DeckSelector/VBoxContainer.move_child(b, i+1)
-		$DeckSelector/VBoxContainer.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-		$DeckSelector/Background.rect_size = $DeckSelector/VBoxContainer.rect_size + Vector2(60, 20)
-		$DeckSelector/Background.rect_position = $DeckSelector/VBoxContainer.rect_position - Vector2(30, 10)
+	$FDCenter/FileDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	$Lobby.hide()
+	if $FDCenter/FileDisplay.fileList.size() > 0:
+		pass
 	else:
 		MessageManager.notify("You must create a new deck before playing")
-		
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
@@ -307,7 +281,7 @@ func onFileButtonClicked(fileName : String):
 		createPopup("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
 		return
 	
-	$DeckSelector.visible = false
+	$FDCenter/FileDisplay.hide()
 	
 	Settings.selectedDeck = fileName
 	

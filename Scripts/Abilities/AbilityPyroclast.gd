@@ -15,4 +15,4 @@ static func onEffect(params):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, it deals " + str(count - subCount) + " damage to you"
+	return .genDescription() + "When this creature is played, it deals " + str(count - subCount) + " damage to its controller"

@@ -18,4 +18,4 @@ func genDescription(subCount = 0) -> String:
 	var string = "a"
 	if count > 1:
 		string = str(count - subCount)
-	return .genDescription() + "When this creature is played, create " + string +" 1/1 mech with no abilities"
+	return .genDescription() + "When this creature is played, its controller creates " + string +" 1/1 mech with no abilities"

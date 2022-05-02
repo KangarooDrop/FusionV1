@@ -60,4 +60,4 @@ func combine(abl : Ability):
 	abl.buffsApplied += buffsApplied
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Gains +" + str(count) + " power for each other creature you control"
+	return .genDescription() + "Gains +" + str(count) + " power for each other creature its controller has"

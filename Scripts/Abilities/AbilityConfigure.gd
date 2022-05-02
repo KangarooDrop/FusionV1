@@ -14,4 +14,4 @@ static func onEffect(params):
 			s.cardNode.card.power += params[1]
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, all other creatures you control gain +" + str(count - subCount) + " power"
+	return .genDescription() + "When this creature is played, all other creatures its controller has gain +" + str(count - subCount) + " power"

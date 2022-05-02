@@ -16,4 +16,4 @@ func onEffect(params):
 			p.takeDamage(d, params[0])
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature dies, you take damage equal to its power"
+	return .genDescription() + "When this creature dies, its controller take damage equal to its power"

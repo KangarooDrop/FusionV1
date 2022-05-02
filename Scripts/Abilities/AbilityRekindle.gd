@@ -57,4 +57,4 @@ func genDescription(subCount = 0) -> String:
 		string = "1 card"
 	else:
 		string = str(count - subCount) + " cards"
-	return .genDescription() + "When this creature is played, choose " + string + " to discard and then draw " + string
+	return .genDescription() + "When this creature is played, its controller chooses " + string + " cards to discard and then draws " + string

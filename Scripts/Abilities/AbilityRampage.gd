@@ -12,4 +12,4 @@ func onDealDamage(slot):
 				p.takeDamage(-slot.cardNode.card.toughness, card)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When attacking a creature, excess damage is dealt to its owner"
+	return .genDescription() + "When this creature kills another, excess damage is dealt to its controller"

@@ -25,4 +25,4 @@ static func onEffect(params):
 	NodeLoc.getBoard().fuseToSlot(params[0], cardList)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, fuse all mechs in your " + str(TextScrapyard.new(null)) + " to it"
+	return .genDescription() + "When this creature is played, fuse all mechs in its controller's " + str(TextScrapyard.new(null)) + " to it"

@@ -29,4 +29,4 @@ func genDescription(subCount = 0) -> String:
 	var string = " card "
 	if count > 1:
 		string = " " + str(count) + " cards "
-	return .genDescription() + "The next" + string + "you play cost 1 more (cannot exceed max number of cards per turn)"
+	return .genDescription() + "The next" + string + "this creature's controller plays cost 1 more energy (cannot exceed max number of cards per turn)"

@@ -29,12 +29,17 @@ var loadedDeckName = ""
 
 var popups := []
 
+onready var fileDisplay = $CenterControl/FileDisplay
+
 func _ready():
 	BackgroundFusion.pause()
 	MusicManager.playDeckEditorMusic()
 	
 	$CenterControl/DeckDisplay.parent = self
 	setCards()
+	
+	fileDisplay.connect("onBackPressed", self, "onFileLoadBackPressed")
+	fileDisplay.connect("onFilePressed", self, "onFileLoadButtonPressed")
 	
 	for k in SORT_ORDER.keys():
 		$CenterControl/SortNode/HBoxContainer/SortButton.add_item(k.capitalize())
@@ -292,7 +297,7 @@ func removeCard(id : int):
 
 var slotClicked = false
 func onMouseDown(slot : CardSlot, button_index : int):
-	if not $CenterControl/SaveDisplay.visible and not $CenterControl/FileDisplay.visible and is_instance_valid(slot.cardNode):
+	if not $CenterControl/SaveDisplay.visible and not fileDisplay.visible and is_instance_valid(slot.cardNode):
 		if button_index == 1:
 			var countCheck = true
 			for i in $CenterControl/DeckDisplay.data.size():
@@ -393,59 +398,15 @@ func onConfirmLoad(popup=null):
 	if popup != null:
 		popups.erase(popup)
 		popup.close()
-		
-	$CenterControl/FileDisplay.visible = true
-	$CenterControl/FileDisplay/ButtonHolder/Label.text = "Load File"
 	
-	var files = []
-	var dir = Directory.new()
-	dir.open(Settings.path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.ends_with("json"):
-			files.append(file)
-	dir.list_dir_end()
-	
-	for c in $CenterControl/FileDisplay/ButtonHolder.get_children():
-		if c is Button and c.name != "BackButton":
-			$CenterControl/FileDisplay/ButtonHolder.remove_child(c)
-			c.queue_free()
-	for i in range(files.size()):
-		var b = Button.new()
-		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
-		b.text = str(files[i].get_basename())
-		NodeLoc.setButtonParams(b)
-		b.connect("pressed", self, "onFileLoadButtonPressed", [files[i]])
-		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
-	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
-	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
-	
-	var chs = $CenterControl/FileDisplay/ButtonHolder.get_children()
-	for c in chs.duplicate():
-		if not c is Button:
-			chs.erase(c)
-	for i in range(chs.size()):
-		chs[i].focus_neighbour_left = "../" + chs[i].name
-		chs[i].focus_neighbour_right = "../" + chs[i].name
-		if i == 0:
-			chs[i].focus_neighbour_top = "../" + chs[i].name
-		else:
-			chs[i].focus_neighbour_top = "../" + chs[i-1].name
-		if i == chs.size() - 1:
-			chs[i].focus_neighbour_bottom = "../" + chs[i].name
-		else:
-			chs[i].focus_neighbour_bottom = "../" + chs[i+1].name
-		
-	chs[0].grab_focus()
-		
+	fileDisplay.loadFiles("Load File", Settings.path, ["json"])
+	$CenterControl/DeckDisplay.canScroll = false
+
 func onFileLoadBackPressed():
-	$CenterControl/FileDisplay.visible = false
-	
-func onFileLoadButtonPressed(fileName : String):
+	fileDisplay.hide()
+	$CenterControl/DeckDisplay.canScroll = true
+
+func onFileLoadButtonPressed(fileName):
 	print("File ", fileName, " selected")
 	
 	var dataRead = FileIO.readJSON(Settings.path + fileName)
@@ -516,8 +477,8 @@ func onFileSaveButtonPressed():
 var fileToDelete = ""
 		
 func onDeleteButtonPressed():
-	$CenterControl/FileDisplay.visible = true
-	$CenterControl/FileDisplay/ButtonHolder/Label.text = "Delete File"
+	fileDisplay.visible = true
+	fileDisplay.get_node("ButtonHolder/Label").text = "Delete File"
 		
 	var files = []
 	var dir = Directory.new()
@@ -531,22 +492,22 @@ func onDeleteButtonPressed():
 			files.append(file)
 	dir.list_dir_end()
 	
-	for c in $CenterControl/FileDisplay/ButtonHolder.get_children():
+	for c in fileDisplay.get_node("ButtonHolder").get_children():
 		if c is Button and c.name != "BackButton":
-			$CenterControl/FileDisplay/ButtonHolder.remove_child(c)
+			fileDisplay.get_node("ButtonHolder").remove_child(c)
 			c.queue_free()
 	for i in range(files.size()):
 		var b = Button.new()
-		$CenterControl/FileDisplay/ButtonHolder.add_child(b)
+		fileDisplay.get_node("ButtonHolder").add_child(b)
 		b.text = str(files[i].get_basename())
 		NodeLoc.setButtonParams(b)
 		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
-		$CenterControl/FileDisplay/ButtonHolder.move_child(b, i+1)
-	$CenterControl/FileDisplay/ButtonHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	$CenterControl/FileDisplay/Background.rect_size = $CenterControl/FileDisplay/ButtonHolder.rect_size + Vector2(60, 20)
-	$CenterControl/FileDisplay/Background.rect_position = $CenterControl/FileDisplay/ButtonHolder.rect_position - Vector2(30, 10)
+		fileDisplay.get_node("ButtonHolder").move_child(b, i+1)
+	fileDisplay.get_node("ButtonHolder").set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	fileDisplay.get_node("Background").rect_size = fileDisplay.get_node("ButtonHolder").rect_size + Vector2(60, 20)
+	fileDisplay.get_node("Background").rect_position = fileDisplay.get_node("ButtonHolder").rect_position - Vector2(30, 10)
 	
-	var chs = $CenterControl/FileDisplay/ButtonHolder.get_children()
+	var chs = fileDisplay.get_node("ButtonHolder").get_children()
 	for c in chs.duplicate():
 		if not c is Button:
 			chs.erase(c)
@@ -566,7 +527,7 @@ func onDeleteButtonPressed():
 	
 func onDeleteFileButtonPressed(fileName : String):
 	fileToDelete = fileName
-	$CenterControl/FileDisplay.visible = false
+	fileDisplay.visible = false
 	var pop = popupUI.instance()
 	pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onDeleteBackPressed", [pop]]])
 	$CenterControl.add_child(pop)
@@ -685,7 +646,7 @@ func randomizeDeck(popup=null):
 			$CenterControl/DeckDisplay.addCard(id)
 
 func _input(event):
-	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or $CenterControl/FileDisplay.visible) and popups.size() == 0:
+	if event is InputEventKey and event.is_pressed() and not event.is_echo() and not ($CenterControl/SaveDisplay.visible or fileDisplay.visible) and popups.size() == 0:
 		if Input.is_key_pressed(KEY_CONTROL):
 			if event.scancode == KEY_S:
 				onSavePressed()
@@ -704,7 +665,7 @@ func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
 		if $CenterControl/SaveDisplay.visible:
 			onFileSaveBackPressed()
-		elif $CenterControl/FileDisplay.visible:
+		elif fileDisplay.visible:
 			onFileLoadBackPressed()
 		elif popups.size() > 0:
 			popups[popups.size()-1].close()

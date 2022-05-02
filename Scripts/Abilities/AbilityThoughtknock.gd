@@ -53,7 +53,7 @@ static func onEffect(params):
 func genDescription(subCount = 0) -> String:
 	var c = ""
 	if count - subCount == 1:
-		c = "When this creature is played, reveal your hand and your opponent chooses a card from it. Discard that card"
+		c = "When this creature is played, its controller reveals their hand and their opponent chooses a card from it. They discard that card"
 	else:
-		c = "When this creature is played, reveal your hand and your opponent chooses " + str(count - subCount) + " cards" + " from it. Discard those cards"
+		c = "When this creature is played, its controller reveals their hand and their opponent chooses " + str(count - subCount) + " cards" + " from it. They discard those cards"
 	return .genDescription() + c

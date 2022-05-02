@@ -17,4 +17,4 @@ static func onEffect(params : Array):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, increase the count of each ability on all cards in your hand by " + str(count - subCount)
+	return .genDescription() + "When this creature is played, increase the count of each ability on all cards in its controller's hand by " + str(count - subCount)

@@ -25,4 +25,4 @@ static func onEffect(params : Array):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "At the end of the turn, return this card to your hand"
+	return .genDescription() + "At the end of the turn, return this card to its controller's hand"

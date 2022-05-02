@@ -31,4 +31,4 @@ func onEffect(card):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "On fusion, add a 1/1 copy of the card with all abilities. Removes this ability"
+	return .genDescription() + "On fusion, add a 1/1 copy of the card with all abilities to its controller's hand. Removes this ability"

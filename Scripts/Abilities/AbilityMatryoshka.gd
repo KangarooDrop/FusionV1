@@ -18,4 +18,4 @@ static func onEffect(params):
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature dies, add " + str(count) + " " + str(TextCard.new(ListOfCards.getCard(57))) +" to your hand"
+	return .genDescription() + "When this creature dies, add " + str(count) + " " + str(TextCard.new(ListOfCards.getCard(57))) +" to its controller's hand"

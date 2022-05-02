@@ -146,6 +146,11 @@ func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
 	abl.setCount(count)
 	return abl
+	
+func cloneBase(card : Card) -> Ability:
+	var abl = get_script().new(card)
+	abl.setCount(count)
+	return abl
 
 func genDescription(subCount = 0) -> String:
 	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count - subCount) if (showCount) else "") +":[/color]\n"

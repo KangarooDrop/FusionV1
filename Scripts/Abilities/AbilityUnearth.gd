@@ -55,4 +55,4 @@ func genDescription(subCount = 0) -> String:
 	var string = " card"
 	if count - timesApplied > 1:
 		string + " cards"
-	return .genDescription() + "When this creature is played, choose " + str(count - timesApplied) + string + " in any " + str(TextScrapyard.new(null)) +". Add that card to your hand"
+	return .genDescription() + "When this creature is played, its controller chooses " + str(count - timesApplied) + string + " in any " + str(TextScrapyard.new(null)) +" and adds the card(s) to their hand"
