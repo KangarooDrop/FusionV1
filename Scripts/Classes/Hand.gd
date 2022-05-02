@@ -44,11 +44,13 @@ func reveal():
 		c.slot.shownToOpponent()
 
 func _physics_process(delta):
+	var dAnim = delta * Settings.animationSpeed
+	
 	if discardQueue.size() > 0:
 		var toRemove = []
 		for i in range(discardQueue.size()):
 			discardQueue[i][0].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i][0].global_position.y)), discardTimers[i] / discardMaxTime)
-			discardTimers[i] += delta
+			discardTimers[i] += dAnim
 			if discardTimers[i] >= discardMaxTime:
 				toRemove.append(i)
 		
@@ -129,7 +131,7 @@ func _physics_process(delta):
 			drawWaitTimer = drawWaitMaxTime
 			
 	if drawWaitTimer > 0:
-		drawWaitTimer -= delta
+		drawWaitTimer -= dAnim
 
 func cardFadeInFinish(cardNode):
 	cardNode.get_node("FadingNode").queue_free()
@@ -159,33 +161,4 @@ func discardIndex(index : int, addCardToGrave=true):
 func addCardToHand(data : Array):
 	if data[0] != null:
 		data[0].ownerID = player.UUID
-		if Settings.playAnimations:
-			drawQueue.append(data)
-		else:
-			SoundEffectManager.playDrawSound()
-			var slotInst = cardSlotScene.instance()
-			slotInst.currentZone = CardSlot.ZONES.HAND
-			slotInst.isOpponent = isOpponent
-			slotInst.playerID = player.UUID
-			add_child(slotInst)
-			slots.append(slotInst)
-			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-			
-			var cardInst = cardNodeScene.instance()
-			cardInst.card = data[0]
-			drawQueue[0][0].cardNode = cardInst
-			data[0].playerID = player.UUID
-			cardInst.card.cardNode = cardInst
-			cardInst.setCardVisible(handVisible or data[0][2])
-			cardInst.playerID = player.UUID
-			add_child(cardInst)
-			nodes.append(cardInst)
-			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-			
-			slotInst.cardNode = cardInst
-			slotInst.cardNode.slot = slotInst
-			
-			centerCards()
-			
-			for c in NodeLoc.getBoard().getAllCards():
-				c.onDraw(cardInst.card)
+		drawQueue.append(data)

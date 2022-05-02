@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/Networking/LobbyPractice.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=2]
 
 [node name="PracticeLobby" type="Control"]
 anchor_left = 0.5
@@ -42,4 +42,4 @@ margin_right = 20.0
 margin_bottom = 20.0
 mouse_filter = 2
 
-[node name="FileDisplay" parent="FDCenter" instance=ExtResource( 7 )]
+[node name="OptionDisplay" parent="FDCenter" instance=ExtResource( 2 )]

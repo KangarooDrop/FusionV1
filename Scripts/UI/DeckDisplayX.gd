@@ -224,14 +224,15 @@ func _input(event):
 		centerChildren()
 	
 	if canScroll:
+		var movePerTick = 16
 		if event is InputEventMouseButton and event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_DOWN:
 				if currentHeight + holder.rect_position.y > maxHeight - 16:
-					holder.rect_position.y = max(holder.rect_position.y - 10, maxHeight - currentHeight - 16)
+					holder.rect_position.y = max(holder.rect_position.y - movePerTick, maxHeight - currentHeight - 16)
 					
 			elif event.button_index == BUTTON_WHEEL_UP:
 				if holder.rect_position.y < 0:
-					holder.rect_position.y = min(holder.rect_position.y + 10, 0)
+					holder.rect_position.y = min(holder.rect_position.y + movePerTick, 0)
 
 func openDeckDisplayHover(button):
 	hoveringOn = button

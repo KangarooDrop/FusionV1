@@ -29,7 +29,10 @@ var loadedDeckName = ""
 
 var popups := []
 
-onready var fileDisplay = $CenterControl/FileDisplay
+onready var fileDisplay = $CenterControl/OptionDisplay
+
+enum FILE_WHAT {NONE, LOAD, DELETE}
+var fileWhat = FILE_WHAT.NONE
 
 func _ready():
 	BackgroundFusion.pause()
@@ -38,8 +41,8 @@ func _ready():
 	$CenterControl/DeckDisplay.parent = self
 	setCards()
 	
-	fileDisplay.connect("onBackPressed", self, "onFileLoadBackPressed")
-	fileDisplay.connect("onFilePressed", self, "onFileLoadButtonPressed")
+	fileDisplay.connect("onBackPressed", self, "onBackPressed")
+	fileDisplay.connect("onOptionPressed", self, "onFilePressed")
 	
 	for k in SORT_ORDER.keys():
 		$CenterControl/SortNode/HBoxContainer/SortButton.add_item(k.capitalize())
@@ -358,6 +361,11 @@ func onNewPressed():
 		popups.append(pop)
 	else:
 		onConfirmNew()
+		
+func onDeleteButtonPressed():
+	fileDisplay.loadFiles("Delete File", Settings.path, ["json"])
+	$CenterControl/DeckDisplay.canScroll = false
+	fileWhat = FILE_WHAT.DELETE
 	
 func onSaveEnter(s : String):
 	onFileSaveButtonPressed()
@@ -399,44 +407,75 @@ func onConfirmLoad(popup=null):
 		popups.erase(popup)
 		popup.close()
 	
+	fileWhat = FILE_WHAT.LOAD
 	fileDisplay.loadFiles("Load File", Settings.path, ["json"])
 	$CenterControl/DeckDisplay.canScroll = false
 
-func onFileLoadBackPressed():
+
+	fileDisplay.connect("onBackPressed", self, "onBackPressed")
+	fileDisplay.connect("onOptionPressed", self, "onFilePressed")
+
+func onBackPressed(popup=null):
+	if popup != null:
+		popups.erase(popup)
+		popup.close()
+	
 	fileDisplay.hide()
 	$CenterControl/DeckDisplay.canScroll = true
+	fileWhat = FILE_WHAT.NONE
+	fileToDelete = ""
 
-func onFileLoadButtonPressed(fileName):
+var fileToDelete = ""
+
+func onFilePressed(button : Button, key):
+	var fileName = key
 	print("File ", fileName, " selected")
 	
-	var dataRead = FileIO.readJSON(Settings.path + fileName)
-	var error = Deck.verifyDeck(dataRead)
-	print("Deck validity: " + str(error))
-	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		$CenterControl/DeckDisplay.clearData()
-		for dat in dataRead.keys():
-			for k in dataRead[dat].keys():
-				var id = int(k)
-				for i in range(int(dataRead[dat][k])):
-					$CenterControl/DeckDisplay.addCard(id)
-					
-					for p in pages:
-						for c in p.get_children():
-							if c is CardSlot and is_instance_valid(c.cardNode):
-								updateSlotCount(c)
-		hasSaved = true
-		
-		loadedDeckName = fileName
-	else:
-		print("Deck file is not valid")
-		
+	if fileWhat == FILE_WHAT.LOAD:
+		var dataRead = FileIO.readJSON(Settings.path + fileName)
+		var error = Deck.verifyDeck(dataRead)
+		print("Deck validity: " + str(error))
+		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			$CenterControl/DeckDisplay.clearData()
+			for dat in dataRead.keys():
+				for k in dataRead[dat].keys():
+					var id = int(k)
+					for i in range(int(dataRead[dat][k])):
+						$CenterControl/DeckDisplay.addCard(id)
+						
+						for p in pages:
+							for c in p.get_children():
+								if c is CardSlot and is_instance_valid(c.cardNode):
+									updateSlotCount(c)
+			hasSaved = true
+			
+			loadedDeckName = fileName
+		else:
+			print("Deck file is not valid")
+			
+			var pop = popupUI.instance()
+			pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+			$CenterControl.add_child(pop)
+			pop.options[0].grab_focus()
+			popups.append(pop)
+			
+		onBackPressed()
+	elif fileWhat == FILE_WHAT.DELETE:
+		fileToDelete = fileName
+		fileDisplay.visible = false
 		var pop = popupUI.instance()
-		pop.init("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+		pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onBackPressed", [pop]]])
 		$CenterControl.add_child(pop)
-		pop.options[0].grab_focus()
+		pop.options[1].grab_focus()
 		popups.append(pop)
-		
-	onFileLoadBackPressed()
+	else:
+		onBackPressed()
+	
+func onDeleteConfirmed(popup=null):
+	var dir = Directory.new()
+	var error = dir.remove(Settings.path + "/" + fileToDelete)
+	print(error)
+	onBackPressed(popup)
 		
 func onFileSaveBackPressed():
 	$CenterControl/SaveDisplay/Background/LineEdit.text = ""
@@ -473,78 +512,6 @@ func onFileSaveButtonPressed():
 		popups.append(pop)
 	
 	onFileSaveBackPressed()
-		
-var fileToDelete = ""
-		
-func onDeleteButtonPressed():
-	fileDisplay.visible = true
-	fileDisplay.get_node("ButtonHolder/Label").text = "Delete File"
-		
-	var files = []
-	var dir = Directory.new()
-	dir.open(Settings.path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.ends_with("json"):
-			files.append(file)
-	dir.list_dir_end()
-	
-	for c in fileDisplay.get_node("ButtonHolder").get_children():
-		if c is Button and c.name != "BackButton":
-			fileDisplay.get_node("ButtonHolder").remove_child(c)
-			c.queue_free()
-	for i in range(files.size()):
-		var b = Button.new()
-		fileDisplay.get_node("ButtonHolder").add_child(b)
-		b.text = str(files[i].get_basename())
-		NodeLoc.setButtonParams(b)
-		b.connect("pressed", self, "onDeleteFileButtonPressed", [files[i]])
-		fileDisplay.get_node("ButtonHolder").move_child(b, i+1)
-	fileDisplay.get_node("ButtonHolder").set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	fileDisplay.get_node("Background").rect_size = fileDisplay.get_node("ButtonHolder").rect_size + Vector2(60, 20)
-	fileDisplay.get_node("Background").rect_position = fileDisplay.get_node("ButtonHolder").rect_position - Vector2(30, 10)
-	
-	var chs = fileDisplay.get_node("ButtonHolder").get_children()
-	for c in chs.duplicate():
-		if not c is Button:
-			chs.erase(c)
-	for i in range(chs.size()):
-		chs[i].focus_neighbour_left = "../" + chs[i].name
-		chs[i].focus_neighbour_right = "../" + chs[i].name
-		if i == 0:
-			chs[i].focus_neighbour_top = "../" + chs[i].name
-		else:
-			chs[i].focus_neighbour_top = "../" + chs[i-1].name
-		if i == chs.size() - 1:
-			chs[i].focus_neighbour_bottom = "../" + chs[i].name
-		else:
-			chs[i].focus_neighbour_bottom = "../" + chs[i+1].name
-		
-	chs[0].grab_focus()
-	
-func onDeleteFileButtonPressed(fileName : String):
-	fileToDelete = fileName
-	fileDisplay.visible = false
-	var pop = popupUI.instance()
-	pop.init("Delete Deck", "Are you sure you want to delete " + fileName, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onDeleteBackPressed", [pop]]])
-	$CenterControl.add_child(pop)
-	pop.options[1].grab_focus()
-	popups.append(pop)
-	
-func onDeleteConfirmed(popup=null):
-	var dir = Directory.new()
-	var error = dir.remove(Settings.path + "/" + fileToDelete)
-	print(error)
-	onDeleteBackPressed(popup)
-	
-func onDeleteBackPressed(popup=null):
-	if popup != null:
-		popups.erase(popup)
-		popup.close()
-	fileToDelete = ""
 
 var ready = false
 var checkTex = preload("res://Art/UI/check.png")
@@ -666,7 +633,7 @@ func _input(event):
 		if $CenterControl/SaveDisplay.visible:
 			onFileSaveBackPressed()
 		elif fileDisplay.visible:
-			onFileLoadBackPressed()
+			onBackPressed()
 		elif popups.size() > 0:
 			popups[popups.size()-1].close()
 			popups.remove(popups.size()-1)

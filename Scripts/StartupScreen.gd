@@ -49,7 +49,7 @@ func onPracticePressed():
 	
 func onSettingsPressed():
 	$VBoxContainer.visible = false
-	$SettingsPage.visible = true
+	$SettingsPage.show()
 	
 func onExitPressed():
 	get_tree().quit()
@@ -86,7 +86,7 @@ func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_ESCAPE:
 		if $CreditsLabel.visible or $VBoxContainer2.visible:
 			onBackPressed()
-		elif $SettingsPage/FDCenter/FileDisplay.visible:
+		elif $SettingsPage/FDCenter/OptionDisplay.visible:
 			$SettingsPage.onShaderBackButtonPressed()
 		elif $SettingsPage.visible:
 			$SettingsPage.onBackPressed()

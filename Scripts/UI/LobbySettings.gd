@@ -18,6 +18,24 @@ func _ready():
 	
 	$VBoxContainer/MatchTypeHbox/OptionButton.select(0)
 	$VBoxContainer/MatchTypeHbox/OptionButton.emit_signal("item_selected", 0)
+	
+	for t in Settings.TURN_TIMES.values():
+		var string = ""
+		if t == -1:
+			string = "No limit"
+		else:
+			string = TurnTimer.intToTime(t)
+		$VBoxContainer/TurnTimer/OptionButton.add_item(string)
+	$VBoxContainer/TurnTimer/OptionButton.select(Settings.TURN_TIMES.values().find(Settings.turnTimerMax))
+	
+	for t in Settings.GAME_TIMES.values():
+		var string = ""
+		if t == -1:
+			string = "No limit"
+		else:
+			string = TurnTimer.intToTime(t)
+		$VBoxContainer/GameTimer/OptionButton.add_item(string)
+	$VBoxContainer/GameTimer/OptionButton.select(Settings.GAME_TIMES.values().find(Settings.gameTimerMax))
 
 func resizeSelf():
 	$VBoxContainer.rect_size = Vector2(0, 0)
@@ -103,3 +121,9 @@ func setOwnGameParams(params : Dictionary):
 		$VBoxContainer/PacksHbox/LineEdit.text = str(params["num_boosters"])
 		
 		Settings.selectedDeck = ".draft.json"
+
+func onTurnTimerSelected(index : int):
+	Settings.turnTimerMax = Settings.TURN_TIMES.values()[index]
+
+func onGameTimerSelected(index : int):
+	Settings.gameTimerMax = Settings.GAME_TIMES.values()[index]

@@ -28,7 +28,7 @@ func _ready():
 	
 	$Lobby/LineEdit3.text = Server.username
 	
-	$FDCenter/FileDisplay.connect("onFilePressed", self, "onFileButtonClicked")
+	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
 
 func _process(delta):
 	if messageTimer > 0:
@@ -260,9 +260,9 @@ func startGame():
 	openFileSelector()
 
 func openFileSelector():
-	$FDCenter/FileDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 	$Lobby.hide()
-	if $FDCenter/FileDisplay.fileList.size() > 0:
+	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass
 	else:
 		MessageManager.notify("You must create a new deck before playing")
@@ -271,7 +271,9 @@ func openFileSelector():
 			print("Error loading test1.tscn. Error Code = " + str(error))
 
 	
-func onFileButtonClicked(fileName : String):
+func onFileButtonClicked(button : Button, key):
+	var fileName = key
+	
 	var path = Settings.path
 	
 	var dataRead = FileIO.readJSON(path + fileName)
@@ -281,7 +283,7 @@ func onFileButtonClicked(fileName : String):
 		createPopup("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
 		return
 	
-	$FDCenter/FileDisplay.hide()
+	$FDCenter/OptionDisplay.hide()
 	
 	Settings.selectedDeck = fileName
 	

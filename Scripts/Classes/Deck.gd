@@ -35,10 +35,9 @@ func pop() -> Card:
 	return c
 
 func mill(playerID):
-	if Settings.playAnimations:
-		NodeLoc.getBoard().millQueue.append(playerID)
-	else:
-		NodeLoc.getBoard().addCardToGrave(playerID, pop())
+	var board = NodeLoc.getBoard()
+	if board != null and "millQueue" in board:
+		board.millQueue.append(playerID)
 
 func draw(count : int) -> Array:
 	var c : Array

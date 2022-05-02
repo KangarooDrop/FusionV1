@@ -3,14 +3,15 @@ extends Node
 var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
 func _ready():
-	$FDCenter/FileDisplay.connect("onBackPressed", self, "onBackButtonClicked")
-	$FDCenter/FileDisplay.connect("onFilePressed", self, "onFileButtonClicked")
-	$FDCenter/FileDisplay.loadFiles("Select Deck", Settings.path, ["json"])
-	if $FDCenter/FileDisplay.fileList.size() == 0:
+	$FDCenter/OptionDisplay.connect("onBackPressed", self, "onBackButtonClicked")
+	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	if $FDCenter/OptionDisplay.optionList.size() == 0:
 		MessageManager.notify("You must create a new deck before playing")
 		onBackButtonClicked()
 	
-func onFileButtonClicked(fileName : String):
+func onFileButtonClicked(button : Button, key):
+	var fileName = key
 	
 	var path = Settings.path
 	

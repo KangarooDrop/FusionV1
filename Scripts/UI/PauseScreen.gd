@@ -62,7 +62,7 @@ func toMainMenu():
 
 func onSettingsButtonClicked():
 	$VBoxContainer.visible = false
-	$SettingsPage.visible = true
+	$SettingsPage.show()
 
 func onSettingsClose():
 	$VBoxContainer.visible = true

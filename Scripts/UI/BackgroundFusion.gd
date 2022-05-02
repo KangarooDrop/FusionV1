@@ -74,6 +74,8 @@ func clear():
 	backFuseSpawnTimer = 0
 
 func _physics_process(delta):
+	var dAnim = delta * Settings.animationSpeed
+	
 	if playing and not paused:
 		backFuseSpawnTimer += delta
 		if backFuseSpawnTimer >= backFuseSpawnMaxTime:

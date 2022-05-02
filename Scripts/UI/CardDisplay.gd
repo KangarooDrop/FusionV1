@@ -10,7 +10,7 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 var slots := []
 var nodes := []
 
-var totalWidth = -1
+export(int) var totalWidth = 600
 
 var maxVal = 1.5
 var minVal = 1
@@ -25,6 +25,7 @@ var mouseDown = false
 var clickTimer = 0
 var clickMaxTime = 0.18
 
+#export(int) var totalWidth = 600
 export(float) var viewMul = 0.75
 
 var movingCards := []
@@ -39,7 +40,7 @@ func _ready():
 	get_tree().get_root().connect("size_changed", self, "myfunc")
 
 func myfunc():
-	totalWidth = get_viewport_rect().size.x * viewMul
+	#totalWidth = get_viewport_rect().size.x * viewMul
 	centerCards()
 
 func centerCards():
@@ -56,28 +57,18 @@ func centerCards():
 		BoardMP.centerNodes(slots, Vector2(), 0, dist)
 		BoardMP.centerNodes(nodes, Vector2(), 0, dist)
 		
-		if Settings.playAnimations:
-			for i in range(slots.size()):
-				var foundSlot = slots[i] == cardHolding
-				for d in movingCards:
-					if d[0] == slots[i]:
-						if d[0] != cardHolding:
-							d[1] = d[0].global_position
-						foundSlot = true
-				if not foundSlot:
-					movingCards.append([slots[i], slots[i].global_position])
-				
-				slots[i].global_position = lastPosSlots[i]
-				nodes[i].global_position = lastPosNodes[i]
-		else:
-			for i in range(slots.size()):
-				slots[i].global_position.y = lastPosSlots[i].y
-				nodes[i].global_position.y = lastPosNodes[i].y
-				for d in movingCards:
-					if d[0] == slots[i]:
-						d[1].x = slots[i].global_position.x
-						slots[i].global_position.x = lastPosSlots[i].x
-						nodes[i].global_position.x = lastPosNodes[i].x
+		for i in range(slots.size()):
+			var foundSlot = slots[i] == cardHolding
+			for d in movingCards:
+				if d[0] == slots[i]:
+					if d[0] != cardHolding:
+						d[1] = d[0].global_position
+					foundSlot = true
+			if not foundSlot:
+				movingCards.append([slots[i], slots[i].global_position])
+			
+			slots[i].global_position = lastPosSlots[i]
+			nodes[i].global_position = lastPosNodes[i]
 					
 
 func removeCard(index : int):
@@ -144,12 +135,14 @@ func _physics_process(delta):
 		var toRemove := []
 		for data in movingCards:
 			if is_instance_valid(data[0]):
-				if (data[1] - data[0].global_position).length() <= moveSpeed / 50.0:
+				var sp = moveSpeed * Settings.animationSpeed
+				
+				if (data[1] - data[0].global_position).length() <= sp / 50.0:
 					data[0].global_position = data[1]
 					data[0].cardNode.global_position = data[0].global_position
 					toRemove.append(data)
 				else:
-					data[0].global_position += (data[1] - data[0].global_position).normalized() * moveSpeed * delta
+					data[0].global_position += (data[1] - data[0].global_position).normalized() * sp * delta
 					data[0].cardNode.global_position = data[0].global_position
 			else:
 				movingCards.erase(data)

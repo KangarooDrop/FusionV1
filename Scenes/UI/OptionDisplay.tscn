@@ -4,12 +4,11 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=2]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=3]
 [ext_resource path="res://Art/UI/hover.png" type="Texture" id=4]
-[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=5]
-[ext_resource path="res://Scripts/UI/FileDisplay.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/UI/OptionDisplay.gd" type="Script" id=5]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
 
-[node name="FileDisplay" type="Node2D"]
-z_index = 11
-script = ExtResource( 6 )
+[node name="OptionDisplay" type="Node2D"]
+script = ExtResource( 5 )
 
 [node name="MouseDisable" type="ColorRect" parent="."]
 anchor_right = 1.0
@@ -40,48 +39,58 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -6.0
-margin_top = -6.0
-margin_right = 6.0
-margin_bottom = 6.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 48.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+margin_top = 23.0
+margin_right = 48.0
+margin_bottom = 23.0
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonHolder" type="VBoxContainer" parent="ScrollContainer"]
-margin_right = 48.0
-margin_bottom = 50.0
+[node name="ButtonHolder" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
 custom_constants/separation = 8
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="ScrollContainer/ButtonHolder"]
-margin_right = 48.0
-margin_bottom = 19.0
-custom_fonts/font = ExtResource( 5 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-align = 1
-
-[node name="BackButton" type="Button" parent="ScrollContainer/ButtonHolder"]
+[node name="Control" type="Control" parent="VBoxContainer"]
 margin_top = 27.0
 margin_right = 48.0
-margin_bottom = 50.0
+margin_bottom = 27.0
+
+[node name="Control2" type="Control" parent="VBoxContainer"]
+margin_top = 31.0
+margin_right = 48.0
+margin_bottom = 31.0
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+margin_top = 35.0
+margin_right = 48.0
+margin_bottom = 58.0
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 1 )
 custom_styles/normal = ExtResource( 3 )
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
-[connection signal="pressed" from="ScrollContainer/ButtonHolder/BackButton" to="." method="onFileLoadBackPressed"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="onBackPressed"]

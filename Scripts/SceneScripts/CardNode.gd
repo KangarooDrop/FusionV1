@@ -98,10 +98,12 @@ func _physics_process(delta):
 		
 	if is_instance_valid(card) and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
 		$CardBackground.texture = (ListOfCards.cardBackground if (not card.canAttack()) else ListOfCards.cardBackgroundActive)
-		
+	
+	var dAnim = delta * Settings.animationSpeed
+	
 	if flipping:
-		flipTimer += delta
-		scale.x = abs(cos(flipTimer / flipMaxTime * PI)) * originalScale
+		flipTimer += dAnim
+		scale.x = abs(cos(min(flipTimer / flipMaxTime, 1) * PI)) * originalScale
 		if not flipSame and not hasFlipped and flipTimer >= flipMaxTime / 2:
 			hasFlipped = true
 			setCardVisible(!getCardVisible())
@@ -114,13 +116,13 @@ func _physics_process(delta):
 	if attacking and NodeLoc.getBoard().getCanFight():
 		if not fightingWait:
 			if attackStartupTimer < attackStartupMaxTime:
-				attackStartupTimer += delta
-				rotation = lerp(0, attackRotation, attackStartupTimer / attackStartupMaxTime)
+				attackStartupTimer += dAnim
+				rotation = lerp(0, attackRotation, min(attackStartupTimer / attackStartupMaxTime, 1))
 			elif attackTimer < attackMaxTime:
-				attackTimer += delta
-				global_position = lerp(attackReturnPos, attackingPositions[attackingIndex], attackTimer / attackMaxTime)
+				attackTimer += dAnim
+				global_position = lerp(attackReturnPos, attackingPositions[attackingIndex], min(1, attackTimer / attackMaxTime))
 			elif attackWaitTimer < attackWaitMaxTime:
-				attackWaitTimer += delta
+				attackWaitTimer += dAnim
 			elif attackReturnTimer < attackReturnMaxTime:
 				if not waitingForStackToClear:
 					if not dealtDamage:
@@ -129,8 +131,8 @@ func _physics_process(delta):
 						waitingForStackToClear = false
 						dealtDamage = true
 					if not fightingWait:
-						attackReturnTimer += delta
-						global_position = lerp(attackingPositions[attackingIndex], attackReturnPos, attackReturnTimer / attackReturnMaxTime)
+						attackReturnTimer += dAnim
+						global_position = lerp(attackingPositions[attackingIndex], attackReturnPos, min(1, attackReturnTimer / attackReturnMaxTime))
 						rotation = lerp(attackRotation, 0, attackReturnTimer / attackReturnMaxTime)
 			else:
 				global_position = attackReturnPos
@@ -169,32 +171,22 @@ func attack(slots : Array):
 			s.cardNode.card.onBeforeCombat(slot, slots)
 	card.onBeforeCombat(slot, slots)
 	
-	if Settings.playAnimations:
-		attackingIndex = 0
-		z_index += 1
-		attacking = true
-		dealtDamage = false
-		attackWaitTimer = 0
-		attackingSlots = slots
-		attackingPositions.clear()
-		for s in slots:
-			attackingPositions.append(s.global_position + (global_position - s.global_position).normalized() * ListOfCards.cardBackground.get_width() * Settings.cardSlotScale)
-		attackReturnPos = global_position
-		attackRotation = attackReturnPos.angle_to_point(attackingPositions[attackingIndex])
-		if attackRotation > PI:
-			attackRotation -= PI
-		elif attackRotation < 0:
-			attackRotation += PI
-		attackRotation -= PI / 2
-		
-	else:
-		for s in slots:
-			fight(s)
-			
-		for s in slots:
-			if is_instance_valid(s.cardNode):
-				s.cardNode.card.onAfterCombat(slot, slots)
-		card.onAfterCombat(slot, slots)
+	attackingIndex = 0
+	z_index += 1
+	attacking = true
+	dealtDamage = false
+	attackWaitTimer = 0
+	attackingSlots = slots
+	attackingPositions.clear()
+	for s in slots:
+		attackingPositions.append(s.global_position + (global_position - s.global_position).normalized() * ListOfCards.cardBackground.get_width() * Settings.cardSlotScale)
+	attackReturnPos = global_position
+	attackRotation = attackReturnPos.angle_to_point(attackingPositions[attackingIndex])
+	if attackRotation > PI:
+		attackRotation -= PI
+	elif attackRotation < 0:
+		attackRotation += PI
+	attackRotation -= PI / 2
 
 func flip():
 	flipping = true

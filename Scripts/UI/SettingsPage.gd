@@ -3,14 +3,55 @@ extends Control
 signal settingsClose
 
 func _ready():
-	$VBox/Anims/CheckBox.pressed = Settings.playAnimations
+	#Waits until parent node has called its ready function
+	yield(owner, "ready")
+	
 	$VBox/Username/LineEdit.text = Server.username
 	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
 	$VBox/MusicSlider/HSlider.value = MusicManager.volume
 	
 	ShaderHandler.connect("shaderChange", self, "onShaderChange")
-	$FDCenter/FileDisplay.connect("onBackPressed", self, "onShaderBackButtonPressed")
-	$FDCenter/FileDisplay.connect("onFilePressed", self, "onShaderLoadButtonPressed")
+	$FDCenter/OptionDisplay.connect("onBackPressed", self, "onShaderBackButtonPressed")
+	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onShaderLoadButtonPressed")
+	
+	for sp in Settings.ANIMATION_SPEEDS:
+		$VBox/AnimSpeed/OptionButton.add_item(sp.capitalize())
+	$VBox/AnimSpeed/OptionButton.select(Settings.ANIMATION_SPEEDS.values().find(int(Settings.animationSpeed * 10)))
+	
+	if Settings.gameMode == Settings.GAME_MODE.NONE:
+		for t in Settings.TURN_TIMES.values():
+			var string = ""
+			if t == -1:
+				string = "No limit"
+			else:
+				string = TurnTimer.intToTime(t)
+			$VBox/TurnTimer/OptionButton.add_item(string)
+		$VBox/TurnTimer/OptionButton.select(Settings.TURN_TIMES.values().find(Settings.turnTimerMax))
+		
+		for t in Settings.GAME_TIMES.values():
+			var string = ""
+			if t == -1:
+				string = "No limit"
+			else:
+				string = TurnTimer.intToTime(t)
+			$VBox/GameTimer/OptionButton.add_item(string)
+		$VBox/GameTimer/OptionButton.select(Settings.GAME_TIMES.values().find(Settings.gameTimerMax))
+	else:
+		$VBox/TurnTimer.hide()
+		$VBox/GameTimer.hide()
+		
+		$VBox.rect_size = Vector2()
+	
+func show():
+	.show()
+	var buffer = Vector2(64, 64)
+	$VBox.rect_size = Vector2()
+	$VBox.rect_position = -$VBox.rect_size / 2
+	
+	$NinePatchRect.rect_min_size = $VBox.rect_size + buffer
+	$NinePatchRect.rect_size = Vector2()
+	$NinePatchRect.rect_position = $VBox.rect_position - buffer / 2
+	print($VBox.rect_size)
 
 func onBackPressed():
 	emit_signal("settingsClose")
@@ -18,9 +59,6 @@ func onBackPressed():
 	visible = false
 	setUsername($VBox/Username/LineEdit.text)
 	Settings.writeToSettings()
-
-func setPlayAnims(button_pressed : bool):
-	Settings.playAnimations = button_pressed
 	
 func setUsername(username : String):
 	Server.setPlayerName(username)
@@ -30,17 +68,27 @@ func openShaderFolder():
 	#OS.shell_open(OS.get_user_data_dir() + "/shaders")
 
 func shaderButtonPressed():
-	$FDCenter/FileDisplay.loadFiles("Select Shader", Settings.shaderPath, ["shader"])
+	$FDCenter/OptionDisplay.loadFiles("Select Shader", Settings.shaderPath, ["shader"])
 
-func onShaderLoadButtonPressed(path):
-	ShaderHandler.setShader(Settings.shaderPath + path)
+func onShaderLoadButtonPressed(button : Button, key):
+	var fileName = key
+	ShaderHandler.setShader(Settings.shaderPath + fileName)
 	onShaderBackButtonPressed()
 
 func onShaderBackButtonPressed():
-	$FDCenter/FileDisplay.hide()
+	$FDCenter/OptionDisplay.hide()
 
 func onShaderChange(path : String):
 	$VBox/Shaders/SelectShaderButton.text = path.get_file().get_basename().capitalize()
+
+func onAnimSpeedSelected(index : int):
+	Settings.animationSpeed = Settings.ANIMATION_SPEEDS.values()[index] / 10.0
+
+func onTurnTimerSelected(index : int):
+	Settings.turnTimerMax = Settings.TURN_TIMES.values()[index]
+
+func onGameTimerSelected(index : int):
+	Settings.gameTimerMax = Settings.GAME_TIMES.values()[index]
 
 func _exit_tree():
 	ShaderHandler.disconnect("shaderChange", self, "onShaderChange")

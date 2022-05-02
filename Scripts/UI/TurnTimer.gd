@@ -1,13 +1,14 @@
 extends Node
 
-var turnTimeMax = 1  * 60
-var gameTimeMax = 10 * 60
+class_name TurnTimer
 
-var turnTimer = turnTimeMax
-var gameTimer = gameTimeMax
+var turnTimer = Settings.turnTimerMax
+var gameTimer = Settings.gameTimerMax
 
 var turnTimerRunning = false
 var gameTimerRunning = false
+
+var turnOver = false
 
 var flipDelayTimer = 0
 var flipDelayMaxTime = 2
@@ -42,8 +43,9 @@ func stopTurnTimer():
 		stopGameTimer()
 
 func resetTurnTimer():
-	turnTimer = turnTimeMax
+	turnTimer = Settings.turnTimerMax
 	updateTurnTimer()
+	turnOver = false
 
 func startGameTimer():
 	gameTimerRunning = true
@@ -53,7 +55,7 @@ func stopGameTimer():
 	gameTimer = ceil(gameTimer)
 
 func resetGameTimer():
-	gameTimer = gameTimeMax
+	gameTimer = Settings.gameTimerMax
 	updateGameTimer()
 
 func _physics_process(delta):
@@ -73,10 +75,12 @@ func _physics_process(delta):
 				flipDelayTimer = 0
 				flipping = true
 		
-		turnTimer -= delta
-		if turnTimer <= 0:
-			stopTurnTimer()
-			emit_signal("onTurnTimerEnd")
+		if Settings.turnTimerMax != -1:
+			turnTimer -= delta
+			if turnTimer <= 0:
+				stopTurnTimer()
+				emit_signal("onTurnTimerEnd")
+				turnOver = true
 		updateTurnTimer()
 			
 	if gameTimerRunning:
@@ -88,12 +92,15 @@ func _physics_process(delta):
 	
 
 func updateTurnTimer():
-	$Label.text = intToTime(max(int(turnTimer), 0))
+	if Settings.turnTimerMax == -1:
+		$Label.text = " --    "
+	else:
+		$Label.text = intToTime(max(int(turnTimer), 0))
 	
 func updateGameTimer():
 	$Label2.text = intToTime(max(int(gameTimer), 0))
 
-func intToTime(num : int) -> String:
+static func intToTime(num : int) -> String:
 	var minutes = num / 60
 	var seconds = int(num - minutes * 60)
 	var minutesString = str(minutes)

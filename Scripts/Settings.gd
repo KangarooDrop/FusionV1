@@ -1,9 +1,42 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.11"
+var versionID = "0.0.3.12"
 
-var playAnimations = true
+
+enum GAME_TYPES {CONSTRUCTED, DRAFT}
+enum MATCH_TYPE {FREE_PLAY, TOURNAMENT}
+enum DRAFT_TYPES {WINSTON, BOOSTER, SOLOMON}
+
+enum ANIMATION_SPEEDS \
+{
+	NORMAL = 10,
+	QUICK = 15,
+	DOUBLE = 20,
+	INSTANT = 9990
+}
+
+enum TURN_TIMES \
+{
+	FIFTEEN = 15
+	THIRTY = 30,
+	SIXTY = 60,
+	NINETY = 90,
+	ONE_TWENTY = 120,
+	NONE = -1
+}
+
+enum GAME_TIMES \
+{
+	ONE = 60,
+	FIVE = 5 * 60,
+	TEN = 10 * 60,
+	TWENTY = 20 * 60
+}
+
+var turnTimerMax : int = TURN_TIMES.NINETY
+var gameTimerMax : int = GAME_TIMES.TEN
+var animationSpeed : float = ANIMATION_SPEEDS.NORMAL / 10.0
 var selectedDeck = ""
 var path = "user://decks/"
 
@@ -21,10 +54,6 @@ var settingsName = "settings"
 
 var shaderPath = "user://shaders/"
 
-enum GAME_TYPES {CONSTRUCTED, DRAFT}
-enum MATCH_TYPE {FREE_PLAY, TOURNAMENT}
-enum DRAFT_TYPES {WINSTON, BOOSTER, SOLOMON}
-
 func _ready():
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
 #	if json.keys().size() == 0:
@@ -33,7 +62,9 @@ func _ready():
 	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
 	var ok = verifySettings(settings)
 	
-	Settings.playAnimations = settings["play_anims"]
+	Settings.turnTimerMax = settings["turn_time"]
+	Settings.gameTimerMax = settings["game_time"]
+	Settings.animationSpeed = 1		#settings["anim_speed"]
 	Server.username = settings["username"]
 	Server.ip = settings["ip_saved"]
 	SoundEffectManager.setVolume(settings["sound_volume"])
@@ -45,8 +76,14 @@ func _ready():
 
 func verifySettings(settings : Dictionary) -> bool:
 	var ok = true
-	if not settings.has("play_anims"):
-		settings["play_anims"] = true
+	if not settings.has("anim_speed"):
+		settings["anim_speed"] = ANIMATION_SPEEDS.NORMAL / 10.0
+		ok = false
+	if not settings.has("turn_time"):
+		settings["turn_time"] = TURN_TIMES.NINETY
+		ok = false
+	if not settings.has("game_time"):
+		settings["game_time"] = GAME_TIMES.TEN
 		ok = false
 	if not settings.has("username"):
 		settings["username"] = "NO_NAME"
@@ -74,7 +111,9 @@ func writeToSettings():
 func getSettingsDict() -> Dictionary:
 	var rtn := \
 	{
-		"play_anims":playAnimations,
+		"anim_speed":animationSpeed,
+		"turn_time":turnTimerMax,
+		"game_time":gameTimerMax,
 		"username":Server.username,
 		"ip_saved":Server.ip,
 		"shader":ShaderHandler.currentShader,

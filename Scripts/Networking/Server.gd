@@ -358,6 +358,7 @@ remote func receivedStartBuilding():
 				availableCardCount[d.card.UUID] = d.count
 
 	var editor = load("res://Scenes/DeckEditor.tscn").instance()
+	availableCardCount[86] = -1
 	editor.availableCardCount = availableCardCount
 	root.add_child(editor)
 	get_tree().current_scene = editor

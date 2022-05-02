@@ -7,7 +7,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=5]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=10]
 
@@ -332,7 +332,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDisplay" parent="FDCenter" instance=ExtResource( 8 )]
+[node name="OptionDisplay" parent="FDCenter" instance=ExtResource( 8 )]
 visible = false
 
 [node name="LobbySettings" parent="." instance=ExtResource( 7 )]

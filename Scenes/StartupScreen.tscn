@@ -194,7 +194,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -512.0
 margin_right = 512.0
-margin_bottom = 1489.0
+margin_bottom = 1529.0
 custom_fonts/normal_font = SubResource( 1 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
@@ -215,7 +215,8 @@ Sound effects obtained from zapsplat.com
 [u]																			[/u]
 
 [u]Music[/u]: 
-Cam Yeomans & Owen [Lastname] - Scratched & Mixed
+Cam Yeomans, Owen [Lastname], & Someone else
+ - Scratched & Mixed
 
 Nic Silver - Reborn in a Dream
 Music Provided by Gyft Music ([url=\"https://gyftmusic.com\"]gyftmusic.com[/url])
@@ -263,7 +264,8 @@ Sound effects obtained from zapsplat.com
 																			
 
 Music: 
-Cam Yeomans & Owen [Lastname] - Scratched & Mixed
+Cam Yeomans, Owen [Lastname], & Someone else
+ - Scratched & Mixed
 
 Nic Silver - Reborn in a Dream
 Music Provided by Gyft Music (gyftmusic.com)

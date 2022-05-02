@@ -1,5 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
+[ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=3]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=4]
@@ -10,7 +11,6 @@
 [ext_resource path="res://Scripts/UI/IntegerLineEdit.gd" type="Script" id=9]
 [ext_resource path="res://Scenes/UI/LobbySettings.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/UI/OpponentList.tscn" type="PackedScene" id=11]
-[ext_resource path="res://Scenes/UI/FileDisplay.tscn" type="PackedScene" id=12]
 
 [node name="LobbyX" type="Control"]
 anchor_right = 1.0
@@ -341,7 +341,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDisplay" parent="FDCenter" instance=ExtResource( 12 )]
+[node name="OptionDisplay" parent="FDCenter" instance=ExtResource( 1 )]
 visible = false
 
 [node name="LoadingWindow" parent="." instance=ExtResource( 8 )]

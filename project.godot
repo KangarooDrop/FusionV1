@@ -489,6 +489,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/rabidholepuncher/RabidHolePuncher.gd"
 }, {
+"base": "Node2D",
+"class": "OptionDisplay",
+"language": "GDScript",
+"path": "res://Scripts/UI/OptionDisplay.gd"
+}, {
 "base": "Reference",
 "class": "Player",
 "language": "GDScript",
@@ -510,6 +515,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/AbilityText/TextCard.gd"
 }, {
 "base": "Ability",
+"class": "TextMill",
+"language": "GDScript",
+"path": "res://Scripts/AbilityText/TextMill.gd"
+}, {
+"base": "Ability",
 "class": "TextRarity",
 "language": "GDScript",
 "path": "res://Scripts/AbilityText/TextRarity.gd"
@@ -523,6 +533,11 @@ _global_script_classes=[ {
 "class": "TournamentLobby",
 "language": "GDScript",
 "path": "res://Scripts/Networking/TournamentLobby.gd"
+}, {
+"base": "Node",
+"class": "TurnTimer",
+"language": "GDScript",
+"path": "res://Scripts/UI/TurnTimer.gd"
 } ]
 _global_script_class_icons={
 "Ability": "",
@@ -621,13 +636,16 @@ _global_script_class_icons={
 "HolePunchState": "res://addons/rabidholepuncher/assets/state.svg",
 "HolePunchStateMachine": "res://addons/rabidholepuncher/assets/state_machine.svg",
 "HolePuncher": "res://addons/rabidholepuncher/assets/punch.svg",
+"OptionDisplay": "",
 "Player": "",
 "PopupUI": "",
 "TextArmor": "",
 "TextCard": "",
+"TextMill": "",
 "TextRarity": "",
 "TextScrapyard": "",
-"TournamentLobby": ""
+"TournamentLobby": "",
+"TurnTimer": ""
 }
 
 [application]
