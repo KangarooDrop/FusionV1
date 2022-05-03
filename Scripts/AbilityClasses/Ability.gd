@@ -17,7 +17,7 @@ func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Ve
 	self.iconPos = iconPos
 	self.setCount(1)
 
-func stateChecked():
+func _physics_process(delta):
 	pass
 
 func onHoverEnter(slot):

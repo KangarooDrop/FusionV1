@@ -9,9 +9,9 @@ var overlayAddedTo = null
 var overlay = null
 
 func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0)):
-	stateChecked()
+	pass
 
-func stateChecked():
+func _physics_process(delta):
 	if card != null:
 		if overlayAddedTo != card.cardNode:
 			if is_instance_valid(overlayAddedTo):

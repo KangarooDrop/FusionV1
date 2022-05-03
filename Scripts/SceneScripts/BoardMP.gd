@@ -512,8 +512,12 @@ var practiceWaiting = false
 
 func _physics_process(delta):
 	
-	for p in players:
-		p._physics_process(delta)
+	if not gameOver:
+		for p in players:
+			p._physics_process(delta)
+		
+		for c in getAllCards():
+			c._physics_process(delta)
 	
 	if not gameOver and deadPlayers.size() > 0:
 		gameOver = true
@@ -851,14 +855,23 @@ func addCardToGrave(playerID : int, card : Card):
 	if card.tier != 1:
 		return
 	
+	var oldCard = graves[playerID].cardNode.card
+	if graves[playerID].cardNode.getCardVisible():
+		graves[playerID].cardNode.card.cardNode = null
+		graves[playerID].cardNode.card = null
+	
 	card.playerID = playerID
 	
 	graveCards[playerID].append(card)
 	
 	var cn = graves[playerID].cardNode
 	cn.visible = true
-	cn.card = card
+	cn.card = card.clone()
+	cn.card.cardNode = cn
 	cn.setCardVisible(true)
+	
+	if oldCard != null:
+		oldCard._physics_process(0)
 	
 	graveDisplays[playerID].addCard(card)
 	
@@ -934,12 +947,14 @@ func initZones():
 	graveCards[p.UUID] = []
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
+	cardNodeInst.card.cardNode = cardNodeInst
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
 	$GraveHolder/GraveHolder_A.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
+	cardNodeInst.slot = cardInst
 	cardNodeInst.position = cardInst.position
 	
 	
@@ -987,12 +1002,14 @@ func initZones():
 	graveCards[p.UUID] = []
 	cardNodeInst = cardNode.instance()
 	cardNodeInst.card = ListOfCards.getCard(0)
+	cardNodeInst.card.cardNode = cardNodeInst
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
 	$GraveHolder/GraveHolder_B.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
+	cardNodeInst.slot = cardInst
 	cardNodeInst.position = cardInst.position
 	
 		
@@ -1549,6 +1566,11 @@ func getAllCards() -> Array:
 				cards.append(s.cardNode.card)
 		for cn in cardNodesFusing:
 			cards.append(cn.card)
+		for k in graves.keys():
+			var s = graves[k]
+			if is_instance_valid(s.cardNode):
+				cards.append(s.cardNode.card)
+				
 		for c in graveCards[p.UUID]:
 			cards.append(c)
 		
@@ -1682,9 +1704,6 @@ func checkState():
 				boardStateNew.append(s.cardNode.card.serialize())
 			else:
 				boardStateNew.append({})
-	
-	for c in getAllCards():
-		c.stateChecked()
 	
 	for i in range(boardState.size()):
 		if not Card.areIdentical(boardState[i], boardStateNew[i]):

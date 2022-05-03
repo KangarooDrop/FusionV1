@@ -185,14 +185,20 @@ func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
 	
 	return cardNew
 
-func hasAbility(card : Card, abl) -> bool:
+static func hasAbility(card : Card, abl) -> bool:
 	return getAbility(card, abl) != null
 
-func getAbility(card : Card, abl):
+static func getAbility(card : Card, abl):
 	for a in card.abilities:
 		if a is abl:
 			return a
 	return null
+
+static func isInZone(card : Card, zone : int) -> bool:
+	if card != null and is_instance_valid(card.cardNode) and is_instance_valid(card.cardNode.slot) and card.cardNode.slot.currentZone == zone:
+		return true
+	else:
+		return false
 
 static func fuseTest():
 	for i in range(ListOfCards.cardList.size()):

@@ -87,11 +87,11 @@ func _init(params):
 	else:
 		maxToughness = toughness
 
-func stateChecked():
+func _physics_process(delta):
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
-		abl.stateChecked()
+		abl._physics_process(delta)
 
 func onHoverEnter(slot):
 	var abls = abilities.duplicate()
