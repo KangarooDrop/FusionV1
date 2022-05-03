@@ -532,7 +532,7 @@ remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, b
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	#if board.activePlayer == 0 and Settings.gameMode == Settings.GAME_MODE.PLAY:
 	#	return
-	board.slotClickedServer(isOpponent, slotZone, slotID, button_index)
+	board.serverQueue.append([isOpponent, slotZone, slotID, button_index])
 	
 ####################################################################
 

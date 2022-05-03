@@ -14,9 +14,22 @@ func _ready():
 	$FDCenter/OptionDisplay.connect("onBackPressed", self, "onShaderBackButtonPressed")
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onShaderLoadButtonPressed")
 	
+
+	var animOptions = []
+	var animKeys = []
 	for sp in Settings.ANIMATION_SPEEDS:
-		$VBox/AnimSpeed/OptionButton.add_item(sp.capitalize())
-	$VBox/AnimSpeed/OptionButton.select(Settings.ANIMATION_SPEEDS.values().find(int(Settings.animationSpeed * 10)))
+		animOptions.append(sp.capitalize())
+		animKeys.append(Settings.ANIMATION_SPEEDS[sp] / 10.0)
+	
+	var index = Settings.ANIMATION_SPEEDS.values().find(int(Settings.animationSpeed * 10))
+	var selector = $VBox/AnimSpeed/OptionSelector
+	selector.holder = $OptionHolder
+	selector.title = "Animation Speed"
+	selector.options = animOptions
+	selector.keys = animKeys
+	selector.initOptions()
+	selector.connect("onSelected", self, "onAnimSpeedSelected")
+	selector.onIndexPressed(index)
 	
 	if Settings.gameMode == Settings.GAME_MODE.NONE:
 		for t in Settings.TURN_TIMES.values():
@@ -81,8 +94,8 @@ func onShaderBackButtonPressed():
 func onShaderChange(path : String):
 	$VBox/Shaders/SelectShaderButton.text = path.get_file().get_basename().capitalize()
 
-func onAnimSpeedSelected(index : int):
-	Settings.animationSpeed = Settings.ANIMATION_SPEEDS.values()[index] / 10.0
+func onAnimSpeedSelected(button, key):
+	Settings.animationSpeed = key
 
 func onTurnTimerSelected(index : int):
 	Settings.turnTimerMax = Settings.TURN_TIMES.values()[index]

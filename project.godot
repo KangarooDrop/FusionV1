@@ -494,6 +494,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/UI/OptionDisplay.gd"
 }, {
+"base": "Button",
+"class": "OptionSelector",
+"language": "GDScript",
+"path": "res://Scripts/UI/OptionSelector.gd"
+}, {
 "base": "Reference",
 "class": "Player",
 "language": "GDScript",
@@ -637,6 +642,7 @@ _global_script_class_icons={
 "HolePunchStateMachine": "res://addons/rabidholepuncher/assets/state_machine.svg",
 "HolePuncher": "res://addons/rabidholepuncher/assets/punch.svg",
 "OptionDisplay": "",
+"OptionSelector": "",
 "Player": "",
 "PopupUI": "",
 "TextArmor": "",

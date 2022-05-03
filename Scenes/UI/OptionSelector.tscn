@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://Scripts/UI/OptionSelector.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=2]
 
 [node name="OptionSelector" type="Button"]
 anchor_left = 0.5
@@ -16,8 +15,5 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="OptionDisplay" parent="." instance=ExtResource( 2 )]
-visible = false
 
 [connection signal="pressed" from="." to="." method="onButtonPressed"]

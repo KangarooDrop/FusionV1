@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/UI/SettingsPage.gd" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=7]
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=8]
 [ext_resource path="res://Art/UI/drop_down.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/UI/OptionSelector.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -258,20 +259,18 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Open Folder"
 
 [node name="AnimSpeed" type="HBoxContainer" parent="VBox"]
-visible = false
 margin_top = 172.0
 margin_right = 349.0
-margin_bottom = 195.0
+margin_bottom = 192.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="VBox/AnimSpeed"]
-margin_left = 85.0
-margin_top = 2.0
-margin_right = 237.0
-margin_bottom = 21.0
+margin_left = 90.0
+margin_right = 242.0
+margin_bottom = 19.0
 custom_fonts/font = ExtResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Animation Speed"
@@ -279,28 +278,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OptionButton" type="OptionButton" parent="VBox/AnimSpeed"]
-margin_left = 241.0
-margin_right = 263.0
-margin_bottom = 23.0
-theme = SubResource( 2 )
-custom_icons/arrow = ExtResource( 9 )
-custom_styles/hover = ExtResource( 7 )
-custom_styles/pressed = ExtResource( 6 )
-custom_styles/normal = ExtResource( 8 )
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="OptionSelector" parent="VBox/AnimSpeed" instance=ExtResource( 10 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 246.0
+margin_top = 0.0
+margin_right = 258.0
+margin_bottom = 20.0
 
 [node name="TurnTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 172.0
+margin_top = 202.0
 margin_right = 349.0
-margin_bottom = 195.0
+margin_bottom = 225.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/TurnTimer"]
@@ -328,9 +319,9 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="GameTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 205.0
+margin_top = 235.0
 margin_right = 349.0
-margin_bottom = 228.0
+margin_bottom = 258.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/GameTimer"]
@@ -358,19 +349,19 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="Control" type="Control" parent="VBox"]
-margin_top = 238.0
+margin_top = 268.0
 margin_right = 349.0
-margin_bottom = 238.0
+margin_bottom = 268.0
 
 [node name="Control2" type="Control" parent="VBox"]
-margin_top = 248.0
+margin_top = 278.0
 margin_right = 349.0
-margin_bottom = 248.0
+margin_bottom = 278.0
 
 [node name="BackButton" type="Button" parent="VBox"]
-margin_top = 258.0
+margin_top = 288.0
 margin_right = 349.0
-margin_bottom = 281.0
+margin_bottom = 311.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/focus = ExtResource( 7 )
@@ -403,11 +394,17 @@ __meta__ = {
 [node name="OptionDisplay" parent="FDCenter" instance=ExtResource( 1 )]
 visible = false
 
+[node name="OptionHolder" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="value_changed" from="VBox/SoundSlider/HSlider" to="." method="onSoundVolumeChange"]
 [connection signal="value_changed" from="VBox/MusicSlider/HSlider" to="." method="onMusicVolumeChange"]
 [connection signal="pressed" from="VBox/Shaders/SelectShaderButton" to="." method="shaderButtonPressed"]
 [connection signal="pressed" from="VBox/Shaders/ShaderFolderButton" to="." method="openShaderFolder"]
-[connection signal="item_selected" from="VBox/AnimSpeed/OptionButton" to="." method="onAnimSpeedSelected"]
 [connection signal="item_selected" from="VBox/TurnTimer/OptionButton" to="." method="onTurnTimerSelected"]
 [connection signal="item_selected" from="VBox/GameTimer/OptionButton" to="." method="onGameTimerSelected"]
 [connection signal="pressed" from="VBox/BackButton" to="." method="onBackPressed"]

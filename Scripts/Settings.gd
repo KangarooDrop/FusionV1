@@ -64,7 +64,7 @@ func _ready():
 	
 	Settings.turnTimerMax = settings["turn_time"]
 	Settings.gameTimerMax = settings["game_time"]
-	Settings.animationSpeed = 1		#settings["anim_speed"]
+	Settings.animationSpeed = settings["anim_speed"]
 	Server.username = settings["username"]
 	Server.ip = settings["ip_saved"]
 	SoundEffectManager.setVolume(settings["sound_volume"])

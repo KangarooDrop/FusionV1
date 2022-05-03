@@ -737,7 +737,7 @@ func _physics_process(delta):
 					graves[millNode.playerID].add_child(millNode)
 					
 	for slot in cardsShaking.keys():
-		if not is_instance_valid(slot.cardNode):
+		if not is_instance_valid(slot) or not is_instance_valid(slot.cardNode):
 			cardsShaking.erase(slot)
 		else:
 			cardsShaking[slot] -= delta
@@ -747,21 +747,13 @@ func _physics_process(delta):
 			else:
 				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
 				
-	if serverQueue.size() > 0:
-		serverCheckTimer += delta
-		if serverCheckTimer >= serverCheckMaxTime:
-			if slotClicked(serverQueue[0][0], serverQueue[0][1], serverQueue[0][2]):
-				serverQueue.remove(0)
-				serverWait = 0
-				serverCheckTimer = serverCheckMaxTime
-			else:
-				serverCheckTimer = 0
-			
+	if serverQueue.size() > 0 and cardNodesFusing.size() == 0:
 		serverWait += delta
 		if serverWait >= serverMaxWait:
 			serverQueue.remove(0)
 			serverWait = 0
-			serverCheckTimer = 0
+			
+		processServerQueue()
 	
 	if gameStarted:
 		if selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
@@ -1018,12 +1010,9 @@ static func centerNodes(nodes : Array, position : Vector2, cardWidth : int, card
 		
 var serverQueue = []
 var serverWait = 0
-var serverMaxWait = 1
-var serverCheckMaxTime = 0.1
-var serverCheckTimer = serverCheckMaxTime
+var serverMaxWait = 5
 
-#F 1 8 1
-func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_index : int):
+func getSlotFromServer(isOpponent : bool, slotZone : int, slotID : int) -> Node:
 	var playerIndex = 0 if isOpponent else 1
 	var parent = null
 	match slotZone:
@@ -1048,16 +1037,20 @@ func slotClickedServer(isOpponent : bool, slotZone : int, slotID : int, button_i
 				parent = $GraveDisplay_A
 			else:
 				parent = $GraveDisplay_B
-	#	yield(get_tree().create_timer(0.02), "timeout")
 	
 	if parent != null:
-		if serverQueue.size() == 0:
-			if not slotClicked(parent.get_child(slotID), button_index, true):
-				serverQueue.append([parent.get_child(slotID), button_index, true])
-				print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
-		else:
-			serverQueue.append([parent.get_child(slotID), button_index, true])
-			print("ERROR OCCURED FROM SERVER CLICK; SLOT NOT READY: QUEUEING")
+		return parent.get_child(slotID)
+	else:
+		return null
+
+func processServerQueue():
+	if serverQueue.size() > 0:
+		var data = serverQueue[0]
+		var slot = getSlotFromServer(data[0], data[1], data[2])
+		if slot != null:
+			if slotClicked(slot, data[3], true):
+				serverQueue.remove(0)
+				serverWait = 0
 		
 var hoveringOn = null
 
@@ -1478,7 +1471,7 @@ func isDrawing() -> bool:
 	return false
 
 func getWaiting() -> bool:
-	return waitAttacking() or waitDrawing() or waitFusing() or waitMilling() or waitActionQueue() or waitAbilityStack()
+	return waitAttacking() or waitDrawing() or waitFusing() or waitMilling() or waitActionQueue() or waitAbilityStack() or waitServerQueue()
 
 func waitAttacking() -> bool:
 	for slot in creatures[players[activePlayer].UUID]:
@@ -1503,6 +1496,9 @@ func waitActionQueue() -> bool:
 
 func waitAbilityStack() -> bool:
 	return abilityStack.size() > 0
+
+func waitServerQueue() -> bool:
+	return serverQueue.size() > 0
 
 
 var clickedOff = false
@@ -1578,6 +1574,11 @@ func getAllCreatures() -> Array:
 	return cards
 
 func nextTurn():
+	var waiting = getWaiting()
+	while waiting:
+		waiting = getWaiting()
+		yield(get_tree().create_timer(0.1), "timeout")
+	
 	if gameOver:
 		return
 	dataLog.append("NEXT_TURN")
