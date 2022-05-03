@@ -42,25 +42,6 @@ func _init(params):
 	tier = int(params["tier"])
 	if params.has("player_id"):
 		playerID = params["player_id"]
-	if params.has("abilities"):
-		for abl in params["abilities"]:
-			var ablData = abl.rsplit(" ")
-			var found = false
-			
-			for data in ProjectSettings.get_setting("_global_script_classes"):
-				if data["class"] == ablData[0]:
-					var abilityLoaded = load(data["path"]).new(self)
-					if ablData.size() > 1:
-						abilityLoaded.setCount(int(ablData[1]))
-					addAbility(abilityLoaded)
-					found = true
-			if not found:
-				print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", abl)
-	if params.has("removed_abilities"):
-		for abl in params["removed_abilities"]:
-			for data in ProjectSettings.get_setting("_global_script_classes"):
-				if data["class"] == abl:
-					removedAbilities.append(load(data["path"]).new(self))
 			
 	if params.has("creature_type"):
 		for c in params["creature_type"]:
@@ -86,6 +67,27 @@ func _init(params):
 		maxToughness = params["max_toughness"]
 	else:
 		maxToughness = toughness
+
+	if params.has("abilities"):
+		for abl in params["abilities"]:
+			var ablData = abl.rsplit(" ")
+			var found = false
+			
+			for data in ProjectSettings.get_setting("_global_script_classes"):
+				if data["class"] == ablData[0]:
+					var abilityLoaded = load(data["path"]).new(self)
+					if ablData.size() > 1:
+						abilityLoaded.setCount(int(ablData[1]))
+					addAbility(abilityLoaded)
+					found = true
+			if not found:
+				print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", abl)
+	if params.has("removed_abilities"):
+		for abl in params["removed_abilities"]:
+			for data in ProjectSettings.get_setting("_global_script_classes"):
+				if data["class"] == abl:
+					removedAbilities.append(load(data["path"]).new(self))
+
 
 func _physics_process(delta):
 	var abls = abilities.duplicate()
@@ -350,6 +352,7 @@ func serialize() -> Dictionary:
 	rtn["abilities"] = []
 	rtn["removed_abilities"] = []
 	rtn["can_play"] = canBePlayed
+	rtn["played_this_turn"] = playedThisTurn
 	for abl in abilities:
 		rtn["abilities"].append(abl.get_script())
 	for abl in removedAbilities:

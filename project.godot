@@ -429,6 +429,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/SceneScripts/CardNode.gd"
 }, {
+"base": "Sprite",
+"class": "CardOverlay",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/CardOverlay.gd"
+}, {
 "base": "Node2D",
 "class": "CardSlot",
 "language": "GDScript",
@@ -629,6 +634,7 @@ _global_script_class_icons={
 "Card": "",
 "CardDisplay": "",
 "CardNode": "",
+"CardOverlay": "",
 "CardSlot": "",
 "CardsLeftIndicator": "",
 "Deck": "",
@@ -674,6 +680,7 @@ NodeLoc="*res://Scripts/NodeLoc.gd"
 BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
 Tournament="*res://Scripts/Networking/Tournament.gd"
 RabidHolePuncher="*res://addons/rabidholepuncher/RabidHolePuncher.tscn"
+Preloader="*res://Scripts/Preloader.gd"
 
 [display]
 

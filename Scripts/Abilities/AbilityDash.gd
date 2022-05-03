@@ -3,7 +3,7 @@ extends Ability
 class_name AbilityDash
 
 func _init(card : Card).("Dash", card, Color.red, false, Vector2(0, 0)):
-	pass
+	card.playedThisTurn = false
 
 func onEnter(slot):
 	.onEnter(slot)

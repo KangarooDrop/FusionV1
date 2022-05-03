@@ -5,27 +5,15 @@ class_name AbilityFrozen
 var frozenThisTurn = false
 
 var frozenOverlay = preload("res://Art/overlays/frozen.png")
-var overlayAddedTo = null
 var overlay = null
 
 func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0)):
 	pass
 
 func _physics_process(delta):
-	if card != null:
-		if overlayAddedTo != card.cardNode:
-			if is_instance_valid(overlayAddedTo):
-				overlay.queue_free()
-				overlay = null
-			overlayAddedTo = null
-			
-			if is_instance_valid(card.cardNode):
-				overlay = Sprite.new()
-				overlay.texture = frozenOverlay
-				card.cardNode.get_node("Overlays").add_child(overlay)
-				overlayAddedTo = card.cardNode
-			else:
-				card.cardNode = null
+	if not is_instance_valid(overlay) and card != null and is_instance_valid(card.cardNode):
+		overlay = Preloader.overlayScene.instance().setTexture(frozenOverlay).setSource(self).setDestroyOnRemove(true)
+		card.cardNode.get_node("Overlays").add_child(overlay)
 
 func onEnter(slot):
 	.onEnter(slot)
@@ -53,14 +41,9 @@ func onEndOfTurn():
 		if frozenThisTurn:
 			card.canFuseThisTurn = true
 			if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-				var scr = get_script()
-				for abl in card.abilities:
-					if abl is scr:
-						card.abilities.erase(abl)
-						card.cantAttackSources.erase(self)
-						overlay.queue_free()
-						overlay = null
-						break
+				card.abilities.erase(self)
+				card.cantAttackSources.erase(self)
+				card = null
 
 func combine(abl : Ability):
 	.combine(abl)

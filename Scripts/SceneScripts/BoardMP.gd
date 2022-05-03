@@ -1392,6 +1392,9 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 		var card = cards[0]
 		cards.remove(0)
 		
+		if is_instance_valid(card.cardNode):
+			card.cardNode.queue_free()
+		
 		var cn = cardNode.instance()
 		cn.card = card
 		card.cardNode = cn
@@ -1425,6 +1428,9 @@ func fuseToHand(player : Player, cards : Array):
 	while cards.size() > 0:
 		var card = cards[0]
 		cards.remove(0)
+		
+		if is_instance_valid(card.cardNode):
+			card.cardNode.queue_free()
 		
 		var cn = cardNode.instance()
 		cn.card = card
