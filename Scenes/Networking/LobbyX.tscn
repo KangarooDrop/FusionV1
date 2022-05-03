@@ -353,7 +353,7 @@ visible = false
 [node name="OpponentList" parent="." instance=ExtResource( 11 )]
 visible = false
 
-[node name="LeaveButton" type="Button" parent="OpponentList"]
+[node name="LeaveButton" type="Button" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -397,4 +397,4 @@ __meta__ = {
 [connection signal="text_changed" from="Lobby/LineEdit2" to="Lobby/LineEdit2" method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Lobby/SendChatButton" to="." method="sendMessage"]
 [connection signal="text_entered" from="Lobby/LineEdit4" to="." method="sendMessage"]
-[connection signal="pressed" from="OpponentList/LeaveButton" to="." method="_on_OpponentLeaveButton_pressed"]
+[connection signal="pressed" from="LeaveButton" to="." method="_on_OpponentLeaveButton_pressed"]

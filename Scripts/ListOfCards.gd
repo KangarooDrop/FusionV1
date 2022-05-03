@@ -161,6 +161,7 @@ func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
 			newIndex = cardA.UUID
 	
 	var cardNew = ListOfCards.getCard(newIndex)
+	cardNew.cardNode = cardNode
 	cardNew.playerID = cardA.playerID
 	cardNew.ownerID = cardA.ownerID
 	cardNew.power = cardA.power + cardB.power
@@ -176,8 +177,6 @@ func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
 	cardNew.playedThisTurn = cardA.playedThisTurn
 	#cardNew.canAttackThisTurn = cardA.canAttackThisTurn
 	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
-	
-	cardNew.cardNode = cardNode
 	
 	cardNew.rarity = max(cardA.rarity, cardB.rarity)
 	

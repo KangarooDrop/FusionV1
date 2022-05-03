@@ -46,6 +46,7 @@ func _ready():
 func setCardVisible(isVis : bool):
 	if isVis and getCardVisible() and is_instance_valid(slot):
 		slot.shownToOpponent()
+	$Overlays.visible = isVis
 	
 	if isVis:
 		if card != null:

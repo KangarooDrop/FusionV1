@@ -34,6 +34,8 @@ onready var fileDisplay = $CenterControl/OptionDisplay
 enum FILE_WHAT {NONE, LOAD, DELETE}
 var fileWhat = FILE_WHAT.NONE
 
+var idToLabel : Dictionary = {}
+
 func _ready():
 	BackgroundFusion.pause()
 	MusicManager.playDeckEditorMusic()
@@ -49,6 +51,34 @@ func _ready():
 	
 	$CenterControl/SortNode/HBoxContainer/SortButton.select(0)
 	setSortOrder(0)
+	
+	
+	if Settings.gameMode != Settings.GAME_MODE.NONE and Server.online:
+		popPlayersReady()
+
+func checkReady():
+	clearPlayersReady()
+	popPlayersReady()
+
+func clearPlayersReady():
+	for c in $CenterControl/OpponentDisplay.get_children():
+		c.queue_free()
+
+func popPlayersReady():
+	for player_id in Server.playerIDs:
+		var label = Label.new()
+		label.clip_text = true
+		label.rect_size.x = $CenterControl/OpponentDisplay.rect_size.x
+		label.text = Server.playerNames[player_id]
+		NodeLoc.setLabelParams(label, true)
+		idToLabel[player_id] = label
+		$CenterControl/OpponentDisplay.add_child(label)
+		
+		var sprite = Sprite.new()
+		sprite.texture = checkTex if Server.playersReady[player_id] else uncheckTex
+		label.add_child(sprite)
+		sprite.position.x = label.rect_size.x - sprite.texture.get_width()
+		sprite.position.y = label.rect_size.y / 2
 
 func setCards():
 	if Settings.gameMode == Settings.GAME_MODE.NONE:

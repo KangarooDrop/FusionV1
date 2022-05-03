@@ -258,6 +258,7 @@ func _on_LeaveButton_pressed():
 func startGame():
 	$LoadingWindow.visible = false
 	openFileSelector()
+	$LeaveButton.show()
 
 func openFileSelector():
 	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])

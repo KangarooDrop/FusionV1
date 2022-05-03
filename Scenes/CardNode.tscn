@@ -80,3 +80,5 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="."]
+
+[node name="Overlays" type="Node2D" parent="."]

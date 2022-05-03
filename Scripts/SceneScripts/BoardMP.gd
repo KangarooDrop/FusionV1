@@ -1681,7 +1681,10 @@ func checkState():
 				boardStateNew.append(s.cardNode.card.serialize())
 			else:
 				boardStateNew.append({})
-				
+	
+	for c in getAllCards():
+		c.stateChecked()
+	
 	for i in range(boardState.size()):
 		if not Card.areIdentical(boardState[i], boardStateNew[i]):
 			#yield(get_tree().create_timer(0.1), "timeout")

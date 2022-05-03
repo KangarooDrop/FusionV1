@@ -111,6 +111,7 @@ func _physics_process(delta):
 				fn.connect("onFadeIn", self, "cardFadeInFinish", [cardInst])
 				cardInst.add_child(fn)
 				fn.fadeIn()
+				NodeLoc.getBoard().checkState()
 			else:
 				cardInst.setCardVisible(false)
 				if handVisible or drawQueue[0][2]:
@@ -120,6 +121,7 @@ func _physics_process(delta):
 				
 				for c in NodeLoc.getBoard().getAllCards():
 					c.onDraw(cardInst.card)
+				NodeLoc.getBoard().checkState()
 			
 			centerCards()
 			if drawQueue[0][1]:

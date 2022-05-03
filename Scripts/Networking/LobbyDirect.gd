@@ -208,6 +208,7 @@ func removeUser(player_id, username):
 			return
 
 func startGame():
+	$LeaveButton.show()
 	openFileSelector()
 
 

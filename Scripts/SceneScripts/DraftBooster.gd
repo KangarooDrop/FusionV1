@@ -1,5 +1,7 @@
 extends DraftClass
 
+onready var selfID = get_tree().get_network_unique_id()
+
 var numBoosters = 3
 var cardsPerBooster = 10
 var boosterCount = 0
@@ -25,6 +27,11 @@ onready var cardHeight = ListOfCards.cardBackground.get_height()
 
 var pickForMe = false
 
+var packNums := {}
+
+var direction : int = 1
+var playersReady := {}
+
 func _ready():
 	var gameSeed = OS.get_system_time_msecs()
 	print("current game seed is ", gameSeed)
@@ -40,19 +47,47 @@ func _ready():
 		playerIDs.shuffle()
 		
 		Server.sendDraftData([playerIDs])
+		
+		for player_id in playerIDs:
+			packNums[player_id] = 1
+			playersReady[player_id] = false
+			
+		popPackNums()
 	
 	get_tree().set_auto_accept_quit(false)
+
 
 func setParams(params : Dictionary):
 	if params.has("num_boosters"):
 		numBoosters = params["num_boosters"]
 
+func setBoosterReady(player_id):
+	print(player_id, " is ready for the next round")
+	playersReady[player_id] = true
+	
+	for player_id in playerIDs:
+		if not playersReady[player_id]:
+			return
+	
+	print("--------  All players ready  --------")
+	Server.confirmBoosterReady()
+	confirmBoosterReady()
+	
+	for player_id in playerIDs:
+		playersReady[player_id] = false
+
+func confirmBoosterReady():
+	direction *= -1
+	genNewBooster()
+
 func genNewBooster(cards = null):
 	if cards == []:
-		genNewBooster()
+		#Server.setBoosterReady()
+		#genNewBooster()
 		return
 	
 	if cards == null:
+		setPackNum(selfID, 1)
 		if boosterCount == numBoosters:
 			if Server.host:
 				playerDoneDrafting(1)
@@ -91,7 +126,7 @@ var doubleClickTimer = 0
 var doubleClickMaxTime = 0.2
 
 func _physics_process(delta):
-	#print(boosterQueue)
+	
 	
 	if pickForMe and $BoosterDisplay.slots.size() > 0:
 		slotClickedQueue1.append($BoosterDisplay.slots[randi() % $BoosterDisplay.slots.size()])
@@ -129,6 +164,12 @@ func _physics_process(delta):
 				$BoosterDisplay.clear()
 				#highestZ.cardNode.queue_free()
 				highestZ.queue_free()
+				
+				setPackNum(selfID, packNums[selfID] - 1)
+				if cardIDs.size() == 0:
+					Server.setBoosterReady()
+					setPackNum(selfID, 0)
+				
 			elif $CardDisplay.slots.has(highestZ):
 				if is_instance_valid(doubleClickSlot) and doubleClickSlot == highestZ:
 					$DeckDisplayControl/DeckDisplay.addCard(highestZ.cardNode.card.UUID)
@@ -219,10 +260,63 @@ func closeDraft():
 func playerDisconnected(player_id):
 	playerIDs.has(player_id)
 	playerIDs.erase(player_id)
+	packNums.erase(player_id)
+	playersReady.erase(player_id)
+	clearPackNums()
+	popPackNums()
+
+func clearPackNums():
+	counter = 0
+	for c in $PackNums.get_children():
+		if c != $PackNums/NinePatchRect:
+			c.queue_free()
+
+func popPackNums():
+	for player_id in playerIDs:
+		if player_id == selfID:
+			popPlayer(Server.username, packNums[selfID])
+		else:
+			popPlayer(Server.playerNames[player_id], packNums[player_id])
+	$PackNums/NinePatchRect.rect_size = Vector2($PackNums.rect_size.x + 32, offY * counter) + Vector2(buffer, buffer)
+	$PackNums/NinePatchRect.rect_position = -Vector2(buffer, buffer) / 2
+
+var counter = 0
+var offY = 24
+var buffer = 16
+
+func popPlayer(username : String, num : int):
+	
+	var label = Label.new()
+	NodeLoc.setLabelParams(label)
+	label.text = username
+	var length = label.get("custom_fonts/font").get_string_size(username).x
+	label.clip_text = true
+	label.rect_size.x = $PackNums.rect_size.x
+	$PackNums.add_child(label)
+	label.rect_position = Vector2(0, offY * counter)
+	
+	label = Label.new()
+	NodeLoc.setLabelParams(label)
+	label.text = " :  " + str(num)
+	$PackNums.add_child(label)
+	label.rect_position = Vector2($PackNums.rect_size.x, offY * counter)
+		
+	counter += 1
+
+func setPackNum(player_id : int, num : int):
+	packNums[player_id] = num
+	if player_id == selfID:
+		Server.setPackNum(num)
+	clearPackNums()
+	popPackNums()
 
 func setDraftData(data : Array):
 	print("got draft data : ", data)
 	playerIDs = data[0]
+	
+	for player_id in playerIDs:
+		packNums[player_id] = 1
+	popPackNums()
 
 func onQuitButtonPressed():
 	if not closing:
@@ -237,14 +331,19 @@ func onSettingsPressed():
 	$SettingsHolder/SettingsPage.visible = true
 
 func _exit_tree():
-	if Server.online and getNextPlayerID() != get_tree().get_network_unique_id():
+	if Server.online and getNextPlayerID() != selfID:
 		sendAllBoosters()
 	get_tree().set_auto_accept_quit(true)
 
 func getNextPlayerID() -> int:
-	var myIndex = playerIDs.find(get_tree().get_network_unique_id())
-	var nextID = playerIDs[(myIndex + 1) % playerIDs.size()]
+	var myIndex = playerIDs.find(selfID)
+	var nextID = playerIDs[(myIndex + direction) % playerIDs.size()]
 	return nextID
+
+func addToBoosterQueue(boosterData):
+	boosterQueue.append(boosterData)
+	if boosterData.size() > 0:
+		setPackNum(selfID, packNums[selfID] + 1)
 
 func sendAllBoosters():
 	if playerIDs.size() > 0 and not closing:

@@ -249,8 +249,7 @@ remote func removeUser(player_id : int):
 	#playerNames.erase(player_id)
 	playersReady.erase(player_id)
 	playersChallenged.erase(player_id)
-	print(Server.host, "  ", Settings.gameMode, "  ", Settings.GAME_MODE.TOURNAMENT, "  ", Tournament.tree)
-	if Server.host and get_node_or_null("/root/DeckEditor") != null and Tournament.tree == null:
+	if get_node_or_null("/root/DeckEditor") != null and Tournament.tree == null:
 		checkReady()
 	
 	receiveOpponentLeave(player_id)
@@ -378,6 +377,31 @@ remote func receiveSetCurrentPlayerDisplay(currentPlayer):
 
 #######################################################################################
 
+func setPackNum(num : int):
+	for player_id in playerIDs:
+		rpc_id(player_id, "receiveSetPackNum", num)
+
+remote func receiveSetPackNum(num : int):
+	var player_id = get_tree().get_rpc_sender_id()
+	NodeLoc.getBoard().setPackNum(player_id, num)
+
+func setBoosterReady():
+	if Server.host:
+		NodeLoc.getBoard().setBoosterReady(1)
+	else:
+		rpc_id(1, "receivedSetBoosterReady")
+
+remote func receivedSetBoosterReady():
+	var player_id = get_tree().get_rpc_sender_id()
+	NodeLoc.getBoard().setBoosterReady(player_id)
+
+func confirmBoosterReady():
+	for player_id in playerIDs:
+		rpc_id(player_id, "receiveConfirmBoosterReady")
+
+remote func receiveConfirmBoosterReady():
+	NodeLoc.getBoard().confirmBoosterReady()
+
 func sendBooster(player_id : int, boosterData : Array):
 	if player_id == get_tree().get_network_unique_id():
 		receiveSendBooster(boosterData)
@@ -386,7 +410,7 @@ func sendBooster(player_id : int, boosterData : Array):
 
 remote func receiveSendBooster(boosterData : Array):
 	if get_node_or_null("/root/Draft") != null:
-		get_node("/root/Draft").boosterQueue.append(boosterData)
+		get_node("/root/Draft").addToBoosterQueue(boosterData)
 
 func doneBoosterDraft():
 	rpc_id(1, "receiveDoneBoosterDraft")
@@ -708,11 +732,10 @@ func startSolomonBuilding(player_id):
 
 func setReady(ready : bool):
 	if Server.online:
-		if Server.host:
-			playersReady[1] = ready
-			checkReady()
-		else:
-			rpc_id(1, "receiveSetReady", ready)
+		playersReady[get_tree().get_network_unique_id()] = ready
+		for player_id in playerIDs:
+			rpc_id(player_id, "receiveSetReady", ready)
+		checkReady()
 	else:
 		print("The Server is currently offline")
 
@@ -722,16 +745,20 @@ remote func receiveSetReady(ready : bool):
 	checkReady()
 	
 func checkReady():
-	if playerIDs.size() == 0:
-		return
-	for player_id in playersReady.keys():
-		if not playersReady[player_id]:
-			return
+	if NodeLoc.getBoard() != null:
+		NodeLoc.getBoard().checkReady()
 	
-	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
-		startTournament()
-	elif Settings.matchType == Settings.MATCH_TYPE.FREE_PLAY:
-		startFreePlay()
+	if Server.host:
+		if playerIDs.size() == 0:
+			return
+		for player_id in playersReady.keys():
+			if not playersReady[player_id]:
+				return
+		
+		if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
+			startTournament()
+		elif Settings.matchType == Settings.MATCH_TYPE.FREE_PLAY:
+			startFreePlay()
 
 func startTournament():
 	var bracket = Tournament.genTournamentOrder(playersReady.keys())

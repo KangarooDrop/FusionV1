@@ -4,8 +4,28 @@ class_name AbilityFrozen
 
 var frozenThisTurn = false
 
+var frozenOverlay = preload("res://Art/overlays/frozen.png")
+var overlayAddedTo = null
+var overlay = null
+
 func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0)):
-	pass
+	stateChecked()
+
+func stateChecked():
+	if card != null:
+		if overlayAddedTo != card.cardNode:
+			if is_instance_valid(overlayAddedTo):
+				overlay.queue_free()
+				overlay = null
+			overlayAddedTo = null
+			
+			if is_instance_valid(card.cardNode):
+				overlay = Sprite.new()
+				overlay.texture = frozenOverlay
+				card.cardNode.get_node("Overlays").add_child(overlay)
+				overlayAddedTo = card.cardNode
+			else:
+				card.cardNode = null
 
 func onEnter(slot):
 	.onEnter(slot)
@@ -38,6 +58,8 @@ func onEndOfTurn():
 					if abl is scr:
 						card.abilities.erase(abl)
 						card.cantAttackSources.erase(self)
+						overlay.queue_free()
+						overlay = null
 						break
 
 func combine(abl : Ability):

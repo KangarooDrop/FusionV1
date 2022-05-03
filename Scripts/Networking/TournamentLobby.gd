@@ -14,6 +14,7 @@ var waitingNum = 0
 var idToLabel := {}
 
 func _ready():
+	Server.opponentID = -1
 	MusicManager.playLobbyMusic()
 	#tournyTest()
 	if Tournament.tree != null:

@@ -204,6 +204,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OpponentDisplay" type="VBoxContainer" parent="CenterControl"]
+margin_left = -462.0
+margin_top = -32.0
+margin_right = -300.0
+margin_bottom = 268.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="SaveDisplay" type="Node2D" parent="CenterControl"]
 visible = false
 position = Vector2( 20, 20 )

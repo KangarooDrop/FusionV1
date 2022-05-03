@@ -87,6 +87,12 @@ func _init(params):
 	else:
 		maxToughness = toughness
 
+func stateChecked():
+	var abls = abilities.duplicate()
+	abls.invert()
+	for abl in abls:
+		abl.stateChecked()
+
 func onHoverEnter(slot):
 	var abls = abilities.duplicate()
 	abls.invert()
