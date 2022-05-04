@@ -20,7 +20,7 @@ func setDestroyOnRemove(dOR : bool) -> Sprite:
 func _physics_process(delta):
 	if destroyOnRemove:
 		if source != null:
-			if source.card == null or not is_instance_valid(source.card.cardNode):
+			if source.card == null or not is_instance_valid(source.card.cardNode) or source.card.cardNode != get_node("../../"):
 				queue_free()
 
 func remove():

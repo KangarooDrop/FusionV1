@@ -90,12 +90,13 @@ func select():
 	rotation = 0
 
 func _physics_process(delta):
+	if card != null:
+		card._physics_process(delta)
+		$Label.text = str(card.power) + " / " + str(card.toughness)
+	
 	if isSelected:
 		selectedTimer += delta
 		rotation = sin(selectedTimer * 1.5) * PI / 32
-	
-	if card != null:
-		$Label.text = str(card.power) + " / " + str(card.toughness)
 		
 	if is_instance_valid(card) and is_instance_valid(slot) and slot.currentZone == CardSlot.ZONES.CREATURE:
 		$CardBackground.texture = (ListOfCards.cardBackground if (not card.canAttack()) else ListOfCards.cardBackgroundActive)

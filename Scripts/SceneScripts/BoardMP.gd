@@ -515,9 +515,6 @@ func _physics_process(delta):
 	if not gameOver:
 		for p in players:
 			p._physics_process(delta)
-		
-		for c in getAllCards():
-			c._physics_process(delta)
 	
 	if not gameOver and deadPlayers.size() > 0:
 		gameOver = true
@@ -713,7 +710,9 @@ func _physics_process(delta):
 				
 			if card != null:
 				var cn = cardNode.instance()
+				cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 				cn.card = card
+				cn.card.cardNode = cn
 				add_child(cn)
 				cn.z_index += 1
 				cn.global_position = decks[players[playerNum].UUID].global_position
@@ -726,7 +725,6 @@ func _physics_process(delta):
 			if millWaitTimer < millWaitMaxTime:
 				millWaitTimer += dAnim
 				if millWaitTimer >= millWaitMaxTime:
-					
 					for c in getAllCards():
 						c.onMill(millNode.card)
 					
@@ -737,8 +735,6 @@ func _physics_process(delta):
 					millWaitTimer = 0
 				else:
 					millNode.global_position = lerp(decks[millNode.playerID].global_position, graves[millNode.playerID].global_position, millWaitTimer / millWaitMaxTime)
-					millNode.get_parent().remove_child(millNode)
-					graves[millNode.playerID].add_child(millNode)
 					
 	for slot in cardsShaking.keys():
 		if not is_instance_valid(slot) or not is_instance_valid(slot.cardNode):
@@ -869,9 +865,6 @@ func addCardToGrave(playerID : int, card : Card):
 	cn.card = card.clone()
 	cn.card.cardNode = cn
 	cn.setCardVisible(true)
-	
-	if oldCard != null:
-		oldCard._physics_process(0)
 	
 	graveDisplays[playerID].addCard(card)
 	
@@ -1389,11 +1382,8 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 				hoveringWindowSlot = null
 	
 	while cards.size() > 0:
-		var card = cards[0]
+		var card = cards[0].clone()
 		cards.remove(0)
-		
-		if is_instance_valid(card.cardNode):
-			card.cardNode.queue_free()
 		
 		var cn = cardNode.instance()
 		cn.card = card
@@ -1426,11 +1416,8 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 
 func fuseToHand(player : Player, cards : Array):
 	while cards.size() > 0:
-		var card = cards[0]
+		var card = cards[0].clone()
 		cards.remove(0)
-		
-		if is_instance_valid(card.cardNode):
-			card.cardNode.queue_free()
 		
 		var cn = cardNode.instance()
 		cn.card = card

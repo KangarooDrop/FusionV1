@@ -49,10 +49,13 @@ func _physics_process(delta):
 	if discardQueue.size() > 0:
 		var toRemove = []
 		for i in range(discardQueue.size()):
-			discardQueue[i][0].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i][0].global_position.y)), discardTimers[i] / discardMaxTime)
-			discardTimers[i] += dAnim
-			if discardTimers[i] >= discardMaxTime:
+			if not is_instance_valid(discardQueue[i][0].cardNode):
 				toRemove.append(i)
+			else:
+				discardQueue[i][0].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i][0].global_position.y)), discardTimers[i] / discardMaxTime)
+				discardTimers[i] += dAnim
+				if discardTimers[i] >= discardMaxTime:
+					toRemove.append(i)
 		
 		if toRemove.size() > 0:
 			for i in range(toRemove.size()):
