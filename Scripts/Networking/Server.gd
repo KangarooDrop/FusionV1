@@ -257,7 +257,10 @@ remote func removeUser(player_id : int):
 remote func receiveOpponentLeave(player_id):
 	if Settings.gameMode == Settings.GAME_MODE.PLAY:
 		if player_id == opponentID:
-			get_node("/root/main/CenterControl/Board").gameOver = true
+			var board = get_node("/root/main/CenterControl/Board")
+			board.gameOver = true
+			for k in board.timers.keys():
+				board.timers[k].stopTurnTimer()
 			opponentID = -1
 #			closeServer()
 	

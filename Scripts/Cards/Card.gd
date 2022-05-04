@@ -321,7 +321,7 @@ func canAttack() -> bool:
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
 
-func clone() -> Card:
+func clone(resetAbilities := false) -> Card:
 	var c : Card = ListOfCards.getCard(UUID)
 	c.abilities.clear()
 	c.power = power
@@ -330,7 +330,10 @@ func clone() -> Card:
 	c.maxToughness = maxToughness
 	c.rarity = rarity
 	for abl in abilities:
-		c.addAbility(abl.cloneBase(c))
+		if resetAbilities:
+			c.addAbility(abl.cloneBase(c))
+		else:
+			c.addAbility(abl.clone(c))
 	for abl in removedAbilities:
 		c.removedAbilities.append(abl.cloneBase(c))
 	return c

@@ -7,21 +7,22 @@ func _init(card : Card).("Bounce", card, Color.purple, false, Vector2(0, 0)):
 
 func onEndOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card):
-		addToStack("onEffect", [card, card.cardNode.slot])
+		addToStack("onEffect", [card])
 
 static func onEffect(params : Array):
 	var board = NodeLoc.getBoard()
 	for p in board.players:
-		if p.UUID == params[1].playerID:
-			p.hand.addCardToHand([params[0], true, true])
-			if is_instance_valid(params[1].cardNode):
-				params[1].cardNode.card.onLeave()
+		if p.UUID == params[0].playerID:
+			if is_instance_valid(params[0].cardNode):
+				params[0].onLeave()
 				for c in board.getAllCards():
-					if c != params[1].cardNode.card:
-						c.onOtherLeave(params[1])
+					if c != params[0]:
+						c.onOtherLeave(params[0].cardNode.slot)
 				
-				params[1].cardNode.queue_free()
-				params[1].cardNode = null
+				params[0].cardNode.queue_free()
+				params[0].cardNode = null
+			
+			p.hand.addCardToHand([params[0].clone(true), true, true])
 			break
 
 func genDescription(subCount = 0) -> String:
