@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/AngerBadger.png-c55f89f2a33bc299fdabd85493425d04.stex"
+path="res://.import/_wave.png-48538d9f45d90f27a30544fc97015a72.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/AngerBadger.png"
-dest_files=[ "res://.import/AngerBadger.png-c55f89f2a33bc299fdabd85493425d04.stex" ]
+source_file="res://Art/portraits/_wave.png"
+dest_files=[ "res://.import/_wave.png-48538d9f45d90f27a30544fc97015a72.stex" ]
 
 [params]
 

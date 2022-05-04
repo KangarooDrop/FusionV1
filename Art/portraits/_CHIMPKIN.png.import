@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/aaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png-e4cf9c630b05cdcd253e18ceb706a5c0.stex"
+path="res://.import/_CHIMPKIN.png-e085cdb27d788cedd649cb79f7de633d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/aaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png"
-dest_files=[ "res://.import/aaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png-e4cf9c630b05cdcd253e18ceb706a5c0.stex" ]
+source_file="res://Art/portraits/_CHIMPKIN.png"
+dest_files=[ "res://.import/_CHIMPKIN.png-e085cdb27d788cedd649cb79f7de633d.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Yes.png-8bfb1825acc984a925d09f332dfa0003.stex"
+path="res://.import/card_SLIME.png-637fd9f04d40f8720a732e623fc8fc58.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/Yes.png"
-dest_files=[ "res://.import/Yes.png-8bfb1825acc984a925d09f332dfa0003.stex" ]
+source_file="res://Art/portraits/card_SLIME.png"
+dest_files=[ "res://.import/card_SLIME.png-637fd9f04d40f8720a732e623fc8fc58.stex" ]
 
 [params]
 

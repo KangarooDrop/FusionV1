@@ -311,7 +311,7 @@
   },
   "29": {
     "name": "Legionstones",
-    "tex": "res://Art/portraits/Rocks.png",
+    "tex": "res://Art/portraits/card_LEGION_STONES.png",
     "power": 0,
     "toughness": 4,
     "creature_type": [
@@ -353,7 +353,7 @@
   },
   "32": {
     "name": "Slime",
-    "tex": "res://Art/portraits/slime.png",
+    "tex": "res://Art/portraits/card_SLIME.png",
     "power": 0,
     "toughness": 1,
     "creature_type": [
@@ -367,7 +367,7 @@
   },
   "33": {
     "name": "Frostling",
-    "tex": "res://Art/portraits/Snowflake.png",
+    "tex": "res://Art/portraits/card_FROSTLING.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [
@@ -381,7 +381,7 @@
   },
   "34": {
     "name": "Blighted",
-    "tex": "res://Art/portraits/ToasterToilet.png",
+    "tex": "res://Art/portraits/card_BLIGHTED.png",
     "power": -3,
     "toughness": -3,
     "creature_type": [
@@ -675,7 +675,7 @@
   },
   "55": {
     "name": "Rockardio",
-    "tex": "res://Art/portraits/RockDude.png",
+    "tex": "res://Art/portraits/card_ROCKARDIO.png",
     "power": 0,
     "toughness": 5,
     "creature_type": [
@@ -689,7 +689,7 @@
   },
   "56": {
     "name": "Grey Goo",
-    "tex": "res://Art/portraits/WurmGuy.png",
+    "tex": "res://Art/portraits/card_GREY_GOO.png",
     "power": 1,
     "toughness": 1,
     "creature_type": [

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Rocks.png-20ea517410c6aa17d30dcec0cf50260d.stex"
+path="res://.import/card_FROSTLING.png-698eb62d90d6e583f9a1dadd2edc188c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/Rocks.png"
-dest_files=[ "res://.import/Rocks.png-20ea517410c6aa17d30dcec0cf50260d.stex" ]
+source_file="res://Art/portraits/card_FROSTLING.png"
+dest_files=[ "res://.import/card_FROSTLING.png-698eb62d90d6e583f9a1dadd2edc188c.stex" ]
 
 [params]
 

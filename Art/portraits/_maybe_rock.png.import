@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FireKoi.png-cae593a1351e19e0ee629baccfe8981a.stex"
+path="res://.import/_maybe_rock.png-6df2447da103e37341d2160de56e4433.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/portraits/FireKoi.png"
-dest_files=[ "res://.import/FireKoi.png-cae593a1351e19e0ee629baccfe8981a.stex" ]
+source_file="res://Art/portraits/_maybe_rock.png"
+dest_files=[ "res://.import/_maybe_rock.png-6df2447da103e37341d2160de56e4433.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
