@@ -209,6 +209,7 @@ func sort():
 				var cardPlacing = cardNode.instance()
 				cardPlacing.z_index = 0
 				cardPlacing.card = card
+				cardPlacing.card.cardNode = cardPlacing
 				page.add_child(cardPlacing)
 				cardPlacing.global_position = slot.global_position
 				slot.cardNode = cardPlacing
