@@ -55,7 +55,7 @@ func slotClicked(slot : CardSlot):
 				
 				for p in board.players:
 					if p.UUID == s.playerID:
-						p.hand.addCardToHand([s.cardNode.card.clone(true), true, true])
+						p.hand.addCardToHand([s.cardNode.card, true, true])
 						s.cardNode.queue_free()
 						break
 				

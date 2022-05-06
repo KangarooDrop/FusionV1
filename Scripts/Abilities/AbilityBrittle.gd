@@ -10,7 +10,8 @@ func onEndOfTurn():
 		addToStack("onEffect", [])
 
 func onEffect(params):
-	card.isDying = true
+	if ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
+		card.isDying = true
 	
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the end of the turn, this creature is destroyed."

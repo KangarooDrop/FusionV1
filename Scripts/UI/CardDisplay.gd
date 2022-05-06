@@ -232,6 +232,13 @@ func _physics_process(delta):
 		for i in range(indexes.size()):
 			nodes[indexes[i]].z_index = i + z_index
 			slots[indexes[i]].z_index = i + z_index
+	
+	if mouseButtonReleased:
+		mouseButtonReleased = false
+		mouseDown = false
+		clickedSlot = null
+		cardHolding = null
+		centerCards()
 
 func onSlotEnter(slot : CardSlot):
 	get_parent().onSlotEnter(slot)
@@ -251,16 +258,20 @@ func onMouseDown(slot : CardSlot, button_index : int):
 			mouseDownQueue.append(slot)
 		else:
 			get_parent().onMouseDown(slot, button_index)
-	
+
+var mouseButtonReleased = false
+
+func _input(event):
+	if event is InputEventMouseButton and not event.is_pressed() and event.button_index == 1:
+		mouseButtonReleased = true
+		
+
 func onMouseUp(slot : CardSlot, button_index : int):
 	if button_index == 1:
 		if mouseDown and is_instance_valid(clickedSlot) and slot == clickedSlot:
 			get_parent().onMouseDown(slot, button_index)
 			clickedSlot = null
-		
-		if is_instance_valid(cardHolding) and slot == cardHolding:
-			cardHolding = null
-			centerCards()
+			mouseButtonReleased = false
 
 func setCards(cards : Array):
 	clear()

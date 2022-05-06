@@ -748,7 +748,7 @@ func _physics_process(delta):
 				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
 	
 	if gameStarted:
-		if selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
+		if actionQueue.size() == 0 and selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
 			selectingSource.slotClicked(null)
 		
 		if not selectingSlot and cardNodesFusing.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
@@ -1149,7 +1149,7 @@ func onSlotExit(slot : CardSlot):
 		
 
 func onMouseDown(slot : CardSlot, button_index : int):
-	if gameStarted and not gameOver and button_index == 1:
+	if gameStarted and not gameOver and button_index == 1 and not timers[players[0].UUID].turnOver:
 		if selectingSlot:
 			slotClicked(slot, button_index)
 		else:

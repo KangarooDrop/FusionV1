@@ -15,19 +15,26 @@ func onEndOfTurn():
 		addToStack("onStealEffect", [self, true])
 
 func onStealEffect(params):
+	if not ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
+		return
+	
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		if p.UUID != card.playerID:
+			var swapped = false
 			for slot in board.creatures[p.UUID]:
 				if not is_instance_valid(slot.cardNode):
 					swapSlot(card.cardNode, slot)
-					params[0].returned = params[1]
-					
-					if not params[1]:
-						card.hasAttacked = false
-						card.playedThisTurn = false
-					
-					return
+					swapped = true
+					break
+			
+			params[0].returned = params[1] or not swapped
+			
+			if not params[1]:
+				card.hasAttacked = false
+				card.playedThisTurn = false
+			
+			return
 
 static func swapSlot(cardNode, newSlot):
 	cardNode.slot.cardNode = null
@@ -38,4 +45,4 @@ static func swapSlot(cardNode, newSlot):
 	cardNode.card.playerID = newSlot.playerID
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, its controller's opponent gains control of it until the end of the turn and it may attack this turn"
+	return .genDescription() + "When this creature is played, its opponent gains control of it until the end of the turn. It may attack this turn"

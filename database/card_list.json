@@ -145,7 +145,7 @@
     "rarity": "COMMON"
   },
   "13": {
-    "name": "Leviathan",
+    "name": "Mermotaur",
     "tex": "res://Art/portraits/card_LEVIATHAN.png",
     "creature_type": [
       5,

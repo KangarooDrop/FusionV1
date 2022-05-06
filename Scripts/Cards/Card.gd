@@ -511,7 +511,7 @@ func fuseToSelf(card):
 	name = newCard.name
 	tier = newCard.tier
 	texture = newCard.texture
-	creatureType = types
+	creatureType = newCard.creatureType
 	
 	power = power + card.power
 	toughness = toughness + card.toughness

@@ -22,7 +22,7 @@ func onEffect(params : Array):
 				card.cardNode.queue_free()
 				card.cardNode = null
 			
-			p.hand.addCardToHand([card.clone(true), true, true])
+			p.hand.addCardToHand([card, true, true])
 			break
 
 func genDescription(subCount = 0) -> String:
