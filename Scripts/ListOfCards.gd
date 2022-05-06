@@ -103,87 +103,9 @@ func canFuseCards(cards : Array) -> bool:
 
 func fuseCards(cards : Array) -> Card:
 	while cards.size() > 1:
-		var c_new = fusePair(cards[0], cards[1])
-		cards.remove(0)
-		cards.remove(0)
-		cards.insert(0, c_new)
+		cards[0].fuseToSelf(cards[1])
+		cards.remove(1)
 	return cards[0]
-	
-func fusePair(cardA : Card, cardB : Card, cardNode : CardNode = null) -> Card:
-	if cardA == null or cardB == null:
-		return null
-	
-	var uniques = []
-	for t in (cardA.creatureType + cardB.creatureType):
-		if not uniques.has(t) and t != Card.CREATURE_TYPE.Null:
-			uniques.append(t)
-	
-	"""
-	uniques = cardA.creatureType.duplicate()
-	for t in cardB.creatureType:
-		if not cardA.creatureType.has(t):
-			uniques.append(t)
-	print(uniques)
-	"""
-	
-	var canFuse = (uniques.size() <= 2)
-	var types = []
-	
-	if uniques.size() == 0:
-		pass
-	elif uniques.size() == 1:
-		if (cardA.creatureType + cardB.creatureType).has(Card.CREATURE_TYPE.Null):
-			types = [uniques[0], Card.CREATURE_TYPE.Null]
-		else:
-			types = [uniques[0], uniques[0]] 
-				
-	elif uniques.size() == 2:
-		types = uniques
-	else:
-		return null
-	
-	var numTypes = types.size()
-	var newIndex
-	match numTypes:
-		0:
-			newIndex = fusionList[0]
-		1:
-			newIndex = fusionList[1][types[0]]
-		2:
-			newIndex = fusionList[2][types[0]][types[1]]
-			if newIndex == null:
-				newIndex = fusionList[2][types[1]][types[0]]
-	
-	if newIndex == -1:
-		if cardA.creatureType.has(Card.CREATURE_TYPE.Null):
-			newIndex = cardB.UUID
-		else:
-			newIndex = cardA.UUID
-	
-	var cardNew = ListOfCards.getCard(newIndex)
-	cardNew.cardNode = cardNode
-	cardNew.playerID = cardA.playerID
-	cardNew.ownerID = cardA.ownerID
-	cardNew.power = cardA.power + cardB.power
-	cardNew.toughness = cardA.toughness + cardB.toughness
-	cardNew.maxToughness = cardA.maxToughness + cardB.maxToughness
-	cardNew.abilities.clear()
-	for abl in (cardA.abilities + cardB.abilities):
-		cardNew.addAbility(abl.clone(cardNew))
-	for abl in (cardA.removedAbilities + cardB.removedAbilities):
-		cardNew.removedAbilities.append(abl.clone(cardNew))
-	cardNew.trimAbilities()
-	cardNew.hasAttacked = cardA.hasAttacked
-	cardNew.playedThisTurn = cardA.playedThisTurn
-	#cardNew.canAttackThisTurn = cardA.canAttackThisTurn
-	cardNew.canFuseThisTurn = cardA.canFuseThisTurn
-	
-	cardNew.rarity = max(cardA.rarity, cardB.rarity)
-	
-	cardA.onFusion(cardNew)
-	cardB.onFusion(cardNew)
-	
-	return cardNew
 
 static func hasAbility(card : Card, abl) -> bool:
 	return getAbility(card, abl) != null
@@ -208,4 +130,4 @@ static func fuseTest():
 				var c2 = ListOfCards.getCard(j)
 				if c2.tier == 1:
 					if ListOfCards.canFuseCards([c1, c2]):
-						var _c = ListOfCards.fusePair(c1, c2)
+						var _c = c1.clone().fuseToSelf(c2)

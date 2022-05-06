@@ -179,23 +179,25 @@ func _physics_process(delta):
 	if is_instance_valid(cardHolding):
 		var oldIndex = slots.find(cardHolding)
 		
-		var newIndex = int(int(cardHolding.position.x + (slots.size() / 2.0 * lastOff)) / lastOff)
-		newIndex = min(newIndex, slots.size() - 1)
-		newIndex = max(newIndex, 0)
-		newIndex = max(newIndex, oldIndex-1)
-		newIndex = min(newIndex, oldIndex+1)
+		if oldIndex >= 0:
 		
-		if newIndex != oldIndex:
-			var tmp1 = slots[newIndex]
-			var tmp2 = nodes[newIndex]
-			slots[newIndex] = slots[oldIndex]
-			nodes[newIndex] = nodes[oldIndex]
-			slots[oldIndex] = tmp1
-			nodes[oldIndex] = tmp2
-			centerCards()
-		
-		cardHolding.cardNode.global_position = get_global_mouse_position()
-		cardHolding.global_position = get_global_mouse_position()
+			var newIndex = int(int(cardHolding.position.x + (slots.size() / 2.0 * lastOff)) / lastOff)
+			newIndex = min(newIndex, slots.size() - 1)
+			newIndex = max(newIndex, 0)
+			newIndex = max(newIndex, oldIndex-1)
+			newIndex = min(newIndex, oldIndex+1)
+			
+			if newIndex != oldIndex:
+				var tmp1 = slots[newIndex]
+				var tmp2 = nodes[newIndex]
+				slots[newIndex] = slots[oldIndex]
+				nodes[newIndex] = nodes[oldIndex]
+				slots[oldIndex] = tmp1
+				nodes[oldIndex] = tmp2
+				centerCards()
+			
+			cardHolding.cardNode.global_position = get_global_mouse_position()
+			cardHolding.global_position = get_global_mouse_position()
 			
 	
 	if slots.size() > 0:

@@ -6,14 +6,14 @@ func _init(card : Card).("Upgrade", card, Color.lightgray, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card.playerID, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 			
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0]:
+		if p.UUID == card.playerID:
 			for cn in p.hand.nodes:
 				for abl in cn.card.abilities:
-					abl.setCount(abl.count + params[1])
+					abl.setCount(abl.count + params[0])
 			break
 
 func genDescription(subCount = 0) -> String:

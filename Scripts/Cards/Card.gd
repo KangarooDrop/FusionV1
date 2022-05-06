@@ -27,11 +27,11 @@ var canFuseThisTurn = true
 var canBePlayed = true
 var playedThisTurn = false
 
-var params
-
 var cardNode
 var playerID = -1
 var ownerID = -1
+
+var params
 
 func _init(params):
 	self.params = params
@@ -161,11 +161,11 @@ func onEndOfTurn():
 	for abl in abls:
 		abl.onEndOfTurn()
 				
-func onFusion(card):
+func onFusion():
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
-		abl.onFusion(card)
+		abl.onFusion()
 	
 func onEnterFromFusion(slot):
 	var abls = abilities.duplicate()
@@ -329,6 +329,10 @@ func clone(resetAbilities := false) -> Card:
 	c.creatureType = creatureType
 	c.maxToughness = maxToughness
 	c.rarity = rarity
+	c.hasAttacked = hasAttacked
+	c.playedThisTurn = playedThisTurn
+	c.playerID = playerID
+	c.ownerID = ownerID
 	for abl in abilities:
 		if resetAbilities:
 			c.addAbility(abl.cloneBase(c))
@@ -460,3 +464,68 @@ func heal(amount : int) -> bool:
 		return true
 	else:
 		return false
+
+func fuseToSelf(card):
+	var uniques = []
+	for t in (creatureType + card.creatureType):
+		if not uniques.has(t) and t != CREATURE_TYPE.Null:
+			uniques.append(t)
+	
+	var canFuse = (uniques.size() <= 2)
+	var types = []
+	
+	if uniques.size() == 0:
+		pass
+	elif uniques.size() == 1:
+		if (creatureType + card.creatureType).has(CREATURE_TYPE.Null):
+			types = [uniques[0], CREATURE_TYPE.Null]
+		else:
+			types = [uniques[0], uniques[0]] 
+				
+	elif uniques.size() == 2:
+		types = uniques
+	else:
+		return null
+	
+	var numTypes = types.size()
+	var newIndex
+	match numTypes:
+		0:
+			newIndex = ListOfCards.fusionList[0]
+		1:
+			newIndex = ListOfCards.fusionList[1][types[0]]
+		2:
+			newIndex = ListOfCards.fusionList[2][types[0]][types[1]]
+			if newIndex == null:
+				newIndex = ListOfCards.fusionList[2][types[1]][types[0]]
+	
+	if newIndex == -1:
+		if creatureType.has(CREATURE_TYPE.Null):
+			newIndex = card.UUID
+		else:
+			newIndex = UUID
+	
+	var newCard = ListOfCards.getCard(newIndex)
+	
+	UUID = newCard.UUID
+	name = newCard.name
+	tier = newCard.tier
+	texture = newCard.texture
+	creatureType = types
+	
+	power = power + card.power
+	toughness = toughness + card.toughness
+	maxToughness = maxToughness + card.maxToughness
+	
+	for abl in card.abilities:
+		addAbility(abl.clone(self))
+	for abl in card.removedAbilities:
+		removedAbilities.append(abl.clone(self))
+	trimAbilities()
+	
+	rarity = max(rarity, card.rarity)
+	
+	onFusion()
+	
+	if is_instance_valid(cardNode):
+		cardNode.setCardVisible(cardNode.getCardVisible())

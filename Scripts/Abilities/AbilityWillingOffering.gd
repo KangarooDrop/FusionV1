@@ -10,19 +10,19 @@ func _init(card).("Willing Offering", card, Color.darkgray, false, Vector2(16, 4
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
 		if slot.playerID == card.playerID:
-			addToStack("onEffect", [self.card, slot.cardNode.card])
+			addToStack("onEffect", [slot.cardNode.card])
 
 func onEffect(params):
-	if NodeLoc.getBoard().isOnBoard(params[0]) and NodeLoc.getBoard().isOnBoard(params[1]):
-		if params[1].power > 0:
-			params[0].power += params[1].power
-			buffsAppliedVec.x += params[1].power
-		if params[1].toughness > 0:
-			params[0].toughness += params[1].toughness
-			params[0].maxToughness += params[1].maxToughness
-			buffsAppliedVec.y += params[1].toughness
+	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().isOnBoard(params[0]):
+		if params[0].power > 0:
+			card.power += params[0].power
+			buffsAppliedVec.x += params[0].power
+		if params[0].toughness > 0:
+			card.toughness += params[0].toughness
+			card.maxToughness += params[0].maxToughness
+			buffsAppliedVec.y += params[0].toughness
 		
-		params[1].isDying = true
+		params[0].isDying = true
 
 func clone(card):
 	var abl = .clone(card)

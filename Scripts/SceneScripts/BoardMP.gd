@@ -642,7 +642,7 @@ func _physics_process(delta):
 							fuseSpinWaitTimer = 0
 							fusing = false
 							#cardNodesFusing[0].slot = fuseEndSlot
-							cardNodesFusing[0].card = ListOfCards.fusePair(cardNodesFusing[0].card, cardNodesFusing[1].card, cardNodesFusing[0])
+							cardNodesFusing[0].card.fuseToSelf(cardNodesFusing[1].card)
 							cardNodesFusing[0].setCardVisible(true)
 							cardNodesFusing[1].queue_free()
 							cardNodesFusing.remove(1)
@@ -746,14 +746,6 @@ func _physics_process(delta):
 				cardsShaking.erase(slot)
 			else:
 				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
-				
-	if serverQueue.size() > 0 and cardNodesFusing.size() == 0:
-		serverWait += delta
-		if serverWait >= serverMaxWait:
-			serverQueue.remove(0)
-			serverWait = 0
-			
-		processServerQueue()
 	
 	if gameStarted:
 		if selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
@@ -785,6 +777,16 @@ func _physics_process(delta):
 					actionQueue.remove(0)
 			else:
 				actionQueue.remove(0)
+	
+	
+	if serverQueue.size() > 0 and cardNodesFusing.size() == 0:
+		serverWait += delta
+		if serverWait >= serverMaxWait:
+			serverQueue.remove(0)
+			serverWait = 0
+			
+		processServerQueue()
+	
 	
 	if rightClickQueue.size() > 0:
 		clickedOff = false
@@ -858,7 +860,7 @@ func addCardToGrave(playerID : int, card : Card):
 	
 	card.playerID = playerID
 	
-	graveCards[playerID].append(card)
+	graveCards[playerID].append(card.clone())
 	
 	var cn = graves[playerID].cardNode
 	cn.visible = true
@@ -866,7 +868,7 @@ func addCardToGrave(playerID : int, card : Card):
 	cn.card.cardNode = cn
 	cn.setCardVisible(true)
 	
-	graveDisplays[playerID].addCard(card)
+	graveDisplays[playerID].addCard(card.clone())
 	
 	for c in getAllCards():
 		c.onGraveAdd(card)
@@ -1382,7 +1384,7 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 				hoveringWindowSlot = null
 	
 	while cards.size() > 0:
-		var card = cards[0].clone()
+		var card = cards[0]
 		cards.remove(0)
 		
 		var cn = cardNode.instance()
@@ -1416,7 +1418,7 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 
 func fuseToHand(player : Player, cards : Array):
 	while cards.size() > 0:
-		var card = cards[0].clone()
+		var card = cards[0]
 		cards.remove(0)
 		
 		var cn = cardNode.instance()
@@ -1774,7 +1776,9 @@ func setOwnUsername():
 	dataLog.append("SET_OWN_USERNAME " + Server.username)
 	
 	if Server.online:
-		Server.setUsername(Server.opponentID, Server.username)
+		setOpponentUsername(Server.playerNames[Server.opponentID])
+	else:
+		setOpponentUsername("Sparky")
 
 func setOpponentUsername(username : String):
 	print("Settings opponent username")

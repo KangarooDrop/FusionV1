@@ -64,7 +64,6 @@ func show():
 	$NinePatchRect.rect_min_size = $VBox.rect_size + buffer
 	$NinePatchRect.rect_size = Vector2()
 	$NinePatchRect.rect_position = $VBox.rect_position - buffer / 2
-	print($VBox.rect_size)
 
 func onBackPressed():
 	emit_signal("settingsClose")

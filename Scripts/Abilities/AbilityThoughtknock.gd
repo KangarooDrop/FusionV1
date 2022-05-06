@@ -8,7 +8,7 @@ func _init(card : Card).("Thoughtknock", card, Color.gold, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [clone(card)])
+	addToStack("onEffect", [])
 
 func slotClicked(slot : CardSlot):
 	if slot == null:
@@ -38,17 +38,17 @@ func slotClicked(slot : CardSlot):
 				hand.discardIndex(discardIndexes[i])
 			NodeLoc.getBoard().endGetSlot()
 
-static func onEffect(params):
+func onEffect(params):
 	var slectingUUID = -1
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0].card.playerID:
+		if p.UUID == card.playerID:
 			if p.hand.nodes.size() == 0:
 				return
 			else:
 				p.hand.reveal()
 		else:
 			slectingUUID = p.UUID
-	NodeLoc.getBoard().getSlot(params[0], slectingUUID)
+	NodeLoc.getBoard().getSlot(self, slectingUUID)
 
 func genDescription(subCount = 0) -> String:
 	var c = ""

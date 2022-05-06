@@ -7,10 +7,10 @@ func _init(card : Card).("Brittle", card, Color.gray, false, Vector2(16, 80)):
 
 func onEndOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card):
-		addToStack("onEffect", [card])
+		addToStack("onEffect", [])
 
-static func onEffect(params):
-	params[0].isDying = true
+func onEffect(params):
+	card.isDying = true
 	
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "At the end of the turn, this creature is destroyed."

@@ -5,7 +5,7 @@ class_name AbilityPurify
 func _init(card : Card).("Purify", card, Color.purple, false, Vector2(0, 16)):
 	pass
 	
-func onFusion(card):
+func onFusion():
 	for abl in card.abilities.duplicate():
 		card.removeAbility(abl)
 

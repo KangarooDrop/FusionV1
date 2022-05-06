@@ -8,17 +8,17 @@ func _init(card : Card).("Rebound", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [clone(card), card.playerID, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	var validTargets = 0
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		for s in board.creatures[p.UUID]:
-			if is_instance_valid(s.cardNode) and s.cardNode.card != params[0].card:
+			if is_instance_valid(s.cardNode) and s.cardNode.card != card:
 				validTargets += 1
 	if validTargets >= 1:
-		board.getSlot(params[0], params[1])
+		board.getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
 	var validTargets = 0
@@ -56,6 +56,7 @@ func slotClicked(slot : CardSlot):
 				for p in board.players:
 					if p.UUID == s.playerID:
 						p.hand.addCardToHand([s.cardNode.card.clone(true), true, true])
+						s.cardNode.queue_free()
 						break
 				
 				s.cardNode.slot.cardNode = null

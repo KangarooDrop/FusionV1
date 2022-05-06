@@ -9,16 +9,16 @@ func _init(card : Card).("Abandon", card, Color.red, true, Vector2(0, 48)):
 
 func onBeforeDamage(attacker, blocker):
 	if attacker == card.cardNode.slot:
-		addToStack("onEffect", [clone(card), card.playerID, count])
+		addToStack("onEffect", [count])
 
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[1]:
-			if p.hand.slots.size() <= params[2]:
+		if p.UUID == card.playerID:
+			if p.hand.slots.size() <= params[0]:
 				for i in range(p.hand.nodes.size()):
 					p.hand.discardIndex(i)
 				return
-	NodeLoc.getBoard().getSlot(params[0], params[1])
+	NodeLoc.getBoard().getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
 	if slot == null:

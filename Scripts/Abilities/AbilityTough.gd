@@ -7,12 +7,12 @@ func _init(card : Card).("Tough", card, Color.darkgray, true, Vector2(0, 48)):
 
 func onBeforeDamage(attacker, blocker):
 	if blocker == card.cardNode.slot:
-		addToStack("onEffect", [card, count])
+		addToStack("onEffect", [count])
 
-static func onEffect(params):
-	params[0].power += params[1]
-	params[0].toughness += params[1]
-	params[0].maxToughness += params[1]
+func onEffect(params):
+	card.power += params[0]
+	card.toughness += params[0]
+	card.maxToughness += params[0]
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When attacked, this creature gains +" + str(count) + "/+" + str(count)

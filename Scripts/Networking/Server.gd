@@ -429,22 +429,6 @@ remote func receiveSendAllBoosters(boostersData : Array):
 	if get_node_or_null("/root/Draft") != null:
 		get_node("/root/Draft").boosterQueue += boostersData
 
-
-
-func setUsername(player_id : int, username : String):
-	if playerIDs.has(player_id):
-		rpc_id(player_id, "serverSetUsername", username)
-
-remote func serverSetUsername(username : String):
-	var board = get_node_or_null("/root/main/CenterControl/Board")
-	while not is_instance_valid(board) or board.gameStarted or board.playerRestart:
-		print("Board not ready yet, waiting; active 1")
-		yield(get_tree().create_timer(0.1), "timeout")
-		board = get_node_or_null("/root/main/CenterControl/Board")
-		if not Server.online:
-			return
-	board.setOpponentUsername(username)
-
 remote func sendDeck(player_id : int):
 	if playerIDs.has(player_id):
 		var board = get_node("/root/main/CenterControl/Board")

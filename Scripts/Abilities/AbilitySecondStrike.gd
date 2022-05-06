@@ -14,11 +14,11 @@ func onAfterCombat(attacker, blockers):
 	if NodeLoc.getBoard().isOnBoard(card):
 		if attacker == card.cardNode.slot:
 			if not activated:
-				addToStack("onEffect", [card, blockers], true, true)
+				addToStack("onEffect", [blockers], true, true)
 			activated = not activated
 
 func onEffect(params):
-	card.cardNode.attack(params[1])
+	card.cardNode.attack(params[0])
 
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()

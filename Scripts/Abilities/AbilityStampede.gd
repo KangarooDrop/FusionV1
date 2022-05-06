@@ -6,11 +6,11 @@ func _init(card : Card).("Stampede", card, Color.brown, false, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card.playerID], true, true)
+	addToStack("onEffect", [], true, true)
 
-static func onEffect(params):
+func onEffect(params):
 	var board = NodeLoc.getBoard()
-	for slot in board.creatures[params[0]]:
+	for slot in board.creatures[card.playerID]:
 		if is_instance_valid(slot.cardNode):
 			slot.cardNode.attack([slot.getAcross()])
 

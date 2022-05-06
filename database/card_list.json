@@ -1262,5 +1262,19 @@
       "AbilityTrickledown"
     ],
     "rarity": "COMMON"
+  },
+  "97": {
+    "name": "Flame Extortionist",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 3,
+    "toughness": 1,
+    "creature_type": [
+      2
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityTreason"
+    ],
+    "rarity": "COMMON"
   }
 }

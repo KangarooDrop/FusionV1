@@ -6,12 +6,12 @@ func _init(card : Card).("Wisedom", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card.playerID, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 			
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0]:
-			for i in range(params[1]):
+		if p.UUID == card.playerID:
+			for i in range(params[0]):
 				p.hand.drawCard()
 			break
 

@@ -26,15 +26,15 @@ static func getValidCombinations(cardsInQueue : Array, cardNodesInHand : Array, 
 	return total
 
 func onApplied(slot):
-	addToStack("onEffect", [clone(card), card.playerID, count - timesApplied])
+	addToStack("onEffect", [self.clone(card)])
 
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[1]:
+		if p.UUID == params[0].card.playerID:
 			if p.hand.slots.size() == 0:
 				return
 	
-	NodeLoc.getBoard().getSlot(params[0], params[1])
+	NodeLoc.getBoard().getSlot(params[0], params[0].card.playerID)
 
 func slotClicked(slot : CardSlot):
 	if slot == null:
@@ -50,6 +50,17 @@ func slotClicked(slot : CardSlot):
 		for i in range(hand.slots.size()):
 			if hand.slots[i] == slot:
 				index = i
+		
+		var tmp = []
+		for n in fuseIndexes:
+			tmp.append(hand.nodes[n].card)
+		if not fuseIndexes.has(index):
+			tmp.append(hand.nodes[index].card)
+		else:
+			tmp.erase(hand.nodes[index].card)
+		if not ListOfCards.canFuseCards(tmp):
+			return
+		
 		if not fuseIndexes.has(index):
 			SoundEffectManager.playSelectSound()
 			fuseIndexes.append(index)
@@ -58,10 +69,6 @@ func slotClicked(slot : CardSlot):
 			SoundEffectManager.playUnselectSound()
 			fuseIndexes.erase(index)
 			slot.cardNode.position.y += 16
-		
-		var tmp = []
-		for n in fuseIndexes:
-			tmp.append(hand.nodes[n].card)
 		
 		#(hand.nodes.size() < count + 1) or 
 		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == count + 1 - timesApplied:

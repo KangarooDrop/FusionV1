@@ -7,15 +7,15 @@ func _init(card : Card).("Permeation", card, Color.gray, true, Vector2(32, 64)):
 
 func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-		addToStack("onEffect", [card, count])
+		addToStack("onEffect", [count])
 
-static func onEffect(params):
-	for i in params[1]:
+func onEffect(params):
+	for i in params[0]:
 		var c = ListOfCards.getCard(56)
-		if not params[0].addCreatureToBoard(c):
+		if not card.addCreatureToBoard(c):
 			for p in NodeLoc.getBoard().getAllPlayers():
-				if p.UUID == params[0].playerID:
-					p.takeDamage(1, params[0])
+				if p.UUID == card.playerID:
+					p.takeDamage(1, card)
 
 func genDescription(subCount = 0) -> String:
 	if count > 1:

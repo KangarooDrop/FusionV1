@@ -8,12 +8,12 @@ func _init(card : Card).("Spikefield", card, Color.gray, true, Vector2(32, 64)):
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
 		if slot.playerID == card.playerID:
-			addToStack("onEffect", [card, count])
+			addToStack("onEffect", [count])
 
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0].playerID:
-			p.takeDamage(params[1], params[0])
+		if p.UUID == card.playerID:
+			p.takeDamage(params[0], card.playerID)
 			break
 
 func genDescription(subCount = 0) -> String:

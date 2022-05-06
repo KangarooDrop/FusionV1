@@ -114,8 +114,8 @@ func _physics_process(delta):
 				data[1].position = data[2] + Vector2(lerp(-cardWidth * 1.5 * data[4], 0, data[6] / fuseSpinMaxTime), 0).rotated(data[6] / fuseSpinMaxTime * PI * 2 * fuseRPS + data[3])
 				
 				if data[6] >= fuseSpinMaxTime:
-					var card = ListOfCards.fusePair(data[0].card, data[1].card)
-					var cn = genBackgroundCard(card, data[3])
+					data[0].card.fuseToSelf(data[1].card)
+					var cn = genBackgroundCard(data[0].card, data[3])
 					cn.z_index = data[0].z_index
 					cn.scale = data[0].scale
 					cn.position = (data[0].position + data[1].position) / 2

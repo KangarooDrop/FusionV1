@@ -3,5 +3,5 @@ render_mode unshaded;
 
 void fragment()
 {
-	COLOR.rgba = vec4(0, 0, 0, 0);
+	COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgba;
 }

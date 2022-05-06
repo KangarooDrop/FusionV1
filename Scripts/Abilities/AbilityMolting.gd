@@ -5,7 +5,7 @@ class_name AbilityMolting
 func _init(card : Card).("Molting", card, Color.brown, true, Vector2(32, 64)):
 	pass
 
-func onFusion(card):
+func onFusion():
 	card.power += count
 	card.toughness += count
 

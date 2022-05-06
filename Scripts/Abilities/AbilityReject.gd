@@ -8,7 +8,14 @@ func _init(card : Card).("Reject", card, Color.purple, true, Vector2(0, 0)):
 	pass
 
 func onDeath():
-	addToStack("onEffect", [clone(card)])
+	addToStack("onEffect", [])
+
+func onEffect(params):
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == card.playerID:
+			if p.hand.nodes.size() == 0:
+				return
+	NodeLoc.getBoard().getSlot(self, card.playerID) 
 
 func slotClicked(slot : CardSlot):
 	if slot == null:
@@ -37,13 +44,6 @@ func slotClicked(slot : CardSlot):
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
 			NodeLoc.getBoard().endGetSlot()
-
-static func onEffect(params):
-	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0].card.playerID:
-			if p.hand.nodes.size() == 0:
-				return
-	NodeLoc.getBoard().getSlot(params[0], params[0].card.playerID) 
 
 func genDescription(subCount = 0) -> String:
 	var c = ""

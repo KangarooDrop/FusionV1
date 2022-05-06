@@ -6,11 +6,11 @@ func _init(card : Card).("Reignite", card, Color.red, false, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card.playerID])
+	addToStack("onEffect", [])
 
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0]:
+		if p.UUID == card.playerID:
 			var cardsDiscarded = p.hand.nodes.size()
 			for i in range(cardsDiscarded):
 				p.hand.discardIndex(i)

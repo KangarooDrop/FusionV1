@@ -8,10 +8,10 @@ func _init(card : Card).("Unearth", card, Color.darkgray, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [self.clone(card), card.playerID])
+	addToStack("onEffect", [])
 
 func onEffect(params):
-	NodeLoc.getBoard().getSlot(params[0], params[1])
+	NodeLoc.getBoard().getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
 	var board = NodeLoc.getBoard()

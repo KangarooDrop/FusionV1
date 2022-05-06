@@ -50,7 +50,7 @@ func onStartOfTurn():
 func onEndOfTurn():
 	pass
 
-func onFusion(card):
+func onFusion():
 	pass
 	
 func onEnterFromFusion(slot):

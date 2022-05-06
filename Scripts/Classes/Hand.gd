@@ -49,7 +49,7 @@ func _physics_process(delta):
 	if discardQueue.size() > 0:
 		var toRemove = []
 		for i in range(discardQueue.size()):
-			if not is_instance_valid(discardQueue[i][0].cardNode):
+			if discardQueue[i][0] == null or not is_instance_valid(discardQueue[i][0].cardNode):
 				toRemove.append(i)
 			else:
 				discardQueue[i][0].cardNode.position = discardPositions[i] + lerp(Vector2(), Vector2(0, -100 * sign(discardQueue[i][0].global_position.y)), discardTimers[i] / discardMaxTime)
@@ -163,6 +163,7 @@ func discardIndex(index : int, addCardToGrave=true):
 		discardPositions.append(slots[index].position)
 		discardTimers.append(0)
 
+#[Card, b:(T=appear_in_hand F=draw_from_deck), b:visible]
 func addCardToHand(data : Array):
 	if data[0] != null:
 		data[0].ownerID = player.UUID

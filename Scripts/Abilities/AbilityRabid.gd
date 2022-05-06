@@ -7,12 +7,11 @@ func _init(card : Card).("Rabid", card, Color.brown, false, Vector2(16, 48)):
 
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
-		addToStack("onEffect", [card, slot], true, true)
+		addToStack("onEffect", [slot], true, true)
 
 func onEffect(params):
-	if is_instance_valid(params[1].cardNode) and params[0].canAttack():
-		if is_instance_valid(params[0].cardNode):
-			params[0].cardNode.attack([params[1]]) 
+	if ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE) and card.canAttack():
+		card.cardNode.attack([params[0]])
 
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()

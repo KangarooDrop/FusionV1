@@ -9,9 +9,9 @@ func _init(card : Card).("Transfigur", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [clone(card), card.playerID, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	var validTargets = 0
 	var board = NodeLoc.getBoard()
 	for p in board.players:
@@ -19,7 +19,7 @@ static func onEffect(params : Array):
 			if is_instance_valid(s.cardNode):
 				validTargets += 1
 	if validTargets >= 1:
-		board.getSlot(params[0], params[1])
+		board.getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
 	var validTargets = 0

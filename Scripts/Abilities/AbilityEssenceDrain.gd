@@ -6,18 +6,18 @@ func _init(card : Card).("Essence Drain", card, Color.darkgray, true, Vector2(0,
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 
-static func onEffect(params):
+func onEffect(params):
 	var n = 0
 	for s in NodeLoc.getBoard().boardSlots:
-		if is_instance_valid(s.cardNode) and s.cardNode.card != null and s != params[0].cardNode.slot:
-			s.cardNode.card.power -= params[1]
-			s.cardNode.card.toughness -= params[1]
-			s.cardNode.card.maxToughness -= params[1]
+		if is_instance_valid(s.cardNode) and s.cardNode.card != null and (not is_instance_valid(card.cardNode) or not is_instance_valid(card.cardNode.slot) or s != card.cardNode.slot):
+			s.cardNode.card.power -= params[0]
+			s.cardNode.card.toughness -= params[0]
+			s.cardNode.card.maxToughness -= params[0]
 			n += 1
 			
-	params[0].power += params[1] * n
+	card.power += params[0] * n
 
 func genDescription(subCount = 0) -> String:
 	var strCount = str(count - subCount)

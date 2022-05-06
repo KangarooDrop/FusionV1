@@ -6,12 +6,14 @@ func _init(card : Card).("Landslide", card, Color.darkgray, false, Vector2(0, 0)
 	pass
 	
 func onApplied(slot):
-	addToStack("onEffect", [card.cardNode.slot])
+	addToStack("onEffect", [])
 			
 func onEffect(params):
+	if not ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
+		return
 	
 	var board = NodeLoc.getBoard()
-	var playerID = params[0].playerID
+	var playerID = self.card.playerID
 	
 	for p in board.players:
 		if p.UUID == playerID:
@@ -23,8 +25,8 @@ func onEffect(params):
 			if found:
 				var cards = []
 				
-				if is_instance_valid(params[0].cardNode):
-					cards.append(params[0].cardNode.card)
+				if is_instance_valid(self.card.cardNode):
+					cards.append(card)
 				
 				for i in p.hand.nodes.size():
 					var cardNode = p.hand.nodes[i]
@@ -38,7 +40,8 @@ func onEffect(params):
 				
 				cards.remove(0)
 				
-				board.fuseToSlot(params[0], cards)
+				if self.card.cardNode.slot.currentZone == CardSlot.ZONES.CREATURE:
+					board.fuseToSlot(self.card.cardNode.slot, cards)
 				
 			return
 

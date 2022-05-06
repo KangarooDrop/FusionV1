@@ -6,13 +6,13 @@ func _init(card : Card).("Production", card, Color.gray, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [card, count - timesApplied])
+	addToStack("onEffect", [count - timesApplied])
 
-static func onEffect(params):
-	for i in range(params[1]):
+func onEffect(params):
+	for i in range(params[0]):
 		var card = ListOfCards.getCard(5)
 		card.abilities[0].timesApplied = 1
-		params[0].addCreatureToBoard(card, null)
+		self.card.addCreatureToBoard(card, null)
 
 func genDescription(subCount = 0) -> String:
 	var string = "a"

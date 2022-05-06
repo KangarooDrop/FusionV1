@@ -8,10 +8,10 @@ func _init(card : Card).("Chimera", card, Color.brown, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	onEffect(slot.playerID, true)
+	addToStack("onEffect", [card, true])
 
 func onHoverEnter(slot):
-	onEffect(slot.playerID, false)
+	onEffect([slot, false])
 
 func onHoverExit(slot):
 	card.power -= buffs * count
@@ -19,8 +19,9 @@ func onHoverExit(slot):
 	card.maxToughness -= buffs * count
 	buffs = 0
 
-func onEffect(playerID : int, removeCards : bool):
-	#Accounting for all tribes in the graveyard
+func onEffect(params):
+	var playerID = params[0].playerID
+	var removeCards = params[1]
 	var board = NodeLoc.getBoard()
 	var tribes = 0
 	for c in board.graveCards[playerID]:
@@ -28,8 +29,9 @@ func onEffect(playerID : int, removeCards : bool):
 			tribes |= 1 << t
 	
 	#Accounting for all tribes of the creature not in the graveyard
-	for t in card.creatureType:
-		tribes |= 1 << t
+	if (params[0] is CardSlot and params[0].playerID == card.playerID):
+		for t in card.creatureType:
+			tribes |= 1 << t
 	
 	#Calculating all bits set to 1 in tribes
 	while tribes > 0:

@@ -5,7 +5,7 @@ class_name AbilityDuplicant
 func _init(card : Card).("Duplicant", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
-func onFusion(card):
+func onFusion():
 	var board = NodeLoc.getBoard()
 	if board is BoardMP:
 		onEffect(card)

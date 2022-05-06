@@ -233,22 +233,25 @@ func fight(slot):
 	card.onDealDamage(slot)
 	SoundEffectManager.playAttackSound()
 	
+	var wasAlive = is_instance_valid(slot.cardNode)
+	var enemCard = null
+	if wasAlive:
+		enemCard = slot.cardNode.card
+	
 	while not NodeLoc.getBoard().getCanFight():
 		fightingWait = true
 		yield(get_tree().create_timer(0.1), "timeout")
 	fightingWait = false
 	
-	
-	if is_instance_valid(slot.cardNode):
-		
-		if slot.cardNode.card.toughness <= 0:
-			slot.cardNode.card.onKilledBy(self.slot)
+	if wasAlive:
+		if enemCard.toughness <= 0:
+			enemCard.onKilledBy(self.slot)
 			for c in NodeLoc.getBoard().getAllCards():
 				c.onOtherKilled(slot)
 			card.onKill(slot)
 		if card.toughness <= 0:
-			card.onKilledBy(slot.cardNode.card)
-			slot.cardNode.card.onKill(self.slot)
+			card.onKilledBy(enemCard)
+			enemCard.onKill(self.slot)
 			for c in NodeLoc.getBoard().getAllCards():
 				c.onOtherKilled(self.slot)
 	else:
@@ -261,8 +264,8 @@ func fight(slot):
 		if not is_instance_valid(c.cardNode) or (c.cardNode.slot != slot and c.cardNode.slot != self.slot):
 			c.onOtherAfterDamage(self.slot, slot)
 	
-	if is_instance_valid(slot.cardNode):
-		slot.cardNode.card.onAfterDamage(self.slot, slot)
+	if enemCard != null:
+		enemCard.onAfterDamage(self.slot, slot)
 	card.onAfterDamage(self.slot, slot)
 	
 	NodeLoc.getBoard().checkState()
