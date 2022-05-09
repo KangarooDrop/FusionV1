@@ -733,6 +733,7 @@ func _physics_process(delta):
 					millNode = null
 					millQueue.remove(0)
 					millWaitTimer = 0
+					checkState()
 				else:
 					millNode.global_position = lerp(decks[millNode.playerID].global_position, graves[millNode.playerID].global_position, millWaitTimer / millWaitMaxTime)
 					
@@ -764,6 +765,7 @@ func _physics_process(delta):
 						waitingAbilities.erase(currentAbility["source"])
 						abilityStack.erase(currentAbility)
 						currentAbility = null
+						checkState()
 				if abilityStack.size() > 0:
 					stackTimer = stackMaxTime
 					
@@ -817,7 +819,10 @@ func _physics_process(delta):
 					pos = selectedSlot.global_position + Vector2(cardWidth*selectedSlot.scale.x/2, 0)
 				
 				if string != null:
-					createHoverNode(pos, self, string, flipped)
+					var card = null
+					if is_instance_valid(selectedSlot.cardNode):
+						card = selectedSlot.cardNode.card
+					createHoverNode(pos, self, string, flipped, card)
 					hoveringWindowSlot = selectedSlot
 					if string == "":
 						hoveringWindow.visible = false
@@ -850,9 +855,6 @@ func _physics_process(delta):
 var graveViewing := -1
 
 func addCardToGrave(playerID : int, card : Card):
-	if card.tier != 1:
-		return
-	
 	var oldCard = graves[playerID].cardNode.card
 	if graves[playerID].cardNode.getCardVisible():
 		graves[playerID].cardNode.card.cardNode = null
@@ -860,15 +862,17 @@ func addCardToGrave(playerID : int, card : Card):
 	
 	card.playerID = playerID
 	
-	graveCards[playerID].append(card.clone())
+	var cl = card.clone()
+	cl.toughness = cl.maxToughness
+	graveDisplays[playerID].addCard(cl)
+	
+	graveCards[playerID].append(cl)
 	
 	var cn = graves[playerID].cardNode
 	cn.visible = true
 	cn.card = card.clone()
 	cn.card.cardNode = cn
 	cn.setCardVisible(true)
-	
-	graveDisplays[playerID].addCard(card.clone())
 	
 	for c in getAllCards():
 		c.onGraveAdd(card)
@@ -877,11 +881,12 @@ func removeCardFromGrave(playerID : int, index : int):
 	if index == graveCards[playerID].size() - 1 and graveCards[playerID].size() > 1:
 		var cn = graves[playerID].cardNode
 		cn.visible = true
-		cn.card = graveCards[playerID][index-1]
+		cn.card = graveCards[playerID][index-1].clone()
 		cn.setCardVisible(true)
 	
 	graveCards[playerID].remove(index)
 	graveDisplays[playerID].removeCard(index)
+	
 	if graveCards[playerID].size() == 0:
 		var cn = graves[playerID].cardNode
 		cn.visible = false
@@ -890,8 +895,9 @@ func removeCardFromGrave(playerID : int, index : int):
 			graveDisplays[playerID].visible = false
 			graveViewing = -1
 
-func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false):
+func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false, card = null):
 	var hoverInst = hoverScene.instance()
+	hoverInst.card = card
 	hoverInst.flipped = flipped
 	parent.add_child(hoverInst)
 	hoverInst.global_position = position
@@ -1058,11 +1064,24 @@ func getSlotFromServer(isOpponent : bool, slotZone : int, slotID : int) -> Node:
 func processServerQueue():
 	if serverQueue.size() > 0:
 		var data = serverQueue[0]
-		var slot = getSlotFromServer(data[0], data[1], data[2])
-		if slot != null:
-			if slotClicked(slot, data[3], true):
+		
+		if data[0] == "slot_click":
+			var slot = getSlotFromServer(data[1], data[2], data[3])
+			if slot != null:
+				if slotClicked(slot, data[4], true):
+					serverQueue.remove(0)
+					serverWait = 0
+		
+		elif data[0] == "ability_activate":
+			#	board.serverQueue.append(["ability_activate", isOpponent, slotZone, slotID, ability_index])
+			var slot = getSlotFromServer(data[1], data[2], data[3])
+			if slot != null and is_instance_valid(slot.cardNode):
+				slot.cardNode.card.onActivate(data[4])
 				serverQueue.remove(0)
 				serverWait = 0
+		
+		elif data[0] == "mode_chosen":
+			pass
 		
 var hoveringOn = null
 
@@ -1401,9 +1420,6 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 		card_A_Holder.nodes.erase(cn)
 		card_B_Holder.nodes.erase(cn)
 	
-	for i in range(0 if isEntering else 1, cardNodesFusing.size()):
-		addCardToGrave(graveOwner, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
-	
 	fuseStartPos = cardNodesFusing[0].global_position
 	fuseEndSlot = slot
 	fuseTimer = 0
@@ -1434,9 +1450,6 @@ func fuseToHand(player : Player, cards : Array):
 		cn.position = Vector2()
 		card_A_Holder.nodes.erase(cn)
 		card_B_Holder.nodes.erase(cn)
-	
-	for i in range(0 if isEntering else 1, cardNodesFusing.size()):
-		addCardToGrave(players[activePlayer].UUID, ListOfCards.getCard(cardNodesFusing[i].card.UUID))
 	
 	fuseStartPos = cardNodesFusing[0].global_position
 	isFusingToHand = true
@@ -1561,10 +1574,6 @@ func getAllCards() -> Array:
 				cards.append(s.cardNode.card)
 		for cn in cardNodesFusing:
 			cards.append(cn.card)
-		for k in graves.keys():
-			var s = graves[k]
-			if is_instance_valid(s.cardNode):
-				cards.append(s.cardNode.card)
 				
 		for c in graveCards[p.UUID]:
 			cards.append(c)
@@ -1628,9 +1637,8 @@ func nextTurn():
 	cardsPlayed = 0
 	activePlayer = (activePlayer + 1) % players.size()
 	setTurnText()
-	players[activePlayer].hand.drawCard()
+	
 	cardsPerTurn = cardsPerTurnMax
-		
 	if activePlayer == 0:
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
@@ -1646,6 +1654,11 @@ func nextTurn():
 	while abilityStack.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
 	
+	players[activePlayer].hand.drawCard()
+	
+	while abilityStack.size() > 0:
+		yield(get_tree().create_timer(0.1), "timeout")
+	
 	if activePlayer == 0 or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		startTimer(activePlayer)
 		resetTimer(activePlayer)
@@ -1656,11 +1669,22 @@ func addCardsPerTurn(inc : int):
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
 		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+
+func addCardsPlayed(inc : int):
+	cardsPlayed += inc
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+	else:
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	
 
 func checkState():
 	var boardState = []
 	var slots = []
+	
+	if is_instance_valid(hoveringWindow) and is_instance_valid(hoveringWindowSlot) and is_instance_valid(hoveringWindowSlot.cardNode):
+		hoveringWindow.setText(hoveringWindowSlot.cardNode.card.getHoverData())
+	
 	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
 			if is_instance_valid(s.cardNode):
@@ -1689,6 +1713,8 @@ func checkState():
 			if c != cardNode.card:
 				c.onOtherLeave(cardNode.slot)
 				c.onOtherDeath(cardNode.slot)
+				
+		addCardToGrave(cardNode.card.playerID, cardNode.card)
 		cardNode.slot.cardNode = null
 		cardNode.queue_free()
 
@@ -1769,6 +1795,14 @@ func onTurnTimerEnd():
 func onGameTimerEnd():
 	onLoss(players[0])
 	Server.onConcede(Server.opponentID)
+
+func sendChat(message = null):
+	if message == null:
+		message = Server.username + " : " + "AAAAAAAA"
+	Server.sendChat(message)
+
+func receiveMessage(message : String):
+	print(message)
 
 func setOwnUsername():
 	print("Settings own username")

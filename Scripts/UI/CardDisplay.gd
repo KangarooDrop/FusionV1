@@ -45,6 +45,7 @@ func myfunc():
 
 func centerCards():
 	if slots.size() > 0:
+		
 		var dist = max(min(totalWidth / slots.size(), cardWidth * 2), 0)
 		lastOff = dist
 		var lastPosSlots := []
@@ -234,11 +235,12 @@ func _physics_process(delta):
 			slots[indexes[i]].z_index = i + z_index
 	
 	if mouseButtonReleased:
+		if cardHolding != null:
+			cardHolding = null
+			centerCards()
 		mouseButtonReleased = false
 		mouseDown = false
 		clickedSlot = null
-		cardHolding = null
-		centerCards()
 
 func onSlotEnter(slot : CardSlot):
 	get_parent().onSlotEnter(slot)
@@ -260,6 +262,7 @@ func onMouseDown(slot : CardSlot, button_index : int):
 			get_parent().onMouseDown(slot, button_index)
 
 var mouseButtonReleased = false
+
 
 func _input(event):
 	if event is InputEventMouseButton and not event.is_pressed() and event.button_index == 1:

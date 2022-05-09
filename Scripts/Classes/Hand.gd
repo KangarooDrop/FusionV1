@@ -43,6 +43,15 @@ func reveal():
 			c.flip()
 		c.slot.shownToOpponent()
 
+func centerCards():
+	.centerCards()
+	
+	if get_parent() is BoardMP:
+		var board = get_parent()
+		for data in movingCards:
+			if board.cardsHolding.has(data[0]):
+				data[1].y += -board.cardDists
+
 func _physics_process(delta):
 	var dAnim = delta * Settings.animationSpeed
 	
@@ -132,6 +141,7 @@ func _physics_process(delta):
 					cardInst.global_position = movingCards[movingCards.size()-1][1]
 					slotInst.global_position = cardInst.global_position
 			drawQueue.remove(0)
+			NodeLoc.getBoard().checkState()
 		
 			drawWaitTimer = drawWaitMaxTime
 			

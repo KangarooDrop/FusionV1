@@ -23,7 +23,7 @@ func add(data):
 	var subCount = 0
 	if data["source"] is AbilityETB:
 		subCount = data["source"].timesApplied
-	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data["source"].genDescription(subCount), false)
+	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data["source"].genStackDescription(subCount), false)
 	data["window"] = h
 	h.position = Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset) + Vector2(0, h.get_node("HoverBack").rect_size.y / 2)
 	h.get_node("Check").rect_position = Vector2(h.get_node("HoverBack").rect_size.x - 20, -h.get_node("HoverBack").rect_size.y/2 + 4)

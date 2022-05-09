@@ -116,6 +116,9 @@ func onAdjustCost(card, cost) -> int:
 func onCardsPlayed(slot, cards):
 	pass
 
+func onOtherActivate(abl):
+	pass
+
 func checkWaiting() -> bool:
 	return true
 
@@ -143,7 +146,7 @@ func _to_string():
 	var cardString = ""
 	if card != null:
 		cardString += "||" + str(card.UUID)
-	return "[color=#" + c.to_html(false) +"][url=" + getFileName() + "||" + str(count) + cardString + "]" + name + (" "+str(count) if (showCount) else "") +"[/url][/color]"
+	return "[color=#" + c.to_html(false) +"][url=desc||" + getFileName() + "||" + str(count) + cardString + "]" + name + (" "+str(count) if (showCount) else "") +"[/url][/color]"
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
@@ -157,6 +160,9 @@ func cloneBase(card : Card) -> Ability:
 
 func genDescription(subCount = 0) -> String:
 	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count - subCount) if (showCount) else "") +":[/color]\n"
+
+func genStackDescription(subCount) -> String:
+	return genDescription(subCount)
 
 func addToStack(funcName : String, params : Array, forceWait = false, canAttack = false):
 	var cl = clone(card)

@@ -144,6 +144,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityFrozen.gd"
 }, {
+"base": "Ability",
+"class": "AbilityGenerate",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityGenerate.gd"
+}, {
 "base": "AbilityETB",
 "class": "AbilityIcecage",
 "language": "GDScript",
@@ -193,6 +198,11 @@ _global_script_classes=[ {
 "class": "AbilityMolting",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityMolting.gd"
+}, {
+"base": "Ability",
+"class": "AbilityNecrophagia",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityNecrophagia.gd"
 }, {
 "base": "AbilityETB",
 "class": "AbilityOvergrowth",
@@ -263,6 +273,11 @@ _global_script_classes=[ {
 "class": "AbilityRebound",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityRebound.gd"
+}, {
+"base": "Ability",
+"class": "AbilityRecurrent",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityRecurrent.gd"
 }, {
 "base": "AbilityETB",
 "class": "AbilityReignite",
@@ -582,6 +597,7 @@ _global_script_class_icons={
 "AbilityFleshrot": "",
 "AbilityFrostbite": "",
 "AbilityFrozen": "",
+"AbilityGenerate": "",
 "AbilityIcecage": "",
 "AbilityInfested": "",
 "AbilityInsignia": "",
@@ -592,6 +608,7 @@ _global_script_class_icons={
 "AbilityMatryoshka": "",
 "AbilityMindrot": "",
 "AbilityMolting": "",
+"AbilityNecrophagia": "",
 "AbilityOvergrowth": "",
 "AbilityPacifism": "",
 "AbilityPermeation": "",
@@ -606,6 +623,7 @@ _global_script_class_icons={
 "AbilityRampage": "",
 "AbilityRavenous": "",
 "AbilityRebound": "",
+"AbilityRecurrent": "",
 "AbilityReignite": "",
 "AbilityReject": "",
 "AbilityRekindle": "",

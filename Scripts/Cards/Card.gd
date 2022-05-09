@@ -288,7 +288,18 @@ func onCardsPlayed(slot, cards):
 	abls.invert()
 	for abl in abls:
 		abl.onCardsPlayed(slot, cards)
-	
+
+func onActivate(index : int):
+	if index >= 0 and index < abilities.size():
+		var abl = abilities[index]
+		
+		var abls = abilities.duplicate()
+		abls.invert()
+		for a in abls:
+			a.onOtherActivate(abl)
+		
+		abl.onActivate()
+
 
 func addCreatureToBoard(card, slot = null) -> bool:
 	if slot == null:
@@ -413,10 +424,19 @@ func getHoverData() -> String:
 		if i < creatureType.size() - 1:
 			string += " / "
 	
+	var addActivate = is_instance_valid(cardNode) and is_instance_valid(cardNode.slot)
+	
 	if abilities.size() > 0:
 		string += "\n"
-	for abl in abilities:
-		string += "\n" + str(abl)
+	for i in range(abilities.size()):
+		var abl = abilities[i]
+		var activeString = ""
+		if addActivate and abl.has_method("onActivate"):
+			if abl.canActivate():
+				activeString = " -- [color=#" + abl.c.to_html(false) +"][url=activate||" + str(i) + "]<Activate>[/url][/color]"
+			else:
+				activeString = " -- [color=#" + Color.black.to_html(false) +"]<Activate>[/color]"
+		string += "\n" + str(abl) + str(activeString)
 	
 	if removedAbilities.size() > 0:
 		string += "\n----------"

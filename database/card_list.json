@@ -1276,5 +1276,47 @@
       "AbilityTreason"
     ],
     "rarity": "COMMON"
+  },
+  "98": {
+    "name": "Power Plant",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 1,
+    "toughness": 3,
+    "creature_type": [
+      6
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityGenerate"
+    ],
+    "rarity": "COMMON"
+  },
+  "99": {
+    "name": "Cannibal Sacrament",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 2,
+    "toughness": 1,
+    "creature_type": [
+      7
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityNecrophagia"
+    ],
+    "rarity": "COMMON"
+  },
+  "100": {
+    "name": "Cockroach",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 1,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityRecurrent"
+    ],
+    "rarity": "COMMON"
   }
 }

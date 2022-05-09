@@ -10,6 +10,7 @@ func _init(card : Card).("Trickledown", card, Color.blue, true, Vector2(0, 0)):
 func onDeath():
 	delayed = true
 	addDelayedAbility()
+	delayed = false
 
 func onStartOfTurn():
 	if delayed:

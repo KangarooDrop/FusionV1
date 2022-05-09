@@ -13,6 +13,8 @@ var closeChildrenFirst = false
 
 var yieldTimer = 0
 
+var card
+
 func _ready():
 	$Label.connect("meta_clicked", self, "handle")
 		
@@ -59,32 +61,43 @@ static func splitText(string, delimiter):
 
 func handle(meta : String):
 	var spl = meta.split("||")
-	var fileName = spl[0]
-	var count = int(spl[1])
-	var card = null
-	if spl.size() >= 3:
-		card = ListOfCards.getCard(int(spl[2]))
 	
-	var abl = null
-	for data in ProjectSettings.get_setting("_global_script_classes"):
-		if data["class"] == fileName:
-			abl = load(data["path"])
-			break
-	if abl != null:
-		var ability = abl.new(card).setCount(count)
+	if spl[0] == "desc":
+		var fileName = spl[1]
+		var count = int(spl[2])
+		var card = null
+		if spl.size() >= 4:
+			card = ListOfCards.getCard(int(spl[3]))
 		
-		closeChildrenFirst = true
-		
-		var hoverInst = load("res://Scenes/UI/Hover.tscn").instance()
-		hoverInst.z_index = z_index + 1
-		get_parent().add_child(hoverInst)
-		hoverInst.flipped = flipped
-		yield(get_tree(), "idle_frame")
-		hoverInst.setText(ability.genDescription())
-		hoverInst.global_position = get_global_mouse_position() + (Vector2(3, 0) + Vector2(hoverInst.get_node("HoverBack").rect_size.x / 2, 0)) * (1 if flipped else -1) + Vector2(0, -hoverInst.get_node("HoverBack").rect_size.y / 4)
-		
-		spawnedWindows.append(hoverInst)
-		hoverInst.parentWindow = self
+		var abl = null
+		for data in ProjectSettings.get_setting("_global_script_classes"):
+			if data["class"] == fileName:
+				abl = load(data["path"])
+				break
+		if abl != null:
+			var ability = abl.new(card).setCount(count)
+			
+			closeChildrenFirst = true
+			
+			var hoverInst = load("res://Scenes/UI/Hover.tscn").instance()
+			hoverInst.z_index = z_index + 1
+			get_parent().add_child(hoverInst)
+			hoverInst.flipped = flipped
+			yield(get_tree(), "idle_frame")
+			hoverInst.setText(ability.genDescription())
+			hoverInst.global_position = get_global_mouse_position() + (Vector2(3, 0) + Vector2(hoverInst.get_node("HoverBack").rect_size.x / 2, 0)) * (1 if flipped else -1) + Vector2(0, -hoverInst.get_node("HoverBack").rect_size.y / 4)
+			
+			spawnedWindows.append(hoverInst)
+			hoverInst.parentWindow = self
+	elif spl[0] == "activate":
+		if card != null:
+			var index = int(spl[1])
+			card.onActivate(index)
+			Server.abilityActivated(Server.opponentID, card.cardNode.slot.isOpponent, card.cardNode.slot.currentZone, card.cardNode.slot.get_index(), index)
+			setText(card.getHoverData())
+			close(true)
+			NodeLoc.getBoard().hoveringWindowSlot = null
+			NodeLoc.getBoard().hoveringWindow = null
 	
 func close(closeAll = false) -> bool:
 	if closeChildrenFirst and not closeAll:

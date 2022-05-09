@@ -283,7 +283,7 @@ func sendChat(message : String):
 		rpc_id(player_id, "receiveSendChat", message)
 
 remote func receiveSendChat(message : String):
-	get_node("/root/LobbyX").receiveMessage(message)
+	NodeLoc.getBoard().receiveMessage(message)
 
 #func _input(event):
 #	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.scancode == KEY_DELETE:
@@ -519,8 +519,20 @@ remote func serverSlotClicked(isOpponent : bool, slotZone : int, slotID : int, b
 	var board = get_node_or_null("/root/main/CenterControl/Board")
 	#if board.activePlayer == 0 and Settings.gameMode == Settings.GAME_MODE.PLAY:
 	#	return
-	board.serverQueue.append([isOpponent, slotZone, slotID, button_index])
+	board.serverQueue.append(["slot_click", isOpponent, slotZone, slotID, button_index])
+
+func abilityActivated(player_id : int, isOpponent : bool, slotZone : int, slotID : int, ability_index : int):
+	if playerIDs.has(player_id):
+		rpc_id(player_id, "receiveAbilityActivated", isOpponent, slotZone, slotID, ability_index)
+
+remote func receiveAbilityActivated(isOpponent : bool, slotZone : int, slotID : int, ability_index : int):
+	var player_id = get_tree().get_rpc_sender_id()
 	
+	var board = get_node_or_null("/root/main/CenterControl/Board")
+	#if board.activePlayer == 0 and Settings.gameMode == Settings.GAME_MODE.PLAY:
+	#	return
+	board.serverQueue.append(["ability_activate", isOpponent, slotZone, slotID, ability_index])
+
 ####################################################################
 
 remote func onNextTurn(player_id : int):
