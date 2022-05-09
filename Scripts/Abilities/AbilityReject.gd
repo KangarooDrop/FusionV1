@@ -43,6 +43,7 @@ func slotClicked(slot : CardSlot):
 		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
+			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
 
 func genDescription(subCount = 0) -> String:

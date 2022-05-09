@@ -7,7 +7,7 @@ func _init(card : Card).("Recurrent", card, Color.brown, false, Vector2(32, 64))
 
 func onStartOfTurn():
 	if ListOfCards.isInZone(card, CardSlot.ZONES.GRAVE_CARD) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-		addToStack("onEffect", [count])
+		addToStack("onEffect", [])
 
 func onEffect(params):
 	var board = NodeLoc.getBoard()

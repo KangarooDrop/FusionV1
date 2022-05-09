@@ -119,6 +119,9 @@ func onCardsPlayed(slot, cards):
 func onOtherActivate(abl):
 	pass
 
+func onTypeSelected(button : Button, key):
+	pass
+
 func checkWaiting() -> bool:
 	return true
 
@@ -165,10 +168,9 @@ func genStackDescription(subCount) -> String:
 	return genDescription(subCount)
 
 func addToStack(funcName : String, params : Array, forceWait = false, canAttack = false):
-	var cl = clone(card)
 	var data = \
 	{
-		"source":cl,
+		"source":self,
 		"funcName":funcName,
 		"params":params,
 		"triggered":false,
@@ -176,7 +178,7 @@ func addToStack(funcName : String, params : Array, forceWait = false, canAttack 
 	}
 	NodeLoc.getBoard().abilityStack.add(data)
 	if forceWait:
-		NodeLoc.getBoard().waitingAbilities.append(cl)
+		NodeLoc.getBoard().waitingAbilities.append(self)
 
 func addDelayedAbility():
 	var board = NodeLoc.getBoard()

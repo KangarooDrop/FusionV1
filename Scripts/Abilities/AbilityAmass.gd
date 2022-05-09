@@ -25,6 +25,7 @@ func onEffect(params):
 	for n in toRemove:
 		board.removeCardFromGrave(card.playerID, n)
 		
+	timesApplied = count
 	NodeLoc.getBoard().fuseToSlot(card.cardNode.slot, cardList)
 
 func genDescription(subCount = 0) -> String:

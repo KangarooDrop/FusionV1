@@ -18,6 +18,7 @@ func onEffect(params : Array):
 			for i in range(cardsDiscarded):
 				p.hand.drawCard()
 			break
+	timesApplied = count
 	
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, its controller discards their hand and then draws that many cards"

@@ -13,7 +13,9 @@ func onEffect(params):
 		var slots = card.cardNode.slot.getNeighbors()
 		for s in slots:
 			var card = ListOfCards.getCard(84)
-			card.addCreatureToBoard(card, s)
+			self.card.addCreatureToBoard(card, s)
+	
+	timesApplied = count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, create a 0/0 ooze on either side of it"

@@ -8,13 +8,15 @@ func _init(card : Card).("Treason", card, Color.red, false, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onStealEffect", [self, false])
+	addToStack("onStealEffect", [false])
 
 func onEndOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card) and not returned:
-		addToStack("onStealEffect", [self, true])
+		addToStack("onStealEffect", [true])
 
 func onStealEffect(params):
+	timesApplied = count
+	
 	if not ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
 		return
 	
@@ -28,9 +30,9 @@ func onStealEffect(params):
 					swapped = true
 					break
 			
-			params[0].returned = params[1] or not swapped
+			returned = params[0] or not swapped
 			
-			if not params[1]:
+			if not params[0]:
 				card.hasAttacked = false
 				card.playedThisTurn = false
 			
@@ -43,6 +45,11 @@ static func swapSlot(cardNode, newSlot):
 	cardNode.global_position = newSlot.global_position
 	cardNode.playerID = newSlot.playerID
 	cardNode.card.playerID = newSlot.playerID
+
+func clone(card : Card) -> Ability:
+	var abl = .clone(card)
+	abl.returned = returned
+	return abl
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, its opponent gains control of it until the end of the turn. It may attack this turn"

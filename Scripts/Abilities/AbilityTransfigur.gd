@@ -9,7 +9,7 @@ func _init(card : Card).("Transfigur", card, Color.blue, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [count - timesApplied])
+	addToStack("onEffect", [])
 
 func onEffect(params : Array):
 	var validTargets = 0
@@ -20,6 +20,8 @@ func onEffect(params : Array):
 				validTargets += 1
 	if validTargets >= 1:
 		board.getSlot(self, card.playerID)
+	else:
+		timesApplied = count
 
 func slotClicked(slot : CardSlot):
 	var validTargets = 0
@@ -55,6 +57,7 @@ func slotClicked(slot : CardSlot):
 				s.cardNode.card.maxToughness = statSet
 				
 			bounceSlots.clear()
+			timesApplied = count
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:

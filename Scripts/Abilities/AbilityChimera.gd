@@ -28,11 +28,6 @@ func onEffect(params):
 		for t in c.creatureType:
 			tribes |= 1 << t
 	
-	#Accounting for all tribes of the creature not in the graveyard
-	if (params[0] is CardSlot and params[0].playerID == card.playerID):
-		for t in card.creatureType:
-			tribes |= 1 << t
-	
 	#Calculating all bits set to 1 in tribes
 	while tribes > 0:
 		if tribes & 1 == 1:
@@ -49,4 +44,4 @@ func onEffect(params):
 			board.removeCardFromGrave(playerID, 0)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, remove all cards from its controller's " + str(TextScrapyard.new(null)) +". Gets +" + str(count - subCount) + "/+" + str(count - subCount) +" for each unique creature type removed this way (Includes its own creature types)"
+	return .genDescription() + "When this creature is played, remove all cards from its controller's " + str(TextScrapyard.new(null)) +". Gets +" + str(count - subCount) + "/+" + str(count - subCount) +" for each unique creature type removed this way"

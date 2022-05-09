@@ -9,7 +9,14 @@ func onKill(slot):
 	addToStack("onEffect", [slot])
 
 func onEffect(params):
-	card.addCreatureToBoard(ListOfCards.getCard(95), params[0])
+	var cardNew = ListOfCards.getCard(95)
+	card.addCreatureToBoard(cardNew, params[0])
+	var pid
+	for p in NodeLoc.getBoard().players:
+		if p.UUID != card.playerID:
+			pid = p.UUID
+			break
+	cardNew.playerID = pid
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature kills another creature, leave behind a " + str(TextCard.new(ListOfCards.getCard(95))) + " where that creature was"

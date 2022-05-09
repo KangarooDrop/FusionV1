@@ -7,10 +7,10 @@ func _init(card : Card).("Permeation", card, Color.gray, true, Vector2(32, 64)):
 
 func onStartOfTurn():
 	if NodeLoc.getBoard().isOnBoard(card) and NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
-		addToStack("onEffect", [count])
+		addToStack("onEffect", [])
 
 func onEffect(params):
-	for i in params[0]:
+	for i in count:
 		var c = ListOfCards.getCard(56)
 		if not card.addCreatureToBoard(c):
 			for p in NodeLoc.getBoard().getAllPlayers():

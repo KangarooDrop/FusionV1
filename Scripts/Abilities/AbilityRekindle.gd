@@ -8,16 +8,18 @@ func _init(card : Card).("Rekindle", card, Color.red, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [count - timesApplied])
+	addToStack("onEffect", [])
 
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			if p.hand.slots.size() <= params[0]:
+			if p.hand.slots.size() <= count - timesApplied:
 				for i in range(p.hand.nodes.size()):
 					p.hand.discardIndex(i)
-				for i in range(params[0]):
+				for i in range(count - timesApplied):
 					p.hand.drawCard()
+				
+				timesApplied = count
 				return
 	NodeLoc.getBoard().getSlot(self, card.playerID)
 
@@ -49,6 +51,8 @@ func slotClicked(slot : CardSlot):
 				hand.discardIndex(discardIndexes[i])
 			for i in range(count - timesApplied):
 				hand.drawCard()
+			timesApplied = count
+			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:

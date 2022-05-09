@@ -35,7 +35,7 @@ func slotClicked(slot):
 			slot.cardNode.card.isDying = true
 			board.endGetSlot()
 			payed = true
-			addToStack("onEffect", [self])
+			addToStack("onEffect", [])
 	else:
 		if slot.currentZone == CardSlot.ZONES.GRAVE_CARD and is_instance_valid(slot.cardNode):
 			var found = false
@@ -47,10 +47,11 @@ func slotClicked(slot):
 							board.removeCardFromGrave(k, i)
 							found = true
 							break
-			
 			board.endGetSlot()
+			
 			if found:
 				card.addCreatureToBoard(slot.cardNode.card)
+			
 			payed = false
 
 func onEffect(params):
@@ -62,7 +63,7 @@ func onEffect(params):
 			break
 	if totalDead == 0:
 		return
-	NodeLoc.getBoard().getSlot(params[0], card.playerID)
+	NodeLoc.getBoard().getSlot(self, card.playerID)
 
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)

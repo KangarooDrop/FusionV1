@@ -13,12 +13,12 @@ func canActivate() -> bool:
 func onActivate():
 	var board = NodeLoc.getBoard()
 	board.addCardsPlayed(1)
-	addToStack("onEffect", [card.playerID, count])
+	addToStack("onEffect", [])
 	
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0]:
-			for i in range(params[1]):
+		if p.UUID == card.playerID:
+			for i in range(count):
 				p.hand.drawCard()
 			break
 

@@ -6,16 +6,17 @@ func _init(card : Card).("Overgrowth", card, Color.brown, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [count - timesApplied])
+	addToStack("onEffect", [])
 
 func onEffect(params):
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		if p.UUID == self.card.playerID:
-			for i in range(params[0]):
+			for i in range(count - timesApplied):
 				var card = p.deck.tutorByAbility(self.get_script())
 				if card != null:
 					p.hand.addCardToHand([card, true, true])
+	timesApplied = count
 
 func genDescription(subCount = 0) -> String:
 	var string

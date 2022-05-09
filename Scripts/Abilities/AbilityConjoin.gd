@@ -26,15 +26,15 @@ static func getValidCombinations(cardsInQueue : Array, cardNodesInHand : Array, 
 	return total
 
 func onApplied(slot):
-	addToStack("onEffect", [self.clone(card)])
+	addToStack("onEffect", [])
 
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
-		if p.UUID == params[0].card.playerID:
+		if p.UUID == card.playerID:
 			if p.hand.slots.size() == 0:
 				return
-	
-	NodeLoc.getBoard().getSlot(params[0], params[0].card.playerID)
+	timesApplied = count
+	NodeLoc.getBoard().getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
 	if slot == null:
@@ -70,12 +70,14 @@ func slotClicked(slot : CardSlot):
 			fuseIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		#(hand.nodes.size() < count + 1) or 
-		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == count + 1 - timesApplied:
+		#(hand.nodes.size() < count + 1) or
+		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == count + 1:
 			for i in range(fuseIndexes.size()):
-				hand.discardIndex(fuseIndexes[i])
+				hand.discardIndex(fuseIndexes[i], false)
 			var board = NodeLoc.getBoard()
 			board.fuseToHand(hand.player, tmp)
+			timesApplied = count
+			fuseIndexes.clear()
 			board.endGetSlot()
 
 func genDescription(subCount = 0) -> String:

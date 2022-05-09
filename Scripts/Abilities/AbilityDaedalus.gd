@@ -8,7 +8,7 @@ func _init(card : Card).("Daedalus", card, Color.lightgray, false, Vector2(0, 0)
 func onApplied(slot):
 	addToStack("onEffect", [])
 			
-static func onEffect(params : Array):
+func onEffect(params : Array):
 	var cards = NodeLoc.getBoard().getAllCreatures()
 	var highest = []
 	for i in range(0, cards.size()):
@@ -18,6 +18,8 @@ static func onEffect(params : Array):
 			highest = [cards[i]]
 	for c in highest:
 		c.isDying = true
+		
+	timesApplied = count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, destroy all creatures with the highest power (if two or more creatures are tied, destroy all of them)"

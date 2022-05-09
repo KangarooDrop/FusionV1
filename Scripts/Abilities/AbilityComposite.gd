@@ -24,6 +24,9 @@ func onEnter(card):
 func onEnterFromFusion(card):
 	onEffect()
 
+func onLeave():
+	onRemove(self)
+
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(self.card):
 		onEffect()

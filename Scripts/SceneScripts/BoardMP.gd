@@ -26,6 +26,8 @@ var graveDisplays : Dictionary
 
 var boardSlots : Array
 
+var typeDisplay
+
 var players : Array
 var activePlayer := -1
 var cardsPerTurnMax = 2
@@ -109,8 +111,10 @@ var rightClickQueue := []
 var boardReady = false
 
 var selectingSlot = false
+var selectingType = false
 var selectingSource = null
 var selectingUUID = -1
+
 var stackMaxTime = 1
 var stackTimer = 0
 
@@ -749,10 +753,13 @@ func _physics_process(delta):
 				slot.cardNode.position.x += cos((shakeMaxTime - cardsShaking[slot]) * PI * 2 * shakeFrequency) * shakeAmount
 	
 	if gameStarted:
-		if actionQueue.size() == 0 and selectingSlot and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
-			selectingSource.slotClicked(null)
+		if actionQueue.size() == 0 and ((selectingUUID == players[1].UUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE) or (selectingUUID == players[0].UUID and timers[selectingUUID].turnOver)):
+			if selectingSlot:
+				selectingSource.slotClicked(null)
+			elif selectingType:
+				selectingSource.onTypeButtonPressed(null, null)
 		
-		if not selectingSlot and cardNodesFusing.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
+		if not selectingSlot and not selectingType and cardNodesFusing.size() == 0 and players[0].hand.drawQueue.size() == 0 and players[0].hand.discardQueue.size() == 0 and players[1].hand.drawQueue.size() == 0 and players[1].hand.discardQueue.size() == 0 and millQueue.size() == 0:
 			if abilityStack.size() > 0:
 				currentAbility = abilityStack.getFront()
 				
@@ -760,7 +767,7 @@ func _physics_process(delta):
 				abilityStack.trigger(currentAbility)
 				
 			if abilityStack.size() > 0 and stackTimer <= 0:
-				if not selectingSlot:
+				if not selectingSlot and not selectingType:
 					if not waitingAbilities.has(currentAbility["source"]) or currentAbility["source"].checkWaiting():
 						waitingAbilities.erase(currentAbility["source"])
 						abilityStack.erase(currentAbility)
@@ -855,6 +862,9 @@ func _physics_process(delta):
 var graveViewing := -1
 
 func addCardToGrave(playerID : int, card : Card):
+	if card.tier < 1:
+		return
+	
 	var oldCard = graves[playerID].cardNode.card
 	if graves[playerID].cardNode.getCardVisible():
 		graves[playerID].cardNode.card.cardNode = null
@@ -870,7 +880,7 @@ func addCardToGrave(playerID : int, card : Card):
 	
 	var cn = graves[playerID].cardNode
 	cn.visible = true
-	cn.card = card.clone()
+	cn.card = cl.clone()
 	cn.card.cardNode = cn
 	cn.setCardVisible(true)
 	
@@ -905,6 +915,13 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 	hoveringWindow = hoverInst
 
 func initZones():
+	
+	typeDisplay = $TypeDisplay
+	typeDisplay.setOptions("Choose A Creature Type", ["Fire", "Water", "Earth", "Beast", "Mech", "Necro"], [2, 3, 4, 5, 6, 7])
+	typeDisplay.hideBack()
+	typeDisplay.connect("onOptionPressed", self, "onTypeButtonPressed")
+	typeDisplay.hide()
+	
 	var cardInst = null
 	
 	#	PLAYER 1 SLOTS  	#
@@ -957,7 +974,6 @@ func initZones():
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.slot = cardInst
 	cardNodeInst.position = cardInst.position
-	
 	
 	
 	#	PLAYER 2 SLOTS  	#
@@ -1760,6 +1776,43 @@ func endGetSlot():
 	startTimer(activePlayer)
 	
 	checkState()
+
+func getType(source, selectingUUID : int):
+	if selectingUUID == players[0].UUID:
+		typeDisplay.show()
+	
+	selectingType = true
+	selectingSource = source
+	self.selectingUUID = selectingUUID
+	stackTimer = 0
+	
+	endTimer(timerPlayer)
+	
+	if players[0].UUID == selectingUUID:
+		startTimer(0)
+	elif players[1].UUID == selectingUUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		startTimer(1)
+
+func endGetType():
+	selectingType = false
+	selectingSource = null
+	abilityStack.remove(0)
+	if abilityStack.size() > 0:
+		stackTimer = stackMaxTime
+	currentAbility = null
+	
+	if players[0].UUID == selectingUUID:
+		endTimer(0)
+	elif players[1].UUID == selectingUUID and Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		endTimer(1)
+		
+	startTimer(activePlayer)
+	
+	checkState()
+
+func onTypeButtonPressed(button, key):
+	typeDisplay.hide()
+	selectingSource.onTypeSelected(button, key)
 
 func onLoss(player : Player):
 	if not gameOver and not deadPlayers.has(player):

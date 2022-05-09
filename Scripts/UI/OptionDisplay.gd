@@ -22,7 +22,7 @@ func loadFiles(title : String, path : String, extensions := ["txt"]):
 		elif not file.begins_with("."):
 			for ex in extensions:
 				if file.ends_with(ex):
-					options.append(file.get_basename().capitalize())
+					options.append(file.get_basename())
 					files.append(file)
 	dir.list_dir_end()
 	
@@ -93,6 +93,9 @@ func setOptions(title : String, options := [], keys := []):
 #	$VBoxContainer.rect_position = -$Background.rect_size / 2 + backBuffer - Vector2(0, 10)
 	#$Background.rect_position = $VBoxContainer.rect_position - Vector2(30, 10)
 
+func hideBack() -> Node:
+	$VBoxContainer/BackButton.visible = false
+	return self
 
 func onBackPressed():
 	emit_signal("onBackPressed")

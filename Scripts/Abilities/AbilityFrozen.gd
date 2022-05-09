@@ -11,7 +11,9 @@ func _init(card : Card).("Frozen", card, Color.lightblue, false, Vector2(16, 0))
 	pass
 
 func _physics_process(delta):
-	if not is_instance_valid(overlay) and card != null and is_instance_valid(card.cardNode):
+	if (not is_instance_valid(overlay) and card != null and is_instance_valid(card.cardNode)) or (is_instance_valid(card.cardNode) and card.cardNode != overlay.get_parent()):
+		if is_instance_valid(overlay):
+			overlay.queue_free()
 		overlay = Preloader.overlayScene.instance().setTexture(frozenOverlay).setSource(self).setDestroyOnRemove(true)
 		card.cardNode.get_node("Overlays").add_child(overlay)
 
@@ -29,6 +31,9 @@ func onStartOfTurn():
 		onEffect()
 		if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer].UUID == card.playerID:
 			frozenThisTurn = true
+
+func onLeave():
+	card.canFuseThisTurn = true
 
 func onEffect():
 	if not card.cantAttackSources.has(self):

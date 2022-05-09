@@ -16,12 +16,12 @@ func onStartOfTurn():
 	if delayed:
 		var board = NodeLoc.getBoard()
 		if board.players[board.activePlayer].UUID == card.playerID:
-			addToStack("onEffect", [count])
+			addToStack("onEffect", [])
 			card.removeAbility(self)
 
 func onEffect(params):
 	var board = NodeLoc.getBoard()
-	board.addCardsPerTurn(params[0])
+	board.addCardsPerTurn(count)
 
 func clone(card) -> Ability:
 	var abl = .clone(card)

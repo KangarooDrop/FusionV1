@@ -14,6 +14,7 @@ func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID != card.playerID:
 			p.takeDamage(card.power, card)
+	timesApplied = count
 	
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, it deals damage equal to its power to the opponent"

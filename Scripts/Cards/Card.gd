@@ -323,6 +323,9 @@ func addCreatureToBoard(card, slot = null) -> bool:
 		for c in NodeLoc.getBoard().getAllCards():
 			if c != card:
 				c.onOtherEnter(slot)
+		
+		NodeLoc.getBoard().checkState()
+		
 		return true
 	return false
 

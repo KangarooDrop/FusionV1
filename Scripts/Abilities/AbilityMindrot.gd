@@ -8,12 +8,12 @@ func _init(card : Card).("Mindrot", card, Color.blue, true, Vector2(0, 0)):
 func onBeforeDamage(attacker, blocker):
 	.onBeforeDamage(attacker, blocker)
 	if attacker == card.cardNode.slot:
-		addToStack("onEffect", [count])
+		addToStack("onEffect", [])
 
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID != card.playerID:
-			for i in range(params[0]):
+			for i in range(count):
 				p.deck.mill(p.UUID)
 
 func genDescription(subCount = 0) -> String:

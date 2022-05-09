@@ -49,6 +49,8 @@ func slotClicked(slot : CardSlot):
 						p.hand.addCardToHand([card, true, true])
 						break
 			
+			timesApplied = count
+			graveCards.clear()
 			NodeLoc.getBoard().endGetSlot()
 
 func genDescription(subCount = 0) -> String:

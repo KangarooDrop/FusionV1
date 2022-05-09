@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/BoardMP.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Classes/Hand.gd" type="Script" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=13]
 [ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Scenes/UI/TurnTimer.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=16]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -161,6 +162,10 @@ moveSpeed = 1000
 z_index = 2
 isOpponent = true
 handVisible = false
+
+[node name="TypeDisplay" parent="." instance=ExtResource( 16 )]
+visible = false
+z_index = 98
 
 [node name="HealthNode" parent="." instance=ExtResource( 3 )]
 position = Vector2( -350, 100 )

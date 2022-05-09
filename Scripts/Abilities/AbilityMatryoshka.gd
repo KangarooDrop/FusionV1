@@ -7,13 +7,13 @@ func _init(card : Card).("Matryoshka", card, Color.darkgray, true, Vector2(32, 9
 
 func onDeath():
 	.onDeath()
-	addToStack("onEffect", [count])
+	addToStack("onEffect", [])
 
 func onEffect(params):
 	var hand = null
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			for i in range(params[0]):
+			for i in range(count):
 				p.hand.addCardToHand([ListOfCards.getCard(57), true, true])
 			break
 

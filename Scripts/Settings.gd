@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.15"
+var versionID = "0.0.3.16"
 
 
 enum GAME_TYPES {CONSTRUCTED, DRAFT}
@@ -37,9 +37,9 @@ enum GAME_TIMES \
 var turnTimerMax : int = TURN_TIMES.NINETY
 var gameTimerMax : int = GAME_TIMES.TEN
 var animationSpeed : float = ANIMATION_SPEEDS.NORMAL / 10.0
+
 var selectedDeck = ""
 var path = "user://decks/"
-
 var dumpPath = "user://dumps/"
 
 enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT}

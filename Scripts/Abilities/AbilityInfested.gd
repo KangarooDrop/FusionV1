@@ -7,10 +7,10 @@ func _init(card : Card).("Infested", card, Color.darkgray, true, Vector2(32, 96)
 
 func onDeath():
 	.onDeath()
-	addToStack("onEffect", [count])
+	addToStack("onEffect", [])
 
 func onEffect(params):
-	for i in range(params[0]):
+	for i in range(count):
 		var card = ListOfCards.getCard(21)
 		card.abilities.clear()
 		card.power = 1

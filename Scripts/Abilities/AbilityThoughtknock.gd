@@ -36,7 +36,10 @@ func slotClicked(slot : CardSlot):
 		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count - timesApplied:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
+			timesApplied = count
+			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
+			
 
 func onEffect(params):
 	var slectingUUID = -1

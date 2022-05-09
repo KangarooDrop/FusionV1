@@ -1318,5 +1318,20 @@
       "AbilityRecurrent"
     ],
     "rarity": "COMMON"
+  },
+  "101": {
+    "name": "Contagion Engineer",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 3,
+    "creature_type": [
+      5,
+      6
+    ],
+    "tier": 2,
+    "abilities": [
+      "AbilityPlague"
+    ],
+    "rarity": "COMMON"
   }
 }

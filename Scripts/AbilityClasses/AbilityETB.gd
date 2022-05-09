@@ -11,13 +11,11 @@ func onEnter(slot):
 	.onEnter(slot)
 	if timesApplied < count:
 		onApplied(slot)
-		timesApplied = count
 	
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
 	if timesApplied < count:
 		onApplied(slot)
-		timesApplied = count
 
 func onApplied(slot):
 	pass
