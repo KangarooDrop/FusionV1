@@ -7,6 +7,7 @@ const KICK_PREFIX: String = "k"
 const CONFIRM_PREFIX: String = "y"
 const EXIT_PREFIX: String = "x"
 const CHAT_PREFIX: String = "m"
+const SET_PUBLIC_DATA_PREFIX: String = "d"
 
 var _server: PacketPeerUDP
 var _init_message: String
@@ -90,6 +91,13 @@ func process(delta: float) -> void:
 		elif packet_string.begins_with(CHAT_PREFIX):
 			hole_puncher.emit_signal("holepunch_chat", packet_string)
 
+func set_lobby_data(data):
+	info("Settings lobby data to \"" + data + "\"")
+	var kick_message = PoolStringArray([SET_PUBLIC_DATA_PREFIX, 
+										hole_puncher._session_name, 
+										data]).join(":")
+	send_message(kick_message, _server, hole_puncher.relay_server_address, 
+				hole_puncher.relay_server_port)
 
 func kick_player(player_name: String) -> void:
 	info("Called kick player function for player " + player_name)

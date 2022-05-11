@@ -90,8 +90,17 @@ func onBackPressed():
 	emit_signal("close")
 	hide()
 
+func onPrivateButtonPressed():
+	$VBoxContainer/HBoxContainer/PrivateButton.disabled = true
+	$VBoxContainer/HBoxContainer/PublicButton.disabled = false
+
+func onPublicButtonPressed():
+	$VBoxContainer/HBoxContainer/PrivateButton.disabled = false
+	$VBoxContainer/HBoxContainer/PublicButton.disabled = true
+
 func getGameParams() -> Dictionary:
 	var params = {}
+	params["is_public"] = $VBoxContainer/HBoxContainer/PublicButton.disabled
 	params["version"] = Settings.versionID
 	params["game_type"] = $VBoxContainer/GameTypeHbox/OptionButton.selected
 	params["match_type"] = $VBoxContainer/MatchTypeHbox/OptionButton.selected

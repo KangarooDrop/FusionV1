@@ -7,6 +7,7 @@ signal holepunch_failure(error)
 signal holepunch_success(self_port, host_ip, host_port)
 signal holepunch_chat(chat)
 signal set_host()
+signal public_lobbies_received(data)
 
 export var relay_server_address: String = "127.0.0.1"
 export var relay_server_port: int = 57775
@@ -111,6 +112,14 @@ func _session_manage(is_host: bool, session_name: String,
 func kick_player(player_name: String) -> void:
 	if _is_host and _state_machine.state.name == "InSession":
 		_state_machine.state.kick_player(player_name)
+
+func get_public_lobbies():
+	if _state_machine.state.name == "None":
+		_state_machine.state.get_public_lobbies()
+
+func set_lobby_data(data):
+	if _is_host and _state_machine.state.name == "InSession":
+		_state_machine.state.set_lobby_data(data)
 
 
 func send_chat(chat : String) -> void:

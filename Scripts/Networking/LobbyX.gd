@@ -25,6 +25,11 @@ func _ready():
 	holepuncher.connect("holepunch_success", self, "holepunch_success")
 	holepuncher.connect("holepunch_chat", self, "holepunch_chat")
 	holepuncher.connect("set_host", self, "set_host")
+	holepuncher.connect("public_lobbies_received", self, "public_lobbies_received")
+	
+	$PublicLobbySelector.connect("closePressed", self, "onPublicLobbiesClose")
+	$PublicLobbySelector.connect("refreshPressed", self, "onPublicLobbiesRefresh")
+	$PublicLobbySelector.connect("joinPressed", self, "onPublicJoinPressed")
 	
 	$Lobby/LineEdit3.text = Server.username
 	
@@ -42,6 +47,7 @@ func setInLobby():
 		$Lobby/LineEdit3.editable = false
 		$Lobby/JoinButton.disabled = true
 		$Lobby/HostButton.disabled = true
+		$Lobby/PublicButton.disabled = true
 		$Lobby/SendChatButton.disabled = false
 		
 		inLobby = true
@@ -81,6 +87,11 @@ func holepunch_progress_update(type, session_name, player_names):
 	if type == holepuncher.STATUS_STARTING_SESSION or type == holepuncher.STATUS_SENDING_GREETINGS or type == holepuncher.STATUS_SENDING_CONFIRMATIONS:
 		$LoadingWindow.visible = true
 		$LoadingWindow/Label.text = type.capitalize()
+	
+	if type == holepuncher.STATUS_SESSION_CREATED:
+		if holepuncher.is_host():
+			yield(get_tree(), "idle_frame")
+			_on_LobbySettings_close()
 
 func kickPlayer(name):
 	holepuncher.kick_player(name)
@@ -124,6 +135,7 @@ func holepunch_failure(error):
 		
 		$LoadingWindow.visible = false
 		$Lobby/LobbySettingsButton.disabled = false
+		$PublicLobbySelector.hide()
 
 func holepunch_success(self_port, host_ip, host_port):
 	print("Success: ", self_port, "  ", host_ip, "  ", host_port)
@@ -210,6 +222,26 @@ func _on_JoinButton_pressed():
 	
 	clearMessages()
 
+func _on_PublicButton_pressed():
+	$RabidHolePuncher.get_public_lobbies()
+	$LoadingWindow.show()
+
+func public_lobbies_received(data):
+	$LoadingWindow.hide()
+	$PublicLobbySelector.addAll(data)
+	$PublicLobbySelector.show()
+
+func onPublicLobbiesClose():
+	$PublicLobbySelector.hide()
+
+func onPublicLobbiesRefresh():
+	_on_PublicButton_pressed()
+
+func onPublicJoinPressed(data):
+	$Lobby/LineEdit.text = data[1]
+	$PublicLobbySelector.hide()
+	_on_JoinButton_pressed()
+
 func _on_StartButton_pressed():
 	if numOfPlayers > 1:
 		var params = getGameParams()
@@ -243,6 +275,7 @@ func _on_LeaveButton_pressed():
 		$Lobby/StartButton.disabled = true
 		$Lobby/JoinButton.disabled = false
 		$Lobby/HostButton.disabled = false
+		$Lobby/PublicButton.disabled = false
 		$Lobby/SendChatButton.disabled = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
@@ -266,7 +299,7 @@ func openFileSelector():
 	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass
 	else:
-		MessageManager.notify("You must create a new deck before playing")
+		MessageManager.notify("You must create a deck before playing")
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
@@ -352,3 +385,17 @@ func toMainMenu():
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
+
+func _on_LobbySettings_close():
+	"Constructed v Draft;; Draft Type;; Tournament v Free"
+	var data = [true, "Constructed " + " - "]
+	var params = getGameParams()
+	
+	var paramsString = ""
+	paramsString += str(params["is_public"]) + ":"
+	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
+		paramsString += Settings.DRAFT_TYPES.keys()[params["draft_type"]].capitalize() + " "
+	paramsString += Settings.GAME_TYPES.keys()[params["game_type"]].capitalize()
+	paramsString += " - " + Settings.MATCH_TYPE.keys()[params["match_type"]].capitalize()
+	
+	$RabidHolePuncher.set_lobby_data(paramsString)

@@ -1,0 +1,277 @@
+2022-04-26 01:39:18,289 - Main - INFO - Listening on *:25565
+2022-04-26 01:39:38,609 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 01:39:40,846 - Server - INFO - Player Grundle exited session pp
+2022-04-26 01:39:40,847 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 01:39:44,335 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 01:39:49,159 - Server - INFO - Player Grundle exited session pp
+2022-04-26 01:39:49,159 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 01:42:23,155 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 01:42:26,344 - Server - INFO - Player Grundle exited session pp
+2022-04-26 01:42:26,344 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:07:23,593 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:07:26,799 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:07:26,799 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:07:27,818 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:07:40,488 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:07:40,489 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:08:44,456 - Server - INFO - Created session ff (max 2 players)
+2022-04-26 02:08:57,725 - Server - INFO - Player Grundle exited session ff
+2022-04-26 02:08:57,726 - Server - INFO - No more players in session ff, deleted session
+2022-04-26 02:11:57,927 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:12:04,380 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:12:04,381 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:13:52,159 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:13:59,152 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:13:59,152 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:14:01,491 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:14:03,307 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:14:03,308 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:14:35,707 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:14:38,845 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-26 02:16:00,292 - Server - INFO - Kicked player Grundle2 from session pp because it timed out
+2022-04-26 02:16:10,893 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-26 02:17:28,302 - Server - INFO - Kicked player Grundle2 from session pp because it timed out
+2022-04-26 02:17:31,322 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:17:31,322 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:17:37,131 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:17:41,909 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:24:24,262 - Server - INFO - Player Grundle2 exited session pp
+2022-04-26 02:24:32,360 - Server - INFO - Kicked player Grundle from session pp because it timed out
+2022-04-26 02:24:32,360 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:24:38,456 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:24:42,701 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:24:56,363 - Server - INFO - Kicked player Grundle from session pp because it timed out
+2022-04-26 02:28:11,758 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:28:24,391 - Server - INFO - Kicked player Grundle from session pp because it timed out
+2022-04-26 02:28:33,382 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:28:37,155 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-26 02:28:53,836 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:28:55,003 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:28:57,260 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-26 02:29:13,889 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:29:14,675 - Server - INFO - Connected player Grundle to session pp
+2022-04-26 02:29:44,424 - Server - INFO - Kicked player Grundle from session pp because it timed out
+2022-04-26 02:30:32,915 - Server - INFO - Created session g (max 2 players)
+2022-04-26 02:30:36,787 - Server - INFO - Player Grundle2 exited session g
+2022-04-26 02:30:36,787 - Server - INFO - No more players in session g, deleted session
+2022-04-26 02:30:59,978 - Server - INFO - Created session p (max 2 players)
+2022-04-26 02:31:04,636 - Server - INFO - Player Grundle2 exited session pp
+2022-04-26 02:31:04,636 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:31:15,240 - Server - INFO - Connected player Grundle to session p
+2022-04-26 02:31:19,196 - Server - INFO - Player Grundle2 exited session p
+2022-04-26 02:31:33,938 - Server - INFO - Player Grundle exited session p
+2022-04-26 02:31:33,939 - Server - INFO - No more players in session p, deleted session
+2022-04-26 02:35:50,234 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:35:54,310 - Server - INFO - Connected player Grundle3 to session pp
+2022-04-26 02:35:56,409 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:36:08,282 - Server - INFO - Player Grundle3 exited session pp
+2022-04-26 02:36:08,282 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:36:09,853 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:36:11,555 - Server - INFO - Connected player Grundle3 to session pp
+2022-04-26 02:36:24,690 - Server - INFO - Kicked player Grundle3 from session pp because it timed out
+2022-04-26 02:36:40,309 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:36:40,310 - Server - INFO - No more players in session pp, deleted session
+2022-04-26 02:38:24,795 - Server - INFO - Created session ppxd (max 2 players)
+2022-04-26 02:38:26,800 - Server - INFO - Connected player Grundle3 to session ppxd
+2022-04-26 02:38:30,837 - Server - INFO - Player Grundle exited session ppxd
+2022-04-26 02:38:35,848 - Server - INFO - Player Grundle3 exited session ppxd
+2022-04-26 02:38:35,848 - Server - INFO - No more players in session ppxd, deleted session
+2022-04-26 02:40:22,759 - Server - INFO - Created session ppxd (max 2 players)
+2022-04-26 02:40:25,379 - Server - INFO - Player Grundle3 exited session ppxd
+2022-04-26 02:40:25,380 - Server - INFO - No more players in session ppxd, deleted session
+2022-04-26 02:47:26,171 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 02:47:30,078 - Server - INFO - Connected player Grundle3 to session pp
+2022-04-26 02:47:31,448 - Server - INFO - Player Grundle3 exited session pp
+2022-04-26 02:47:51,084 - Server - INFO - Connected player Grundle3 to session pp
+2022-04-26 02:47:52,235 - Server - INFO - Player Grundle3 exited session pp
+2022-04-26 02:47:56,727 - Server - INFO - Connected player Grundle3 to session pp
+2022-04-26 02:47:58,661 - Server - INFO - Player Grundle3 exited session pp
+2022-04-26 02:48:11,234 - Server - INFO - Player Grundle exited session pp
+2022-04-26 02:48:11,235 - Server - INFO - No more players in session pp, deleted session
+c    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+x    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+c    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+2022-04-26 16:08:27,201 - Main - INFO - Listening on *:25565
+2022-04-26 21:20:46,674 - Server - INFO - Created session f (max 2 players)
+2022-04-26 21:20:54,968 - Server - INFO - Player Grundle2 exited session f
+2022-04-26 21:20:54,969 - Server - INFO - No more players in session f, deleted session
+2022-04-26 21:27:19,264 - Server - INFO - Created session pp (max 2 players)
+2022-04-26 21:27:20,801 - Server - INFO - Player Grundle2 exited session pp
+2022-04-26 21:27:20,801 - Server - INFO - No more players in session pp, deleted session
+2022-04-27 00:37:16,427 - Server - INFO - Created session w (max 2 players)
+2022-04-27 00:38:16,504 - Server - INFO - Player Grundle exited session w
+2022-04-27 00:38:16,504 - Server - INFO - No more players in session w, deleted session
+2022-04-27 03:39:41,738 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 03:39:46,159 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 03:39:48,864 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 03:40:36,000 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 03:40:37,101 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 03:40:39,549 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 03:40:55,635 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 03:40:56,585 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 03:40:58,727 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 03:41:15,103 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 03:41:17,073 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 03:41:18,761 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 16:46:47,952 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 16:46:50,854 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 16:46:54,160 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 16:47:48,390 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 16:47:49,829 - Server - INFO - Connected player Grundle2 to session pp
+2022-04-27 16:47:51,916 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-27 17:21:42,004 - Server - INFO - Created session pp (max 2 players)
+2022-04-27 17:21:43,791 - Server - INFO - Player Grundle exited session pp
+2022-04-27 17:21:43,792 - Server - INFO - No more players in session pp, deleted session
+2022-04-28 17:14:00,997 - Server - INFO - Created session pp2 (max 3 players)
+2022-04-28 17:14:08,630 - Server - INFO - Kicked player pppp from session pp2 because it timed out
+2022-04-28 17:14:08,630 - Server - INFO - No more players in session pp2, deleted session
+2022-04-28 17:14:53,758 - Server - INFO - Created session pp (max 3 players)
+2022-04-28 17:15:04,683 - Server - INFO - Kicked player me from session pp because it timed out
+2022-04-28 17:15:04,684 - Server - INFO - No more players in session pp, deleted session
+2022-04-28 17:15:18,452 - Server - INFO - Created session pp (max 3 players)
+2022-04-28 17:15:28,703 - Server - INFO - Kicked player me from session pp because it timed out
+2022-04-28 17:15:28,703 - Server - INFO - No more players in session pp, deleted session
+2022-04-28 17:16:33,521 - Server - INFO - Created session pp (max 4 players)
+2022-04-28 17:17:31,783 - Server - INFO - Connected player me2 to session pp
+2022-04-28 17:17:34,719 - Server - INFO - Kicked player me2 from session pp
+2022-04-28 17:17:36,623 - Server - INFO - Connected player me2 to session pp
+2022-04-28 17:17:43,065 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 17:19:08,437 - Server - INFO - Created session pp (max 3 players)
+2022-04-28 17:19:12,744 - Server - INFO - Connected player m2 to session pp
+2022-04-28 17:19:21,155 - Server - INFO - Kicked player m2 from session pp
+2022-04-28 17:19:22,769 - Server - INFO - Connected player m2 to session pp
+2022-04-28 17:19:26,440 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 17:22:00,015 - Server - INFO - Created session pp (max 2 players)
+2022-04-28 17:22:05,070 - Server - INFO - Connected player me2 to session pp
+2022-04-28 17:22:09,611 - Server - INFO - Player me2 exited session pp
+2022-04-28 17:22:11,303 - Server - INFO - Connected player me2 to session pp
+2022-04-28 17:22:35,346 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 19:43:01,354 - Server - INFO - Created session pp (max 2 players)
+2022-04-28 19:43:16,808 - Server - INFO - Connected player Grundle to session pp
+2022-04-28 19:43:23,025 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 19:57:28,365 - Server - INFO - Created session poop (max 4 players)
+2022-04-28 19:57:38,116 - Server - INFO - Kicked player Grundle from session poop because it timed out
+2022-04-28 19:57:38,116 - Server - INFO - No more players in session poop, deleted session
+2022-04-28 19:58:14,296 - Server - INFO - Created session poop (max 4 players)
+2022-04-28 19:58:26,156 - Server - INFO - Kicked player Grundle from session poop because it timed out
+2022-04-28 19:58:26,157 - Server - INFO - No more players in session poop, deleted session
+2022-04-28 19:58:48,748 - Server - INFO - Created session p (max 4 players)
+2022-04-28 19:59:43,803 - Server - INFO - Player grund exited session p
+2022-04-28 19:59:43,803 - Server - INFO - No more players in session p, deleted session
+2022-04-28 20:00:09,272 - Server - INFO - Created session g (max 4 players)
+2022-04-28 20:00:48,057 - Server - INFO - Player pee exited session g
+2022-04-28 20:00:48,057 - Server - INFO - No more players in session g, deleted session
+2022-04-28 20:00:50,147 - Server - INFO - Created session g (max 4 players)
+2022-04-28 20:01:08,661 - Server - INFO - Player pee exited session g
+2022-04-28 20:01:08,661 - Server - INFO - No more players in session g, deleted session
+2022-04-28 20:01:09,430 - Server - INFO - Created session g (max 4 players)
+2022-04-28 20:01:22,213 - Server - INFO - Kicked player pee from session g because it timed out
+2022-04-28 20:01:22,213 - Server - INFO - No more players in session g, deleted session
+2022-04-28 20:01:39,143 - Server - INFO - Created session p (max 4 players)
+2022-04-28 20:03:41,708 - Server - INFO - Player p exited session p
+2022-04-28 20:03:41,708 - Server - INFO - No more players in session p, deleted session
+2022-04-28 20:03:53,493 - Server - INFO - Created session 12 (max 4 players)
+2022-04-28 20:04:25,665 - Server - INFO - Player pp exited session 12
+2022-04-28 20:04:25,665 - Server - INFO - No more players in session 12, deleted session
+2022-04-28 20:04:57,945 - Server - INFO - Created session pp (max 4 players)
+2022-04-28 20:05:05,611 - Server - INFO - Connected player GBABY to session pp
+2022-04-28 20:05:22,987 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 20:07:14,082 - Server - INFO - Created session pp (max 4 players)
+2022-04-28 20:07:16,732 - Server - INFO - Connected player f to session pp
+2022-04-28 20:07:19,933 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 20:09:52,271 - Server - INFO - Created session pp (max 4 players)
+2022-04-28 20:09:53,694 - Server - INFO - Connected player p to session pp
+2022-04-28 20:09:55,604 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-28 20:10:50,242 - Server - INFO - Created session pp (max 4 players)
+2022-04-28 20:10:50,948 - Server - INFO - Connected player pp to session pp
+2022-04-28 20:10:52,636 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-29 01:17:21,423 - Server - INFO - Created session pp (max 2 players)
+2022-04-29 01:17:40,754 - Server - INFO - Player Grundle exited session pp
+2022-04-29 01:17:40,754 - Server - INFO - No more players in session pp, deleted session
+2022-04-29 19:27:45,593 - Server - INFO - Created session pp (max 2 players)
+2022-04-29 19:27:50,118 - Server - INFO - Player Grundle exited session pp
+2022-04-29 19:27:50,119 - Server - INFO - No more players in session pp, deleted session
+2022-04-29 20:53:30,551 - Server - INFO - Created session pp (max 2 players)
+2022-04-29 20:55:38,016 - Server - INFO - Kicked player Grundle from session pp because it timed out
+2022-04-29 20:55:38,016 - Server - INFO - No more players in session pp, deleted session
+2022-04-30 02:16:37,344 - Server - INFO - Created session pp (max 2 players)
+2022-04-30 02:16:38,211 - Server - INFO - Player Grundle exited session pp
+2022-04-30 02:16:38,212 - Server - INFO - No more players in session pp, deleted session
+x    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+x    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+c    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+x    dict_keys(['h', 'c', 'p', 'k', 'x', 's', 'y', 'm'])
+True
+2022-04-30 19:16:27,913 - Main - INFO - Listening on *:25565
+2022-04-30 19:16:38,737 - Main - INFO - Listening on *:25565
+2022-04-30 19:16:44,253 - Server - INFO - Created session ff (max 2 players)
+2022-04-30 19:16:47,340 - Server - INFO - Player Grundle exited session ff
+2022-04-30 19:16:47,341 - Server - INFO - No more players in session ff, deleted session
+2022-04-30 19:16:49,729 - Server - INFO - Created session ff (max 2 players)
+2022-04-30 19:16:51,426 - Server - INFO - Player Grundle exited session ff
+2022-04-30 19:16:51,426 - Server - INFO - No more players in session ff, deleted session
+2022-04-30 22:10:00,506 - Server - INFO - Created session ryan (max 2 players)
+2022-04-30 22:10:17,359 - Server - INFO - Connected player Necromal to session ryan
+2022-04-30 22:10:26,400 - Server - INFO - All addresses sent for session ryan. Session closed.
+2022-04-30 22:15:46,407 - Server - INFO - Created session adam (max 2 players)
+2022-04-30 22:15:56,986 - Server - INFO - Connected player nilbog to session adam
+2022-04-30 22:16:00,144 - Server - INFO - All addresses sent for session adam. Session closed.
+2022-04-30 22:35:05,343 - Server - INFO - Created session kevin (max 8 players)
+2022-04-30 22:35:07,693 - Server - INFO - Connected player Necromal to session kevin
+2022-04-30 22:35:08,769 - Server - INFO - Connected player Grundle to session kevin
+2022-04-30 22:35:12,476 - Server - INFO - Connected player nilbog to session kevin
+2022-04-30 22:35:13,134 - Server - INFO - Connected player Cam to session kevin
+2022-04-30 22:35:20,187 - Server - INFO - Connected player TheSauceDiaz to session kevin
+2022-04-30 22:35:51,344 - Server - INFO - Connected player oweeen to session kevin
+2022-04-30 22:35:55,099 - Server - INFO - Connected player Deeno to session kevin
+2022-04-30 22:36:56,501 - Server - INFO - All addresses sent for session kevin. Session closed.
+2022-04-30 22:38:43,727 - Server - INFO - Created session kevin (max 8 players)
+2022-04-30 22:38:47,208 - Server - INFO - Connected player nilbog to session kevin
+2022-04-30 22:38:48,868 - Server - INFO - Connected player Necromal to session kevin
+2022-04-30 22:38:51,247 - Server - INFO - Connected player Deeno to session kevin
+2022-04-30 22:38:52,085 - Server - INFO - Connected player Grundle to session kevin
+2022-04-30 22:38:58,091 - Server - INFO - Connected player oweeen to session kevin
+2022-04-30 22:38:58,916 - Server - INFO - Connected player Cam to session kevin
+2022-04-30 22:39:34,756 - Server - INFO - Connected player TheSauceDiaz to session kevin
+2022-04-30 22:39:50,876 - Server - INFO - All addresses sent for session kevin. Session closed.
+2022-04-30 23:26:10,261 - Server - INFO - Created session diaz (max 2 players)
+2022-04-30 23:26:10,602 - Server - INFO - Connected player TheSauceDiaz to session diaz
+2022-04-30 23:26:12,777 - Server - INFO - Created session goblin (max 2 players)
+2022-04-30 23:26:26,508 - Server - INFO - Player nilbog exited session goblin
+2022-04-30 23:26:26,508 - Server - INFO - No more players in session goblin, deleted session
+2022-04-30 23:26:47,365 - Server - INFO - Created session nilbog (max 2 players)
+2022-04-30 23:26:56,182 - Server - INFO - Connected player oweeen to session nilbog
+2022-04-30 23:27:01,668 - Server - INFO - All addresses sent for session nilbog. Session closed.
+2022-04-30 23:27:08,791 - Server - INFO - All addresses sent for session diaz. Session closed.
+2022-04-30 23:27:32,903 - Server - INFO - Created session loser (max 2 players)
+2022-04-30 23:27:41,283 - Server - INFO - Connected player Cam to session loser
+2022-04-30 23:27:46,763 - Server - INFO - All addresses sent for session loser. Session closed.
+2022-04-30 23:28:04,875 - Server - INFO - Created session pp (max 2 players)
+2022-04-30 23:28:14,284 - Server - INFO - Connected player Deeno to session pp
+2022-04-30 23:28:23,227 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-30 23:29:45,262 - Server - INFO - Created session pp (max 2 players)
+2022-04-30 23:29:53,750 - Server - INFO - Connected player Deeno to session pp
+2022-04-30 23:30:10,837 - Server - INFO - All addresses sent for session pp. Session closed.
+2022-04-30 23:59:25,508 - Server - INFO - Created session grands (max 2 players)
+2022-04-30 23:59:28,981 - Server - INFO - Connected player TheSauceDiaz to session grands
+2022-04-30 23:59:33,672 - Server - INFO - All addresses sent for session grands. Session closed.
+2022-05-02 16:44:38,506 - Server - INFO - Created session f (max 2 players)
+2022-05-02 16:44:40,976 - Server - INFO - Player Grundle exited session f
+2022-05-02 16:44:40,976 - Server - INFO - No more players in session f, deleted session
+2022-05-09 20:42:36,058 - Server - INFO - Created session dfg (max 2 players)
+2022-05-09 20:42:39,727 - Server - INFO - Player Diggity2 exited session dfg
+2022-05-09 20:42:39,727 - Server - INFO - No more players in session dfg, deleted session
+2022-05-09 20:42:47,628 - Server - INFO - Created session kk (max 2 players)
+2022-05-09 20:42:57,974 - Server - INFO - Player Diggity2 exited session kk
+2022-05-09 20:42:57,974 - Server - INFO - No more players in session kk, deleted session
+Error: invalid request
+Error: invalid request
+Error: invalid request
+Error: invalid request
+Error: invalid request

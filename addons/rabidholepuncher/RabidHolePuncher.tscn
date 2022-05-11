@@ -20,6 +20,8 @@ initial_state = NodePath("None")
 [node name="None" type="Node" parent="StateMachine"]
 script = ExtResource( 6 )
 
+[node name="ServerTimer" type="Timer" parent="StateMachine/None"]
+
 [node name="InitRequestSent" type="Node" parent="StateMachine"]
 script = ExtResource( 7 )
 

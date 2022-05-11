@@ -1,7 +1,7 @@
 extends Node
 
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.16"
+var versionID = "0.0.3.17"
 
 
 enum GAME_TYPES {CONSTRUCTED, DRAFT}

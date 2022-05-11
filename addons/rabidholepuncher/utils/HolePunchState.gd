@@ -16,6 +16,7 @@ const REPEAT_MESSAGE_TIMEOUT_SECONDS: float = 0.5
 const SERVER_TIMEOUT_SECONDS: float = 15.0
 const ERROR_STR: String = "error"
 const INFO_PREFIX: String = "i"
+const GET_PUBLIC_LOBBY_PREFIX: String = "l"
 
 onready var _state_machine: = _get_state_machine(self)
 var hole_puncher: HolePuncher
