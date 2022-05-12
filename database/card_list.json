@@ -957,7 +957,7 @@
   "75": {
     "name": "Raanagan",
     "tex": "res://Art/portraits/card_RAANAGAN.png",
-    "power": 2,
+    "power": 3,
     "toughness": 2,
     "creature_type": [
       2

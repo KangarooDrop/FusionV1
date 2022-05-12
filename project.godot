@@ -711,6 +711,7 @@ BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
 Tournament="*res://Scripts/Networking/Tournament.gd"
 RabidHolePuncher="*res://addons/rabidholepuncher/RabidHolePuncher.tscn"
 Preloader="*res://Scripts/Preloader.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 
 [display]
 
@@ -719,7 +720,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/rabidholepuncher/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/rabidholepuncher/plugin.cfg", "res://addons/silent_wolf/plugin.cfg" )
 
 [gdnative]
 
