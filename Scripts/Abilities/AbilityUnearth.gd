@@ -11,7 +11,16 @@ func onApplied(slot):
 	addToStack("onEffect", [])
 
 func onEffect(params):
-	NodeLoc.getBoard().getSlot(self, card.playerID)
+	var total = 0
+	var board = NodeLoc.getBoard()
+	for p in board.players:
+		var g = board.graveCards[p.UUID]
+		total += g.size()
+	
+	if total > 0:
+		NodeLoc.getBoard().getSlot(self, card.playerID)
+	else:
+		pass
 
 func slotClicked(slot : CardSlot):
 	var board = NodeLoc.getBoard()
@@ -37,16 +46,9 @@ func slotClicked(slot : CardSlot):
 		
 		if graveCards.size() >= total or graveCards.size() >= count - timesApplied:
 			for card in graveCards:
-				for k in board.graveCards.keys():
-					var g = board.graveCards[k]
-					for i in range(g.size()):
-						if g[i] == card:
-							board.removeCardFromGrave(k, i)
-							break
-				
 				for p in board.players:
 					if p.UUID == self.card.playerID:
-						p.hand.addCardToHand([card, true, true])
+						p.hand.addCardToHand([card, false, true])
 						break
 			
 			timesApplied = count

@@ -16,8 +16,7 @@ func onEffect(params):
 			var g = board.graveCards[p.UUID]
 			for i in range(g.size()):
 				if g[i] == card:
-					board.removeCardFromGrave(p.UUID, i)
-					p.hand.addCardToHand([card, true, true])
+					p.hand.addCardToHand([card, false, true])
 					return
 
 func genDescription(subCount = 0) -> String:

@@ -195,6 +195,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityMindrot.gd"
 }, {
 "base": "Ability",
+"class": "AbilityMinoan",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityMinoan.gd"
+}, {
+"base": "Ability",
 "class": "AbilityMolting",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityMolting.gd"
@@ -369,7 +374,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTransfigur.gd"
 }, {
-"base": "AbilityETB",
+"base": "Ability",
 "class": "AbilityTransform",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityTransform.gd"
@@ -607,6 +612,7 @@ _global_script_class_icons={
 "AbilityMadness": "",
 "AbilityMatryoshka": "",
 "AbilityMindrot": "",
+"AbilityMinoan": "",
 "AbilityMolting": "",
 "AbilityNecrophagia": "",
 "AbilityOvergrowth": "",

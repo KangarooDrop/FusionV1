@@ -118,6 +118,10 @@ var selectingUUID = -1
 var stackMaxTime = 1
 var stackTimer = 0
 
+var cardsMovingCard := []
+var cardsMovingAbility := []
+var cardsMovingSlot := []
+
 func _ready():
 	print("-".repeat(30))
 	
@@ -989,7 +993,7 @@ func initZones():
 		cardInst.playerID = p.UUID
 		creatures_B_Holder.add_child(cardInst)
 		cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-		creatures[p.UUID].append(cardInst)
+		creatures[p.UUID].insert(0, cardInst)
 		boardSlots.append(cardInst)
 	centerNodes(creatures[p.UUID], Vector2(), cardWidth, cardDists)
 	
@@ -1644,6 +1648,7 @@ func nextTurn():
 		c.onEndOfTurn()
 	######################
 	
+	checkState()
 	
 	while abilityStack.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
@@ -1672,6 +1677,7 @@ func nextTurn():
 	
 	while abilityStack.size() > 0:
 		yield(get_tree().create_timer(0.1), "timeout")
+				
 	
 	players[activePlayer].hand.drawCard()
 	
@@ -1744,6 +1750,55 @@ func checkState():
 				boardStateNew.append(s.cardNode.card.serialize())
 			else:
 				boardStateNew.append({})
+	
+	#[card(moving), ability(source), slot(moving to)]
+	if cardsMovingCard.size() > 0:
+		for c in getAllCards():
+			if isOnBoard(c) and not c in cardsMovingCard:
+				cardsMovingCard.append(c)
+				cardsMovingAbility.append(null)
+				cardsMovingSlot.append(c.cardNode.slot)
+		
+		var resolved = false
+		while not resolved:
+			var errorSlots : Array = []
+			
+			for i in range(0, cardsMovingCard.size(), 1):
+				for j in range(i+1, cardsMovingCard.size(), 1):
+					if cardsMovingSlot[i] == cardsMovingSlot[j]:
+						errorSlots.append([i, j])
+#						print("ERROR DECTED IN MOVING")
+			
+			resolved = errorSlots.size() == 0
+			
+			for e in errorSlots:
+				cardsMovingAbility[e[0]] = null
+				cardsMovingAbility[e[1]] = null
+				cardsMovingSlot[e[0]] = cardsMovingCard[e[0]].cardNode.slot
+				cardsMovingSlot[e[1]] = cardsMovingCard[e[1]].cardNode.slot
+			errorSlots.clear()
+		
+		for i in range(cardsMovingCard.size()):
+			if cardsMovingCard[i].cardNode.slot != cardsMovingSlot[i]:
+				if is_instance_valid(cardsMovingCard[i].cardNode.slot):
+					cardsMovingCard[i].cardNode.slot.cardNode = null
+					cardsMovingCard[i].cardNode.slot = null
+				
+				if is_instance_valid(cardsMovingSlot[i].cardNode):
+					cardsMovingSlot[i].cardNode.slot = null
+					cardsMovingSlot[i].cardNode = null
+				
+				cardsMovingCard[i].cardNode.slot = cardsMovingSlot[i]
+				cardsMovingSlot[i].cardNode = cardsMovingCard[i].cardNode
+				cardsMovingSlot[i].cardNode.global_position = cardsMovingSlot[i].global_position
+				
+				cardsMovingCard[i].playerID = cardsMovingSlot[i].playerID
+				cardsMovingCard[i].cardNode.playerID = cardsMovingSlot[i].playerID
+	
+		cardsMovingCard.clear()
+		cardsMovingAbility.clear()
+		cardsMovingSlot.clear()
+			
 	
 	for i in range(boardState.size()):
 		if not Card.areIdentical(boardState[i], boardStateNew[i]):

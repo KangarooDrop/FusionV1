@@ -57,12 +57,9 @@ func slotClicked(slot : CardSlot):
 				
 				for p in board.players:
 					if p.UUID == s.playerID:
-						p.hand.addCardToHand([s.cardNode.card, true, true])
+						p.hand.addCardToHand([s.cardNode.card, false, true])
 						s.cardNode.queue_free()
 						break
-				
-				s.cardNode.slot.cardNode = null
-				s.cardNode.queue_free()
 				
 			bounceSlots.clear()
 			timesApplied = count

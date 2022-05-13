@@ -18,11 +18,8 @@ func onEffect(params : Array):
 				for c in board.getAllCards():
 					if c != card:
 						c.onOtherLeave(card.cardNode.slot)
-				
-				card.cardNode.queue_free()
-				card.cardNode = null
 			
-			p.hand.addCardToHand([card, true, true])
+			p.hand.addCardToHand([card, false, true])
 			break
 
 func genDescription(subCount = 0) -> String:

@@ -1,6 +1,6 @@
 extends Node
 
-var cardList := []
+var cardList := {}
 
 var cardBackground = preload("res://Art/backgrounds/card_blank.png")
 var cardBackgroundActive = preload("res://Art/backgrounds/card_active.png")
@@ -44,26 +44,26 @@ func _ready():
 	var cardDataset : Dictionary = parse_json(file.get_as_text())
 	file.close()
 	
-#	for k in cardDataset.keys():
-#		cardDataset[k]["rarity"] = Card.RARITY.COMMON
-#	FileIO.writeToJSON("user://", "card_list_new", cardDataset)
-	
-	for k in cardDataset.keys():
-		var dat = cardDataset[k]
-		dat["UUID"] = k
-		cardList.append(Card.new(cardDataset[k]))
-	
 	for i in range(Card.RARITY.size()):
 		rarityToCards.append([])
-	for i in range(cardList.size()):
-		if cardList[i].tier == 1:
-			rarityToCards[cardList[i].rarity].append(i)
+	
+	for k in cardDataset.keys():
+		if k in cardList.keys():
+			print("Error: ID Collision at index ", k, " with values ", cardList[k], ", ", cardDataset[k])
+		
+		var id = int(k)
+		
+		var dat = cardDataset[k]
+		dat["UUID"] = id
+		cardList[id] = Card.new(cardDataset[k])
+		
+		rarityToCards[cardList[id].rarity].append(id)
 	
 	fuseTest()
 			
 
 func getCard(index : int) -> Card:
-	if index < 0 or index >= cardList.size():
+	if not index in cardList.keys():
 		return null
 	var card = cardList[index].get_script().new(cardList[index].params)
 	card.UUID = index
@@ -123,11 +123,11 @@ static func isInZone(card : Card, zone : int) -> bool:
 		return false
 
 static func fuseTest():
-	for i in range(ListOfCards.cardList.size()):
-		var c1 = ListOfCards.getCard(i)
+	for k1 in ListOfCards.cardList.keys():
+		var c1 = ListOfCards.getCard(k1)
 		if c1.tier == 1:
-			for j in range(ListOfCards.cardList.size()):
-				var c2 = ListOfCards.getCard(j)
+			for k2 in ListOfCards.cardList.keys():
+				var c2 = ListOfCards.getCard(k2)
 				if c2.tier == 1:
 					if ListOfCards.canFuseCards([c1, c2]):
 						var _c = c1.clone().fuseToSelf(c2)

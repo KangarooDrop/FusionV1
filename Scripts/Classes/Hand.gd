@@ -89,25 +89,59 @@ func _physics_process(delta):
 			
 	elif drawQueue.size() > 0:
 		if drawWaitTimer <= 0:
+
 			SoundEffectManager.playDrawSound()
 			
-			var slotInst = cardSlotScene.instance()
+			var cardPos = null
+			var isVis = false
+			var cardInst = drawQueue[0][0].cardNode
+			var slotInst
+			
+			if not is_instance_valid(drawQueue[0][0].cardNode):
+				pass
+			else:
+				cardPos = drawQueue[0][0].cardNode.global_position
+				isVis = drawQueue[0][0].cardNode.cardVisible
+				drawQueue[0][0].cardNode.queue_free()
+				
+				if is_instance_valid(drawQueue[0][0].cardNode.slot):
+					var s = drawQueue[0][0].cardNode.slot
+					if s.currentZone == CardSlot.ZONES.CREATURE:
+						var board = NodeLoc.getBoard()
+						cardPos = s.global_position
+					if s.currentZone == CardSlot.ZONES.GRAVE_CARD:
+						var board = NodeLoc.getBoard()
+						cardPos = board.graves[drawQueue[0][0].playerID].global_position
+						board.removeCardFromGrave(drawQueue[0][0].playerID, board.graveCards[drawQueue[0][0].playerID].find(drawQueue[0][0]))
+					elif s.currentZone == CardSlot.ZONES.HAND:
+						var board = NodeLoc.getBoard()
+						for p in board.players:
+							if p.UUID == s.playerID:
+								var hand = p.hand
+								cardPos = s.global_position
+								hand.removeCard(hand.slots.find(s))
+						
+					drawQueue[0][0].cardNode.slot.cardNode = null
+					drawQueue[0][0].cardNode.slot = null
+				
+				
+				
+			cardInst = cardNodeScene.instance()
+			cardInst.card = drawQueue[0][0]
+			drawQueue[0][0].cardNode = cardInst
+			cardInst.card.cardNode = cardInst
+			cardInst.playerID = player.UUID
+			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+			add_child(cardInst)
+			nodes.append(cardInst)
+			
+			slotInst = cardSlotScene.instance()
 			slotInst.currentZone = CardSlot.ZONES.HAND
 			slotInst.isOpponent = isOpponent
 			slotInst.playerID = player.UUID
 			add_child(slotInst)
 			slotInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 			slots.append(slotInst)
-			
-			var cardInst = cardNodeScene.instance()
-			cardInst.card = drawQueue[0][0]
-			drawQueue[0][0].cardNode = cardInst
-			drawQueue[0][0].playerID = player.UUID
-			cardInst.card.cardNode = cardInst
-			cardInst.playerID = player.UUID
-			cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
-			add_child(cardInst)
-			nodes.append(cardInst)
 			
 			slotInst.cardNode = cardInst
 			slotInst.cardNode.slot = slotInst
@@ -126,10 +160,18 @@ func _physics_process(delta):
 				NodeLoc.getBoard().checkState()
 			else:
 				cardInst.setCardVisible(false)
-				if handVisible or drawQueue[0][2]:
-					cardInst.flip()
-				cardInst.global_position = deck.global_position
-				slotInst.global_position = deck.global_position
+				
+				if isVis:
+					cardInst.setCardVisible(true)
+				else:
+					if handVisible or drawQueue[0][2]:
+						cardInst.flip()
+				if cardPos != null:
+					cardInst.global_position = cardPos
+					slotInst.global_position = cardPos
+				else:
+					cardInst.global_position = deck.global_position
+					slotInst.global_position = deck.global_position
 				
 				for c in NodeLoc.getBoard().getAllCards():
 					c.onDraw(cardInst.card)
@@ -173,7 +215,7 @@ func discardIndex(index : int, addCardToGrave=true):
 		discardPositions.append(slots[index].position)
 		discardTimers.append(0)
 
-#[Card, b:(T=appear_in_hand F=draw_from_deck), b:visible]
+#[Card, b:(T=appear_in_hand F=move from current location/deck), b:visible]
 func addCardToHand(data : Array):
 	if data[0] != null:
 		data[0].ownerID = player.UUID

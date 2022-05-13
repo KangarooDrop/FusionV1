@@ -1333,5 +1333,19 @@
       "AbilityPlague"
     ],
     "rarity": "COMMON"
+  },
+  "102": {
+    "name": "Whirlpool Aspect",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 3,
+    "creature_type": [
+      3
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityMinoan"
+    ],
+    "rarity": "COMMON"
   }
 }

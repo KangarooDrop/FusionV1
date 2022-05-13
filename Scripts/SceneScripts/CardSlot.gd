@@ -91,6 +91,26 @@ func getAcross():
 			return otherCreatures[index]
 	return null
 		
+func getClockwise():
+	if currentZone == ZONES.CREATURE and playerID >= 0:
+		var board = NodeLoc.getBoard()
+		var index = board.creatures[playerID].find(self)
+		
+		for i in range(board.players.size()):
+			if board.players[i].UUID == playerID:
+				if i == 0:
+					if index == 0:
+						return board.creatures[board.players[(i+1) % board.players.size()].UUID][0]
+					else:
+						return board.creatures[playerID][index-1]
+				else:
+					if index == board.creatures[board.players[i].UUID].size() - 1:
+						var creatures = board.creatures[board.players[(i+1) % board.players.size()].UUID]
+						return creatures[creatures.size() - 1]
+					else:
+						return board.creatures[playerID][index+1]
+		
+	return null
 
 func setHighlight(isHighlighted : bool):
 	if isHighlighted:

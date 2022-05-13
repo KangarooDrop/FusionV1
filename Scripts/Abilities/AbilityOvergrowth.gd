@@ -15,7 +15,7 @@ func onEffect(params):
 			for i in range(count - timesApplied):
 				var card = p.deck.tutorByAbility(self.get_script())
 				if card != null:
-					p.hand.addCardToHand([card, true, true])
+					p.hand.addCardToHand([card, false, true])
 	timesApplied = count
 
 func genDescription(subCount = 0) -> String:

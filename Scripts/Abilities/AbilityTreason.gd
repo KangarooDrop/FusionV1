@@ -33,6 +33,7 @@ func onStealEffect(params):
 			
 			returned = params[0] or not swapped
 			
+			
 			if not params[0]:
 				card.hasAttacked = false
 				card.playedThisTurn = false

@@ -42,6 +42,7 @@ func onEffect(params):
 	if removeCards:
 		while(board.graveCards[playerID].size() > 0):
 			board.removeCardFromGrave(playerID, 0)
+		timesApplied = count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, remove all cards from its controller's " + str(TextScrapyard.new(null)) +". Gets +" + str(count - subCount) + "/+" + str(count - subCount) +" for each unique creature type removed this way"

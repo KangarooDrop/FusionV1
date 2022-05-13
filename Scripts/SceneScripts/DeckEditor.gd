@@ -82,6 +82,18 @@ func popPlayersReady():
 
 func setCards():
 	if Settings.gameMode == Settings.GAME_MODE.NONE:
+		for k in ListOfCards.cardList.keys():
+			var c = ListOfCards.cardList[k]
+			if c.tier == 1:
+				if c.rarity == Card.RARITY.BASIC:
+					availableCardCount[k] = -1
+				elif c.rarity == Card.RARITY.COMMON:
+					availableCardCount[k] = 4
+				elif c.rarity == Card.RARITY.LEGENDARY:
+					availableCardCount[k] = 1
+				elif c.rarity == Card.RARITY.VANGUARD:
+					availableCardCount[k] = 1
+		
 		for i in range(ListOfCards.cardList.size()):
 			if ListOfCards.cardList[i].tier == 1:
 				if ListOfCards.cardList[i].rarity == Card.RARITY.BASIC:
