@@ -65,7 +65,6 @@ func _ready():
 	Settings.turnTimerMax = settings["turn_time"]
 	Settings.gameTimerMax = settings["game_time"]
 	Settings.animationSpeed = settings["anim_speed"]
-	Server.username = settings["username"]
 	Server.ip = settings["ip_saved"]
 	SoundEffectManager.setVolume(settings["sound_volume"])
 	MusicManager.setVolume(settings["music_volume"])
@@ -84,9 +83,6 @@ func verifySettings(settings : Dictionary) -> bool:
 		ok = false
 	if not settings.has("game_time"):
 		settings["game_time"] = GAME_TIMES.TEN
-		ok = false
-	if not settings.has("username"):
-		settings["username"] = "NO_NAME"
 		ok = false
 	if not settings.has("ip_saved"):
 		settings["ip_saved"] = "127.0.0.1"
@@ -114,7 +110,6 @@ func getSettingsDict() -> Dictionary:
 		"anim_speed":animationSpeed,
 		"turn_time":turnTimerMax,
 		"game_time":gameTimerMax,
-		"username":Server.username,
 		"ip_saved":Server.ip,
 		"shader":ShaderHandler.currentShader,
 		"sound_volume":SoundEffectManager.volume,

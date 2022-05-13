@@ -1,6 +1,6 @@
 extends Node2D
 
-var username := "NO_NAME"
+#SilentWolf.Auth.logged_in_player
 
 var host = false
 var online = false
@@ -103,7 +103,7 @@ func playerConnected(player_id : int):
 
 remote func receiveConfirmVersion(versionID):
 	if Settings.compareVersion(Settings.versionID, versionID) == 0:
-		rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", Server.username)
+		rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", SilentWolf.Auth.logged_in_player)
 	else:
 		MessageManager.notify("Error: Incompatible game versions")
 		Server.closeServer()
@@ -121,7 +121,7 @@ func sendParams(player_id : int, gameParams):
 remote func receiveSendParams(gameParams):
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY:
 		if  gameParams["version"] == Settings.versionID:
-			rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username)
+			rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", SilentWolf.Auth.logged_in_player)
 	
 	if Settings.gameMode == Settings.GAME_MODE.DIRECT:
 		Settings.gameMode = Settings.GAME_MODE.LOBBY
@@ -152,7 +152,7 @@ remote func receiveSetPlayerData(username : String):
 		rpc_id(id, "addUser", player_id, username)
 		rpc_id(player_id, "addUser", id, playerNames[id])
 	addUser(player_id, username)
-	rpc_id(player_id, "addUser", 1, self.username)
+	rpc_id(player_id, "addUser", 1, SilentWolf.Auth.logged_in_player)
 	rpc_id(player_id, "receiveConfirmJoin")
 
 remote func receiveConfirmJoin():
@@ -200,21 +200,6 @@ remote func receiveConfirmJoin():
 		pass
 
 ####################################################################
-
-remote func setPlayerName(username : String):
-	self.username = username
-	if NodeLoc.getBoard() != null:
-		NodeLoc.getBoard().editOwnName(username)
-	if online:
-		for id in playerIDs:
-			rpc_id(id, "receiveSetPlayerName", username)
-
-remote func receiveSetPlayerName(username : String, player_id : int = -1):
-	if player_id == -1:
-		player_id = get_tree().get_rpc_sender_id()
-	playerNames[player_id] = username
-	if NodeLoc.getBoard() != null:
-		NodeLoc.getBoard().editPlayerName(player_id, username)
 
 remote func addUser(player_id : int, username : String):
 	print("User "+ str(player_id) + " Connected")
@@ -842,7 +827,7 @@ remote func receiveRequestGM(p1, p2):
 			gm = p2
 		gmData[[p1, p2]] = gm
 		
-		print("GM = ", gm, ":", username if gm == 1 else playerNames[gm])
+		print("GM = ", gm, ":", SilentWolf.Auth.logged_in_player if gm == 1 else playerNames[gm])
 	
 	var gm
 	if gmData.has([p1, p2]):

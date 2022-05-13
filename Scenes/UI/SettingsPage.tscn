@@ -91,38 +91,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Username" type="HBoxContainer" parent="VBox"]
+[node name="SoundSlider" type="HBoxContainer" parent="VBox"]
 margin_top = 48.0
 margin_right = 349.0
-margin_bottom = 71.0
-alignment = 1
-
-[node name="Label" type="Label" parent="VBox/Username"]
-margin_left = 46.0
-margin_top = 2.0
-margin_right = 149.0
-margin_bottom = 21.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Username: "
-
-[node name="LineEdit" type="LineEdit" parent="VBox/Username"]
-margin_left = 153.0
-margin_right = 303.0
-margin_bottom = 23.0
-rect_min_size = Vector2( 150, 0 )
-custom_styles/read_only = ExtResource( 7 )
-custom_styles/focus = ExtResource( 7 )
-custom_styles/normal = ExtResource( 8 )
-custom_fonts/font = ExtResource( 3 )
-custom_colors/cursor_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_constants/minimum_spaces = 0
-
-[node name="SoundSlider" type="HBoxContainer" parent="VBox"]
-margin_top = 81.0
-margin_right = 349.0
-margin_bottom = 100.0
+margin_bottom = 67.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -154,9 +126,9 @@ __meta__ = {
 }
 
 [node name="MusicSlider" type="HBoxContainer" parent="VBox"]
-margin_top = 110.0
+margin_top = 77.0
 margin_right = 349.0
-margin_bottom = 129.0
+margin_bottom = 96.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -188,9 +160,9 @@ __meta__ = {
 }
 
 [node name="Shaders" type="HBoxContainer" parent="VBox"]
-margin_top = 139.0
+margin_top = 106.0
 margin_right = 349.0
-margin_bottom = 162.0
+margin_bottom = 129.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/Shaders"]
@@ -259,9 +231,9 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Open Folder"
 
 [node name="AnimSpeed" type="HBoxContainer" parent="VBox"]
-margin_top = 172.0
+margin_top = 139.0
 margin_right = 349.0
-margin_bottom = 192.0
+margin_bottom = 159.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -289,9 +261,9 @@ margin_right = 258.0
 margin_bottom = 20.0
 
 [node name="TurnTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 202.0
+margin_top = 169.0
 margin_right = 349.0
-margin_bottom = 225.0
+margin_bottom = 192.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/TurnTimer"]
@@ -319,9 +291,9 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="GameTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 235.0
+margin_top = 202.0
 margin_right = 349.0
-margin_bottom = 258.0
+margin_bottom = 225.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/GameTimer"]
@@ -349,19 +321,19 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="Control" type="Control" parent="VBox"]
-margin_top = 268.0
+margin_top = 235.0
 margin_right = 349.0
-margin_bottom = 268.0
+margin_bottom = 235.0
 
 [node name="Control2" type="Control" parent="VBox"]
-margin_top = 278.0
+margin_top = 245.0
 margin_right = 349.0
-margin_bottom = 278.0
+margin_bottom = 245.0
 
 [node name="BackButton" type="Button" parent="VBox"]
-margin_top = 288.0
+margin_top = 255.0
 margin_right = 349.0
-margin_bottom = 311.0
+margin_bottom = 278.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/focus = ExtResource( 7 )

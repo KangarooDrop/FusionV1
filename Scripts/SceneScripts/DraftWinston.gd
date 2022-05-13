@@ -298,7 +298,7 @@ func addAllPlayerDisplay():
 	for player_id in playerIDs:
 		var uname
 		if not Server.playerIDs.has(player_id):
-			uname = Server.username
+			uname = SilentWolf.Auth.logged_in_player
 		else:
 			uname = Server.playerNames[player_id]
 		addPlayerDisplay(uname, player_id)

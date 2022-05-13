@@ -91,7 +91,7 @@ func generateBracket():
 			if Server.playerNames.has(nodes[j].data):
 				label.text = Server.playerNames[nodes[j].data]
 			elif nodes[j].data == get_tree().get_network_unique_id():
-				label.text = Server.username
+				label.text = SilentWolf.Auth.logged_in_player
 			elif nodes[j].data == -1:
 				label.text = "                 "
 			else:

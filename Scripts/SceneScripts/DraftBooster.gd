@@ -274,7 +274,7 @@ func clearPackNums():
 func popPackNums():
 	for player_id in playerIDs:
 		if player_id == selfID:
-			popPlayer(Server.username, packNums[selfID])
+			popPlayer(SilentWolf.Auth.logged_in_player, packNums[selfID])
 		else:
 			popPlayer(Server.playerNames[player_id], packNums[player_id])
 	$PackNums/NinePatchRect.rect_size = Vector2($PackNums.rect_size.x + 32, offY * counter) + Vector2(buffer, buffer)

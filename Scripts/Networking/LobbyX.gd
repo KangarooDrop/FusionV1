@@ -31,8 +31,6 @@ func _ready():
 	$PublicLobbySelector.connect("refreshPressed", self, "onPublicLobbiesRefresh")
 	$PublicLobbySelector.connect("joinPressed", self, "onPublicJoinPressed")
 	
-	$Lobby/LineEdit3.text = Server.username
-	
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
 
 func _process(delta):
@@ -44,7 +42,6 @@ func setInLobby():
 		$Lobby/LeaveButton.text = "Leave Lobby"
 		$Lobby/LineEdit.editable = false
 		$Lobby/LineEdit2.editable = false
-		$Lobby/LineEdit3.editable = false
 		$Lobby/JoinButton.disabled = true
 		$Lobby/HostButton.disabled = true
 		$Lobby/PublicButton.disabled = true
@@ -72,7 +69,7 @@ func holepunch_progress_update(type, session_name, player_names):
 			vbox.add_child(label)
 			
 			if holepuncher.is_host():
-				if name != Server.username:
+				if name != SilentWolf.Auth.logged_in_player:
 					var tb = TextureButton.new()
 					tb.texture_normal = kickTex
 					tb.texture_pressed = kickTex
@@ -196,7 +193,6 @@ func _exit_tree():
 #	Server.closeServer()
 
 func _on_HostButton_pressed():
-	checkUsernameChange()
 	var numPlayers = $Lobby/LineEdit2.get_value()
 	if numPlayers <= 1 or numPlayers > 16:
 		print("Failure: Bad player count")
@@ -205,17 +201,16 @@ func _on_HostButton_pressed():
 	else:
 		$LoadingWindow.visible = true
 		setInLobby()
-		holepuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
+		holepuncher.create_session($Lobby/LineEdit.text, SilentWolf.Auth.logged_in_player, numPlayers)
 		
 		$LoadingWindow/Label.text = "Connecting to Server"
 		
 		clearMessages()
 
 func _on_JoinButton_pressed():
-	checkUsernameChange()
 	$LoadingWindow.visible = true
 	setInLobby()
-	holepuncher.join_session($Lobby/LineEdit.text, Server.username)
+	holepuncher.join_session($Lobby/LineEdit.text, SilentWolf.Auth.logged_in_player)
 	
 	$LoadingWindow/Label.text = "Connecting to Server"
 	$Lobby/LobbySettingsButton.disabled = true
@@ -279,14 +274,12 @@ func _on_LeaveButton_pressed():
 		$Lobby/SendChatButton.disabled = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
-		$Lobby/LineEdit3.editable = true
 		$Lobby/LeaveButton.text = "Main Menu"
 		inLobby = false
 	else:
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
-		checkUsernameChange()
 
 func startGame():
 	$LoadingWindow.visible = false
@@ -338,15 +331,6 @@ func setOwnGameParams(gameParams : Dictionary):
 func getGameParams() -> Dictionary:
 	return lobbySettings.getGameParams()
 
-func onUsernameLineEditChange(new_text):
-	Server.username = new_text
-
-func checkUsernameChange():
-	var new_text = $Lobby/LineEdit3.text
-	if new_text != Server.username:
-		Server.username = new_text
-		Settings.writeToSettings()
-
 func createPopup(title : String, desc : String):
 	var pop = popupUI.instance()
 	pop.init(title, desc, [["Close", pop, "close", []]])
@@ -369,7 +353,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	holepuncher.send_chat(Server.username + ":" + text)
+	holepuncher.send_chat(SilentWolf.Auth.logged_in_player + ":" + text)
 	$Lobby/LineEdit4.text = ""
 
 

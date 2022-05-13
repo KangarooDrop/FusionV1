@@ -484,11 +484,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/SceneScripts/DraftClass.gd"
 }, {
-"base": "Control",
-"class": "DraftLobby",
-"language": "GDScript",
-"path": "res://Scripts/Networking/DraftLobby.gd"
-}, {
 "base": "DraftClass",
 "class": "DraftSolomon",
 "language": "GDScript",
@@ -670,7 +665,6 @@ _global_script_class_icons={
 "Deck": "",
 "DeckDisplayDataX": "",
 "DraftClass": "",
-"DraftLobby": "",
 "DraftSolomon": "",
 "GitAPI": "",
 "HandNode": "",

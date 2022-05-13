@@ -6,7 +6,6 @@ func _ready():
 	#Waits until parent node has called its ready function
 	yield(owner, "ready")
 	
-	$VBox/Username/LineEdit.text = Server.username
 	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
 	$VBox/MusicSlider/HSlider.value = MusicManager.volume
 	
@@ -69,11 +68,7 @@ func onBackPressed():
 	emit_signal("settingsClose")
 	
 	visible = false
-	setUsername($VBox/Username/LineEdit.text)
 	Settings.writeToSettings()
-	
-func setUsername(username : String):
-	Server.setPlayerName(username)
 
 func openShaderFolder():
 	OS.shell_open(ProjectSettings.globalize_path("user://") + "shaders/")

@@ -8,15 +8,15 @@
 [ext_resource path="res://Art/UI/title.png" type="Texture" id=6]
 [ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=7]
 
-[sub_resource type="DynamicFont" id=4]
-size = 32
-font_data = ExtResource( 4 )
-
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 size = 32
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
 size = 32
 font_data = ExtResource( 4 )
 
@@ -50,7 +50,7 @@ margin_bottom = 34.0
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 1 )
 custom_styles/normal = ExtResource( 3 )
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -64,7 +64,7 @@ margin_bottom = 78.0
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 1 )
 custom_styles/normal = ExtResource( 3 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -78,7 +78,7 @@ margin_bottom = 122.0
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 1 )
 custom_styles/normal = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )

@@ -194,7 +194,7 @@ func _ready():
 			
 		if Tournament.lastGameLoss:
 			var pop = popupUI.instance()
-			pop.init("Choose Starting Player", "", [[Server.username, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
+			pop.init("Choose Starting Player", "", [[SilentWolf.Auth.logged_in_player, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
 			$PopupHolder.add_child(pop)
 			pop.options[0].grab_focus()
 		elif Tournament.lastGameWin:
@@ -1849,18 +1849,13 @@ func onGameTimerEnd():
 	onLoss(players[0])
 	Server.onConcede(Server.opponentID)
 
-func sendChat(message = null):
-	if message == null:
-		message = Server.username + " : " + "AAAAAAAA"
-	Server.sendChat(message)
-
 func receiveMessage(message : String):
 	print(message)
 
 func setOwnUsername():
 	print("Settings own username")
-	$UsernameLabel.text = Server.username
-	dataLog.append("SET_OWN_USERNAME " + Server.username)
+	$UsernameLabel.text = SilentWolf.Auth.logged_in_player
+	dataLog.append("SET_OWN_USERNAME " + $UsernameLabel.text)
 	
 	if Server.online:
 		setOpponentUsername(Server.playerNames[Server.opponentID])

@@ -323,7 +323,7 @@ func opponentSlotClicked(cardDisplayInt : int, cardIndex : int):
 func setCurrentState(newState : int):
 	currentState = newState
 	Server.solomonSetState(opponentID, newState)
-	editOwnName(Server.username)
+	editOwnName(SilentWolf.Auth.logged_in_player)
 
 func setOpponentState(newState : int):
 	opponentState = newState

@@ -15,8 +15,6 @@ func _ready():
 	BackgroundFusion.stop()
 	MusicManager.playLobbyMusic()
 	
-	$Lobby/LineEdit3.text = Server.username
-	
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
 
 
@@ -30,7 +28,6 @@ func setInLobby():
 		$Lobby/LeaveButton.text = "Leave Lobby"
 		$Lobby/LineEdit.editable = false
 		$Lobby/LineEdit2.editable = false
-		$Lobby/LineEdit3.editable = false
 		$Lobby/JoinButton.disabled = true
 		$Lobby/HostButton.disabled = true
 		$Lobby/SendChatButton.disabled = false
@@ -76,23 +73,21 @@ func _on_StartButton_pressed():
 
 
 func _on_HostButton_pressed():
-	checkUsernameChange()
 	Server.online = true
 	Server.host = true
 	var peers = $Lobby/LineEdit2.get_value()
 	Server.startServer(Server.DEFAULT_PORT, peers)
 	setInLobby()
 	$Lobby/StartButton.disabled = false
-	addUser(1, Server.username)
+	addUser(1, SilentWolf.Auth.logged_in_player)
 	clearMessages()
 
 
 func _on_JoinButton_pressed():
 	if$Lobby/LineEdit.text != "":
-		checkUsernameChange()
 		Server.online = true
 		setInLobby()
-		addUser(get_tree().get_network_unique_id(), Server.username)
+		addUser(get_tree().get_network_unique_id(), SilentWolf.Auth.logged_in_player)
 		$Lobby/LobbySettingsButton.disabled = true
 		clearMessages()
 		Server.connectToServer($Lobby/LineEdit.text)
@@ -128,7 +123,6 @@ func _on_LeaveButton_pressed():
 		$Lobby/SendChatButton.disabled = true
 		$Lobby/LineEdit.editable = true
 		$Lobby/LineEdit2.editable = true
-		$Lobby/LineEdit3.editable = true
 		$Lobby/LeaveButton.text = "Main Menu"
 		inLobby = false
 		$Lobby/LobbySettingsButton.disabled = false
@@ -136,7 +130,6 @@ func _on_LeaveButton_pressed():
 		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 		if error != 0:
 			print("Error loading test1.tscn. Error Code = " + str(error))
-		checkUsernameChange()
 
 
 func sendMessage(text = null):
@@ -151,7 +144,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	Server.sendChat(Server.username + ": " + text)
+	Server.sendChat(SilentWolf.Auth.logged_in_player + ": " + text)
 	$Lobby/LineEdit4.text = ""
 
 
@@ -169,14 +162,6 @@ func receiveMessage(message : String):
 func clearMessages():
 	for c in $Lobby/ScrollContainer2/VBoxContainer.get_children():
 		c.queue_free()
-
-
-func checkUsernameChange():
-	var new_text = $Lobby/LineEdit3.text
-	if new_text != Server.username:
-		Server.username = new_text
-		Settings.writeToSettings()
-
 
 func addUser(player_id, username):
 	var vbox = $Lobby/ScrollContainer/VBoxContainer
