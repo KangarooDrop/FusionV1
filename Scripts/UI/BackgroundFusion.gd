@@ -196,17 +196,3 @@ func genBackgroundCard(card : Card, angle : float) -> CardNode:
 	move_child(cn, 0)
 	cn.rotation = angle
 	return cn
-
-func _input(event):
-	if event is InputEventKey and not event.is_echo():
-		if event.scancode == KEY_CONTROL:
-			if event.is_pressed():
-				Engine.time_scale = 5
-			else:
-				Engine.time_scale = 1
-		elif event.scancode == KEY_SHIFT:
-			if event.is_pressed():
-				Engine.time_scale = 0.1
-			else:
-				Engine.time_scale = 1
-		

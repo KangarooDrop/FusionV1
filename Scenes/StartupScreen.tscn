@@ -48,23 +48,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeckEditButton" type="Button" parent="VBoxContainer"]
+[node name="PlayButton" type="Button" parent="VBoxContainer"]
 margin_right = 122.0
 margin_bottom = 23.0
-custom_styles/hover = ExtResource( 7 )
-custom_styles/pressed = ExtResource( 6 )
-custom_styles/normal = ExtResource( 8 )
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Deck Editor"
-
-[node name="PlayButton" type="Button" parent="VBoxContainer"]
-margin_top = 33.0
-margin_right = 122.0
-margin_bottom = 56.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -76,9 +62,9 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Play"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 66.0
+margin_top = 33.0
 margin_right = 122.0
-margin_bottom = 89.0
+margin_bottom = 56.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -90,6 +76,20 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Settings"
 
 [node name="CreditsButton" type="Button" parent="VBoxContainer"]
+margin_top = 66.0
+margin_right = 122.0
+margin_bottom = 89.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Credits"
+
+[node name="LogoutButton" type="Button" parent="VBoxContainer"]
 margin_top = 99.0
 margin_right = 122.0
 margin_bottom = 122.0
@@ -101,7 +101,7 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Credits"
+text = "Log Out"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
 margin_top = 132.0
@@ -124,16 +124,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -176.0
-margin_top = -93.0
+margin_top = -128.0
 margin_right = -5.0
-margin_bottom = 37.0
+margin_bottom = 27.0
 rect_scale = Vector2( 2, 2 )
 custom_constants/separation = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PracticeButton" type="Button" parent="VBoxContainer2"]
+[node name="DeckEditButton" type="Button" parent="VBoxContainer2"]
 margin_right = 171.0
 margin_bottom = 23.0
 custom_styles/hover = ExtResource( 7 )
@@ -144,9 +144,9 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Practice"
+text = "Deck Editor"
 
-[node name="LobbyButton" type="Button" parent="VBoxContainer2"]
+[node name="PracticeButton" type="Button" parent="VBoxContainer2"]
 margin_top = 33.0
 margin_right = 171.0
 margin_bottom = 56.0
@@ -158,9 +158,9 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Lobby"
+text = "Practice"
 
-[node name="DirectButton" type="Button" parent="VBoxContainer2"]
+[node name="LobbyButton" type="Button" parent="VBoxContainer2"]
 margin_top = 66.0
 margin_right = 171.0
 margin_bottom = 89.0
@@ -172,12 +172,26 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Direct Connection"
+text = "Lobby"
 
-[node name="BackButton" type="Button" parent="VBoxContainer2"]
+[node name="DirectButton" type="Button" parent="VBoxContainer2"]
 margin_top = 99.0
 margin_right = 171.0
 margin_bottom = 122.0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 8 )
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Direct Connection"
+
+[node name="BackButton" type="Button" parent="VBoxContainer2"]
+margin_top = 132.0
+margin_right = 171.0
+margin_bottom = 155.0
 custom_styles/hover = ExtResource( 7 )
 custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 8 )
@@ -327,11 +341,12 @@ __meta__ = {
 [node name="SettingsPage" parent="." instance=ExtResource( 3 )]
 visible = false
 
-[connection signal="pressed" from="VBoxContainer/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="onPlayPressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="onSettingsPressed"]
 [connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="onCreditsPressed"]
+[connection signal="pressed" from="VBoxContainer/LogoutButton" to="." method="onLogOutPressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="onExitPressed"]
+[connection signal="pressed" from="VBoxContainer2/DeckEditButton" to="." method="onDeckEditPressed"]
 [connection signal="pressed" from="VBoxContainer2/PracticeButton" to="." method="onPracticePressed"]
 [connection signal="pressed" from="VBoxContainer2/LobbyButton" to="." method="onLobbyButtonPressed"]
 [connection signal="pressed" from="VBoxContainer2/DirectButton" to="." method="onDirectButtonPressed"]

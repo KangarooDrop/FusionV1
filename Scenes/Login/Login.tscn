@@ -1,0 +1,264 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonPressed.tres" type="StyleBox" id=1]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonHover.tres" type="StyleBox" id=2]
+[ext_resource path="res://Art/UI/ButtonStyles/ButtonNormal.tres" type="StyleBox" id=3]
+[ext_resource path="res://Fonts/alagard.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Art/UI/hover.png" type="Texture" id=5]
+[ext_resource path="res://Fonts/FontNormal.tres" type="DynamicFont" id=6]
+[ext_resource path="res://Scripts/Login/Login.gd" type="Script" id=7]
+[ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Art/UI/un_check.png" type="Texture" id=9]
+[ext_resource path="res://Art/UI/check.png" type="Texture" id=10]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.6, 0.6, 0.6, 0.25098 )
+
+[sub_resource type="Theme" id=5]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = null
+Button/styles/focus = SubResource( 4 )
+Button/styles/hover = null
+Button/styles/normal = null
+Button/styles/pressed = null
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 4 )
+
+[node name="Login" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -2066.6, -172.586 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SignUpWindow" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -175.0
+margin_top = -115.5
+margin_right = 175.0
+margin_bottom = 115.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SignUpWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource( 5 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SignUpWindow"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -112.0
+margin_top = -101.5
+margin_right = 112.0
+margin_bottom = 101.5
+grow_horizontal = 2
+grow_vertical = 2
+custom_constants/separation = 6
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SignUpWindow/VBoxContainer"]
+margin_top = 6.0
+margin_right = 224.0
+margin_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Log In"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SignUpWindow/VBoxContainer"]
+margin_top = 42.0
+margin_right = 224.0
+margin_bottom = 106.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_constants/separation = 8
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UsernameLineEdit" type="LineEdit" parent="SignUpWindow/VBoxContainer/VBoxContainer"]
+margin_right = 224.0
+margin_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 200, 28 )
+custom_styles/read_only = ExtResource( 1 )
+custom_styles/normal = ExtResource( 3 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0.168627, 0.168627, 0.168627, 1 )
+placeholder_text = "Username"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PasswordLineEdit" type="LineEdit" parent="SignUpWindow/VBoxContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 224.0
+margin_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 200, 28 )
+custom_styles/read_only = ExtResource( 1 )
+custom_styles/normal = ExtResource( 3 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/cursor_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_uneditable = Color( 0.168627, 0.168627, 0.168627, 1 )
+secret = true
+placeholder_text = "Password"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SignUpWindow/VBoxContainer"]
+margin_top = 112.0
+margin_right = 224.0
+margin_bottom = 136.0
+alignment = 1
+
+[node name="Label" type="Label" parent="SignUpWindow/VBoxContainer/HBoxContainer2"]
+margin_left = 40.0
+margin_top = 4.0
+margin_right = 156.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 116, 16 )
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "Remember Me?"
+valign = 2
+
+[node name="CheckBox" type="CheckBox" parent="SignUpWindow/VBoxContainer/HBoxContainer2"]
+margin_left = 160.0
+margin_right = 184.0
+margin_bottom = 24.0
+theme = SubResource( 5 )
+custom_icons/radio_checked = ExtResource( 10 )
+custom_icons/checked = ExtResource( 10 )
+custom_icons/radio_unchecked = ExtResource( 10 )
+custom_icons/unchecked = ExtResource( 9 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SignUpWindow/VBoxContainer"]
+margin_top = 142.0
+margin_right = 224.0
+margin_bottom = 158.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 180, 16 )
+custom_fonts/normal_font = SubResource( 2 )
+custom_colors/default_color = Color( 0.321569, 0.360784, 0.92549, 1 )
+bbcode_enabled = true
+bbcode_text = "[center][url]Forgot Password?[/url][/center]"
+text = "Forgot Password?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="SignUpWindow/VBoxContainer"]
+margin_top = 164.0
+margin_right = 224.0
+margin_bottom = 164.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SignUpWindow/VBoxContainer"]
+margin_top = 170.0
+margin_right = 224.0
+margin_bottom = 196.0
+custom_constants/separation = 16
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubmitButton" type="Button" parent="SignUpWindow/VBoxContainer/HBoxContainer"]
+margin_left = 34.0
+margin_right = 104.0
+margin_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 70, 26 )
+custom_styles/hover = ExtResource( 2 )
+custom_styles/pressed = ExtResource( 1 )
+custom_styles/normal = ExtResource( 3 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Login"
+
+[node name="BackButton" type="Button" parent="SignUpWindow/VBoxContainer/HBoxContainer"]
+margin_left = 120.0
+margin_right = 190.0
+margin_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 70, 26 )
+custom_styles/hover = ExtResource( 2 )
+custom_styles/pressed = ExtResource( 1 )
+custom_styles/normal = ExtResource( 3 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Back"
+
+[node name="LoadingWindow" parent="." instance=ExtResource( 8 )]
+visible = false
+
+[node name="PopupHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+
+[connection signal="text_entered" from="SignUpWindow/VBoxContainer/VBoxContainer/UsernameLineEdit" to="." method="on_LineEdit_Enter"]
+[connection signal="text_entered" from="SignUpWindow/VBoxContainer/VBoxContainer/PasswordLineEdit" to="." method="on_LineEdit_Enter"]
+[connection signal="meta_clicked" from="SignUpWindow/VBoxContainer/RichTextLabel" to="." method="_on_RichTextLabel_meta_clicked"]
+[connection signal="pressed" from="SignUpWindow/VBoxContainer/HBoxContainer/SubmitButton" to="." method="_on_SubmitButton_pressed"]
+[connection signal="pressed" from="SignUpWindow/VBoxContainer/HBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]

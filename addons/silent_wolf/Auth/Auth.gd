@@ -501,13 +501,16 @@ func _on_ValidateSession_request_completed( result, response_code, headers, body
 		SWLogger.debug("reponse: " + str(response))
 		if "message" in response.keys() and response.message == "Forbidden":
 			SWLogger.error("You are not authorized to call the SilentWolf API - check your API key configuration: https://silentwolf.com/leaderboard")
+			complete_session_check({"success":false, "error":"forbidden"})
 		else:
 			SWLogger.info("SilentWolf validate session success? : " + str(response.success))
 			if response.success:
 				set_player_logged_in(response.player_name)
-				complete_session_check(logged_in_player)
+				complete_session_check(response)
 			else:
-				complete_session_check(response.error)
+				complete_session_check(response)
+	else:
+		complete_session_check({"success":false, "error":"no_internet"})
 
 
 func _on_GetPlayerDetails_request_completed( result, response_code, headers, body ):

@@ -48,6 +48,14 @@ func _init():
 	print("SW Init timestamp: " + str(OS.get_time()))
 
 func _ready():
+	configure({
+		"api_key": "eghvRfxYvr8CRtvsdZ9dn9GwuFFgZWQj6CK447EJ",
+		"game_id": "testfusion",
+		"game_version": "0.0.1",
+		"log_level": 1
+	})
+	
+	
 	# The following line would keep SilentWolf working even if the game tree is paused.
 	#pause_mode = Node.PAUSE_MODE_PROCESS
 	print("SW ready start timestamp: " + str(OS.get_time()))

@@ -43,20 +43,16 @@ corner_radius_bottom_left = 20
 size = 64
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFontData" id=13]
+[sub_resource type="DynamicFontData" id=5]
 font_path = "res://addons/silent_wolf/assets/fonts/Comfortaa-Bold.ttf"
 
-[sub_resource type="DynamicFont" id=5]
-size = 64
-font_data = SubResource( 13 )
-
 [sub_resource type="DynamicFont" id=6]
-size = 48
-font_data = SubResource( 13 )
+size = 64
+font_data = SubResource( 5 )
 
 [sub_resource type="DynamicFont" id=7]
-size = 32
-font_data = ExtResource( 3 )
+size = 48
+font_data = SubResource( 5 )
 
 [sub_resource type="DynamicFont" id=8]
 size = 32
@@ -64,20 +60,24 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=9]
 size = 32
-outline_color = Color( 0.211765, 0.25098, 0.937255, 1 )
-font_data = SubResource( 13 )
+font_data = ExtResource( 3 )
 
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="DynamicFont" id=10]
+size = 32
+outline_color = Color( 0.211765, 0.25098, 0.937255, 1 )
+font_data = SubResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=11]
 content_margin_left = 5.0
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=12]
 size = 32
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=13]
 size = 32
-font_data = SubResource( 13 )
+font_data = SubResource( 5 )
 
 [node name="Login" type="TextureRect"]
 margin_right = 40.0
@@ -111,7 +111,7 @@ __meta__ = {
 [node name="Label" type="Label" parent="FormContainer"]
 margin_right = 648.0
 margin_bottom = 72.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 text = "Log in"
 align = 1
 
@@ -125,7 +125,7 @@ custom_constants/separation = 20
 margin_top = 10.0
 margin_right = 269.0
 margin_bottom = 65.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 text = "Username:"
 
 [node name="Username" type="LineEdit" parent="FormContainer/UsernameContainer"]
@@ -133,7 +133,7 @@ margin_left = 289.0
 margin_right = 619.0
 margin_bottom = 75.0
 rect_min_size = Vector2( 330, 75 )
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
 max_length = 30
 
 [node name="PasswordContainer" type="HBoxContainer" parent="FormContainer"]
@@ -146,7 +146,7 @@ custom_constants/separation = 40
 margin_top = 10.0
 margin_right = 247.0
 margin_bottom = 65.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 text = "Password:"
 
 [node name="Password" type="LineEdit" parent="FormContainer/PasswordContainer"]
@@ -154,7 +154,7 @@ margin_left = 287.0
 margin_right = 617.0
 margin_bottom = 75.0
 rect_min_size = Vector2( 330, 75 )
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 max_length = 30
 secret = true
 
@@ -162,7 +162,7 @@ secret = true
 margin_top = 462.0
 margin_right = 648.0
 margin_bottom = 499.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0.321569, 0.360784, 0.92549, 1 )
 text = "Forgot Password?"
 
@@ -174,8 +174,8 @@ rect_min_size = Vector2( 50, 50 )
 focus_mode = 0
 custom_icons/checked = ExtResource( 6 )
 custom_icons/unchecked = ExtResource( 5 )
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 11 )
+custom_styles/normal = SubResource( 11 )
+custom_fonts/font = SubResource( 12 )
 custom_constants/hseparation = 15
 text = "Stay signed in for 30 days"
 expand_icon = true
@@ -185,7 +185,7 @@ visible = false
 margin_top = 522.0
 margin_right = 648.0
 margin_bottom = 559.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 13 )
 custom_colors/font_color = Color( 0.866667, 0.101961, 0.101961, 1 )
 autowrap = true
 
@@ -200,9 +200,10 @@ visible = false
 margin_top = 740.0
 margin_right = 648.0
 margin_bottom = 812.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 text = "Processing..."
 align = 1
+
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="FormContainer/LinkButton" to="." method="_on_LinkButton_pressed"]
 [connection signal="pressed" from="FormContainer/LoginButton" to="." method="_on_LoginButton_pressed"]

@@ -53,6 +53,10 @@ func onSettingsPressed():
 	
 func onExitPressed():
 	get_tree().quit()
+	
+func onLogOutPressed():
+	SilentWolf.Auth.logout_player()
+	get_tree().change_scene("res://Scenes/Login/Home.tscn")
 
 func onSettingsClose():
 	$VBoxContainer.visible = true
