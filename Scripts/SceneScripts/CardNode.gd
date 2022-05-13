@@ -42,7 +42,11 @@ var selectedTimer = 0
 
 func _ready():
 	setCardVisible(cardVisible)
-			
+
+func clearOverlays():
+	for c in $Overlays.get_children():
+		c.queue_free()
+
 func setCardVisible(isVis : bool):
 	if isVis and getCardVisible() and is_instance_valid(slot):
 		slot.shownToOpponent()

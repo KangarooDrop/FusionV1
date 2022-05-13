@@ -879,6 +879,7 @@ func addCardToGrave(playerID : int, card : Card):
 	graveCards[playerID].append(cl)
 	
 	var cn = graves[playerID].cardNode
+	cn.clearOverlays()
 	cn.visible = true
 	cn.card = cl.clone()
 	cn.card.cardNode = cn
@@ -890,6 +891,7 @@ func addCardToGrave(playerID : int, card : Card):
 func removeCardFromGrave(playerID : int, index : int):
 	if index == graveCards[playerID].size() - 1 and graveCards[playerID].size() > 1:
 		var cn = graves[playerID].cardNode
+		cn.clearOverlays()
 		cn.visible = true
 		cn.card = graveCards[playerID][index-1].clone()
 		cn.setCardVisible(true)
@@ -899,6 +901,7 @@ func removeCardFromGrave(playerID : int, index : int):
 	
 	if graveCards[playerID].size() == 0:
 		var cn = graves[playerID].cardNode
+		cn.clearOverlays()
 		cn.visible = false
 		cn.setCardVisible(false)
 		if graveViewing == playerID:
