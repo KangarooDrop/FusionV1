@@ -91,78 +91,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SoundSlider" type="HBoxContainer" parent="VBox"]
+[node name="Shaders" type="HBoxContainer" parent="VBox"]
 margin_top = 48.0
 margin_right = 349.0
-margin_bottom = 67.0
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="VBox/SoundSlider"]
-margin_left = 4.0
-margin_right = 141.0
-margin_bottom = 19.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Sound Volume:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HSlider" type="HSlider" parent="VBox/SoundSlider"]
-margin_left = 145.0
-margin_right = 345.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 200, 19 )
-custom_styles/slider = ExtResource( 7 )
-custom_styles/grabber_area_highlight = ExtResource( 6 )
-custom_styles/grabber_area = ExtResource( 8 )
-min_value = -50.0
-max_value = 10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MusicSlider" type="HBoxContainer" parent="VBox"]
-margin_top = 77.0
-margin_right = 349.0
-margin_bottom = 96.0
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="VBox/MusicSlider"]
-margin_left = 6.0
-margin_right = 139.0
-margin_bottom = 19.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Music Volume:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HSlider" type="HSlider" parent="VBox/MusicSlider"]
-margin_left = 143.0
-margin_right = 343.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 200, 19 )
-custom_styles/slider = ExtResource( 7 )
-custom_styles/grabber_area_highlight = ExtResource( 6 )
-custom_styles/grabber_area = ExtResource( 8 )
-min_value = -50.0
-max_value = 0.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Shaders" type="HBoxContainer" parent="VBox"]
-margin_top = 106.0
-margin_right = 349.0
-margin_bottom = 129.0
+margin_bottom = 71.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/Shaders"]
@@ -231,17 +163,17 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Open Folder"
 
 [node name="AnimSpeed" type="HBoxContainer" parent="VBox"]
-margin_top = 139.0
+margin_top = 81.0
 margin_right = 349.0
-margin_bottom = 159.0
+margin_bottom = 101.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="VBox/AnimSpeed"]
-margin_left = 90.0
-margin_right = 242.0
+margin_left = 46.0
+margin_right = 198.0
 margin_bottom = 19.0
 custom_fonts/font = ExtResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -255,15 +187,16 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 246.0
+margin_left = 202.0
 margin_top = 0.0
-margin_right = 258.0
+margin_right = 302.0
 margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
 
 [node name="TurnTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 169.0
+margin_top = 111.0
 margin_right = 349.0
-margin_bottom = 192.0
+margin_bottom = 134.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/TurnTimer"]
@@ -291,9 +224,9 @@ custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 
 [node name="GameTimer" type="HBoxContainer" parent="VBox"]
-margin_top = 202.0
+margin_top = 144.0
 margin_right = 349.0
-margin_bottom = 225.0
+margin_bottom = 167.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBox/GameTimer"]
@@ -319,6 +252,74 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+
+[node name="SoundSlider" type="HBoxContainer" parent="VBox"]
+margin_top = 177.0
+margin_right = 349.0
+margin_bottom = 196.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBox/SoundSlider"]
+margin_left = 4.0
+margin_right = 141.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Sound Volume:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSlider" type="HSlider" parent="VBox/SoundSlider"]
+margin_left = 145.0
+margin_right = 345.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 200, 19 )
+custom_styles/slider = ExtResource( 7 )
+custom_styles/grabber_area_highlight = ExtResource( 6 )
+custom_styles/grabber_area = ExtResource( 8 )
+min_value = -50.0
+max_value = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusicSlider" type="HBoxContainer" parent="VBox"]
+margin_top = 206.0
+margin_right = 349.0
+margin_bottom = 225.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBox/MusicSlider"]
+margin_left = 6.0
+margin_right = 139.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Music Volume:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSlider" type="HSlider" parent="VBox/MusicSlider"]
+margin_left = 143.0
+margin_right = 343.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 200, 19 )
+custom_styles/slider = ExtResource( 7 )
+custom_styles/grabber_area_highlight = ExtResource( 6 )
+custom_styles/grabber_area = ExtResource( 8 )
+min_value = -50.0
+max_value = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Control" type="Control" parent="VBox"]
 margin_top = 235.0
@@ -354,10 +355,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -367,16 +364,18 @@ __meta__ = {
 visible = false
 
 [node name="OptionHolder" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="value_changed" from="VBox/SoundSlider/HSlider" to="." method="onSoundVolumeChange"]
-[connection signal="value_changed" from="VBox/MusicSlider/HSlider" to="." method="onMusicVolumeChange"]
 [connection signal="pressed" from="VBox/Shaders/SelectShaderButton" to="." method="shaderButtonPressed"]
 [connection signal="pressed" from="VBox/Shaders/ShaderFolderButton" to="." method="openShaderFolder"]
 [connection signal="item_selected" from="VBox/TurnTimer/OptionButton" to="." method="onTurnTimerSelected"]
 [connection signal="item_selected" from="VBox/GameTimer/OptionButton" to="." method="onGameTimerSelected"]
+[connection signal="value_changed" from="VBox/SoundSlider/HSlider" to="." method="onSoundVolumeChange"]
+[connection signal="value_changed" from="VBox/MusicSlider/HSlider" to="." method="onMusicVolumeChange"]
 [connection signal="pressed" from="VBox/BackButton" to="." method="onBackPressed"]

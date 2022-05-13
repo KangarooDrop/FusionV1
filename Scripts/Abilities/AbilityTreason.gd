@@ -15,10 +15,11 @@ func onEndOfTurn():
 		addToStack("onStealEffect", [true])
 
 func onStealEffect(params):
-	timesApplied = count
-	
 	if not ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
+		timesApplied = 0
 		return
+		
+	timesApplied = count
 	
 	var board = NodeLoc.getBoard()
 	for p in board.players:

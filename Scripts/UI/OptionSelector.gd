@@ -18,7 +18,7 @@ var displayScene = preload("res://Scenes/UI/OptionDisplay.tscn")
 
 func _ready():
 	#Waits until parent node has called its ready function
-	yield(owner, "ready")
+	yield(get_tree(), "idle_frame")
 	if not initialized:
 		initOptions()
 
@@ -42,8 +42,8 @@ func initOptions():
 	initialized = true
 
 func onButtonPressed():
-	display.show()
 	display.global_position = get_viewport_rect().size / 2
+	display.setOptions(title, options, keys)
 
 func onIndexPressed(index : int):
 	var button = buttonHolder.get_child(index)

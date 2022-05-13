@@ -69,5 +69,17 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="."]
+visible = false
 position = Vector2( 159.5, 20 )
 texture = ExtResource( 2 )
+
+[node name="SpinHolder" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 139.5
+margin_right = 139.5
+__meta__ = {
+"_edit_use_anchors_": false
+}

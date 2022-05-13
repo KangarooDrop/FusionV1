@@ -9,6 +9,8 @@ var optionList : Array = []
 
 var maxSize : Vector2 = Vector2(400, 300)
 
+var lastPos : Vector2
+
 func loadFiles(title : String, path : String, extensions := ["txt"]):
 	var options = []
 	var files = []
@@ -34,6 +36,8 @@ func setOptions(title : String, options := [], keys := []):
 		for i in range(options.size() - keys.size()):
 			keys.append(null)
 	show()
+	lastPos = position
+	position = Vector2(-999, -999)
 	$VBoxContainer/Label.text = title
 	
 	for c in $VBoxContainer/ScrollContainer/ButtonHolder.get_children():
@@ -81,6 +85,9 @@ func setOptions(title : String, options := [], keys := []):
 	$VBoxContainer/ScrollContainer.rect_min_size.x = min(maxSize.x, size.x)
 	$VBoxContainer/ScrollContainer.rect_min_size.y = min(maxSize.y, size.y)
 	$VBoxContainer/ScrollContainer.rect_size = Vector2()
+	
+	yield(get_tree(), "idle_frame")
+	
 	$VBoxContainer.rect_size = Vector2()
 	$VBoxContainer.rect_position = -$VBoxContainer/ScrollContainer.rect_min_size / 2
 	
@@ -90,8 +97,8 @@ func setOptions(title : String, options := [], keys := []):
 	$Background.rect_size = $VBoxContainer.rect_size + backBuffer
 	$Background.rect_position = $VBoxContainer.rect_position - backBuffer / 2
 	
-#	$VBoxContainer.rect_position = -$Background.rect_size / 2 + backBuffer - Vector2(0, 10)
-	#$Background.rect_position = $VBoxContainer.rect_position - Vector2(30, 10)
+	position = lastPos
+	lastPos = Vector2()
 
 func hideBack() -> Node:
 	$VBoxContainer/BackButton.visible = false
