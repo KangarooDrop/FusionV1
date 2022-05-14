@@ -699,6 +699,7 @@ config/icon="res://icon.png"
 [autoload]
 
 MessageManager="*res://Scripts/UI/MessageManager.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 ShaderHandler="*res://Scripts/ShaderHandler.gd"
 ListOfCards="*res://Scripts/ListOfCards.gd"
 SoundEffectManager="*res://Scripts/Audio/SoundEffectManager.gd"
@@ -711,7 +712,6 @@ BackgroundFusion="*res://Scripts/UI/BackgroundFusion.gd"
 Tournament="*res://Scripts/Networking/Tournament.gd"
 RabidHolePuncher="*res://addons/rabidholepuncher/RabidHolePuncher.tscn"
 Preloader="*res://Scripts/Preloader.gd"
-SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 
 [display]
 

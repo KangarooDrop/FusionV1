@@ -12,6 +12,7 @@ func _ready():
 
 func _on_confirmation_succeeded():
 	# redirect to configured scene (user is logged in after registration)
+	yield(SilentWolf.Players, "sw_player_data_received")
 	get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 
 func _on_confirmation_failed(error):

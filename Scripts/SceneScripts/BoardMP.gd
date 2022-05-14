@@ -315,19 +315,15 @@ func onKeepButtonPressed():
 	handMoving = true
 
 func getDeckFromFile() -> Array:
-	var fileName = Settings.selectedDeck
-	var path = Settings.path
-	
-	var dataRead = FileIO.readJSON(path + fileName)
-	var error = Deck.verifyDeck(dataRead)
+	var error = Deck.verifyDeck(Settings.deckData)
 	var cardList := [[], []]
 	
 	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		for k in dataRead["cards"].keys():
+		for k in Settings.deckData["cards"].keys():
 			var id = int(k)
-			for i in range(int(dataRead["cards"][k])):
+			for i in range(int(Settings.deckData["cards"][k])):
 				cardList[0].append(ListOfCards.getCard(id))
-		for k in dataRead["vanguard"].keys():
+		for k in Settings.deckData["vanguard"].keys():
 			cardList[1].append(ListOfCards.getCard(int(k)))
 	else:
 		MessageManager.notify("Invalid Deck:\nverify deck file contents")

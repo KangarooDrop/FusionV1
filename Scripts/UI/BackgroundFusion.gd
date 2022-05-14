@@ -159,12 +159,24 @@ func genBackgroundMoving():
 func genBackgroundFusion():
 	var screenSize = get_viewport().get_visible_rect().size
 	var ready = false
-	var c1
-	var c2
+	var cards = [null, null]
 	while not ready:
-		c1 = ListOfCards.generateCard()
-		c2 = ListOfCards.generateCard()
-		ready = ListOfCards.canFuseCards([c1, c2])
+		for i in range(cards.size()):
+			if randf() > 0.8:
+				var cs = [null, null]
+				var bad = true
+				while bad:
+					for j in range(cards.size()):
+						cs[j] = ListOfCards.generateCard()
+					bad = not ListOfCards.canFuseCards(cs)
+					if not bad:
+						cs[0].fuseToSelf(cs[1])
+						cards[i] = cs[0]
+						pass
+			else:
+				cards[i] = ListOfCards.generateCard()
+		
+		ready = ListOfCards.canFuseCards(cards)
 		
 	var fusePoint = Vector2(randi() % int(screenSize.x * (1-backFuseBuffer)) + int(screenSize.x * backFuseBuffer/2), randi() % int(screenSize.y * (1-backFuseBuffer)) + int(screenSize.y * backFuseBuffer/2))
 	var angle = 2 * PI * randf()
@@ -177,11 +189,11 @@ func genBackgroundFusion():
 	#print(float(layer) / maxLayer)
 	var scale = lerp(Settings.cardSlotScale / 2.0, Settings.cardSlotScale * 1.5, float(layer) / maxLayer)
 	
-	var cn1 = genBackgroundCard(c1, angle)
+	var cn1 = genBackgroundCard(cards[0], angle)
 	cn1.position = startPos1
 	cn1.z_index = -100 - maxLayer + layer
 	cn1.scale = Vector2(scale, scale)
-	var cn2 = genBackgroundCard(c2, angle)
+	var cn2 = genBackgroundCard(cards[1], angle)
 	cn2.position = startPos2
 	cn2.z_index = -100 - maxLayer + layer
 	cn2.scale = Vector2(scale, scale)

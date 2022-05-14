@@ -21,6 +21,7 @@ func sw_session_check_complete(return_value=null):
 			createPopup("Error", "Error loggin in. Please re-enter your information")
 		$LoadingWindow.hide()
 	else:
+		yield(SilentWolf.Players, "sw_player_data_received")
 		get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 
 func _on_RegisterButton_pressed():

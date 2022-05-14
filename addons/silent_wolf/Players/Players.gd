@@ -156,7 +156,9 @@ func _on_PushPlayerData_request_completed(result, response_code, headers, body):
 		else:
 			SWLogger.info("SilentWolf post player data score success: " + str(response_code))
 			var player_name = response.player_name
-			emit_signal("sw_player_data_posted", player_name)
+			emit_signal("sw_player_data_posted", true)
+			return
+	emit_signal("sw_player_data_posted", false)
 		
 func _on_RemovePlayerData_request_completed(result, response_code, headers, body):
 	SWLogger.info("RemovePlayerData request completed")

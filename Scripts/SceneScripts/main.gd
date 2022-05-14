@@ -32,12 +32,16 @@ func _input(event):
 				
 
 func onDeckChangePressed():
-	$CenterControl/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
+	var options : Array = decks.keys()
+	var keys : Array = []
+	for d in options:
+		keys.append(decks[d])
+	$CenterControl/OptionDisplay.setOptions("Select Deck", options, keys)
 
 func onDeckChangeButtonPressed(button : Button, key):
-	var fileName = key
 	onDeckChangeBackPressed()
-	Settings.selectedDeck = fileName
+	Settings.deckData = key
 	MessageManager.notify("Deck selected for next game")
 
 func onDeckChangeBackPressed():

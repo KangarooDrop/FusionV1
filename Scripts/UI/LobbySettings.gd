@@ -56,7 +56,6 @@ func onGameTypeSelected(index):
 		$VBoxContainer/DraftTypeHbox.visible = false
 		$VBoxContainer/PacksHbox.visible = false
 	elif index == Settings.GAME_TYPES.DRAFT:
-		Settings.selectedDeck = ".draft.json"
 		onDraftTypeSelected($VBoxContainer/DraftTypeHbox/OptionButton.selected)
 		
 		$VBoxContainer/DraftTypeHbox.visible = true
@@ -128,8 +127,6 @@ func setOwnGameParams(params : Dictionary):
 		$VBoxContainer/DraftTypeHbox/OptionButton.select(params["draft_type"])
 		onDraftTypeSelected(params["draft_type"])
 		$VBoxContainer/PacksHbox/LineEdit.text = str(params["num_boosters"])
-		
-		Settings.selectedDeck = ".draft.json"
 
 func onTurnTimerSelected(index : int):
 	Settings.turnTimerMax = Settings.TURN_TIMES.values()[index]

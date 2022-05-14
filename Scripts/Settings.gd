@@ -38,9 +38,7 @@ var turnTimerMax : int = TURN_TIMES.NINETY
 var gameTimerMax : int = GAME_TIMES.TEN
 var animationSpeed : float = ANIMATION_SPEEDS.NORMAL / 10.0
 
-var selectedDeck = ""
-var path = "user://decks/"
-var dumpPath = "user://dumps/"
+var deckData := {}
 
 enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT}
 
@@ -49,15 +47,18 @@ var matchType : int = 0
 
 var cardSlotScale = 1.5
 
+var dumpPath = "user://dumps/"
 var settingsPath = "user:/"
 var settingsName = "settings"
 
 var shaderPath = "user://shaders/"
 
 func _ready():
+	SilentWolf.Auth.connect("sw_login_succeeded", self, "onLogIn")
+	SilentWolf.Auth.connect("sw_session_check_complete", self, "onLogIn")
+	SilentWolf.Auth.connect("sw_logout_succeeded", self, "onLogOut")
+	
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
-#	if json.keys().size() == 0:
-#		FileIO.writeToJSON(settingsPath, settingsName, getSettingsDict())
 		
 	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
 	var ok = verifySettings(settings)
@@ -72,6 +73,20 @@ func _ready():
 	
 	if not ok:
 		writeToSettings()
+
+func onLogIn(data=null):
+	if data == null or data.success:
+		var player_name = SilentWolf.Auth.logged_in_player
+		yield(SilentWolf.Players.get_player_data(player_name), "sw_player_data_received")
+		var daat = SilentWolf.Players.player_data
+		print("Received player data")
+		if not SilentWolf.Players.player_data.has("decks"):
+			SilentWolf.Players.player_data["decks"] = {}
+			SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
+			print("Deck key is null; setting")
+
+func onLogOut():
+	SilentWolf.Players.clear_player_data()
 
 func verifySettings(settings : Dictionary) -> bool:
 	var ok = true

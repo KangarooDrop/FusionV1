@@ -278,9 +278,9 @@ func getDeckData() -> Dictionary:
 	var rtn = {"vanguard":{}, "cards":{}}
 	for d in data:
 		if d.card.rarity == Card.RARITY.VANGUARD:
-			rtn["vanguard"][d.card.UUID] = d.count
+			rtn["vanguard"][str(d.card.UUID)] = float(d.count)
 		else:
-			rtn["cards"][d.card.UUID] = d.count
+			rtn["cards"][str(d.card.UUID)] = float(d.count)
 	return rtn
 
 func getDeckDataAsJSON() -> Dictionary:

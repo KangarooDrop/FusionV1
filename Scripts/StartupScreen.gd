@@ -15,6 +15,13 @@ func _ready():
 	if Server.online:
 		Server.closeServer()
 	
+	
+	
+#	SilentWolf.Players.post_player_data(player_name, {"Data":"None"})	
+#	yield(SilentWolf.Players.get_player_data(player_name), "sw_player_data_received")
+#	print("Player data: " + str(SilentWolf.Players.player_data))
+	
+	
 	"""
 	Tournament.startTournament(Tournament.genTournamentOrder([1, 2, 3, 4, 5, 6]))
 	Tournament.trimBranches()

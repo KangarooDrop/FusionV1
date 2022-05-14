@@ -16,6 +16,8 @@ func _ready():
 	MusicManager.playLobbyMusic()
 	
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
+	
+	$LobbySettings/VBoxContainer/HBoxContainer.hide()
 
 
 func _process(delta):
@@ -198,7 +200,13 @@ func startGame():
 
 
 func openFileSelector():
-	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
+	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
+	var options : Array = decks.keys()
+	var keys : Array = []
+	for d in options:
+		keys.append(decks[d])
+	$FDCenter/OptionDisplay.setOptions("Select Deck", options, keys)
+	
 	$Lobby.hide()
 	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass
@@ -209,20 +217,15 @@ func openFileSelector():
 			print("Error loading test1.tscn. Error Code = " + str(error))
 
 func onFileButtonClicked(button : Button, key):
-	var fileName = key
-	
-	var path = Settings.path
-	
-	var dataRead = FileIO.readJSON(path + fileName)
-	var dError = Deck.verifyDeck(dataRead)
+	var dError = Deck.verifyDeck(key)
 	
 	if dError != OK:
-		createPopup("Error Loading Deck", "Error loading " + fileName + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
+		createPopup("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
 		return
 	
 	$FDCenter/OptionDisplay.hide()
 	
-	Settings.selectedDeck = fileName
+	Settings.deckData = key
 	
 	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
 		Server.setReady(true)

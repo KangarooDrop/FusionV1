@@ -82,7 +82,13 @@ func generateCard() -> Card:
 	else:
 		rar = Card.RARITY.COMMON
 	
-	return ListOfCards.getCard(rarityToCards[rar][randi() % rarityToCards[rar].size()])
+	var bad = true
+	var card = null
+	while bad:
+		card = ListOfCards.getCard(rarityToCards[rar][randi() % rarityToCards[rar].size()])
+		bad = card.tier != 1
+	
+	return card
 
 static func deserialize(data : Dictionary) -> Card:
 	var card : Card = Card.new(data)

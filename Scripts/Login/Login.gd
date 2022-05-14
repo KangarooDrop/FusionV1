@@ -18,6 +18,7 @@ func _on_SubmitButton_pressed():
 	$LoadingWindow.show()
 	
 func _on_login_succeeded():
+	yield(SilentWolf.Players, "sw_player_data_received")
 	get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	
 func _on_login_failed(error):

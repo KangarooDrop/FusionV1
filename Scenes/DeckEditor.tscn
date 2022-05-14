@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/DeckEditor.gd" type="Script" id=1]
 [ext_resource path="res://Art/UI/un_check.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Art/UI/drop_down.png" type="Texture" id=10]
 [ext_resource path="res://Scenes/UI/OptionDisplay.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/UI/OptionSelector.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Scenes/UI/LoadingWindow.tscn" type="PackedScene" id=13]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -215,7 +216,6 @@ __meta__ = {
 
 [node name="SaveDisplay" type="Node2D" parent="CenterControl"]
 visible = false
-position = Vector2( 20, 20 )
 z_index = 2
 
 [node name="MouseDisable" type="ColorRect" parent="CenterControl/SaveDisplay"]
@@ -491,6 +491,12 @@ margin_right = 268.0
 margin_bottom = 32.0
 
 [node name="OptionDisplay" parent="CenterControl" instance=ExtResource( 11 )]
+visible = false
+
+[node name="LoadingOffset" type="Node2D" parent="CenterControl"]
+z_index = 3
+
+[node name="LoadingWindow" parent="CenterControl/LoadingOffset" instance=ExtResource( 13 )]
 visible = false
 
 [connection signal="pressed" from="CenterControl/Menu/ReadyButton" to="." method="onReadyPressed"]
