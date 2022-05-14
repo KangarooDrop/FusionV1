@@ -144,7 +144,7 @@ func _physics_process(delta):
 			slots.append(slotInst)
 			
 			slotInst.cardNode = cardInst
-			slotInst.cardNode.slot = slotInst
+			cardInst.slot = slotInst
 			
 			if drawQueue[0][2]:
 				slotInst.shownToOpponent()

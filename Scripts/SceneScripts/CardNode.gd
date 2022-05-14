@@ -172,6 +172,11 @@ func _physics_process(delta):
 func attack(slots : Array):
 	card.hasAttacked = true
 	
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == playerID:
+			p.addToFlag(Player.CREATURES_ATTACKED, 1)
+			break
+	
 	for s in slots:
 		if is_instance_valid(s.cardNode):
 			s.cardNode.card.onBeforeCombat(slot, slots)

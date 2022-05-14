@@ -669,14 +669,10 @@ func _physics_process(delta):
 					cardNodesFusing[0].global_position = lerp(fuseStartPos, fuseEndSlot.global_position, fuseReturnTimer / fuseReturnMaxTime)
 					if fuseReturnTimer >= fuseReturnMaxTime:
 						var cardNode = cardNodesFusing[0]
-						fuseEndSlot.cardNode = cardNodesFusing[0]
 						cardNode.get_parent().remove_child(cardNode)
-						cardNode.slot = fuseEndSlot
 						creatures_A_Holder.add_child(cardNode)
 						cardNode.global_position = fuseEndSlot.global_position
 						cardNodesFusing = []
-						cardNode.card.playerID = fuseEndSlot.playerID
-						cardNode.card.cardNode = cardNode
 						
 						var cs = getAllCards()
 						if isEntering:
@@ -1405,7 +1401,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 	
 	return true
 
-func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer].UUID):
+func fuseToSlot(slot : CardSlot, cards : Array):
+	
 	isEntering = not is_instance_valid(slot.cardNode)
 	
 	if not isEntering:
@@ -1428,6 +1425,7 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 		var cn = cardNode.instance()
 		cn.card = card
 		card.cardNode = cn
+		cn.playerID = slot.playerID
 		card.playerID = slot.playerID
 		
 		cardNodesFusing.append(cn)
@@ -1438,6 +1436,9 @@ func fuseToSlot(slot : CardSlot, cards : Array, graveOwner=players[activePlayer]
 		cn.position = Vector2()
 		card_A_Holder.nodes.erase(cn)
 		card_B_Holder.nodes.erase(cn)
+	
+	cardNodesFusing[0].slot = slot
+	slot.cardNode = cardNodesFusing[0]
 	
 	fuseStartPos = cardNodesFusing[0].global_position
 	fuseEndSlot = slot
@@ -1666,6 +1667,8 @@ func nextTurn():
 	
 	
 	######################	ON START OF TURN EFFECTS
+	for p in players:
+		p.onStartOfTurn()
 	for c in getAllCards():
 		c.onStartOfTurn()
 	

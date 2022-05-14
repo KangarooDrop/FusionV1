@@ -30,11 +30,11 @@ func _init(lifeNode, armourNode):
 func initHand():
 	hand.initHand(self)
 
-func heal(amt : int, source : CardNode):
+func heal(amt : int, source):
 	amt = max(amt, 0)
 	addLife(amt)
 
-func takeDamage(dmg : int, source : CardNode):
+func takeDamage(dmg : int, source):
 	dmg = max(dmg, 0)
 	
 	if armour > 0:
@@ -88,3 +88,34 @@ func _physics_process(delta):
 			ft.get_node("Label").set("custom_colors/font_color", ftData[0][1])
 			ft.position = ftData[0][2] + Vector2(labelSize.x - 4, labelSize.y / 2)
 			ftData.remove(0)
+
+const CREATURES_ATTACKED = 	"creatures_attacked"
+const DAMAGE_TAKEN = 		"damage_taken"
+const DAMAGE_DEALT = 		"damage_dealt"
+const CARDS_DRAWN = 		"cards_drawn"
+
+var defaultFlag = {"yourLastTurn":0, "lastTurn":0, "currentTurn":0, "total":0}
+var flags : Dictionary = \
+{
+	CREATURES_ATTACKED:		defaultFlag.duplicate(),
+	
+	DAMAGE_TAKEN:			defaultFlag.duplicate(),
+	DAMAGE_DEALT:			defaultFlag.duplicate(),
+	
+	CARDS_DRAWN: 			defaultFlag.duplicate(),
+}
+
+
+func onStartOfTurn():
+	for f in flags:
+		flags[f].yourLastTurn = flags[f].lastTurn
+		flags[f].lastTurn = flags[f].currentTurn
+		flags[f].currentTurn = 0
+
+func addToFlag(flag : String, inc : int):
+	if flags.has(flag):
+		flags[flag].currentTurn += inc
+		flags[flag].total += inc
+
+func getFlag(flag : String) -> Dictionary:
+	return flags[flag]

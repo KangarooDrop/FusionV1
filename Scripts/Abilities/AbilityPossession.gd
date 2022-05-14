@@ -10,7 +10,7 @@ func onOtherBeforeDamage(attacker, blocker):
 		addToStack("onEffect", [blocker])
 
 func onEffect(params):
-	NodeLoc.getBoard().fuseToSlot(params[0], [card], card.playerID)
+	NodeLoc.getBoard().fuseToSlot(params[0], [card])
 	discardSelf(card, false)
 	
 func genDescription(subCount = 0) -> String:

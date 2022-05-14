@@ -14,13 +14,20 @@ func onOtherBeforeDamage(attacker, blocker):
 
 func onEnter(slot):
 	.onEnter(slot)
-	if not card.cantAttackSources.has(self):
+	if not hasAttaked() and not card.cantAttackSources.has(self):
 		card.cantAttackSources.append(self)
 
 func onEnterFromFusion(slot):
 	.onEnterFromFusion(slot)
-	if not card.cantAttackSources.has(self):
+	if not hasAttaked() and not card.cantAttackSources.has(self):
 		card.cantAttackSources.append(self)
+
+func hasAttaked() -> bool:
+	for p in NodeLoc.getBoard().players:
+		if p.UUID == card.playerID:
+			if p.getFlag(Player.CREATURES_ATTACKED).currentTurn > 0:
+				return true
+	return false
 
 func onStartOfTurn():
 	.onStartOfTurn()
