@@ -7,6 +7,7 @@ var titleSprite = preload("res://Art/UI/title.png")
 
 onready var lSprite
 onready var rSprite
+onready var others = $FuseCenter/Sprite
 
 var waitTimer = 0
 var waitMaxTime = 1
@@ -23,7 +24,8 @@ var contShowing = false
 var contTimer = 0
 
 var screenSize
-var bounds 
+var bounds
+var splitPercent = 0.5
 
 func _ready():
 	bounds = Vector2(titleSprite.get_width(), titleSprite.get_height())
@@ -32,7 +34,7 @@ func _ready():
 	lSprite = Sprite.new()
 	lSprite.texture = titleSprite
 	lSprite.region_enabled = true
-	lSprite.region_rect = Rect2(Vector2(0, 0), Vector2(bounds.x/2, bounds.y))
+	lSprite.region_rect = Rect2(Vector2(0, 0), Vector2(bounds.x * splitPercent, bounds.y))
 	lSprite.name = "LeftSprite"
 	$FuseCenter.add_child(lSprite)
 	lSprite.visible = false
@@ -40,10 +42,13 @@ func _ready():
 	rSprite = Sprite.new()
 	rSprite.texture = titleSprite
 	rSprite.region_enabled = true
-	rSprite.region_rect = Rect2(Vector2(bounds.x/2, 0), Vector2(bounds.x/2, bounds.y))
+	rSprite.region_rect = Rect2(Vector2(bounds.x * splitPercent, 0), Vector2(bounds.x * splitPercent, bounds.y))
 	rSprite.name = "RightSprite"
 	$FuseCenter.add_child(rSprite)
 	rSprite.visible = false
+	
+	others.get_node("FadingNode").maxTime = 0.5
+	others.rotation = angleOff
 
 func _physics_process(delta):
 	if waitTimer < waitMaxTime:
@@ -85,6 +90,8 @@ func showLabel():
 	fn.connect("onFadeIn", self, "onFadeIn")
 	$ContLabel.add_child(fn)
 	fn.fadeIn()
+	
+	others.get_node("FadingNode").fadeIn()
 
 func onFadeIn():
 	contShowing = true
