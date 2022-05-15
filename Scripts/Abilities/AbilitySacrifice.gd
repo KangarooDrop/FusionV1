@@ -14,6 +14,7 @@ func onEffect(params):
 		if is_instance_valid(slot.cardNode):
 			slot.cardNode.card.power += count
 			slot.cardNode.card.toughness += count
+			slot.cardNode.card.maxToughness += count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature dies, it gives other creatures you control +" + str(count) + "/+" + str(count)

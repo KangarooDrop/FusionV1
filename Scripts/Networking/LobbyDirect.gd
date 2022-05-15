@@ -166,6 +166,10 @@ func clearMessages():
 		c.queue_free()
 
 func addUser(player_id, username):
+		
+	if not OS.is_window_focused():
+		OS.request_attention()
+				
 	var vbox = $Lobby/ScrollContainer/VBoxContainer
 	var label = Label.new()
 	label.text = username
@@ -189,6 +193,10 @@ func kickPlayer(player_id):
 
 
 func removeUser(player_id, username):
+		
+	if not OS.is_window_focused():
+		OS.request_attention()
+	
 	for c in $Lobby/ScrollContainer/VBoxContainer.get_children():
 		if c is Label and c.text == username:
 			c.queue_free()

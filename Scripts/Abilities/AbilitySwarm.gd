@@ -9,9 +9,17 @@ func _init(card : Card).("Swarm", card, Color.brown, true, Vector2(16, 48)):
 
 func onHoverEnter(slot):
 	onEffect()
+	if not is_instance_valid(slot.cardNode) or not ListOfCards.hasAbility(slot.cardNode.card, get_script()):
+		self.card.power += count
+		self.card.toughness += count
+		self.card.maxToughness += count
 
 func onHoverExit(slot):
 	onRemove(self)
+	if not is_instance_valid(slot.cardNode) or not ListOfCards.hasAbility(slot.cardNode.card, get_script()):
+		self.card.power -= count
+		self.card.toughness -= count
+		self.card.maxToughness -= count
 
 func onEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
@@ -33,6 +41,10 @@ func onOtherEnterFromFusion(slot):
 
 func onOtherLeave(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
+		if is_instance_valid(slot.cardNode):
+			print("HERE! ", slot.cardNode.card, "  ", ListOfCards.hasAbility(slot.cardNode.card, get_script()))
+		else:
+			print("NOT HERE!")
 		if is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, get_script()):
 			onEffect()
 

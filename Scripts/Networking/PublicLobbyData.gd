@@ -2,13 +2,13 @@ extends Control
 
 var joinButton
 var usernameLabel
-var keyLabel
+var versionLabel
 var playersLabel
 var infoLabel
 
 var buffer = 16
 
-func initInfo(username : String, roomKey : String, playersString : String, info : String, lengths : Array = [64, 128, 64, 64, 256]):
+func initInfo(username : String, versionString : String, playersString : String, info : String, lengths : Array = [64, 128, 64, 64, 256]):
 	if lengths.size() != 5:
 		print("Error loading public lobby data, freeing")
 		queue_free()
@@ -28,17 +28,17 @@ func initInfo(username : String, roomKey : String, playersString : String, info 
 		usernameLabel.rect_size.x = 0
 		usernameLabel.rect_position.x = joinButton.rect_position.x + lengths[0] + buffer
 		
-		keyLabel = $KeyLabel
-		keyLabel.text = roomKey
-		keyLabel.rect_min_size.x = lengths[2]
-		keyLabel.rect_size.x = 0
-		keyLabel.rect_position.x = usernameLabel.rect_position.x + lengths[1] + buffer
+		versionLabel = $VersionLabel
+		versionLabel.text = versionString
+		versionLabel.rect_min_size.x = lengths[2]
+		versionLabel.rect_size.x = 0
+		versionLabel.rect_position.x = usernameLabel.rect_position.x + lengths[1] + buffer
 		
 		playersLabel = $PlayersLabel
 		playersLabel.text = playersString
 		playersLabel.rect_min_size.x = lengths[3]
 		playersLabel.rect_size.x = 0
-		playersLabel.rect_position.x = keyLabel.rect_position.x + lengths[2] + buffer
+		playersLabel.rect_position.x = versionLabel.rect_position.x + lengths[2] + buffer
 		
 		infoLabel = $InfoLabel
 		infoLabel.text = info

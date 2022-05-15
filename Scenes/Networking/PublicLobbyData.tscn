@@ -49,7 +49,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="KeyLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="."]
 margin_left = -160.0
 margin_right = -32.0
 margin_bottom = 23.0
@@ -58,6 +58,9 @@ custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "ABC1F"
 clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PlayersLabel" type="Label" parent="."]
 margin_left = -16.0

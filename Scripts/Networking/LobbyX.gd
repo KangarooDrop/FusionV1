@@ -58,7 +58,14 @@ func holepunch_progress_update(type, session_name, player_names):
 		$LoadingWindow.visible = false
 			
 	if type == holepuncher.STATUS_SESSION_CREATED or type == holepuncher.STATUS_SESSION_UPDATED:
+		
+		if player_names.size() != numOfPlayers:
+			if not OS.is_window_focused():
+				OS.request_attention()
+		
+		
 		clearPlayers()
+		
 		numOfPlayers = player_names.size()
 		
 		var vbox = $Lobby/ScrollContainer/VBoxContainer
@@ -233,7 +240,7 @@ func onPublicLobbiesRefresh():
 	_on_PublicButton_pressed()
 
 func onPublicJoinPressed(data):
-	$Lobby/LineEdit.text = data[1]
+	$Lobby/LineEdit.text = data[0]
 	$PublicLobbySelector.hide()
 	_on_JoinButton_pressed()
 
@@ -378,6 +385,7 @@ func _on_LobbySettings_close():
 	
 	var paramsString = ""
 	paramsString += str(params["is_public"]) + ":"
+	paramsString += str(params["version"]) + ":"
 	if params["game_type"] == Settings.GAME_TYPES.DRAFT:
 		paramsString += Settings.DRAFT_TYPES.keys()[params["draft_type"]].capitalize() + " "
 	paramsString += Settings.GAME_TYPES.keys()[params["game_type"]].capitalize()

@@ -19,7 +19,7 @@ func _ready():
 	for l in lengths:
 		total += l
 	
-	header.initInfo("Username", "Room Key", "Players", "Game Info", lengths)
+	header.initInfo("Username", "Version", "Players", "Game Info", lengths)
 	header.joinButton.hide()
 	
 #	var testData = []
@@ -49,13 +49,15 @@ func addAll(data):
 		addEmptyText()
 	else:
 		for datum in data:
-			addData(datum[0], datum[1], datum[2], datum[3])
+			#Username, key, num_player, version, game_info
+			#	-> 
+			addData(datum[0], datum[3], datum[2], datum[4], datum[1])
 	resize()
 
-func addData(username, key, playerString, info) -> Node:
+func addData(username, version, playerString, info, key) -> Node:
 	var d = pldScene.instance()
-	d.initInfo(username, key, playerString, info, lengths)
-	d.joinButton.connect("pressed", self, "joinPressed", [[username, key, playerString, info]])
+	d.initInfo(username, version, playerString, info, lengths)
+	d.joinButton.connect("pressed", self, "joinPressed", [[key]])
 	$VBoxContainer/ScrollContainer/VBoxContainer.add_child(d)
 	return d
 

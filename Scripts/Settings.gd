@@ -77,13 +77,14 @@ func _ready():
 func onLogIn(data=null):
 	if data == null or data.success:
 		var player_name = SilentWolf.Auth.logged_in_player
-		yield(SilentWolf.Players.get_player_data(player_name), "sw_player_data_received")
-		var daat = SilentWolf.Players.player_data
-		print("Received player data")
-		if not SilentWolf.Players.player_data.has("decks"):
-			SilentWolf.Players.player_data["decks"] = {}
-			SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
-			print("Deck key is null; setting")
+		if player_name != null:
+			yield(SilentWolf.Players.get_player_data(player_name), "sw_player_data_received")
+			var daat = SilentWolf.Players.player_data
+			print("Received player data")
+			if not SilentWolf.Players.player_data.has("decks"):
+				SilentWolf.Players.player_data["decks"] = {}
+				SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
+				print("Deck key is null; setting")
 
 func onLogOut():
 	SilentWolf.Players.clear_player_data()

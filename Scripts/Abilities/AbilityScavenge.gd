@@ -12,6 +12,7 @@ func onOtherDeath(slot):
 func onEffect(params):
 	card.power += count
 	card.toughness += count
+	card.maxToughness += count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When another creature you control dies, gain +" + str(count) + "/+" + str(count)

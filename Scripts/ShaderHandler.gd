@@ -12,7 +12,8 @@ var verifiedShaders : Array = \
 [
 	"res://Shaders/Default.shader",
 	"res://Shaders/Invert.shader",
-	"res://Shaders/LowLight.shader"
+	"res://Shaders/LowLight.shader",
+	"res://Shaders/Blur.shader",
 ]
 
 func _ready():
