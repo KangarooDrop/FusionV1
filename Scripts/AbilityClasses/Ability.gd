@@ -183,4 +183,4 @@ func addToStack(funcName : String, params : Array, forceWait = false, canAttack 
 func addDelayedAbility():
 	var board = NodeLoc.getBoard()
 	var card = board.delayedAbilityCards[self.card.playerID]
-	card.addAbility(clone(card))
+	card.addAbility(self.clone(card))

@@ -92,7 +92,7 @@ class Session:
             self.host = None
 
     def get_public_info(self) -> List:
-        return [self.players_array[0].name, self.name, f"{len(self.players_array)} / {self.max_players}", self.lobby_info[1]]
+        return [self.players_array[0].name, self.name, f"{len(self.players_array)} / {self.max_players}", self.lobby_info[1], self.lobby_info[2]]
 
     def __eq__(self, other):
         if other is None:

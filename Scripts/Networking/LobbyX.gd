@@ -284,9 +284,15 @@ func _on_LeaveButton_pressed():
 		$Lobby/LeaveButton.text = "Main Menu"
 		inLobby = false
 	else:
-		var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-		if error != 0:
-			print("Error loading test1.tscn. Error Code = " + str(error))
+		var root = get_node("/root")
+		var startup = load("res://Scenes/StartupScreen.tscn").instance()
+		
+		startup.onPlayPressed()
+		root.add_child(startup)
+		get_tree().current_scene = startup
+		
+		root.remove_child(self)
+		queue_free()
 
 func startGame():
 	$LoadingWindow.visible = false

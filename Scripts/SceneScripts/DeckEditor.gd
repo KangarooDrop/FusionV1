@@ -447,9 +447,15 @@ func onConfirmExit(popup=null):
 		popups.erase(popup)
 		popup.close()
 	
-	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
-	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+	var root = get_node("/root")
+	var startup = load("res://Scenes/StartupScreen.tscn").instance()
+	
+	startup.onPlayPressed()
+	root.add_child(startup)
+	get_tree().current_scene = startup
+	
+	root.remove_child(self)
+	queue_free()
 
 func onConfirmLoad(popup=null):
 	if popup != null:
@@ -545,41 +551,51 @@ func onFileSaveBackPressed():
 	
 func onFileSaveButtonPressed():
 	
-	var fileName = $CenterControl/SaveDisplay/Background/LineEdit.text
+	var fileName : String = $CenterControl/SaveDisplay/Background/LineEdit.text
+	$CenterControl/SaveDisplay/Background/LineEdit.release_focus()
+	$CenterControl/SaveDisplay/Background/SaveButton.release_focus()
 	
-	var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
-	if error == Deck.DECK_VALIDITY_TYPE.VALID:
-		SilentWolf.Players.player_data["decks"][fileName] = $CenterControl/DeckDisplay.getDeckData()
-		$CenterControl/LoadingOffset/LoadingWindow.get_node("Label").text = "Saving Deck"
-		$CenterControl/LoadingOffset/LoadingWindow.show()
-		var out = yield(SilentWolf.Players.post_player_data(SilentWolf.Auth.logged_in_player, SilentWolf.Players.player_data), "sw_player_data_posted")
-		$CenterControl/LoadingOffset/LoadingWindow.hide()
-		if out:
-			print("Deck successfully saved")
-			var pop = popupUI.instance()
-			pop.init("Deck Saved", "", [["Close", self, "closePopupUI", [pop]]])
-			$CenterControl.add_child(pop)
-			hasSaved = true
-			loadedDeckName = fileName
-			pop.options[0].grab_focus()
-			popups.append(pop)
-		else:
-			SilentWolf.Players.player_data["decks"].erase(fileName)
-			var pop = popupUI.instance()
-			pop.init("Error Saving Deck", "Could not connect to server", [["Close", self, "closePopupUI", [pop]]])
-			$CenterControl.add_child(pop)
-			pop.options[0].grab_focus()
-			popups.append(pop)
-		
-		
-		
-		
-	else:
+	if fileName.empty():
+		SilentWolf.Players.player_data["decks"].erase(fileName)
 		var pop = popupUI.instance()
-		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+		pop.init("Error Saving Deck", "Deck name cannot be empty", [["Close", self, "closePopupUI", [pop]]])
 		$CenterControl.add_child(pop)
 		pop.options[0].grab_focus()
 		popups.append(pop)
+	else:
+		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
+		if error == Deck.DECK_VALIDITY_TYPE.VALID:
+			SilentWolf.Players.player_data["decks"][fileName] = $CenterControl/DeckDisplay.getDeckData()
+			$CenterControl/LoadingOffset/LoadingWindow.get_node("Label").text = "Saving Deck"
+			$CenterControl/LoadingOffset/LoadingWindow.show()
+			var out = yield(SilentWolf.Players.post_player_data(SilentWolf.Auth.logged_in_player, SilentWolf.Players.player_data), "sw_player_data_posted")
+			$CenterControl/LoadingOffset/LoadingWindow.hide()
+			if out:
+				print("Deck successfully saved")
+				var pop = popupUI.instance()
+				pop.init("Deck Saved", "", [["Close", self, "closePopupUI", [pop]]])
+				$CenterControl.add_child(pop)
+				hasSaved = true
+				loadedDeckName = fileName
+				pop.options[0].grab_focus()
+				popups.append(pop)
+			else:
+				SilentWolf.Players.player_data["decks"].erase(fileName)
+				var pop = popupUI.instance()
+				pop.init("Error Saving Deck", "Could not connect to server", [["Close", self, "closePopupUI", [pop]]])
+				$CenterControl.add_child(pop)
+				pop.options[0].grab_focus()
+				popups.append(pop)
+			
+			
+			
+			
+		else:
+			var pop = popupUI.instance()
+			pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+			$CenterControl.add_child(pop)
+			pop.options[0].grab_focus()
+			popups.append(pop)
 	
 	onFileSaveBackPressed()
 

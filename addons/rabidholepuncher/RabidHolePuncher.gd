@@ -50,12 +50,8 @@ const STATUS_SENDING_CONFIRMATIONS: String = "sending_confirmations"
 """
 Naming regular expressions
 """
-onready var SESSION_NAME_REGEX: RegEx = RegEx.new()
-const SESSION_NAME_REGEX_DEFINITION: String = "^([A-Za-z0-9]{1,10})$"
-onready var PLAYER_NAME_REGEX: RegEx = RegEx.new()
-const PLAYER_NAME_REGEX_DEFINITION: String = "^([A-Za-z0-9]{1,12})$"
-onready var SESSION_PASS_REGEX: RegEx = RegEx.new()
-const SESSION_PASS_REGEX_DEFINITION: String = "^([A-Za-z0-9]{1,12})$"
+onready var ILLEGAL_REGEX : RegEx = RegEx.new()
+const ILLEGAL_REGEX_DEFINITION : String = "[:;|\\[\\]\\\\]"
 
 onready var _state_machine = $StateMachine
 onready var _logger = $Logger
@@ -69,9 +65,7 @@ var _is_host: bool = false
 
 
 func _ready() -> void:
-	SESSION_NAME_REGEX.compile(SESSION_NAME_REGEX_DEFINITION)
-	PLAYER_NAME_REGEX.compile(PLAYER_NAME_REGEX_DEFINITION)
-	SESSION_PASS_REGEX.compile(SESSION_PASS_REGEX_DEFINITION)
+	ILLEGAL_REGEX.compile(ILLEGAL_REGEX_DEFINITION)
 	if not debug:
 		_logger.queue_free()
 		_logger = null
@@ -90,15 +84,17 @@ func join_session(session_name: String, player_name: String,
 func _session_manage(is_host: bool, session_name: String, 
 						player_name: String, max_players: int, 
 						session_pass: String) -> void:
+	
 	if _state_machine.state.name != "None":
 		return
-	if not SESSION_NAME_REGEX.search(session_name):
+	
+	if ILLEGAL_REGEX.search(session_name):
 		_state_machine.transition_to("None", {"error" : "error:invalid_session_name"})
 		return
-	if not PLAYER_NAME_REGEX.search(player_name):
+	if ILLEGAL_REGEX.search(player_name):
 		_state_machine.transition_to("None", {"error" : "error:invalid_player_name"})
 		return
-	if not session_pass.empty() and not SESSION_PASS_REGEX.search(session_pass):
+	if ILLEGAL_REGEX.search(session_pass):
 		_state_machine.transition_to("None", {"error" : "error:invalid_session_name"})
 		return
 	self._is_host = is_host

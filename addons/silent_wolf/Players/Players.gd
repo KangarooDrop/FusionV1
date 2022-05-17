@@ -137,7 +137,7 @@ func _on_GetPlayerData_request_completed(result, response_code, headers, body):
 			player_data = response.player_data
 			SWLogger.debug("Request completed: Player data: " + str(player_data))
 			emit_signal("sw_player_data_received", player_name, player_data)
-		
+
 func _on_PushPlayerData_request_completed(result, response_code, headers, body):
 	SWLogger.info("PushPlayerData request completed")
 	var status_check = CommonErrors.check_status_code(response_code)

@@ -1917,7 +1917,10 @@ func setOwnUsername():
 	if Server.online:
 		setOpponentUsername(Server.playerNames[Server.opponentID])
 	else:
-		setOpponentUsername("Sparky")
+		setOpponentUsername(practiceNames[randi() % practiceNames.size()])
+
+const practiceNames : Array = ["Sparky", "Durandal", "Durian", "Gumbercules", "Mecha_Jesus", "Bones", "Luna", "Olive", "Rocky", "Stitch", "Jet", \
+	"Moxie", "Robert Baratheon, First of his Name"]
 
 func setOpponentUsername(username : String):
 	print("Settings opponent username")

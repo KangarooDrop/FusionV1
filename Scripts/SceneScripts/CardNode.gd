@@ -169,8 +169,9 @@ func _physics_process(delta):
 						attackRotation += PI
 					attackRotation -= PI / 2
 
-func attack(slots : Array):
-	card.hasAttacked = true
+func attack(slots : Array, setHasAttacked = true):
+	if setHasAttacked:
+		card.hasAttacked = true
 	
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == playerID:

@@ -12,7 +12,8 @@ func onEffect(params):
 	var board = NodeLoc.getBoard()
 	for slot in board.creatures[card.playerID]:
 		if is_instance_valid(slot.cardNode):
-			slot.cardNode.attack([slot.getAcross()])
+			slot.cardNode.attack([slot.getAcross()], false)
+	timesApplied = count
 
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()

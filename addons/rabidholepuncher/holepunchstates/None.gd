@@ -27,7 +27,6 @@ func process(delta: float) -> void:
 	if hole_puncher._server.get_available_packet_count() > 0:
 		var packet_string = hole_puncher._server.get_packet().get_string_from_utf8()
 		if packet_string.begins_with(GET_PUBLIC_LOBBY_PREFIX):
-			print("Public lobby data received")
 			var lobbyData = (packet_string as String).split(":")
 			var rtn = []
 			
@@ -38,7 +37,7 @@ func process(delta: float) -> void:
 					rtn.append(split)
 					
 			hole_puncher.emit_signal("public_lobbies_received", rtn)
-			print("Received public lobbies: ", rtn)
+			print("Received public lobbies data: ", rtn)
 			_server_timer.stop()
 
 func exit() -> void:

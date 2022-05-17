@@ -1,7 +1,9 @@
 extends Node
 
+signal _on_validate_player_data_complete(player_name, player_data)
+
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.3.17"
+var versionID = "0.0.4.00"
 
 
 enum GAME_TYPES {CONSTRUCTED, DRAFT}
@@ -54,8 +56,7 @@ var settingsName = "settings"
 var shaderPath = "user://shaders/"
 
 func _ready():
-	SilentWolf.Auth.connect("sw_login_succeeded", self, "onLogIn")
-	SilentWolf.Auth.connect("sw_session_check_complete", self, "onLogIn")
+	SilentWolf.Players.connect("sw_player_data_received", self, "sw_player_data_received")
 	SilentWolf.Auth.connect("sw_logout_succeeded", self, "onLogOut")
 	
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
@@ -74,17 +75,26 @@ func _ready():
 	if not ok:
 		writeToSettings()
 
-func onLogIn(data=null):
-	if data == null or data.success:
-		var player_name = SilentWolf.Auth.logged_in_player
-		if player_name != null:
-			yield(SilentWolf.Players.get_player_data(player_name), "sw_player_data_received")
-			var daat = SilentWolf.Players.player_data
-			print("Received player data")
-			if not SilentWolf.Players.player_data.has("decks"):
-				SilentWolf.Players.player_data["decks"] = {}
-				SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
-				print("Deck key is null; setting")
+const default_sw_dict = {"decks":{}}
+func sw_player_data_received(player_name, player_data):
+	
+	var should_push = false
+	
+	print("Received player data: ", player_data)
+	if typeof(SilentWolf.Players.player_data) != TYPE_DICTIONARY or (SilentWolf.Players.player_data as Dictionary).empty():
+		SilentWolf.Players.player_data = default_sw_dict
+		should_push = true
+		print("Deck is null/empty; setting")
+		
+	if not SilentWolf.Players.player_data.has("decks"):
+		SilentWolf.Players.player_data["decks"] = {}
+		should_push = true
+		print("Key 'deck' dne; setting")
+	
+	if should_push:
+		SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
+	
+	emit_signal("_on_validate_player_data_complete", player_name, SilentWolf.Players.player_data)
 
 func onLogOut():
 	SilentWolf.Players.clear_player_data()

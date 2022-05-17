@@ -275,3 +275,125 @@ Error: invalid request
 Error: invalid request
 Error: invalid request
 Error: invalid request
+2022-05-11 20:25:30,483 - Main - INFO - Listening on *:25565
+2022-05-11 20:35:36,953 - Main - INFO - Listening on *:25565
+2022-05-11 20:35:38,959 - Server - INFO - Created session ppp (max 2 players)
+2022-05-11 20:35:45,436 - Server - INFO - Player Diggity exited session ppp
+2022-05-11 20:35:45,437 - Server - INFO - No more players in session ppp, deleted session
+2022-05-11 20:35:46,523 - Server - INFO - Created session ppp (max 2 players)
+2022-05-11 20:35:47,976 - Server - INFO - Player Diggity exited session ppp
+2022-05-11 20:35:47,976 - Server - INFO - No more players in session ppp, deleted session
+2022-05-11 20:36:26,281 - Server - INFO - Created session ppp (max 2 players)
+2022-05-11 20:37:11,429 - Server - INFO - Connected player Doogle to session ppp
+2022-05-11 20:37:15,451 - Server - INFO - All addresses sent for session ppp. Session closed.
+2022-05-13 00:12:18,702 - Server - INFO - Created session pp (max 2 players)
+2022-05-13 00:12:20,622 - Server - INFO - Player Doogle exited session pp
+2022-05-13 00:12:20,622 - Server - INFO - No more players in session pp, deleted session
+2022-05-13 01:03:20,764 - Server - INFO - Created session pp (max 2 players)
+2022-05-13 01:03:55,157 - Server - INFO - Connected player Rupaul to session pp
+2022-05-13 01:04:04,152 - Server - INFO - Kicked player Rupaul from session pp
+2022-05-13 01:04:10,430 - Server - INFO - Player Admin exited session pp
+2022-05-13 01:04:10,430 - Server - INFO - No more players in session pp, deleted session
+2022-05-13 01:39:31,621 - Server - INFO - Created session noGrills (max 2 players)
+2022-05-13 01:39:42,883 - Server - INFO - Connected player Rupaul to session noGrills
+2022-05-13 01:43:24,475 - Server - INFO - Player Buns exited session noGrills
+2022-05-13 01:43:43,389 - Server - INFO - Kicked player Rupaul from session noGrills because it timed out
+2022-05-13 01:43:43,389 - Server - INFO - No more players in session noGrills, deleted session
+2022-05-13 01:45:20,735 - Server - INFO - Created session aaaa (max 2 players)
+2022-05-13 01:45:41,245 - Server - INFO - Connected player Rupaul to session aaaa
+2022-05-13 01:45:45,252 - Server - INFO - Player Rupaul exited session aaaa
+2022-05-13 01:45:46,000 - Server - INFO - Connected player Rupaul to session aaaa
+2022-05-13 01:45:48,441 - Server - INFO - Player Rupaul exited session aaaa
+2022-05-13 01:45:50,981 - Server - INFO - Connected player Rupaul to session aaaa
+2022-05-13 01:45:57,756 - Server - INFO - All addresses sent for session aaaa. Session closed.
+2022-05-13 19:11:21,584 - Server - INFO - Created session pp (max 2 players)
+2022-05-13 19:11:27,777 - Server - INFO - Player Admin exited session pp
+2022-05-13 19:11:27,777 - Server - INFO - No more players in session pp, deleted session
+2022-05-14 23:21:32,831 - Server - INFO - Created session ff (max 2 players)
+2022-05-14 23:21:36,310 - Server - INFO - Player Admin exited session ff
+2022-05-14 23:21:36,310 - Server - INFO - No more players in session ff, deleted session
+2022-05-14 23:21:51,246 - Server - INFO - Created session ff (max 2 players)
+2022-05-14 23:24:40,543 - Server - INFO - Kicked player Admin from session ff because it timed out
+2022-05-14 23:24:40,544 - Server - INFO - No more players in session ff, deleted session
+2022-05-14 23:28:56,382 - Server - INFO - Created session ff (max 2 players)
+2022-05-14 23:29:28,574 - Server - INFO - Created session dd (max 2 players)
+2022-05-14 23:29:33,429 - Server - INFO - Player Admin exited session ff
+2022-05-14 23:29:33,429 - Server - INFO - No more players in session ff, deleted session
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"ppp:False:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"ppp:False:Constructed - Free Play"
+['True', 'Solomon Draft - Tournament']    True    True
+Setting session data to"ppp:True:Solomon Draft - Tournament"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"pp:False:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"pp:False:Constructed - Free Play"
+['True', 'Constructed - Free Play']    True    True
+Setting session data to"pp:True:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"pp:False:Constructed - Free Play"
+['True', 'Constructed - Free Play']    True    True
+Setting session data to"pp:True:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"noGrills:False:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"aaaa:False:Constructed - Free Play"
+['True', 'Constructed - Free Play']    True    True
+Setting session data to"aaaa:True:Constructed - Free Play"
+['False', 'Constructed - Free Play']    False    False
+Setting session data to"pp:False:Constructed - Free Play"
+['False', '0.0.3.17', 'Constructed - Free Play']    False    False
+Setting session data to"ff:False:0.0.3.17:Constructed - Free Play"
+['True', '0.0.3.17', 'Constructed - Free Play']    True    True
+Setting session data to"ff:True:0.0.3.17:Constructed - Free Play"
+['False', '0.0.3.17', 'Constructed - Free Play']    False    False
+Setting session data to"ff:False:0.0.3.17:Constructed - Free Play"
+['True', '0.0.3.17', 'Constructed - Tournament']    True    True
+Setting session data to"ff:True:0.0.3.17:Constructed - Tournament"
+['False', '0.0.3.17', 'Constructed - Free Play']    False    False
+Setting session data to"ff:False:0.0.3.17:Constructed - Free Play"
+['True', '0.0.3.17', 'Constructed - Free Play']    True    True
+Setting session data to"ff:True:0.0.3.17:Constructed - Free Play"
+['False', '0.0.3.17', 'Constructed - Free Play']    False    False
+Setting session data to"dd:False:0.0.3.17:Constructed - Free Play"
+['True', '0.0.3.17', 'Constructed - Free Play']    True    True
+Setting session data to"dd:True:0.0.3.17:Constructed - Free Play"
+2022-05-14 23:41:09,873 - Main - INFO - Listening on *:25565
+2022-05-14 23:41:24,067 - Server - INFO - Created session ff (max 2 players)
+2022-05-14 23:41:42,018 - Server - INFO - Player Admin exited session ff
+2022-05-14 23:41:42,018 - Server - INFO - No more players in session ff, deleted session
+2022-05-15 00:06:30,696 - Server - INFO - Created session ff (max 2 players)
+2022-05-15 00:06:39,353 - Server - INFO - Kicked player Admin from session ff because it timed out
+2022-05-15 00:06:39,353 - Server - INFO - No more players in session ff, deleted session
+2022-05-15 00:07:18,596 - Server - INFO - Created session pp (max 2 players)
+2022-05-15 00:07:35,425 - Server - INFO - Player Admin exited session pp
+2022-05-15 00:07:35,425 - Server - INFO - No more players in session pp, deleted session
+2022-05-15 00:09:17,194 - Server - INFO - Created session pp (max 2 players)
+2022-05-15 00:09:21,485 - Server - INFO - Connected player Rupaul to session pp
+2022-05-15 00:09:27,593 - Server - INFO - Player Rupaul exited session pp
+2022-05-15 00:09:35,894 - Server - INFO - Connected player Rupaul to session pp
+2022-05-15 00:09:40,436 - Server - INFO - Player Rupaul exited session pp
+2022-05-15 00:10:05,983 - Server - INFO - Connected player Rupaul to session pp
+2022-05-15 00:10:17,738 - Server - INFO - Player Rupaul exited session pp
+2022-05-15 00:11:01,902 - Server - INFO - Connected player Rupaul to session pp
+2022-05-15 00:11:05,361 - Server - INFO - Player Rupaul exited session pp
+2022-05-15 00:11:13,438 - Server - INFO - Connected player Rupaul to session pp
+2022-05-15 00:11:19,128 - Server - INFO - Player Rupaul exited session pp
+2022-05-15 00:11:33,500 - Server - INFO - Player Admin exited session pp
+2022-05-15 00:11:33,500 - Server - INFO - No more players in session pp, deleted session
+2022-05-16 18:59:13,701 - Server - INFO - Created session pp (max 2 players)
+2022-05-16 18:59:17,554 - Server - INFO - Player Admin exited session pp
+2022-05-16 18:59:17,555 - Server - INFO - No more players in session pp, deleted session
+2022-05-16 18:59:27,976 - Server - INFO - Created session pp (max 2 players)
+2022-05-16 19:00:05,707 - Server - INFO - Player Admin exited session pp
+2022-05-16 19:00:05,707 - Server - INFO - No more players in session pp, deleted session
+Setting session data to"ff:False:0.0.3.17:Constructed - Free Play"
+Setting session data to"ff:True:0.0.3.17:Booster Draft - Tournament"
+Setting session data to"pp:False:0.0.3.17:Constructed - Free Play"
+Setting session data to"pp:True:0.0.3.17:Constructed - Free Play"
+Setting session data to"pp:False:0.0.4.00:Constructed - Free Play"
+Setting session data to"pp:False:0.0.4.00:Constructed - Free Play"
+Setting session data to"pp:False:0.0.4.00:Constructed - Free Play"
+Setting session data to"pp:True:0.0.4.00:Solomon Draft - Tournament"
+2022-05-17 19:28:10,561 - Main - INFO - Listening on *:25565

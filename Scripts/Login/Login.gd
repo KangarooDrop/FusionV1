@@ -18,7 +18,8 @@ func _on_SubmitButton_pressed():
 	$LoadingWindow.show()
 	
 func _on_login_succeeded():
-	yield(SilentWolf.Players, "sw_player_data_received")
+	SilentWolf.Players.get_player_data(SilentWolf.Auth.logged_in_player)
+	yield(Settings, "_on_validate_player_data_complete")
 	get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 	
 func _on_login_failed(error):

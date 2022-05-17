@@ -20,15 +20,9 @@ PLAYER_CLEANUP_SCHEDULED_SECONDS: float = 8
 CONFIRMATION_RETRIES: int = 8
 SECONDS_BETWEEN_CONFIRMATION_RETRIES: float = 0.1
 
-SESSION_NAME_REGEX = "[A-Za-z0-9]{1,10}"
-PLAYER_NAME_REGEX = "[A-Za-z0-9]{1,12}"
-MAX_PLAYERS_REGEX = "([2-9]|1[0-2])"
-SESSION_PASS_REGEX = "[A-Za-z0-9]{1,12}"
 
-SESSION_PLAYER_REGEX = "^" + SESSION_NAME_REGEX + ":" + PLAYER_NAME_REGEX + "$"
-SESSION_PLAYER_PASS_REGEX = "^" + SESSION_NAME_REGEX + ":" + PLAYER_NAME_REGEX + "(:" + SESSION_PASS_REGEX + ")?$"
-SESSION_HOST_REGEX = "^" + SESSION_NAME_REGEX + ":" + PLAYER_NAME_REGEX + ":" + MAX_PLAYERS_REGEX \
-                     + "(:" + SESSION_PASS_REGEX + ")?$"
+#    : ; | [ ] \
+ILLEGAL_CHARACTERS_REGEX = "[:;|\\[\\]\\\\]"
 
 
 class Server(DatagramProtocol):
@@ -232,7 +226,7 @@ class Server(DatagramProtocol):
 
         for key, session in self.active_sessions.items():
             if session.is_public():
-                session_data.append('#'.join(session.get_public_info()))
+                session_data.append('|'.join(session.get_public_info()))
 
         self.send_message((ip, port), "l:" + ":".join(session_data))
 
@@ -246,7 +240,6 @@ class Server(DatagramProtocol):
 
         s_split = message.split(':')
         s_split.pop(0)
-        print(s_split, "  ", s_split[0], "  ", s_split[0] == "True")
         s_split[0] = s_split[0] == "True"
 
         session.lobby_info = s_split
@@ -282,22 +275,25 @@ class Server(DatagramProtocol):
     Parse messages helper methods 
     """
     def parse_session_player_from(self, message: str, source_address: Tuple) -> Tuple:
-        split = message.split(':')
-        msg_string = split[0] + ":" + split[1]
 
-        if not re.search(SESSION_PLAYER_REGEX, msg_string):
-            self.send_message(source_address, ERR_REQUEST_INVALID)
-            self.logger.debug("Invalid session/player message received %s", message)
-            raise InvalidRequest(f"Invalid session/player message received {message}")
+        print("PARSE_SESSION_PLAYER_FROM")
+        split = message.split(':')
+        for s in split:
+            if re.search(ILLEGAL_CHARACTERS_REGEX, s):
+                self.send_message(source_address, ERR_REQUEST_INVALID)
+                self.logger.debug("Invalid session/player message received %s", message)
+                raise InvalidRequest(f"Invalid session/player message received {message}")
        # Session, Player
         return split[0], split[1]
 
     def parse_host_request(self, host_request: str, source_address: Tuple) -> Tuple:
-        if not re.search(SESSION_HOST_REGEX, host_request):
-            self.send_message(source_address, ERR_REQUEST_INVALID)
-            self.logger.debug("Invalid session/player message received %s", host_request)
-            raise InvalidRequest(f"Invalid session/player message received {host_request}")
+        print("PARSE_HOST_REQUEST")
         split = host_request.split(":")
+        for s in split:
+            if re.search(ILLEGAL_CHARACTERS_REGEX, s):
+                self.send_message(source_address, ERR_REQUEST_INVALID)
+                self.logger.debug("Invalid session/player message received %s", host_request)
+                raise InvalidRequest(f"Invalid session/player message received {host_request}")
         if len(split) == 3:
             # Session, Player, MaxPlayers
             return split[0], split[1], int(split[2]), None
@@ -306,11 +302,13 @@ class Server(DatagramProtocol):
             return split[0], split[1], int(split[2]), split[3]
 
     def parse_connect_request(self, connect_request: str, source_address: Tuple) -> Tuple:
-        if not re.search(SESSION_PLAYER_PASS_REGEX, connect_request):
-            self.send_message(source_address, ERR_REQUEST_INVALID)
-            self.logger.debug("Invalid session/player message received %s", connect_request)
-            raise InvalidRequest(f"Invalid session/player message received {connect_request}")
+        print("PARSE_CONNECT_REQUEST")
         split = connect_request.split(":")
+        for s in split:
+            if re.search(ILLEGAL_CHARACTERS_REGEX, s):
+                self.send_message(source_address, ERR_REQUEST_INVALID)
+                self.logger.debug("Invalid session/player message received %s", connect_request)
+                raise InvalidRequest(f"Invalid session/player message received {connect_request}")
         if len(split) == 2:
             # Session, Player
             return split[0], split[1], None

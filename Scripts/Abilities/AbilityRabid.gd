@@ -10,8 +10,8 @@ func onOtherEnter(slot):
 		addToStack("onEffect", [slot], true, true)
 
 func onEffect(params):
-	if ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE) and card.canAttack():
-		card.cardNode.attack([params[0]])
+	if ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE) and card.canAttackAutomatic():
+		card.cardNode.attack([params[0]], false)
 
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()

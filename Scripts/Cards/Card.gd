@@ -332,6 +332,9 @@ func addCreatureToBoard(card, slot = null) -> bool:
 func canAttack() -> bool:
 	return cantAttackSources.size() == 0 and not hasAttacked and not playedThisTurn
 
+func canAttackAutomatic() -> bool:
+	return cantAttackSources.size() == 0
+
 func _to_string() -> String:
 	return name + " - " + str(power) + "/" + str(toughness)
 
