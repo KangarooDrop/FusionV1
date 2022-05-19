@@ -5,7 +5,7 @@ class_name AbilityLimitBreak
 func _init(card : Card).("Limit Break", card, Color.purple, false, Vector2(0, 0)):
 	pass
 
-func onAdjustCost(card, cost) -> int:
+func onAdjustCost(card) -> int:
 	if card == self.card:
 		return -99
 	return 0

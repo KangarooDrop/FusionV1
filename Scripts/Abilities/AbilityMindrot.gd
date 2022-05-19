@@ -2,7 +2,7 @@ extends Ability
 
 class_name AbilityMindrot
 
-func _init(card : Card).("Mindrot", card, Color.blue, true, Vector2(0, 0)):
+func _init(card : Card).("Mindrot", card, Color.blue, false, Vector2(0, 0)):
 	pass
 
 func onBeforeDamage(attacker, blocker):
@@ -13,8 +13,8 @@ func onBeforeDamage(attacker, blocker):
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID != card.playerID:
-			for i in range(count):
+			for i in range(card.power):
 				p.deck.mill(p.UUID)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature attacks, its controller's opponent " + str(TextMill.new(null).setCount(count))
+	return .genDescription() + "When this creature attacks, its opponent " + str(TextMill.new(null).setName("Mills")) + " equal to this creature's power"

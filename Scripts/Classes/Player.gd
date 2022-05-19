@@ -44,6 +44,7 @@ func takeDamage(dmg : int, source):
 		
 	if dmg > 0:
 		addLife(-dmg)
+		addToFlag(DAMAGE_TAKEN, dmg)
 	
 	if life <= 0:
 		NodeLoc.getBoard().onLoss(self)
@@ -89,20 +90,22 @@ func _physics_process(delta):
 			ft.position = ftData[0][2] + Vector2(labelSize.x - 4, labelSize.y / 2)
 			ftData.remove(0)
 
-const CREATURES_ATTACKED = 	"creatures_attacked"
-const DAMAGE_TAKEN = 		"damage_taken"
-const DAMAGE_DEALT = 		"damage_dealt"
-const CARDS_DRAWN = 		"cards_drawn"
+const CREATURES_ATTACKED = 					"creatures_attacked"
+const DAMAGE_TAKEN = 						"damage_taken"
+const CARDS_DRAWN_DECK = 					"cards_drawn"
+const CARDS_ADDED = 						"cards_added"
+const CARDS_PLAYED = 						"cards_played"
+const MANA_SPENT = 							"mana_spent"
 
 var defaultFlag = {"yourLastTurn":0, "lastTurn":0, "currentTurn":0, "total":0}
 var flags : Dictionary = \
 {
-	CREATURES_ATTACKED:		defaultFlag.duplicate(),
-	
-	DAMAGE_TAKEN:			defaultFlag.duplicate(),
-	DAMAGE_DEALT:			defaultFlag.duplicate(),
-	
-	CARDS_DRAWN: 			defaultFlag.duplicate(),
+	CREATURES_ATTACKED:				defaultFlag.duplicate(),
+	DAMAGE_TAKEN:					defaultFlag.duplicate(),
+	CARDS_DRAWN_DECK: 				defaultFlag.duplicate(),
+	CARDS_ADDED: 					defaultFlag.duplicate(),
+	CARDS_PLAYED:					defaultFlag.duplicate(),
+	MANA_SPENT:						defaultFlag.duplicate()
 }
 
 
@@ -119,3 +122,7 @@ func addToFlag(flag : String, inc : int):
 
 func getFlag(flag : String) -> Dictionary:
 	return flags[flag]
+
+func printFlags():
+	for k in flags.keys():
+		print(k, ": ", getFlag(k))

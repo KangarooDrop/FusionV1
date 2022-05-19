@@ -139,6 +139,9 @@ func onDeath():
 		abl.onDeath()
 	
 func onLeave():
+	hasAttacked = false
+	playedThisTurn = false
+	
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
@@ -277,10 +280,10 @@ func onAfterCombat(attacker, blockers):
 	for abl in abls:
 		abl.onAfterCombat(attacker, blockers)
 
-func onAdjustCost(card, cost) -> int:
+func onAdjustCost(card) -> int:
 	var costAdjustment = 0
 	for abl in abilities.duplicate():
-		costAdjustment += abl.onAdjustCost(card, cost)
+		costAdjustment += abl.onAdjustCost(card)
 	return costAdjustment
 
 func onCardsPlayed(slot, cards):
@@ -513,17 +516,16 @@ func fuseToSelf(card):
 	else:
 		return null
 	
+	var newTier = max(2, min(ListOfCards.MAX_TIER, self.tier + card.tier)) 
 	var numTypes = types.size()
 	var newIndex
-	match numTypes:
-		0:
-			newIndex = ListOfCards.fusionList[0]
-		1:
-			newIndex = ListOfCards.fusionList[1][types[0]]
-		2:
-			newIndex = ListOfCards.fusionList[2][types[0]][types[1]]
-			if newIndex == null:
-				newIndex = ListOfCards.fusionList[2][types[1]][types[0]]
+	
+	if numTypes == 0:
+		newIndex = ListOfCards.fusionList[0]
+	else:
+		newIndex = ListOfCards.fusionList[newTier][types[0]][types[1]]
+		if newIndex == null:
+			newIndex = ListOfCards.fusionList[newTier][types[1]][types[0]]
 	
 	if newIndex == -1:
 		if creatureType.has(CREATURE_TYPE.Null):

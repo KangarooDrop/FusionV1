@@ -19,8 +19,8 @@ func onEffect(card):
 				count -= 1
 				self.card.removeAbility(get_script().new(self.card))
 
-func onAdjustCost(card, cost) -> int:
-	if NodeLoc.getBoard().isOnBoard(self.card) and card.ownerID == self.card.playerID and cost < NodeLoc.getBoard().cardsPerTurnMax:
+func onAdjustCost(card) -> int:
+	if NodeLoc.getBoard().isOnBoard(self.card) and card.ownerID == self.card.playerID:
 		return 1
 	else:
 		return 0

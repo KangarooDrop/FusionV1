@@ -30,8 +30,8 @@ var typeDisplay
 
 var players : Array
 var activePlayer := -1
-var cardsPerTurnMax = 2
-var cardsPerTurn = cardsPerTurnMax
+var cardsPerTurnMax := 2
+var cardsPerTurn := cardsPerTurnMax
 var cardsPlayed = 0
 
 var shakeMaxTime = 0.5
@@ -212,8 +212,6 @@ func _ready():
 			setStartingPlayer(startingPlayerIndex)
 			print("Send: Starting player")
 			Server.setActivePlayer(Server.opponentID, (startingPlayerIndex + 1) % 2)
-		
-			initCardsLeftIndicator()
 
 func chooseStartingPlayer(index : int, pop):
 	setStartingPlayer(index)
@@ -1318,6 +1316,8 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					for s in cardsHolding:
 						cost += getCardCost(s.cardNode.card)
 					cardsPlayed += cost
+					players[activePlayer].addToFlag(Player.CARDS_PLAYED, cardsHolding.size())
+					players[activePlayer].addToFlag(Player.MANA_SPENT, cost)
 					
 					for c in getAllCards():
 						c.onCardsPlayed(slot, cardList)
@@ -1551,6 +1551,8 @@ func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_F1:
 			saveReplay()
+		if event.scancode == KEY_F4:
+			players[activePlayer].printFlags()
 	
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_SPACE:
@@ -1567,16 +1569,14 @@ func isOnBoard(card : Card):
 	return false
 
 func getCardCost(card) -> int:
+	
 	var cost = 1
 	
-	cost += card.onAdjustCost(card, cost)
-	
-	var crs = getAllCreatures()
-	crs.invert()
+	var crs = getAllCards()
 	for c in crs:
-		cost += c.onAdjustCost(card, cost)
+		cost += c.onAdjustCost(card)
 	
-	return int(max(cost, 0))
+	return int(max(min(cost, cardsPerTurnMax), 0))
 
 func getAllCards() -> Array:
 	var cards := []
@@ -1920,7 +1920,7 @@ func setOwnUsername():
 		setOpponentUsername(practiceNames[randi() % practiceNames.size()])
 
 const practiceNames : Array = ["Sparky", "Durandal", "Durian", "Gumbercules", "Mecha_Jesus", "Bones", "Luna", "Olive", "Rocky", "Stitch", "Jet", \
-	"Moxie", "Robert Baratheon, First of his Name"]
+	"Moxie", "Robert Baratheon, First of his Name", "Sinbad"]
 
 func setOpponentUsername(username : String):
 	print("Settings opponent username")

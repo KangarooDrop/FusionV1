@@ -110,7 +110,7 @@ func onBeforeCombat(attacker, blockers):
 func onAfterCombat(attacker, blockers):
 	pass
 
-func onAdjustCost(card, cost) -> int:
+func onAdjustCost(card) -> int:
 	return 0
 
 func onCardsPlayed(slot, cards):
@@ -140,6 +140,10 @@ static func discardSelf(card, addCardToGrave = true):
 
 func setCount(count : int) -> Ability:
 	self.count = count
+	return self
+
+func setName(name : String) -> Ability:
+	self.name = name
 	return self
 
 func getFileName():

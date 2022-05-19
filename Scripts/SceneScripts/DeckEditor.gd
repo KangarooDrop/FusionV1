@@ -94,16 +94,16 @@ func setCards():
 				elif c.rarity == Card.RARITY.VANGUARD:
 					availableCardCount[k] = 1
 		
-		for i in range(ListOfCards.cardList.size()):
-			if ListOfCards.cardList[i].tier == 1:
-				if ListOfCards.cardList[i].rarity == Card.RARITY.BASIC:
-					availableCardCount[i] = -1
-				elif ListOfCards.cardList[i].rarity == Card.RARITY.COMMON:
-					availableCardCount[i] = 4
-				elif ListOfCards.cardList[i].rarity == Card.RARITY.LEGENDARY:
-					availableCardCount[i] = 1
-				elif ListOfCards.cardList[i].rarity == Card.RARITY.VANGUARD:
-					availableCardCount[i] = 1
+		for k in ListOfCards.cardList.keys():
+			if ListOfCards.cardList[k].tier == 1:
+				if ListOfCards.cardList[k].rarity == Card.RARITY.BASIC:
+					availableCardCount[k] = -1
+				elif ListOfCards.cardList[k].rarity == Card.RARITY.COMMON:
+					availableCardCount[k] = 4
+				elif ListOfCards.cardList[k].rarity == Card.RARITY.LEGENDARY:
+					availableCardCount[k] = 1
+				elif ListOfCards.cardList[k].rarity == Card.RARITY.VANGUARD:
+					availableCardCount[k] = 1
 					
 	else:
 		if Server.playerIDs.size() > 0:
