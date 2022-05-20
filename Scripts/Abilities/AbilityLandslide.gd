@@ -42,9 +42,9 @@ func onEffect(params):
 				
 				if self.card.cardNode.slot.currentZone == CardSlot.ZONES.CREATURE:
 					board.fuseToSlot(self.card.cardNode.slot, cards)
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			return
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, fuse all cards with " + str(self) + " from its controller's hand to it that are able"

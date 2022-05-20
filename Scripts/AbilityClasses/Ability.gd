@@ -7,7 +7,8 @@ var c : Color
 var iconPos : Vector2
 
 var showCount = false
-var count = 1
+
+var myVars : Dictionary = {}
 
 func _init(name : String, card : Card, c : Color, showCount : bool, iconPos : Vector2):
 	self.name = name
@@ -126,7 +127,7 @@ func checkWaiting() -> bool:
 	return true
 
 func combine(abl : Ability):
-	setCount(count + abl.count)
+	setCount(myVars.count + abl.myVars.count)
 
 static func discardSelf(card, addCardToGrave = true):
 	for i in range(NodeLoc.getBoard().players.size()):
@@ -138,8 +139,8 @@ static func discardSelf(card, addCardToGrave = true):
 					break
 			break
 
-func setCount(count : int) -> Ability:
-	self.count = count
+func setCount(countNew : int) -> Ability:
+	myVars.count = countNew
 	return self
 
 func setName(name : String) -> Ability:
@@ -153,20 +154,27 @@ func _to_string():
 	var cardString = ""
 	if card != null:
 		cardString += "||" + str(card.UUID)
-	return "[color=#" + c.to_html(false) +"][url=desc||" + getFileName() + "||" + str(count) + cardString + "]" + name + (" "+str(count) if (showCount) else "") +"[/url][/color]"
+	return "[color=#" + c.to_html(false) +"][url=desc||" + getFileName() + "||" + str(myVars.count) + cardString + "]" + name + (" "+str(myVars.count) if (showCount) else "") +"[/url][/color]"
 
 func clone(card : Card) -> Ability:
 	var abl = get_script().new(card)
-	abl.setCount(count)
+	abl.myVars = myVars.duplicate(true)
 	return abl
 	
 func cloneBase(card : Card) -> Ability:
 	var abl = get_script().new(card)
-	abl.setCount(count)
+	abl.setCount(myVars.count)
 	return abl
 
+func serialize() -> String:
+	var rtn = ""
+	rtn += get_script().get_path().get_basename().get_file() + " " + str(myVars.count)
+	for k in myVars.keys():
+		rtn += " " + k + "=" + str(myVars[k])
+	return rtn
+
 func genDescription(subCount = 0) -> String:
-	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(count - subCount) if (showCount) else "") +":[/color]\n"
+	return "[color=#" + c.to_html(false) +"]" + name + (" "+str(myVars.count - subCount) if (showCount) else "") +":[/color]\n"
 
 func genStackDescription(subCount) -> String:
 	return genDescription(subCount)

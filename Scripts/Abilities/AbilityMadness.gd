@@ -2,21 +2,19 @@ extends Ability
 
 class_name AbilityMadness
 
-var buffsApplied := 0
-
 func _init(card : Card).("Madness", card, Color.blue, true, Vector2(0, 0)):
-	pass
+	myVars["buffsApplied"] = 0
 
 func onHoverEnter(slot):
 	var pid = slot.playerID
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
 			var num = player.deck.deckSize - player.deck.cards.size()
-			var dif = num * count - buffsApplied
+			var dif = num * myVars.count - myVars.buffsApplied
 			card.power += dif
 			card.toughness += dif
 			card.maxToughness += dif
-			buffsApplied += dif
+			myVars.buffsApplied += dif
 			
 			break
 
@@ -24,11 +22,11 @@ func onHoverExit(slot):
 	var pid = slot.playerID
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
-			var dif = buffsApplied
+			var dif = myVars.buffsApplied
 			card.power -= dif
 			card.toughness -= dif
 			card.maxToughness -= dif
-			buffsApplied -= dif
+			myVars.buffsApplied -= dif
 			break
 
 func onDraw(card):
@@ -50,11 +48,11 @@ func onEffect():
 	for player in NodeLoc.getBoard().players:
 		if player.UUID == pid:
 			var num = player.deck.deckSize - player.deck.cards.size()
-			var dif = num * count - buffsApplied
+			var dif = num * myVars.count - myVars.buffsApplied
 			card.power += dif
 			card.toughness += dif
 			card.maxToughness += dif
-			buffsApplied += dif
+			myVars.buffsApplied += dif
 			
 			break
 
@@ -65,23 +63,18 @@ func onRemove(ability):
 			var pid = card.playerID
 			for player in NodeLoc.getBoard().players:
 				if player.UUID == pid:
-					var dif = buffsApplied
+					var dif = myVars.buffsApplied
 					card.power -= dif
 					card.toughness -= dif
 					card.maxToughness -= dif
-					buffsApplied -= dif
+					myVars.buffsApplied -= dif
 					break
 
 func combine(abl : Ability):
 	.combine(abl)
-	var total = buffsApplied + abl.buffsApplied
-	buffsApplied = total
-	abl.buffsApplied = total
-
-func clone(card : Card) -> Ability:
-	var abl = .clone(card)
-	abl.buffsApplied = buffsApplied
-	return abl
+	var total = myVars.buffsApplied + abl.myVars.buffsApplied
+	myVars.buffsApplied = total
+	abl.myVars.buffsApplied = total
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "This creature gets +" + str(count) + "/+" + str(count) + " for each card removed from its controller's deck"
+	return .genDescription() + "This creature gets +" + str(myVars.count) + "/+" + str(myVars.count) + " for each card removed from its controller's deck"

@@ -2,20 +2,18 @@ extends Ability
 
 class_name AbilityVenomous
 
-var activated = false
-
 func _init(card : Card).("Venomous", card, Color.brown, true, Vector2(16, 64)):
-	pass
+	myVars["activated"] = false
 
 func onBeforeDamage(attacker, blocker):
 	if (attacker == card.cardNode.slot and is_instance_valid(blocker.cardNode)) or (blocker == card.cardNode.slot and is_instance_valid(attacker.cardNode)):
-		card.power += count
-		activated = true
+		card.power += myVars.count
+		myVars.activated = true
 
 func onAfterDamage(attacker, blocker):
-	if activated:
-		activated = false
-		card.power -= count
+	if myVars.activated:
+		myVars.activated = false
+		card.power -= myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "While fighting another creature, this creature has +" + str(count) + " power"
+	return .genDescription() + "While fighting another creature, this creature has +" + str(myVars.count) + " power"

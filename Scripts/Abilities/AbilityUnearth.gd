@@ -44,19 +44,19 @@ func slotClicked(slot : CardSlot):
 		for k in board.graveCards.keys():
 			total += board.graveCards[k].size()
 		
-		if graveCards.size() >= total or graveCards.size() >= count - timesApplied:
+		if graveCards.size() >= total or graveCards.size() >= myVars.count - myVars.timesApplied:
 			for card in graveCards:
 				for p in board.players:
 					if p.UUID == self.card.playerID:
 						p.hand.addCardToHand([card, false, true])
 						break
 			
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			graveCards.clear()
 			NodeLoc.getBoard().endGetSlot()
 
 func genDescription(subCount = 0) -> String:
 	var string = " card"
-	if count - timesApplied > 1:
+	if myVars.count - myVars.timesApplied > 1:
 		string + " cards"
-	return .genDescription() + "When this creature is played, its controller chooses " + str(count - timesApplied) + string + " in any " + str(TextScrapyard.new(null)) +" and adds the card(s) to their hand"
+	return .genDescription() + "When this creature is played, its controller chooses " + str(myVars.count - myVars.timesApplied) + string + " in any " + str(TextScrapyard.new(null)) +" and adds the card(s) to their hand"

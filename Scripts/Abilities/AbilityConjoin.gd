@@ -33,7 +33,7 @@ func onEffect(params : Array):
 		if p.UUID == card.playerID:
 			if p.hand.slots.size() == 0:
 				return
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 	NodeLoc.getBoard().getSlot(self, card.playerID)
 
 func slotClicked(slot : CardSlot):
@@ -71,14 +71,14 @@ func slotClicked(slot : CardSlot):
 			slot.cardNode.position.y += 16
 		
 		#(hand.nodes.size() < count + 1) or
-		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == count + 1:
+		if getValidCombinations(tmp, hand.nodes, fuseIndexes.size() + 1) == 0 or fuseIndexes.size() == myVars.count + 1:
 			for i in range(fuseIndexes.size()):
 				hand.discardIndex(fuseIndexes[i], false)
 			var board = NodeLoc.getBoard()
 			board.fuseToHand(hand.player, tmp)
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			fuseIndexes.clear()
 			board.endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this card is played, its controller fuses " + str(count+1-timesApplied) + " cards together and put the fusion creature into their hand"
+	return .genDescription() + "When this card is played, its controller fuses " + str(myVars.count+1-myVars.timesApplied) + " cards together and put the fusion creature into their hand"

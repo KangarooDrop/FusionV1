@@ -11,8 +11,8 @@ func onApplied(slot):
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			p.addArmour(count - timesApplied)
-	timesApplied = count
+			p.addArmour(myVars.count - myVars.timesApplied)
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, its controller gains " + str(count - subCount) + " " + str(TextArmor.new(null))
+	return .genDescription() + "When this creature is played, its controller gains " + str(myVars.count - subCount) + " " + str(TextArmor.new(null))

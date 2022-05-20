@@ -11,10 +11,10 @@ func onApplied(slot):
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			for i in range(count - timesApplied):
+			for i in range(myVars.count - myVars.timesApplied):
 				p.hand.drawCard()
 			break
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, its controller draws " + str(count - subCount) + (" cards" if count - subCount > 1 else " card")
+	return .genDescription() + "When this creature is played, its controller draws " + str(myVars.count - subCount) + (" cards" if myVars.count - subCount > 1 else " card")

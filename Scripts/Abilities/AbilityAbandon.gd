@@ -14,7 +14,7 @@ func onBeforeDamage(attacker, blocker):
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			if p.hand.slots.size() <= count:
+			if p.hand.slots.size() <= myVars.count:
 				for i in range(p.hand.nodes.size()):
 					p.hand.discardIndex(i)
 				return
@@ -43,11 +43,11 @@ func slotClicked(slot : CardSlot):
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count:
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= myVars.count:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
 			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + ("When this creature attacks, its controller chooses and discards " + str(count) + " card") + ("s" if count > 1 else "")
+	return .genDescription() + ("When this creature attacks, its controller chooses and discards " + str(myVars.count) + " card") + ("s" if myVars.count > 1 else "")

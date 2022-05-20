@@ -10,15 +10,15 @@ func onStartOfTurn():
 		addToStack("onEffect", [])
 
 func onEffect(params):
-	for i in count:
-		var c = ListOfCards.getCard(56)
+	for i in myVars.count:
+		var c = ListOfCards.getCard(1027)
 		if not card.addCreatureToBoard(c):
 			for p in NodeLoc.getBoard().getAllPlayers():
 				if p.UUID == card.playerID:
 					p.takeDamage(1, card)
 
 func genDescription(subCount = 0) -> String:
-	if count > 1:
-		return  .genDescription() + "At the start of its controller's turn, this creature creates another " + str(count) + " " + str(TextCard.new(ListOfCards.getCard(56))) + ". Its controller takes 1 damage, for each that cannot be created"
+	if myVars.count > 1:
+		return  .genDescription() + "At the start of its controller's turn, this creature creates another " + str(myVars.count) + " " + str(TextCard.new(ListOfCards.getCard(1027))) + ". Its controller takes 1 damage, for each that cannot be created"
 	else:
-		return  .genDescription() + "At the start of its controller's turn, this creature creates another " + str(TextCard.new(ListOfCards.getCard(56))) + ". Its controller takes 1 damage if it could not be created"
+		return  .genDescription() + "At the start of its controller's turn, this creature creates another " + str(TextCard.new(ListOfCards.getCard(1027))) + ". Its controller takes 1 damage if it could not be created"

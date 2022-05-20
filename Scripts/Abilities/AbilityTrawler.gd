@@ -8,7 +8,7 @@ func _init(card : Card).("Trawler", card, Color.darkgray, true, Vector2(0, 0)):
 	pass
 
 func onApplied(slot):
-	addToStack("onEffect", [count - timesApplied])
+	addToStack("onEffect", [myVars.count - myVars.timesApplied])
 
 func onEffect(params):
 	NodeLoc.getBoard().getSlot(self, card.playerID)
@@ -30,7 +30,7 @@ func slotClicked(slot : CardSlot):
 			SoundEffectManager.playUnselectSound()
 			graveIDs.erase(slot.playerID)
 		
-		if graveIDs.size() >= board.graves.size() or graveIDs.size() >= count - timesApplied:
+		if graveIDs.size() >= board.graves.size() or graveIDs.size() >= myVars.count - myVars.timesApplied:
 			for id in graveIDs:
 				removeCards(id, true)
 			NodeLoc.getBoard().endGetSlot()

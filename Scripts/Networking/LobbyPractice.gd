@@ -8,6 +8,7 @@ func _ready():
 	
 	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
 	var options : Array = decks.keys()
+	options.sort()
 	var keys : Array = []
 	for d in options:
 		keys.append(decks[d])

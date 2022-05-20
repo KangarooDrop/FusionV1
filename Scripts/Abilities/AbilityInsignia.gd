@@ -11,7 +11,7 @@ func onApplied(slot):
 func onEffect(params):
 	for c in NodeLoc.getBoard().getAllCreatures():
 		c.addAbility(AbilitySoulblaze.new(c))
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, inflict " + str(AbilitySoulblaze.new(null)) + " on all creatures"

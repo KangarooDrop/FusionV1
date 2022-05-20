@@ -13,9 +13,9 @@ func onEffect(params):
 	var hand = null
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			for i in range(count):
-				p.hand.addCardToHand([ListOfCards.getCard(57), true, true])
+			for i in range(myVars.count):
+				p.hand.addCardToHand([ListOfCards.getCard(1028), true, true])
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature dies, add " + str(count) + " " + str(TextCard.new(ListOfCards.getCard(57))) +" to its controller's hand"
+	return .genDescription() + "When this creature dies, add " + str(myVars.count) + " " + str(TextCard.new(ListOfCards.getCard(1028))) +" to its controller's hand"

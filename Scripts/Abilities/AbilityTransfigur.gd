@@ -3,10 +3,9 @@ extends AbilityETB
 class_name AbilityTransfigur
 
 var bounceSlots := []
-var statSet : int = 3
 
 func _init(card : Card).("Transfigur", card, Color.blue, true, Vector2(0, 0)):
-	pass
+	myVars["statSet"] = 3
 
 func onApplied(slot):
 	addToStack("onEffect", [])
@@ -21,7 +20,7 @@ func onEffect(params : Array):
 	if validTargets >= 1:
 		board.getSlot(self, card.playerID)
 	else:
-		timesApplied = count
+		myVars.timesApplied = myVars.count
 
 func slotClicked(slot : CardSlot):
 	var validTargets = 0
@@ -48,22 +47,22 @@ func slotClicked(slot : CardSlot):
 		else:
 			SoundEffectManager.playUnselectSound()
 			bounceSlots.erase(slot)
-		if bounceSlots.size() >= count - timesApplied or bounceSlots.size() >= validTargets:
+		if bounceSlots.size() >= myVars.count - myVars.timesApplied or bounceSlots.size() >= validTargets:
 			
 			for s in bounceSlots:
 				s.cardNode.select()
-				s.cardNode.card.power = statSet
-				s.cardNode.card.toughness = statSet
-				s.cardNode.card.maxToughness = statSet
+				s.cardNode.card.power = myVars.statSet
+				s.cardNode.card.toughness = myVars.statSet
+				s.cardNode.card.maxToughness = myVars.statSet
 				
 			bounceSlots.clear()
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:
 	var s = ""
-	if count - subCount > 1:
-		s = "When this creature is played, its controller chooses " + str(count - subCount) + " creatures and sets their power and toughness to " + str(statSet)
+	if myVars.count - subCount > 1:
+		s = "When this creature is played, its controller chooses " + str(myVars.count - subCount) + " creatures and sets their power and toughness to " + str(myVars.statSet)
 	else:
-		s = "When this creature is played, its controller chooses a creature and set its power and toughness to " + str(statSet)
+		s = "When this creature is played, its controller chooses a creature and set its power and toughness to " + str(myVars.statSet)
 	return .genDescription() + s

@@ -22,7 +22,7 @@ func add(data):
 	var stackSize = stack.size()
 	var subCount = 0
 	if data["source"] is AbilityETB:
-		subCount = data["source"].timesApplied
+		subCount = data["source"].myVars.timesApplied
 	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data["source"].genStackDescription(subCount), false)
 	data["window"] = h
 	h.position = Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset) + Vector2(0, h.get_node("HoverBack").rect_size.y / 2)
@@ -62,3 +62,7 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 
 func _to_string() -> String:
 	return str(stack)
+
+func clear():
+	for i in range(stack.size()):
+		remove(0)

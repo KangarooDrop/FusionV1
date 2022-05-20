@@ -12,7 +12,7 @@ func onOtherDeath(slot):
 func onEffect(params):
 	if is_instance_valid(card.cardNode) and card.cardNode.slot.currentZone == CardSlot.ZONES.HAND:
 		if card.addCreatureToBoard(card, null):
-			discardSelf(card)
+			discardSelf(card, false)
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When a creature you control dies, this card is automatically put into play from your hand"

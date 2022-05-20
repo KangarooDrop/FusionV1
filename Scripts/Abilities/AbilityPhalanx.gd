@@ -2,28 +2,26 @@ extends Ability
 
 class_name AbilityPhalanx
 
-var buffsApplied = 0
-
 func _init(card : Card).("Phalanx", card, Color.darkgray, true, Vector2(16, 48)):
-	pass
+	myVars["buffsApplied"] = 0
 
 func onEnter(slot):
-	for i in range(count - buffsApplied):
+	for i in range(myVars.count - myVars.buffsApplied):
 		onEffect()
-		buffsApplied += 1
+		myVars.buffsApplied += 1
 
 func onEnterFromFusion(slot):
-	for i in range(count - buffsApplied):
+	for i in range(myVars.count - myVars.buffsApplied):
 		onEffect()
-		buffsApplied += 1
+		myVars.buffsApplied += 1
 
 func onOtherEnter(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
 		for s in card.cardNode.slot.getNeighbors():
 			if s == slot:
-				s.cardNode.card.power += count
-				s.cardNode.card.toughness += count
-				s.cardNode.card.maxToughness += count
+				s.cardNode.card.power += myVars.count
+				s.cardNode.card.toughness += myVars.count
+				s.cardNode.card.maxToughness += myVars.count
 
 func onEffect():
 	for s in card.cardNode.slot.getNeighbors():
@@ -36,36 +34,32 @@ func onLeave():
 	if is_instance_valid(card.cardNode):
 		for s in card.cardNode.slot.getNeighbors():
 			if is_instance_valid(s.cardNode):
-				s.cardNode.card.power -= count
-				s.cardNode.card.toughness -= count
-				s.cardNode.card.maxToughness -= count
+				s.cardNode.card.power -= myVars.count
+				s.cardNode.card.toughness -= myVars.count
+				s.cardNode.card.maxToughness -= myVars.count
 
 func onRemove(ability):
 	if ability == self:
 		if is_instance_valid(card.cardNode):
 			for s in card.cardNode.slot.getNeighbors():
 				if is_instance_valid(s.cardNode):
-					s.cardNode.card.power -= count
-					s.cardNode.card.toughness -= count
-					s.cardNode.card.maxToughness -= count
+					s.cardNode.card.power -= myVars.count
+					s.cardNode.card.toughness -= myVars.count
+					s.cardNode.card.maxToughness -= myVars.count
 
 func onOtherLeave(slot):
 	if NodeLoc.getBoard().isOnBoard(card):
 		if is_instance_valid(slot.cardNode):
 			if slot in card.cardNode.slot.getNeighbors():
-				slot.cardNode.card.power -= count
-				slot.cardNode.card.toughness -= count
-				slot.cardNode.card.maxToughness -= count
+				slot.cardNode.card.power -= myVars.count
+				slot.cardNode.card.toughness -= myVars.count
+				slot.cardNode.card.maxToughness -= myVars.count
 	
 	
 func clone(card : Card) -> Ability:
 	var abl = .clone(card)
-	abl.buffsApplied = buffsApplied
+	abl.myVars.buffsApplied = myVars.buffsApplied
 	return abl
 
-func combine(abl : Ability):
-	.combine(abl)
-	abl.buffsApplied += buffsApplied
-
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Adjacent creatures get +" + str(count) + "/+" + str(count)
+	return .genDescription() + "Adjacent creatures get +" + str(myVars.count) + "/+" + str(myVars.count)

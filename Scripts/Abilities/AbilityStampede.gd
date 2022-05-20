@@ -13,7 +13,7 @@ func onEffect(params):
 	for slot in board.creatures[card.playerID]:
 		if is_instance_valid(slot.cardNode):
 			slot.cardNode.attack([slot.getAcross()], false)
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func checkWaiting() -> bool:
 	var board = NodeLoc.getBoard()
@@ -23,5 +23,5 @@ func checkWaiting() -> bool:
 	return true
 
 func genDescription(subCount = 0) -> String:
-	var strCount = str(count - subCount)
+	var strCount = str(myVars.count - subCount)
 	return .genDescription() + "When this creature is played, each creatures you control attacks the slot across from itself"

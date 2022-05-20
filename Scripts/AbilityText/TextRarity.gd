@@ -21,13 +21,13 @@ func setCount(count : int) -> Ability:
 	return r
 
 func genDescription(subCount = 0) -> String:
-	if count == 1:
+	if myVars.count == 1:
 		return .genDescription() + "A deck can have any numbe of Basic cards"
-	elif count == 2:
+	elif myVars.count == 2:
 		return .genDescription() + "A deck can have up to 4 of the same Common card"
-	elif count == 3:
+	elif myVars.count == 3:
 		return .genDescription() + "A deck can have only 1 of the same Legendary card"
-	elif count == 4:
+	elif myVars.count == 4:
 		return .genDescription() + "A deck can have only 1 Vanguard card. It's basically commander"
 	
 	return .genDescription() + "uh-oh"

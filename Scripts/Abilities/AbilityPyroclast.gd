@@ -11,9 +11,9 @@ func onApplied(slot):
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			p.takeDamage(count - timesApplied, card)
+			p.takeDamage(myVars.count - myVars.timesApplied, card)
 			break
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, it deals " + str(count - subCount) + " damage to its controller"
+	return .genDescription() + "When this creature is played, it deals " + str(myVars.count - subCount) + " damage to its controller"

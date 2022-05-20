@@ -15,4 +15,4 @@ func setCount(count : int) -> Ability:
 	return self
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Put the top " + str(count) + " cards of your deck into your " + str(TextScrapyard.new(null))
+	return .genDescription() + "Put the top " + str(myVars.count) + " cards of your deck into your " + str(TextScrapyard.new(null))

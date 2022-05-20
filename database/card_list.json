@@ -39,7 +39,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityWisdom 1"
+      "AbilityWisdom"
     ],
     "rarity": "COMMON"
   },
@@ -1164,7 +1164,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityPyroclast 5"
+      "AbilityPyroclast count=5"
     ],
     "rarity": "COMMON"
   },
@@ -1192,7 +1192,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityVenomous 2"
+      "AbilityVenomous count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1220,7 +1220,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityRekindle 2"
+      "AbilityRekindle count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1248,7 +1248,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityShieldUp 5"
+      "AbilityShieldUp count=5"
     ],
     "rarity": "COMMON"
   },
@@ -1276,7 +1276,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityConfigure 2"
+      "AbilityConfigure count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1304,7 +1304,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityChimera 1"
+      "AbilityChimera count=1"
     ],
     "rarity": "COMMON"
   },
@@ -1374,7 +1374,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityWorldfire 2"
+      "AbilityWorldfire count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1388,7 +1388,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityPhalanx 2"
+      "AbilityPhalanx count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1416,7 +1416,7 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityMatryoshka 2"
+	"AbilityMatryoshka count=2"
     ],
     "rarity": "LEGENDARY"
   },
@@ -1430,7 +1430,7 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityDuplicant 1"
+	"AbilityDuplicant"
     ],
     "rarity": "LEGENDARY"
   },
@@ -1444,7 +1444,7 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityMolting 1"
+	"AbilityMolting"
     ],
     "rarity": "LEGENDARY"
   },
@@ -1458,7 +1458,7 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityInsignia 1"
+	"AbilityInsignia"
     ],
     "rarity": "LEGENDARY"
   },
@@ -1486,7 +1486,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilitySwarm 2"
+      "AbilitySwarm count=2"
     ],
     "rarity": "COMMON"
   },
@@ -1584,7 +1584,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityBioagent 5"
+      "AbilityBioagent count=5"
     ],
     "rarity": "COMMON"
   },
@@ -1612,7 +1612,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityUpgrade 1"
+      "AbilityUpgrade"
     ],
     "rarity": "LEGENDARY"
   },
@@ -1655,7 +1655,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityEmblazon 1"
+      "AbilityEmblazon"
     ],
     "rarity": "COMMON"
   },
@@ -1669,7 +1669,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityAbandon 1"
+      "AbilityAbandon"
     ],
     "rarity": "COMMON"
   },

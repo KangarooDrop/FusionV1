@@ -157,7 +157,38 @@ static func deserialize(data : Dictionary) -> Card:
 	var card : Card = Card.new(data)
 	card.playerID = data["player_id"]
 	return card
+
+static func deserializeAbility(data : String, card : Card) -> Ability:
+	var abilityLoaded = null
+	var ablData = data.split(" ")
 	
+	var found = false
+	for data in ProjectSettings.get_setting("_global_script_classes"):
+		if data["class"] == ablData[0]:
+			abilityLoaded = load(data["path"]).new(card)
+			for i in range(1, ablData.size()):
+				if "=" in ablData[i]:
+					var eq = ablData[i].split("=")
+					var varName = eq[0]
+					var varNum  = eq[1]
+					if varNum.is_valid_integer():
+						varNum = int(varNum)
+					elif varNum.is_valid_float():
+						varNum = float(varNum)
+					elif varNum == "True":
+						varNum = true
+					elif varNum == "False":
+						varNum = false
+					
+					abilityLoaded.myVars[varName] = varNum
+			
+			found = true
+			break
+	if not found:
+		print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", data)
+	
+	return abilityLoaded
+
 func canFuseCards(cards : Array) -> bool:
 	var uniques = []
 	for c in cards:

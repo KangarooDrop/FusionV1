@@ -40,7 +40,7 @@ func slotClicked(slot : CardSlot):
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count:
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= myVars.count:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
 			discardIndexes.clear()
@@ -48,8 +48,8 @@ func slotClicked(slot : CardSlot):
 
 func genDescription(subCount = 0) -> String:
 	var c = ""
-	if count - subCount == 1:
+	if myVars.count - subCount == 1:
 		c = "When this creature dies, its controller chooses a card from their hand and discards it"
 	else:
-		c = "When this creature dies, its controller chooses " + str(count - subCount) + " cards their your hand and discard them"
+		c = "When this creature dies, its controller chooses " + str(myVars.count - subCount) + " cards their your hand and discard them"
 	return .genDescription() + c

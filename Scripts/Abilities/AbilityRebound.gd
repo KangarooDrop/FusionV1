@@ -20,7 +20,7 @@ func onEffect(params : Array):
 	if validTargets >= 1:
 		board.getSlot(self, card.playerID)
 	else:
-		timesApplied = count
+		myVars.timesApplied = myVars.count
 
 func slotClicked(slot : CardSlot):
 	var validTargets = 0
@@ -47,7 +47,7 @@ func slotClicked(slot : CardSlot):
 		else:
 			SoundEffectManager.playUnselectSound()
 			bounceSlots.erase(slot)
-		if bounceSlots.size() >= count - timesApplied or bounceSlots.size() >= validTargets:
+		if bounceSlots.size() >= myVars.count - myVars.timesApplied or bounceSlots.size() >= validTargets:
 			
 			for s in bounceSlots:
 				s.cardNode.card.onLeave()
@@ -62,13 +62,13 @@ func slotClicked(slot : CardSlot):
 						break
 				
 			bounceSlots.clear()
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:
 	var s = ""
-	if count - subCount > 1:
-		s = "When this creature is played, choose " + str(count - subCount) + " other creatures and return them to their controllers' hands"
+	if myVars.count - subCount > 1:
+		s = "When this creature is played, choose " + str(myVars.count - subCount) + " other creatures and return them to their controllers' hands"
 	else:
 		s = "When this creature is played, choose another creature and return it to its controller's hand"
 	return .genDescription() + s

@@ -22,6 +22,6 @@ func genDescription(subCount = 0) -> String:
 			else:
 				abilityString += ", "
 		var abl = card.abilities[i]
-		abilityString += str(abl.get_script().new(null).setCount(abl.count))
+		abilityString += str(abl.get_script().new(null).setCount(abl.myVars.count))
 	
 	return .genDescription() + "A " + str(card.power) + "/" + str(card.toughness) + " " + typeString + abilityString

@@ -1143,10 +1143,10 @@ func onSlotEnter(slot : CardSlot):
 		if is_instance_valid(selectedCard):
 			var opponentHasTaunt = false
 			for s in creatures[slot.playerID]:
-				if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
+				if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).myVars.active:
 					opponentHasTaunt = true
 			
-			if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
+			if isMyTurn() and not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).myVars.active):
 				if slot.playerID != selectedCard.playerID and slot.currentZone == CardSlot.ZONES.CREATURE:
 					if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 						for s in slot.getNeighbors():
@@ -1364,10 +1364,10 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						if is_instance_valid(selectedCard):
 							var opponentHasTaunt = false
 							for s in creatures[slot.playerID]:
-								if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).active:
+								if is_instance_valid(s.cardNode) and ListOfCards.hasAbility(s.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(s.cardNode.card, AbilityTaunt).myVars.active:
 									opponentHasTaunt = true
 							
-							if not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).active):
+							if not opponentHasTaunt or (is_instance_valid(slot.cardNode) and ListOfCards.hasAbility(slot.cardNode.card, AbilityTaunt) and ListOfCards.getAbility(slot.cardNode.card, AbilityTaunt).myVars.active):
 								var slots = []
 								if ListOfCards.hasAbility(selectedCard.cardNode.card, AbilityPronged):
 									slots = slot.getNeighbors()
@@ -1553,6 +1553,11 @@ func _input(event):
 			saveReplay()
 		if event.scancode == KEY_F4:
 			players[activePlayer].printFlags()
+		if event.scancode == KEY_F5:
+			serialStore = serialize()
+		if event.scancode == KEY_F6:
+			if serialStore != null:
+				deserialize(serialStore)
 	
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_SPACE:
@@ -1629,6 +1634,10 @@ func nextTurn():
 		return
 	dataLog.append("NEXT_TURN")
 	
+	var lastHover = hoveringOn
+	if hoveringOn != null:
+		onSlotExit(hoveringOn)
+	
 	while cardsHolding.size() > 0:
 		cardsHolding[0].position.y += cardDists
 		cardsHolding[0].cardNode.position.y = cardsHolding[0].position.y
@@ -1636,6 +1645,9 @@ func nextTurn():
 	if is_instance_valid(selectedCard):
 		selectedCard.cardNode.select()
 		selectedCard = null
+	
+	if hoveringOn != null:
+		onSlotEnter(hoveringOn)
 	
 	
 	checkState()
@@ -1700,14 +1712,168 @@ func addCardsPlayed(inc : int):
 		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
 		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+
+var serialStore = null
+
+func serialize() -> Dictionary:
+	var rtn = {}
+	
+	var creatureData = []
+	var playerData = []
+	var deckData = []
+	var graveData = []
+	var handData = []
+	var delayedData = []
+	
+	var turnData = []
+	
+	for p in getAllPlayers():
+		
+		#	GETTING DATA OF CREATURES ON THE BOARD	#
+		var cd = []
+		for s in creatures[p.UUID]:
+			if is_instance_valid(s.cardNode):
+				cd.append(s.cardNode.card.serialize())
+			else:
+				cd.append({})
+		creatureData.append(cd)
+		
+		#	GETTING DATA OF PLAYERS 	#
+		var pd = [p.life, p.armour, p.drawDamage, p.flags.duplicate(true)]
+		playerData.append(pd)
+		
+		#	GETTING DECK DATA	#
+		deckData.append(p.deck.serialize())
+		
+		#	GETTING GRAVE DATA	#
+		var gd = []
+		for c in graveCards[p.UUID]:
+			gd.append(c.serialize())
+		graveData.append(gd)
+		
+		#	GETTING HAND DATA	#
+		var hd = []
+		for cn in p.hand.nodes:
+			hd.append([cn.card.serialize(), cn.getCardVisible() if p.hand.isOpponent else cn.slot.get_node("EyeSprite").visible])
+		handData.append(hd)
+		
+		#	GETTING DELAYED ABILITIES	#
+		var ad = delayedAbilityCards[p.UUID].serialize()
+		delayedData.append(ad)
+		
+	#	GETTING TURN DATA	#
+	turnData = [activePlayer, cardsPlayed, cardsPerTurn]
+	
+	#DELAYED ABILITIES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+		
+	rtn["creatures"] = creatureData
+	rtn["players"] = playerData
+	rtn["decks"] = deckData
+	rtn["graves"] = graveData
+	rtn["hands"] = handData
+	rtn["delays"] = delayedData
+	rtn["turnData"] = turnData
+	
+	return rtn
+
+func deserialize(data : Dictionary):
+	var creatureData = data["creatures"]
+	var playerData = data["players"]
+	var deckData = data["decks"]
+	var graveData = data["graves"]
+	var handData = data["hands"]
+	var delayedData = data["delays"]
+	var turnData = data["turnData"]
+	
+	for i in range(players.size()):
+		var p = players[i]
+		
+		var cd = creatureData[i]
+		var pd = playerData[i]
+		var dd = deckData[i]
+		var gd = graveData[i]
+		var hd = handData[i]
+		
+		#	CREATURE DATA	#
+		for j in range(cd.size()):
+			var slot = creatures[p.UUID][j]
+			if cd[j].empty():
+				if not is_instance_valid(slot.cardNode):
+					continue
+				else:
+					slot.cardNode.queue_free()
+					slot.cardNode.slot = null
+					slot.cardNode = null
+			else:
+				if is_instance_valid(slot.cardNode) and cd[j] == slot.cardNode.card.serialize():
+					continue
+				else:
+					var card = ListOfCards.deserialize(cd[j])
+					if is_instance_valid(slot.cardNode):
+						slot.cardNode.card.cardNode = null
+						slot.cardNode.card = card
+						card.cardNode = slot.cardNode
+						card.cardNode.setCardVisible(card.cardNode.getCardVisible())
+					else:
+						var cn = cardNode.instance()
+						cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
+						cn.card = card
+						cn.card.cardNode = cn
+						slot.cardNode = cn
+						cn.slot = slot
+						add_child(cn)
+						cn.global_position = slot.global_position
+						cn.playerID = slot.playerID
+						cn.setCardVisible(cn.getCardVisible())
+		
+		#	PLAYER DATA 	#
+		p.life			 = pd[0]
+		p.armour		 = pd[1]
+		p.drawDamage	 = pd[2]
+		p.flags			 = pd[3]
+		
+		#	DECK DATA	#
+		p.deck.deserialize(dd)
+		
+		#	GRAVE DATA	#
+		for j in range(graveCards[p.UUID].size()):
+			removeCardFromGrave(p.UUID, 0)
+		for j in range(gd.size()):
+			var card = ListOfCards.deserialize(gd[j])
+			addCardToGrave(p.UUID, card)
+		
+		#	HAND DATA	#
+		p.hand.clear()
+		for j in range(hd.size()):
+			var card = ListOfCards.deserialize(hd[j][0])
+			p.hand.addCardToHand([card, false, hd[j][1]], false)
+		
+		#	DELAYED DATA	#
+		delayedAbilityCards[p.UUID] = ListOfCards.deserialize(delayedData[i])
+		
+	#	Turn Data	#
+	activePlayer = 	turnData[0]
+	cardsPlayed = 	turnData[1]
+	cardsPerTurn = 	turnData[2]
+	
+	if activePlayer == 0:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
+	else:
+		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	
 
 func checkState():
+	serialize()
+	
 	var boardState = []
 	var slots = []
 	
 	if is_instance_valid(hoveringWindow) and is_instance_valid(hoveringWindowSlot) and is_instance_valid(hoveringWindowSlot.cardNode):
-		hoveringWindow.setText(hoveringWindowSlot.cardNode.card.getHoverData())
+		if hoveringWindowSlot.currentZone != CardSlot.ZONES.DECK:
+			hoveringWindow.setText(hoveringWindowSlot.cardNode.card.getHoverData())
 	
 	for p in getAllPlayers():
 		for s in creatures[p.UUID]:
@@ -1724,11 +1890,6 @@ func checkState():
 					creaturesDying.append(s.cardNode)
 				
 	for cardNode in creaturesDying:
-		if hoveringWindowSlot == cardNode.slot:
-			hoveringWindow.close(true)
-			hoveringWindowSlot = null
-		
-		
 		SoundEffectManager.playDeathSound()
 		cardNode.card.onLeave()
 		cardNode.card.onDeath()
@@ -1737,10 +1898,14 @@ func checkState():
 			if c != cardNode.card:
 				c.onOtherLeave(cardNode.slot)
 				c.onOtherDeath(cardNode.slot)
-				
-		addCardToGrave(cardNode.card.playerID, cardNode.card)
-		cardNode.slot.cardNode = null
-		cardNode.queue_free()
+		
+		if cardNode.card.toughness <= 0 or cardNode.card.isDying:
+			if hoveringWindowSlot == cardNode.slot:
+				hoveringWindow.close(true)
+				hoveringWindowSlot = null
+			addCardToGrave(cardNode.card.playerID, cardNode.card)
+			cardNode.slot.cardNode = null
+			cardNode.queue_free()
 
 	var boardStateNew = []
 	for p in getAllPlayers():
@@ -1920,7 +2085,7 @@ func setOwnUsername():
 		setOpponentUsername(practiceNames[randi() % practiceNames.size()])
 
 const practiceNames : Array = ["Sparky", "Durandal", "Durian", "Gumbercules", "Mecha_Jesus", "Bones", "Luna", "Olive", "Rocky", "Stitch", "Jet", \
-	"Moxie", "Robert Baratheon, First of his Name", "Sinbad"]
+	"Moxie", "Robert Baratheon, First of his Name", "Sinbad", "Sniffy"]
 
 func setOpponentUsername(username : String):
 	print("Settings opponent username")
