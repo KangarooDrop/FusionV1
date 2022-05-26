@@ -1,7 +1,6 @@
 extends Node
 
 var player_name = null
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
 """
 	[Request Form]: Username/Email - Submit button
@@ -94,9 +93,7 @@ func on_Form_LineEdit_Enter(new_text):
 
 
 func createPopup(title : String, desc : String, options = null):
-	var pop = popupUI.instance()
+	var pop = MessageManager.createPopup(title, desc, [])
 	if options == null:
-		options = [["Close", pop, "close", []]]
-	pop.init(title, desc, options)
-	$PopupHolder.add_child(pop)
-	pop.options[0].grab_focus()
+		options = pop.GET_CLOSE_BUTTON()
+	pop.setButtons(options)

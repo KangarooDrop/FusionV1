@@ -1,34 +1,17 @@
 extends Control
 
 var notif = preload("res://Scenes/UI/Message.tscn")
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 
 var yOff = 66
 var moveTime = 0.25
 var moving := {}
 
-var canvas
-var messageHolder
-var versionLabel
+onready var messageHolder = $MessageHolder
+onready var versionLabel = $VersionLabel
 
 func _ready():
-	
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
-	messageHolder = Control.new()
-	messageHolder.name = "MessageHolder"
-	add_child(messageHolder)
-	
-	versionLabel = Label.new()
-	versionLabel.name = "VersionLabel"
 	versionLabel.text = "Version: " + str(Settings.versionID)
-	add_child(versionLabel)
-	versionLabel.set("custom_colors/font_color", Color(0,0,0))
-	
-	yield(get_tree(), "idle_frame")
-	set_anchors_and_margins_preset(Control.PRESET_WIDE)
-	messageHolder.set_anchors_and_margins_preset(Control.PRESET_CENTER_LEFT)
-	versionLabel.set_anchors_and_margins_preset(Control.PRESET_TOP_LEFT)
-	versionLabel.rect_position += Vector2(8, 8)
 
 func _process(delta):
 	var move = delta * yOff / moveTime
@@ -55,9 +38,22 @@ func notify(text : String, textLength = 200, margin = 4):
 	nLabel.rect_size.x = textLength
 	nLabel.text = text
 	messageHolder.add_child(n)
-	n.rect_position.y -= 128
+	n.rect_position.y += 128
 	
 	nLabel.rect_position.x = margin + 6
 	nLabel.rect_position.y = -nLabel.rect_size.y / 2
 	nRect.rect_size = Vector2(textLength + margin * 2, nLabel.get_size().y + margin * 2)
 	nRect.rect_position.y = -nRect.rect_size.y / 2
+
+const POPUP_CLOSE_SELF = [0]
+
+func createPopup(title : String, desc : String, buttonOptions := [POPUP_CLOSE_SELF]) -> PopupUI:
+	var pop = popupUI.instance()
+	
+	for i in range(buttonOptions.size()):
+		if buttonOptions[i] == POPUP_CLOSE_SELF:
+			buttonOptions[i] = pop.GET_CLOSE_BUTTON()
+	
+	pop.init(title, desc, buttonOptions)
+	$CanvasLayer/PopupHolder.add_child(pop)
+	return pop

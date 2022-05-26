@@ -42,7 +42,7 @@ var animationSpeed : float = ANIMATION_SPEEDS.NORMAL / 10.0
 
 var deckData := {}
 
-enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT}
+enum GAME_MODE {NONE, LOBBY, PLAY, PRACTICE, DRAFTING, TOURNAMENT, DIRECT, PUZZLE}
 
 var gameMode : int = 0
 var matchType : int = 0

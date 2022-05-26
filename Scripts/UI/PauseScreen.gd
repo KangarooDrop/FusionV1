@@ -1,9 +1,5 @@
 extends Control
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-
-var mmPop
-
 func _ready():
 	if not Server.online:
 		$VBoxContainer/OpponentsButton.visible = false
@@ -15,6 +11,9 @@ func _ready():
 		$VBoxContainer/ChangeDeckButton.visible = false
 		$VBoxContainer/RestartButton.visible = false
 		$VBoxContainer/OpponentsButton.visible = false
+	
+	if Settings.gameMode == Settings.GAME_MODE.PUZZLE:
+		$VBoxContainer/ChangeDeckButton.visible = false
 
 func onRestartPressed():
 	if Server.online or Settings.gameMode == Settings.GAME_MODE.PRACTICE:
@@ -23,6 +22,8 @@ func onRestartPressed():
 				MessageManager.notify("Restart request sent to opponent")
 			get_node("/root/main/CenterControl/Board").playerRestart = true
 			Server.onRestart(Server.opponentID)
+	elif Settings.gameMode == Settings.GAME_MODE.PUZZLE:
+		get_node("/root/main/CenterControl/Board").puzzleRestart()
 	else:
 		MessageManager.notify("Opponent has already left the match")
 	onBackPressed()
@@ -49,11 +50,10 @@ func onBackPressed():
 	visible = false
 
 func onMainMenuPressed():
-	mmPop = popupUI.instance()
-	mmPop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", mmPop, "close", []]])
-	get_parent().add_child(mmPop)
+	var pop = MessageManager.createPopup("Main Menu", "Are you sure you want to quit and return to the main menu?", [])
+	pop.setButtons([["Yes", self, "toMainMenu", []], pop.GET_CLOSE_BUTTON()])
 	
-func toMainMenu():
+func toMainMenu(popup=null):
 	if Server.online:
 		Server.closeServer()
 	var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
@@ -68,7 +68,7 @@ func onSettingsClose():
 	$VBoxContainer.visible = true
 
 func onConcedePressed():
-	var board = get_node("../../Board")
+	var board = NodeLoc.getBoard()
 	Server.sendMessage(Server.opponentID, "Opponent has conceded")
 	board.onConcede()
 

@@ -23,7 +23,7 @@ func add(data):
 	var subCount = 0
 	if data["source"] is AbilityETB:
 		subCount = data["source"].myVars.timesApplied
-	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard(), data["source"].genStackDescription(subCount), false)
+	var h = createHoverNode(Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset), NodeLoc.getBoard().get_node("CenterControl"), data["source"].genStackDescription(subCount), false)
 	data["window"] = h
 	h.position = Vector2(-475-225/2, -100) + stackSize * Vector2(0, offset) + Vector2(0, h.get_node("HoverBack").rect_size.y / 2)
 	h.get_node("Check").rect_position = Vector2(h.get_node("HoverBack").rect_size.x - 20, -h.get_node("HoverBack").rect_size.y/2 + 4)
@@ -49,7 +49,7 @@ func getFront():
 
 func pop() -> Array:
 	return stack.pop_front()
-	
+
 func createHoverNode(position : Vector2, parent : Node, text : String, flipped = false) -> Node:
 	var hoverInst = hoverScene.instance()
 	hoverInst.flipped = flipped

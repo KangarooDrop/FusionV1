@@ -3,7 +3,6 @@ extends Node
 
 var inLobby = false
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var kickTex = preload("res://Art/UI/kick.png")
 
 onready var lobbySettings = $LobbySettings
@@ -105,13 +104,6 @@ func setOwnGameParams(gameParams : Dictionary):
 
 func getGameParams() -> Dictionary:
 	return lobbySettings.getGameParams()
-
-
-func createPopup(title : String, desc : String):
-	var pop = popupUI.instance()
-	pop.init(title, desc, [["Close", pop, "close", []]])
-	$PopupHolder.add_child(pop)
-	pop.options[0].grab_focus()
 
 
 func _on_LeaveButton_pressed():
@@ -251,10 +243,12 @@ func onFileButtonClicked(button : Button, key):
 		$OpponentList.show()
 
 func _on_OpponentLeaveButton_pressed():
-	var pop = popupUI.instance()
-	pop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
-	$PopupHolder.add_child(pop)
-	pop.options[1].grab_focus()
+	var pop = MessageManager.createPopup("Main Menu", "Are you sure you want to quit and return to the main menu?", [])
+	pop.setButtons([["Yes", self, "toMainMenu", []], ["Back", null, null, []]])
+
+func createPopup(title : String, desc : String):
+	var pop = MessageManager.createPopup(title, desc, [])
+	pop.setButtons([pop.GET_CLOSE_BUTTON()])
 	
 func toMainMenu():
 	if Server.online:

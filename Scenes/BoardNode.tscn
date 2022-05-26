@@ -1,6 +1,5 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://Scripts/SceneScripts/BoardMP.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Classes/Hand.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/HealthNode.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/UI/CardsLeftIndicator.tscn" type="PackedScene" id=4]
@@ -30,18 +29,123 @@ font_data = ExtResource( 8 )
 size = 32
 font_data = ExtResource( 8 )
 
-[node name="Board" type="Node2D"]
-script = ExtResource( 1 )
+[node name="Board" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterControl" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Creatures_A" type="Node2D" parent="CenterControl"]
+position = Vector2( 0, 68 )
+
+[node name="Creatures_B" type="Node2D" parent="CenterControl"]
+position = Vector2( 0, -68 )
+
+[node name="DeckHolder" type="Node2D" parent="CenterControl"]
+position = Vector2( 446, 0 )
+
+[node name="GraveHolder" type="Node2D" parent="CenterControl"]
+position = Vector2( 334, 0 )
+
+[node name="GraveHolder_A" type="Control" parent="CenterControl/GraveHolder"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GraveHolder_B" type="Control" parent="CenterControl/GraveHolder"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TypeDisplay" parent="CenterControl" instance=ExtResource( 16 )]
+visible = false
+z_index = 98
+
+[node name="HealthNode" parent="CenterControl" instance=ExtResource( 3 )]
+position = Vector2( -350, 100 )
+
+[node name="HealthNode2" parent="CenterControl" instance=ExtResource( 3 )]
+position = Vector2( -350, -100 )
+
+[node name="ArmourNode" parent="CenterControl" instance=ExtResource( 3 )]
+position = Vector2( -350, 150 )
+
+[node name="ArmourNode2" parent="CenterControl" instance=ExtResource( 3 )]
+position = Vector2( -350, -150 )
+
+[node name="Fusion_Holder" type="Node2D" parent="CenterControl"]
+z_index = 16
+z_as_relative = false
+
+[node name="CardsLeftIndicator_A" parent="CenterControl" instance=ExtResource( 4 )]
+position = Vector2( 0, 152 )
+
+[node name="CardsLeftIndicator_B" parent="CenterControl" instance=ExtResource( 4 )]
+position = Vector2( 0, -152 )
+
+[node name="TurnIndicator" type="Sprite" parent="CenterControl"]
+visible = false
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+script = ExtResource( 6 )
+
+[node name="FadingNode" parent="CenterControl/TurnIndicator" instance=ExtResource( 7 )]
+
+[node name="TI" type="Node2D" parent="CenterControl"]
+position = Vector2( -443, -40 )
+
+[node name="Label" type="Label" parent="CenterControl/TI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -51.5
+margin_top = -39.5
+margin_right = 51.5
+margin_bottom = 39.5
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Your 
+Turn"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="UsernameLabel" type="Label" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 370.0
-margin_top = 160.0
-margin_right = 410.0
-margin_bottom = 179.0
+margin_left = 350.0
+margin_top = 140.0
+margin_right = 390.0
+margin_bottom = 159.0
 grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = ExtResource( 9 )
@@ -57,10 +161,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 350.5
-margin_top = -170.0
-margin_right = 390.5
-margin_bottom = -151.0
+margin_left = 330.5
+margin_top = -190.0
+margin_right = 370.5
+margin_bottom = -171.0
 grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = ExtResource( 9 )
@@ -71,45 +175,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Creatures_A" type="Node2D" parent="."]
-position = Vector2( 0, 68 )
-
-[node name="Creatures_B" type="Node2D" parent="."]
-position = Vector2( 0, -68 )
-
-[node name="DeckHolder" type="Node2D" parent="."]
-position = Vector2( 446, 0 )
-
-[node name="GraveHolder" type="Node2D" parent="."]
-position = Vector2( 334, 0 )
-
-[node name="GraveHolder_A" type="Control" parent="GraveHolder"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GraveHolder_B" type="Control" parent="GraveHolder"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="GraveDisplay_A" parent="." instance=ExtResource( 10 )]
 visible = false
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 0.0
+margin_bottom = 0.0
 z_index = 16
 currentZone = 6
 
 [node name="GraveDisplay_B" parent="." instance=ExtResource( 10 )]
 visible = false
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 0.0
+margin_bottom = 0.0
 z_index = 16
 currentZone = 6
 isOpponent = true
@@ -119,10 +199,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = 248.0
-margin_right = 20.0
-margin_bottom = 288.0
+margin_left = -40.0
+margin_top = 228.0
+margin_bottom = 268.0
 mouse_filter = 2
 script = ExtResource( 2 )
 __meta__ = {
@@ -138,10 +217,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -184.0
-margin_top = -160.0
-margin_right = -128.0
-margin_bottom = -135.0
+margin_left = -204.0
+margin_top = -180.0
+margin_right = -148.0
+margin_bottom = -155.0
 rect_scale = Vector2( 2, 2 )
 custom_styles/hover = ExtResource( 12 )
 custom_styles/pressed = ExtResource( 11 )
@@ -162,10 +241,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 53.5
-margin_top = -160.0
-margin_right = 146.5
-margin_bottom = -135.0
+margin_left = 33.5
+margin_top = -180.0
+margin_right = 126.5
+margin_bottom = -155.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_scale = Vector2( 2, 2 )
@@ -187,10 +266,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -248.0
-margin_right = 20.0
-margin_bottom = -208.0
+margin_left = -40.0
+margin_top = -268.0
+margin_bottom = -228.0
 mouse_filter = 2
 script = ExtResource( 2 )
 __meta__ = {
@@ -201,74 +279,16 @@ z_index = 2
 isOpponent = true
 handVisible = false
 
-[node name="TypeDisplay" parent="." instance=ExtResource( 16 )]
-visible = false
-z_index = 98
-
-[node name="HealthNode" parent="." instance=ExtResource( 3 )]
-position = Vector2( -350, 100 )
-
-[node name="HealthNode2" parent="." instance=ExtResource( 3 )]
-position = Vector2( -350, -100 )
-
-[node name="ArmourNode" parent="." instance=ExtResource( 3 )]
-position = Vector2( -350, 150 )
-
-[node name="ArmourNode2" parent="." instance=ExtResource( 3 )]
-position = Vector2( -350, -150 )
-
-[node name="Fusion_Holder" type="Node2D" parent="."]
-z_index = 16
-z_as_relative = false
-
-[node name="CardsLeftIndicator_A" parent="." instance=ExtResource( 4 )]
-position = Vector2( 0, 152 )
-
-[node name="CardsLeftIndicator_B" parent="." instance=ExtResource( 4 )]
-position = Vector2( 0, -152 )
-
-[node name="TurnIndicator" type="Sprite" parent="."]
-visible = false
-scale = Vector2( 2, 2 )
-texture = ExtResource( 5 )
-script = ExtResource( 6 )
-
-[node name="FadingNode" parent="TurnIndicator" instance=ExtResource( 7 )]
-
-[node name="TI" type="Node2D" parent="."]
-position = Vector2( -475, -32 )
-
-[node name="Label" type="Label" parent="TI"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -51.5
-margin_top = -39.5
-margin_right = 51.5
-margin_bottom = 39.5
-grow_horizontal = 2
-grow_vertical = 2
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Your 
-Turn"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="EndTurnButton" type="Button" parent="."]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -574.5
-margin_top = 16.0
-margin_right = -375.5
-margin_bottom = 60.0
+margin_left = -544.0
+margin_top = 20.0
+margin_right = -345.0
+margin_bottom = 64.0
 focus_mode = 0
 custom_styles/hover = ExtResource( 12 )
 custom_styles/pressed = ExtResource( 11 )
@@ -288,10 +308,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -250.0
-margin_right = 20.0
-margin_bottom = -236.0
+margin_left = -40.0
+margin_top = -278.0
+margin_bottom = -248.0
 grow_horizontal = 2
 grow_vertical = 2
 custom_fonts/font = SubResource( 3 )
@@ -302,30 +321,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PopupHolder" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="LoadingWindow" parent="." instance=ExtResource( 14 )]
 visible = false
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 0.0
+margin_bottom = 0.0
 
 [node name="TurnTimer_A" parent="." instance=ExtResource( 15 )]
-margin_left = -525.0
-margin_top = 125.0
-margin_right = -525.0
-margin_bottom = 125.0
+margin_left = -545.0
+margin_top = 105.0
+margin_right = -545.0
+margin_bottom = 105.0
 
 [node name="TurnTimer_B" parent="." instance=ExtResource( 15 )]
-margin_left = -525.0
-margin_top = -125.0
-margin_right = -525.0
-margin_bottom = -125.0
+margin_left = -545.0
+margin_top = -145.0
+margin_right = -545.0
+margin_bottom = -145.0
 
 [connection signal="pressed" from="KeepButton" to="." method="onKeepButtonPressed"]
 [connection signal="pressed" from="MulliganButton" to="." method="onMulliganButtonPressed"]

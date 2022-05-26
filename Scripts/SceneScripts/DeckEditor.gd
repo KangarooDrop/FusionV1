@@ -2,8 +2,6 @@ extends Node
 
 var availableCardCount : Dictionary = {}
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-
 var nums := []
 
 var slotPageWidth = 5
@@ -381,10 +379,8 @@ func updateSlotCount(slot : CardSlot):
 
 func onLoadPressed():
 	if not hasSaved:
-		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [["Yes", self, "onConfirmLoad", [pop]], ["Back", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[1].grab_focus()
+		var pop = MessageManager.createPopup("Unsaved Changes", "You have unsaved changes. Are you sure you want to load a new deck?", [])
+		pop.setButtons([["Yes", self, "onConfirmLoad", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		onConfirmLoad()
@@ -397,10 +393,8 @@ func onSavePressed():
 	
 func onNewPressed():
 	if not hasSaved:
-		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [["Yes", self, "onConfirmNew", [pop]], ["Back", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[1].grab_focus()
+		var pop = MessageManager.createPopup("Unsaved Changes", "You have unsaved changes. Are you sure you want to start a new deck?", [])
+		pop.setButtons([["Yes", self, "onConfirmNew", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		onConfirmNew()
@@ -422,18 +416,14 @@ func onSaveEnter(s : String):
 	
 func onExitPressed():
 	if not hasSaved:
-		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [["Yes", self, "onConfirmExit", [pop]], ["Back", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[1].grab_focus()
+		var pop = MessageManager.createPopup("Unsaved Changes", "You have unsaved changes. Are you sure you want to exit?", [])
+		pop.setButtons([["Yes", self, "onConfirmExit", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		onConfirmExit()
 
 func closePopupUI(popup=null):
-	if popup != null:
-		popups.erase(popup)
-		popup.close()
+	popups.erase(popup)
 
 func onConfirmNew(popup=null):
 	if popup != null:
@@ -506,21 +496,16 @@ func onFilePressed(button : Button, key):
 			loadedDeckName = button.text
 		else:
 			print("Deck file is not valid")
-			
-			var pop = popupUI.instance()
-			pop.init("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
-			$CenterControl.add_child(pop)
-			pop.options[0].grab_focus()
+			var pop = MessageManager.createPopup("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [])
+			pop.setButtons([["Close", self, "onBackPressed", [pop]]])
 			popups.append(pop)
 			
 		onBackPressed()
 	elif fileWhat == FILE_WHAT.DELETE:
 		fileToDelete = button.text
 		fileDisplay.visible = false
-		var pop = popupUI.instance()
-		pop.init("Delete Deck", "Are you sure you want to delete " + button.text, [["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onBackPressed", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[1].grab_focus()
+		var pop = MessageManager.createPopup("Delete Deck", "Are you sure you want to delete " + button.text, [])
+		pop.setButtons([["Yes", self, "onDeleteConfirmed", [pop]], ["Back", self, "onBackPressed", [pop]]])
 		popups.append(pop)
 	else:
 		onBackPressed()
@@ -534,17 +519,13 @@ func onDeleteConfirmed(popup=null):
 	var out = yield(SilentWolf.Players.post_player_data(SilentWolf.Auth.logged_in_player, SilentWolf.Players.player_data), "sw_player_data_posted")
 	$CenterControl/LoadingOffset/LoadingWindow.hide()
 	if out:
-		var pop = popupUI.instance()
-		pop.init("Deck Deleted", "", [["Close", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[0].grab_focus()
+		var pop = MessageManager.createPopup("Deck Deleted", "", [])
+		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		SilentWolf.Players.player_data["decks"][fileToDelete] = bak
-		var pop = popupUI.instance()
-		pop.init("Error Deleting Deck", "Could not connect to server", [["Close", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[0].grab_focus()
+		var pop = MessageManager.createPopup("Error Deleting Deck", "Could not connect to server", [])
+		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 		
 func onFileSaveBackPressed():
@@ -559,10 +540,8 @@ func onFileSaveButtonPressed():
 	
 	if fileName.empty():
 		SilentWolf.Players.player_data["decks"].erase(fileName)
-		var pop = popupUI.instance()
-		pop.init("Error Saving Deck", "Deck name cannot be empty", [["Close", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[0].grab_focus()
+		var pop = MessageManager.createPopup("Error Saving Deck", "Deck name cannot be empty", [])
+		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
@@ -574,29 +553,23 @@ func onFileSaveButtonPressed():
 			$CenterControl/LoadingOffset/LoadingWindow.hide()
 			if out:
 				print("Deck successfully saved")
-				var pop = popupUI.instance()
-				pop.init("Deck Saved", "", [["Close", self, "closePopupUI", [pop]]])
-				$CenterControl.add_child(pop)
+				var pop = MessageManager.createPopup("Deck Saved", "", [])
+				pop.setButtons([["Close", self, "closePopupUI", [pop]]])
+				popups.append(pop)
 				hasSaved = true
 				loadedDeckName = fileName
-				pop.options[0].grab_focus()
-				popups.append(pop)
 			else:
 				SilentWolf.Players.player_data["decks"].erase(fileName)
-				var pop = popupUI.instance()
-				pop.init("Error Saving Deck", "Could not connect to server", [["Close", self, "closePopupUI", [pop]]])
-				$CenterControl.add_child(pop)
-				pop.options[0].grab_focus()
+				var pop = MessageManager.createPopup("Error Saving Deck", "Could not connect to server", [])
+				pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 				popups.append(pop)
 			
 			
 			
 			
 		else:
-			var pop = popupUI.instance()
-			pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
-			$CenterControl.add_child(pop)
-			pop.options[0].grab_focus()
+			var pop = MessageManager.createPopup("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [])
+			pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 			popups.append(pop)
 	
 	onFileSaveBackPressed()
@@ -613,10 +586,8 @@ func onReadyPressed():
 				$CenterControl/Menu/ReadyButton/Sprite.texture = checkTex if ready else uncheckTex
 				Server.setReady(ready)
 		else:
-			var pop = popupUI.instance()
-			pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
-			$CenterControl.add_child(pop)
-			pop.options[0].grab_focus()
+			var pop = MessageManager.createPopup("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [])
+			pop.setButtons([["Close", self, "closePopupUI", [pop]]])
 			popups.append(pop)
 	else:
 		ready = not ready
@@ -656,10 +627,8 @@ func getCurrentPage() -> int:
 
 func onRandomizePressed():
 	if not hasSaved:
-		var pop = popupUI.instance()
-		pop.init("Unsaved Changes", "You have unsaved changes. Are you sure you want to create a random deck?", [["Yes", self, "randomizeDeck", [pop]], ["Back", self, "closePopupUI", [pop]]])
-		$CenterControl.add_child(pop)
-		pop.options[1].grab_focus()
+		var pop = MessageManager.createPopup("Unsaved Changes", "You have unsaved changes. Are you sure you want to create a random deck?", [])
+		pop.setButtons([["Yes", self, "randomizeDeck", [pop]], ["Back", self, "closePopupUI", [pop]]])
 		popups.append(pop)
 	else:
 		randomizeDeck()

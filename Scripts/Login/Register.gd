@@ -1,7 +1,5 @@
 extends Node
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-
 onready var illegal_reg : RegEx = RegEx.new()
 const illegal_regex : String = "[:;|\\[\\]\\\\]"
 onready var reg : RegEx = RegEx.new()
@@ -48,12 +46,10 @@ func _on_BackButton_pressed():
 	get_tree().change_scene("res://Scenes/Login/Home.tscn")
 
 func createPopup(title : String, desc : String, options = null):
-	var pop = popupUI.instance()
+	var pop = MessageManager.createPopup(title, desc, [])
 	if options == null:
-		options = [["Close", pop, "close", []]]
-	pop.init(title, desc, options)
-	$PopupHolder.add_child(pop)
-	pop.options[0].grab_focus()
+		options = pop.GET_CLOSE_BUTTON()
+	pop.setButtons(options)
 
 func on_LineEdit_Enter(new_text):
 	_on_SubmitButton_pressed()

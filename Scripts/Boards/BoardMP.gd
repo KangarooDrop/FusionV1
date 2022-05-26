@@ -1,11 +1,12 @@
 
-extends Node2D
+extends Node
 
 class_name BoardMP
 
+var puzzleData = null
+
 var deadPlayers = []
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 onready var cardWidth = ListOfCards.cardBackground.get_width()
@@ -39,9 +40,9 @@ var shakeAmount = 0.8
 var shakeFrequency = 6
 var cardsShaking := {}
 
-onready var creatures_A_Holder = $Creatures_A
-onready var creatures_B_Holder = $Creatures_B
-onready var deckHolder = $DeckHolder
+onready var creatures_A_Holder = $CenterControl/Creatures_A
+onready var creatures_B_Holder = $CenterControl/Creatures_B
+onready var deckHolder = $CenterControl/DeckHolder
 onready var card_A_Holder = $Hand_A
 onready var card_B_Holder = $Hand_B
 
@@ -154,7 +155,7 @@ func _ready():
 		
 		#print(readyToStart, " and ", deckDataSet, " and ", hasStartingPlayer, " and ", versionConfirmed, " and ", (gameSeed != -1), " and ", mulliganDone, " and ", mulliganDoneOpponent)
 	
-	players.append(Player.new($HealthNode, $ArmourNode))
+	players.append(Player.new($CenterControl/HealthNode, $CenterControl/ArmourNode))
 	creatures[players[0].UUID] = []
 	timers[players[0].UUID] = $TurnTimer_A
 	$TurnTimer_A.connect("onTurnTimerEnd", self, "onTurnTimerEnd")
@@ -164,7 +165,7 @@ func _ready():
 	dc.ownerID = players[0].UUID
 	delayedAbilityCards[players[0].UUID] = dc
 	
-	players.append(Player.new($HealthNode2, $ArmourNode2))
+	players.append(Player.new($CenterControl/HealthNode2, $CenterControl/ArmourNode2))
 	players[1].isOpponent = true
 	players[1].isPractice = Settings.gameMode == Settings.GAME_MODE.PRACTICE
 	creatures[players[1].UUID] = []
@@ -197,10 +198,8 @@ func _ready():
 		startingPlayerChoice = Tournament.lastGameLoss or Tournament.lastGameWin
 			
 		if Tournament.lastGameLoss:
-			var pop = popupUI.instance()
-			pop.init("Choose Starting Player", "", [[SilentWolf.Auth.logged_in_player, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
-			$PopupHolder.add_child(pop)
-			pop.options[0].grab_focus()
+			var pop = MessageManager.createPopup("Choose Starting Player", "", [])
+			pop.setButtons([[SilentWolf.Auth.logged_in_player, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
 		elif Tournament.lastGameWin:
 			$LoadingWindow.visible = true
 			$LoadingWindow/Label.text = "Opponent is choosing\nthe starting player"
@@ -228,11 +227,11 @@ func matchInfoFadeIn():
 
 func initCardsLeftIndicator():
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
-		$CardsLeftIndicator_B.setCardData(0, 0, cardsPerTurn)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+		$CenterControl/CardsLeftIndicator_B.setCardData(0, 0, cardsPerTurn)
 	else:
-		$CardsLeftIndicator_A.setCardData(0, 0, cardsPerTurn)
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
+		$CenterControl/CardsLeftIndicator_A.setCardData(0, 0, cardsPerTurn)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
 	
 
 func setGameSeed(gameSeed : int):
@@ -259,7 +258,7 @@ func startMulligan():
 			print("waiting for seed")
 	print("Starting mulligan")
 	oldHandPos = card_A_Holder.rect_position.y
-	card_A_Holder.rect_position.y = 0
+	card_A_Holder.rect_position.y = $CenterControl.rect_position.y
 	players[0].hand.drawHand()
 
 func onMulliganButtonPressed():
@@ -496,15 +495,28 @@ func startGame():
 
 func setTurnText():
 	if activePlayer == 0:
-		$TI/Label.text = "Your\nTurn"
+		$CenterControl/TI/Label.text = "Your\nTurn"
 		if gameStarted:
 			$EndTurnButton.visible = true
 	else:
-		$TI/Label.text = "Opponent\nTurn"
+		$CenterControl/TI/Label.text = "Opponent\nTurn"
 		$EndTurnButton.visible = false
 
 func getCanFight() -> bool:
 	return (abilityStack.size() == 0 or abilityStack.getFront()["canAttack"]) and cardNodesFusing.size() == 0 and millQueue.size() == 0 and not isDrawing()
+
+func puzzleRestart():
+	var root = get_node("/root")
+	var mainOld = root.get_node("main")
+	var mainNew = load("res://Scenes/main.tscn").instance()
+
+	mainNew.puzzleData = puzzleData
+
+	root.add_child(mainNew)
+	get_tree().current_scene = mainNew
+
+	root.remove_child(mainOld)
+	mainOld.queue_free()
 
 var rotTimer = 0
 var rotAngle = PI / 2
@@ -542,6 +554,13 @@ func _physics_process(delta):
 			elif out == 2:
 				playerRestart = true
 				opponentRestart = true
+		elif Settings.gameMode == Settings.GAME_MODE.PUZZLE:
+			yield(get_tree().create_timer(3), "timeout")
+			if out == 1 or out == 2:
+				pass
+			elif out == 3:
+				pass
+			
 	
 	if Settings.gameMode == Settings.GAME_MODE.PRACTICE:
 		if not practiceWaiting and activePlayer != 0 and gameStarted and not getWaiting():
@@ -556,16 +575,18 @@ func _physics_process(delta):
 	
 	if playerRestart and opponentRestart:
 		print("REEEEEEEEEESPAWN!")
-		var error = get_tree().change_scene("res://Scenes/main.tscn")
-		if error != 0:
-			print("Error loading test1.tscn. Error Code = " + str(error))
-	
+		if Settings.gameMode == Settings.GAME_MODE.PUZZLE:
+			puzzleRestart()
+		else:
+			var error = get_tree().change_scene("res://Scenes/main.tscn")
+			if error != 0:
+				print("Error loading test1.tscn. Error Code = " + str(error))
 	
 	
 	if handMoving and players[0].hand.drawQueue.size() == 0:
 		handMoveTimer += delta * Settings.animationSpeed
 		if handMoveTimer < handMoveMaxTime:
-			card_A_Holder.rect_position.y = lerp(0, oldHandPos, handMoveTimer / handMoveMaxTime)
+			card_A_Holder.rect_position.y = lerp($CenterControl.rect_position.y, oldHandPos, handMoveTimer / handMoveMaxTime)
 		else:
 			handMoving = false
 			card_A_Holder.rect_position.y = oldHandPos
@@ -578,7 +599,7 @@ func _physics_process(delta):
 			rotTimer += delta
 		else:
 			rotTimer = 0
-		$TI.rotation = sin(2 * PI * rotTimer * rotFreq) * rotAngle
+		$CenterControl/TI.rotation = sin(2 * PI * rotTimer * rotFreq) * rotAngle
 		
 	if is_instance_valid(hoveringWindowSlot):
 		if hoveringWindowSlot.currentZone == CardSlot.ZONES.DECK:
@@ -913,7 +934,7 @@ func createHoverNode(position : Vector2, parent : Node, text : String, flipped =
 
 func initZones():
 	
-	typeDisplay = $TypeDisplay
+	typeDisplay = $CenterControl/TypeDisplay
 	typeDisplay.setOptions("Choose A Creature Type", ["Fire", "Water", "Earth", "Beast", "Mech", "Necro"], [2, 3, 4, 5, 6, 7])
 	typeDisplay.hideBack()
 	typeDisplay.connect("onOptionPressed", self, "onTypeButtonPressed")
@@ -954,7 +975,7 @@ func initZones():
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
 	cardInst.playerID = p.UUID
-	$GraveHolder/GraveHolder_A.add_child(cardInst)
+	$CenterControl/GraveHolder/GraveHolder_A.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, cardHeight)
 	graves[p.UUID] = cardInst
@@ -966,7 +987,7 @@ func initZones():
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
-	$GraveHolder/GraveHolder_A.add_child(cardNodeInst)
+	$CenterControl/GraveHolder/GraveHolder_A.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.slot = cardInst
@@ -1008,7 +1029,7 @@ func initZones():
 	cardInst = cardSlot.instance()
 	cardInst.currentZone = CardSlot.ZONES.GRAVE
 	cardInst.playerID = p.UUID
-	$GraveHolder/GraveHolder_B.add_child(cardInst)
+	$CenterControl/GraveHolder/GraveHolder_B.add_child(cardInst)
 	cardInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.position = Vector2(0, -cardHeight)
 	graves[p.UUID] = cardInst
@@ -1020,7 +1041,7 @@ func initZones():
 	cardNodeInst.cardVisible = true
 	cardNodeInst.visible = false
 	cardNodeInst.playerID = p.UUID
-	$GraveHolder/GraveHolder_B.add_child(cardNodeInst)
+	$CenterControl/GraveHolder/GraveHolder_B.add_child(cardNodeInst)
 	cardNodeInst.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 	cardInst.cardNode = cardNodeInst
 	cardNodeInst.slot = cardInst
@@ -1060,9 +1081,9 @@ func getSlotFromServer(isOpponent : bool, slotZone : int, slotID : int) -> Node:
 			parent = deckHolder
 		CardSlot.ZONES.GRAVE:
 			if playerIndex == 0:
-				parent = $GraveHolder/GraveHolder_A
+				parent = $CenterControl/GraveHolder/GraveHolder_A
 			else:
-				parent = $GraveHolder/GraveHolder_B
+				parent = $CenterControl/GraveHolder/GraveHolder_B
 		CardSlot.ZONES.GRAVE_CARD:
 			if playerIndex == 0:
 				parent = $GraveDisplay_A
@@ -1256,9 +1277,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 						for s in cardsHolding:
 							cost += getCardCost(s.cardNode.card)
 						if activePlayer == 0:
-							$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
+							$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
 						else:
-							$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
+							$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed - cost, cost, cardsPlayed)
 							
 			elif slot.currentZone == CardSlot.ZONES.CREATURE:
 				if cardsHolding.size() > 0 and cardNodesFusing.size() == 0:
@@ -1337,9 +1358,9 @@ func slotClicked(slot : CardSlot, button_index : int, fromServer = false) -> boo
 					fuseToSlot(slot, cardList)
 
 					if activePlayer == 0:
-						$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+						$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 					else:
-						$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+						$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 						
 				else:
 					if not isMyTurn() and not fromServer:
@@ -1431,8 +1452,8 @@ func fuseToSlot(slot : CardSlot, cards : Array):
 		cardNodesFusing.append(cn)
 		cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		cn.z_index = 1
-		$Fusion_Holder.add_child(cn)
-		$Fusion_Holder.move_child(cn, 0)
+		$CenterControl/Fusion_Holder.add_child(cn)
+		$CenterControl/Fusion_Holder.move_child(cn, 0)
 		cn.position = Vector2()
 		card_A_Holder.nodes.erase(cn)
 		card_B_Holder.nodes.erase(cn)
@@ -1465,8 +1486,8 @@ func fuseToHand(player : Player, cards : Array):
 		cardNodesFusing.append(cn)
 		cn.scale = Vector2(Settings.cardSlotScale, Settings.cardSlotScale)
 		cn.z_index = 1
-		$Fusion_Holder.add_child(cn)
-		$Fusion_Holder.move_child(cn, 0)
+		$CenterControl/Fusion_Holder.add_child(cn)
+		$CenterControl/Fusion_Holder.move_child(cn, 0)
 		cn.position = Vector2()
 		card_A_Holder.nodes.erase(cn)
 		card_B_Holder.nodes.erase(cn)
@@ -1485,14 +1506,14 @@ func fuseToHand(player : Player, cards : Array):
 	centerFusion()
 
 func centerFusion():
-	centerNodes(cardNodesFusing, Vector2((cardWidth * Settings.cardSlotScale + cardDists) * $Fusion_Holder.get_children().size() / 2 - cardWidth / 2 * Settings.cardSlotScale - cardDists / 2, 0), cardWidth, cardDists)
+	centerNodes(cardNodesFusing, Vector2((cardWidth * Settings.cardSlotScale + cardDists) * $CenterControl/Fusion_Holder.get_children().size() / 2 - cardWidth / 2 * Settings.cardSlotScale - cardDists / 2, 0), cardWidth, cardDists)
 
 func isMyTurn() -> bool:
 	return 0 == activePlayer
 
 func passMyTurn(withBuffer = false):
 	if isMyTurn():
-		if (not get_node("/root/main/CenterControl/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/OptionDisplay").visible) or (activePlayer == 0 and timers[players[0].UUID].turnOver):
+		if (not get_node("/root/main/Control/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/OptionDisplay").visible) or (activePlayer == 0 and timers[players[0].UUID].turnOver):
 			if not gameOver and gameStarted:
 				if withBuffer:
 					var waiting = true
@@ -1555,9 +1576,14 @@ func _input(event):
 			players[activePlayer].printFlags()
 		if event.scancode == KEY_F5:
 			serialStore = serialize()
+			FileIO.writeToJSON("puzzles", "bak", serialStore)
 		if event.scancode == KEY_F6:
 			if serialStore != null:
 				deserialize(serialStore)
+			else:
+				var ss = FileIO.readJSON("res://puzzles/bak.json")
+				print(ss)
+				serialStore = ss
 	
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_SPACE:
@@ -1673,9 +1699,9 @@ func nextTurn():
 	
 	cardsPerTurn = cardsPerTurnMax
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	
 	
 	######################	ON START OF TURN EFFECTS
@@ -1702,16 +1728,16 @@ func nextTurn():
 func addCardsPerTurn(inc : int):
 	cardsPerTurn += inc
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 
 func addCardsPlayed(inc : int):
 	cardsPlayed += inc
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	else:
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 
 var serialStore = null
 
@@ -1831,7 +1857,9 @@ func deserialize(data : Dictionary):
 		p.life			 = pd[0]
 		p.armour		 = pd[1]
 		p.drawDamage	 = pd[2]
-		p.flags			 = pd[3]
+		for k in pd[3]:
+			p.flags[k] = Player.defaultFlag.duplicate(true)
+			p.addToFlag(k, pd[3][k])
 		
 		#	DECK DATA	#
 		p.deck.deserialize(dd)
@@ -1858,11 +1886,11 @@ func deserialize(data : Dictionary):
 	cardsPerTurn = 	turnData[2]
 	
 	if activePlayer == 0:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn, 0, 0)
 	else:
-		$CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
-		$CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
+		$CenterControl/CardsLeftIndicator_A.setCardData(cardsPerTurn, 0, 0)
+		$CenterControl/CardsLeftIndicator_B.setCardData(cardsPerTurn - cardsPlayed, 0, cardsPlayed)
 	
 
 func checkState():
@@ -2072,7 +2100,8 @@ func onGameTimerEnd():
 	Server.onConcede(Server.opponentID)
 
 func receiveMessage(message : String):
-	print(message)
+	var chat = get_node("/root/main/CenterControl/LobbyChat")
+	chat.addMessage(message)
 
 func setOwnUsername():
 	print("Settings own username")

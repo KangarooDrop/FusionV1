@@ -1,0 +1,120 @@
+{
+  "creatures": [
+    [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "players": [
+    [
+      30,
+      0,
+      1,
+      {}
+    ],
+    [
+      30,
+      0,
+      1,
+      {}
+    ]
+  ],
+  "decks": [
+    [],
+    []
+  ],
+  "graves": [
+    [],
+    []
+  ],
+  "hands": [
+    [
+      [
+        {
+          "UUID": 0,
+          "rarity": "BASIC",
+          "name": "Primordial Ooze",
+          "tier": 1,
+          "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
+          "player_id": -1,
+          "power": 2,
+          "toughness": 2,
+          "has_attacked": false,
+          "played_this_turn": true,
+          "abilities": [
+          ],
+          "removed_abilities": [
+
+          ],
+          "can_play": true,
+          "creature_type": [
+            1
+          ]
+        },
+        true
+      ]
+    ],
+    []
+  ],
+  "delays": [
+    {
+      "UUID": 0,
+      "rarity": "BASIC",
+      "name": "Primordial Ooze",
+      "tier": 1,
+      "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
+      "player_id": -1,
+      "power": 2,
+      "toughness": 2,
+      "has_attacked": false,
+      "played_this_turn": true,
+      "abilities": [
+
+      ],
+      "removed_abilities": [
+
+      ],
+      "can_play": true,
+      "creature_type": [
+        1
+      ]
+    },
+    {
+      "UUID": 0,
+      "rarity": "BASIC",
+      "name": "Primordial Ooze",
+      "tier": 1,
+      "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
+      "player_id": -1,
+      "power": 2,
+      "toughness": 2,
+      "has_attacked": false,
+      "played_this_turn": true,
+      "abilities": [
+
+      ],
+      "removed_abilities": [
+
+      ],
+      "can_play": true,
+      "creature_type": [
+        1
+      ]
+    }
+  ],
+  "turnData": [
+    0,
+    0,
+    2
+  ]
+}

@@ -24,6 +24,10 @@ func getBoard() -> Node:
 	if b != null:
 		return b
 	
+	b = get_node_or_null("/root/TournamentLobby")
+	if b != null:
+		return b
+	
 	return null
 
 func setButtonParams(button : Button):

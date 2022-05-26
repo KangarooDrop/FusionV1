@@ -49,6 +49,12 @@ func onPracticePressed():
 	if error != 0:
 		print("Error loading test1.tscn. Error Code = " + str(error))
 	
+func onPuzzlePressed():
+	Settings.gameMode = Settings.GAME_MODE.PUZZLE
+	var error = get_tree().change_scene("res://Scenes/main.tscn")
+	if error != 0:
+		print("Error loading test1.tscn. Error Code = " + str(error))
+	
 func onSettingsPressed():
 	$VBoxContainer.visible = false
 	$SettingsPage.show()

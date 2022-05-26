@@ -1,7 +1,5 @@
 extends Node
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-
 func _ready():
 	$FDCenter/OptionDisplay.connect("onBackPressed", self, "onBackButtonClicked")
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
@@ -22,10 +20,8 @@ func onFileButtonClicked(button : Button, key):
 	var dError = Deck.verifyDeck(key)
 	
 	if dError != OK:
-		var pop = popupUI.instance()
-		pop.init("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [["Close", pop, "close", []]])
-		$PopupHolder.add_child(pop)
-		pop.options[0].grab_focus()
+		var pop = MessageManager.createPopup("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [])
+		pop.setButtons([pop.GET_CLOSE_BUTTON()])
 		return
 	
 	Settings.deckData = key

@@ -345,7 +345,7 @@ remote func receivedStartBuilding():
 				availableCardCount[d.card.UUID] = d.count
 
 	var editor = load("res://Scenes/DeckEditor.tscn").instance()
-	availableCardCount[86] = -1
+	availableCardCount[0] = -1
 	editor.availableCardCount = availableCardCount
 	root.add_child(editor)
 	get_tree().current_scene = editor
@@ -729,8 +729,9 @@ remote func receiveSetReady(ready : bool):
 	checkReady()
 	
 func checkReady():
-	if NodeLoc.getBoard() != null:
-		NodeLoc.getBoard().checkReady()
+	var b = NodeLoc.getBoard()
+	if is_instance_valid(b) and b.has_method("checkReady"):
+		b.checkReady()
 	
 	if Server.host:
 		if playerIDs.size() == 0:

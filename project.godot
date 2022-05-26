@@ -439,10 +439,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Audio/AudioManager.gd"
 }, {
-"base": "Node2D",
+"base": "Node",
 "class": "BoardMP",
 "language": "GDScript",
-"path": "res://Scripts/SceneScripts/BoardMP.gd"
+"path": "res://Scripts/Boards/BoardMP.gd"
+}, {
+"base": "Node2D",
+"class": "BoardPuzzle",
+"language": "GDScript",
+"path": "res://Scripts/Boards/BoardPuzzle.gd"
 }, {
 "base": "Reference",
 "class": "Card",
@@ -662,6 +667,7 @@ _global_script_class_icons={
 "AbilityWorldfire": "",
 "AudioManager": "",
 "BoardMP": "",
+"BoardPuzzle": "",
 "Card": "",
 "CardDisplay": "",
 "CardNode": "",
@@ -698,9 +704,9 @@ config/icon="res://icon.png"
 
 [autoload]
 
-MessageManager="*res://Scripts/UI/MessageManager.gd"
+MessageManager="*res://Scenes/UI/MessageManager.tscn"
 SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
-ShaderHandler="*res://Scripts/ShaderHandler.gd"
+ShaderHandler="*res://Scenes/ShaderHandler.tscn"
 ListOfCards="*res://Scripts/ListOfCards.gd"
 SoundEffectManager="*res://Scripts/Audio/SoundEffectManager.gd"
 MusicManager="*res://Scripts/Audio/MusicManager.gd"
