@@ -13,8 +13,8 @@ func onOtherEnter(slot):
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			p.takeDamage(count, card.playerID)
+			p.takeDamage(myVars.count, card.playerID)
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "Whenever a creature you control enters the battlefield, you take " + str(count) + " damage"
+	return .genDescription() + "Whenever a creature you control enters the battlefield, you take " + str(myVars.count) + " damage"

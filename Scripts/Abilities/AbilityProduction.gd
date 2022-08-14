@@ -9,14 +9,14 @@ func onApplied(slot):
 	addToStack("onEffect", [])
 
 func onEffect(params):
-	for i in range(count - timesApplied):
+	for i in range(myVars.count - myVars.timesApplied):
 		var card = ListOfCards.getCard(5)
-		card.abilities[0].timesApplied = 1
+		card.abilities[0].myVars.timesApplied = 1
 		self.card.addCreatureToBoard(card, null)
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	var string = "a"
-	if count > 1:
-		string = str(count - subCount)
+	if myVars.count > 1:
+		string = str(myVars.count - subCount)
 	return .genDescription() + "When this creature is played, its controller creates " + string +" 1/1 mech with no abilities"

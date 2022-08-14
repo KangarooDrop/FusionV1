@@ -35,7 +35,7 @@ func initHand(player):
 func drawHand():
 	var actualHandSize = handSize - mulliganCount + (0 if NodeLoc.getBoard().players[NodeLoc.getBoard().activePlayer] == player else 1)
 	for i in range(actualHandSize):
-		drawCard()
+		drawCard(false)
 
 func reveal():
 	for c in nodes:
@@ -193,13 +193,16 @@ func _physics_process(delta):
 func cardFadeInFinish(cardNode):
 	cardNode.get_node("FadingNode").queue_free()
 
-func drawCard():
+func drawCard(addToFlag = true):
+	if addToFlag:
+		player.addToFlag(Player.CARDS_DRAWN_DECK, 1)
+	
 	var card = player.deck.pop()
 	if player.deck.cards.size() <= 0 and is_instance_valid(deck.cardNode):
 		deck.cardNode.queue_free()
 		deck.cardNode = null
 	if card != null:
-		addCardToHand([card, false, false])
+		addCardToHand([card, false, false], addToFlag)
 	else:
 		player.takeDamage(player.drawDamage, null)
 		player.drawDamage += 1
@@ -216,7 +219,9 @@ func discardIndex(index : int, addCardToGrave=true):
 		discardTimers.append(0)
 
 #[Card, b:(T=appear_in_hand F=move from current location/deck), b:visible]
-func addCardToHand(data : Array):
+func addCardToHand(data : Array, addToFlag = true):
 	if data[0] != null:
+		if addToFlag:
+			player.addToFlag(Player.CARDS_ADDED, 1)
 		data[0].ownerID = player.UUID
 		drawQueue.append(data)

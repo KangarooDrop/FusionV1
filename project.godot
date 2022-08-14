@@ -60,6 +60,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/Abilities/AbilityComposite.gd"
 }, {
 "base": "AbilityETB",
+"class": "AbilityCompost",
+"language": "GDScript",
+"path": "res://Scripts/Abilities/AbilityCompost.gd"
+}, {
+"base": "AbilityETB",
 "class": "AbilityConfigure",
 "language": "GDScript",
 "path": "res://Scripts/Abilities/AbilityConfigure.gd"
@@ -439,10 +444,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Audio/AudioManager.gd"
 }, {
-"base": "Node2D",
+"base": "Node",
 "class": "BoardMP",
 "language": "GDScript",
-"path": "res://Scripts/SceneScripts/BoardMP.gd"
+"path": "res://Scripts/Boards/BoardMP.gd"
+}, {
+"base": "Node2D",
+"class": "BoardPuzzle",
+"language": "GDScript",
+"path": "res://Scripts/Boards/BoardPuzzle.gd"
 }, {
 "base": "Reference",
 "class": "Card",
@@ -483,6 +493,11 @@ _global_script_classes=[ {
 "class": "DeckDisplayDataX",
 "language": "GDScript",
 "path": "res://Scripts/UI/DeckDisplayDataX.gd"
+}, {
+"base": "DraftClass",
+"class": "DraftBooster",
+"language": "GDScript",
+"path": "res://Scripts/SceneScripts/DraftBooster.gd"
 }, {
 "base": "Node",
 "class": "DraftClass",
@@ -585,6 +600,7 @@ _global_script_class_icons={
 "AbilityChimera": "",
 "AbilityCombustion": "",
 "AbilityComposite": "",
+"AbilityCompost": "",
 "AbilityConfigure": "",
 "AbilityConjoin": "",
 "AbilityCoup": "",
@@ -662,6 +678,7 @@ _global_script_class_icons={
 "AbilityWorldfire": "",
 "AudioManager": "",
 "BoardMP": "",
+"BoardPuzzle": "",
 "Card": "",
 "CardDisplay": "",
 "CardNode": "",
@@ -670,6 +687,7 @@ _global_script_class_icons={
 "CardsLeftIndicator": "",
 "Deck": "",
 "DeckDisplayDataX": "",
+"DraftBooster": "",
 "DraftClass": "",
 "DraftSolomon": "",
 "GitAPI": "",
@@ -698,9 +716,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-MessageManager="*res://Scripts/UI/MessageManager.gd"
-SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
-ShaderHandler="*res://Scripts/ShaderHandler.gd"
+MessageManager="*res://Scenes/UI/MessageManager.tscn"
+ShaderHandler="*res://Scenes/ShaderHandler.tscn"
 ListOfCards="*res://Scripts/ListOfCards.gd"
 SoundEffectManager="*res://Scripts/Audio/SoundEffectManager.gd"
 MusicManager="*res://Scripts/Audio/MusicManager.gd"
@@ -720,7 +737,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/rabidholepuncher/plugin.cfg", "res://addons/silent_wolf/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/rabidholepuncher/plugin.cfg" )
 
 [gdnative]
 

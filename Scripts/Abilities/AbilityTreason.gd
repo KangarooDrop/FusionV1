@@ -2,24 +2,22 @@ extends AbilityETB
 
 class_name AbilityTreason
 
-var returned = false
-
 func _init(card : Card).("Treason", card, Color.red, false, Vector2(0, 0)):
-	pass
+	myVars["returned"] = false
 
 func onApplied(slot):
 	addToStack("onStealEffect", [false])
 
 func onEndOfTurn():
-	if NodeLoc.getBoard().isOnBoard(card) and not returned:
+	if NodeLoc.getBoard().isOnBoard(card) and not myVars.returned:
 		addToStack("onStealEffect", [true])
 
 func onStealEffect(params):
 	if not ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
-		timesApplied = 0
+		myVars.timesApplied = 0
 		return
 		
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 	
 	var board = NodeLoc.getBoard()
 	for p in board.players:
@@ -31,7 +29,7 @@ func onStealEffect(params):
 					swapped = true
 					break
 			
-			returned = params[0] or not swapped
+			myVars.returned = params[0] or not swapped
 			
 			
 			if not params[0]:
@@ -47,11 +45,6 @@ static func swapSlot(cardNode, newSlot):
 	cardNode.global_position = newSlot.global_position
 	cardNode.playerID = newSlot.playerID
 	cardNode.card.playerID = newSlot.playerID
-
-func clone(card : Card) -> Ability:
-	var abl = .clone(card)
-	abl.returned = returned
-	return abl
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, its opponent gains control of it until the end of the turn. It may attack this turn"

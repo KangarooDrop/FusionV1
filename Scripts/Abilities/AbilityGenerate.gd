@@ -18,12 +18,12 @@ func onActivate():
 func onEffect(params):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			for i in range(count):
+			for i in range(myVars.count):
 				p.hand.drawCard()
 			break
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "(1): draw " + str(count) + " cards"
+	return .genDescription() + "(1): draw " + str(myVars.count) + " cards"
 
 func genStackDescription(subCount) -> String:
-	return .genDescription() + "Draw " + str(count) + " cards"
+	return .genDescription() + "Draw " + str(myVars.count) + " cards"

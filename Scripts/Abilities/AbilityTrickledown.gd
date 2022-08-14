@@ -2,18 +2,16 @@ extends Ability
 
 class_name AbilityTrickledown
 
-var delayed = false
-
 func _init(card : Card).("Trickledown", card, Color.blue, true, Vector2(0, 0)):
-	pass
+	myVars["delayed"] = false
 
 func onDeath():
-	delayed = true
+	myVars.delayed = true
 	addDelayedAbility()
-	delayed = false
+	myVars.delayed = false
 
 func onStartOfTurn():
-	if delayed:
+	if myVars.delayed:
 		var board = NodeLoc.getBoard()
 		if board.players[board.activePlayer].UUID == card.playerID:
 			addToStack("onEffect", [])
@@ -21,12 +19,7 @@ func onStartOfTurn():
 
 func onEffect(params):
 	var board = NodeLoc.getBoard()
-	board.addCardsPerTurn(count)
-
-func clone(card) -> Ability:
-	var abl = .clone(card)
-	abl.delayed = delayed
-	return abl
+	board.addCardsPerTurn(myVars.count)
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "After this creature dies, gain " + str(count) +" energy on your next turn"
+	return .genDescription() + "After this creature dies, gain " + str(myVars.count) +" energy on your next turn"

@@ -11,8 +11,8 @@ func onApplied(slot):
 func onEffect(params):
 	for s in NodeLoc.getBoard().creatures[card.playerID]:
 		if is_instance_valid(s.cardNode) and (not is_instance_valid(card.cardNode) or not is_instance_valid(card.cardNode.slot) or s != card.cardNode.slot):
-			s.cardNode.card.power += count - timesApplied
-	timesApplied = count
+			s.cardNode.card.power += myVars.count - myVars.timesApplied
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, all other creatures its controller has gain +" + str(count - subCount) + " power"
+	return .genDescription() + "When this creature is played, all other creatures its controller has gain +" + str(myVars.count - subCount) + " power"

@@ -21,7 +21,7 @@ func onTypeSelected(button : Button, key):
 	selectedTypes.append(key)
 	onEffect(null)
 	
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 	
 	NodeLoc.getBoard().endGetType()
 
@@ -58,13 +58,13 @@ func onEffect(slot):
 	var board = NodeLoc.getBoard()
 	var cards = []
 	if slot == null:
-		amt = count - timesApplied
+		amt = myVars.count - myVars.timesApplied
 		for p in board.players:
 			for s in board.creatures[p.UUID]:
 				if is_instance_valid(s.cardNode):
 					cards.append(s.cardNode.card)
 	else:
-		amt = count
+		amt = myVars.count
 		if is_instance_valid(slot.cardNode):
 			cards.append(slot.cardNode.card)
 	
@@ -78,16 +78,16 @@ func onEffect(slot):
 			
 			if found:
 				affectedCards.append(c)
-				c.power -= count
-				c.toughness -= count
-				c.maxToughness -= count
+				c.power -= myVars.count
+				c.toughness -= myVars.count
+				c.maxToughness -= myVars.count
 
 func removeEffect(slot):
 	if is_instance_valid(slot.cardNode) and slot.cardNode.card in affectedCards:
 		affectedCards.erase(slot.cardNode.card)
-		slot.cardNode.card.power += count
-		slot.cardNode.card.toughness += count
-		slot.cardNode.card.maxToughness += count
+		slot.cardNode.card.power += myVars.count
+		slot.cardNode.card.toughness += myVars.count
+		slot.cardNode.card.maxToughness += myVars.count
 
 	
 func genDescription(subCount = 0) -> String:
@@ -98,4 +98,4 @@ func genDescription(subCount = 0) -> String:
 			ts += Card.CREATURE_TYPE.keys()[selectedTypes[i]].capitalize()
 			if i != selectedTypes.size() - 1:
 				ts += ", "
-	return .genDescription() + "When this creature is played, its controller chooses a creature type. Creatures of the chosen type(s) get -" + str(count) + "/-" + str(count)
+	return .genDescription() + "When this creature is played, its controller chooses a creature type. Creatures of the chosen type(s) get -" + str(myVars.count) + "/-" + str(myVars.count)

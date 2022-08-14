@@ -55,13 +55,17 @@ func mouseEnter():
 		if get_parent() is cardDisplay:
 			get_parent().onSlotEnter(self)
 		else:
-			NodeLoc.getBoard().onSlotEnter(self)
+			var b = NodeLoc.getBoard()
+			if is_instance_valid(b) and b.has_method("onSlotEnter"):
+				b.onSlotEnter(self)
 	
 func mouseExit():
 	if get_parent() is cardDisplay:
 		get_parent().onSlotExit(self)
 	else:
-		NodeLoc.getBoard().onSlotExit(self)
+		var b = NodeLoc.getBoard()
+		if is_instance_valid(b) and b.has_method("onSlotExit"):
+			b.onSlotExit(self)
 
 func getNeighbors() -> Array:
 	var neighbors = []

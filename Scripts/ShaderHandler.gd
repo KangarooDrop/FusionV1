@@ -3,7 +3,6 @@ extends Node
 var fontTRES = preload("res://Fonts/FontNormal.tres")
 var fading = preload("res://Scenes/UI/FadingNode.tscn")
 
-var shad = preload("res://Scenes/Shader.tscn")
 var shadObj
 
 signal shaderChange
@@ -14,30 +13,13 @@ var verifiedShaders : Array = \
 	"res://Shaders/Invert.shader",
 	"res://Shaders/LowLight.shader",
 	"res://Shaders/Blur.shader",
+	"res://Shaders/Doppler.shader",
+	"res://Shaders/CRT.shader",
 ]
 
 func _ready():
 	verifyShaders()
-	
-	var centerControl = Control.new()
-	centerControl.set_anchors_and_margins_preset(Control.PRESET_CENTER)
-	add_child(centerControl)
-	
-	var node = Node2D.new()
-	node.z_index = 4096
-	centerControl.add_child(node)
-	
-	shadObj = shad.instance()
-	node.add_child(shadObj)
-	
-	var canvas = CanvasLayer.new()
-	canvas.name = "Canvas"
-	add_child(canvas)
-	
-	var control = Control.new()
-	control.name = "WarningHolder"
-	canvas.add_child(control)
-	control.set_anchors_and_margins_preset(Control.PRESET_TOP_RIGHT)
+	shadObj = $Canvas/ColorRect
 
 func verifyShaders():
 	

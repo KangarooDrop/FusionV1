@@ -13,9 +13,9 @@ func onEffect(params : Array):
 		if p.UUID == card.playerID:
 			for cn in p.hand.nodes:
 				for abl in cn.card.abilities:
-					abl.setCount(abl.count + count - timesApplied)
+					abl.setCount(abl.myVars.count + myVars.count - myVars.timesApplied)
 			break
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, increase the count of each ability on all cards in its controller's hand by " + str(count - subCount)
+	return .genDescription() + "When this creature is played, increase the count of each ability on all cards in its controller's hand by " + str(myVars.count - subCount)

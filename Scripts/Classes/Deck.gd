@@ -7,6 +7,14 @@ var deckSize : int = -1
 
 var vanguard : Card
 
+enum DECK_TYPE \
+{
+	NONE,
+	WIP,
+	STANDARD,
+	VANGUARD
+}
+
 static func MIN_DECK_SIZE() -> int:
 	return 20 
 
@@ -149,6 +157,7 @@ static func verifyDeck(deckData) -> int:
 	var total = 0
 	
 	#CHECK IF DECK DATA IS ACTUALLY A DICTIONARY
+	print(typeof(deckData))
 	if typeof(deckData) != TYPE_DICTIONARY:
 		return DECK_VALIDITY_TYPE.WRONG_TYPE
 	
@@ -173,7 +182,7 @@ static func verifyDeck(deckData) -> int:
 
 static func verifyCardData(cardID, cardCount, cardType) -> int:
 	
-	var maxID = ListOfCards.cardList.size()
+	var allKeys = ListOfCards.cardList.keys()
 	
 	#CHECK IF THE ID AND COUNT ARE INTEGERS
 	if typeof(cardID) != TYPE_STRING or typeof(cardCount) != TYPE_REAL:
@@ -186,7 +195,7 @@ static func verifyCardData(cardID, cardCount, cardType) -> int:
 	var count = int(cardCount)
 		
 	#CHECK IF INDEX IS WITHIN BOUNDS OF CARD LIST
-	if key < 0 or key >= maxID:
+	if not key in allKeys:
 		return DECK_VALIDITY_TYPE.UNKNOWN_INDEX
 		
 	#CHECKS IF THERE ARE TOO MANY OF SAME CARD or LESS THAN ONE CARD
@@ -194,6 +203,8 @@ static func verifyCardData(cardID, cardCount, cardType) -> int:
 		return DECK_VALIDITY_TYPE.BAD_COUNT
 	
 	var card = ListOfCards.getCard(key)
+	if card == null:
+		return DECK_VALIDITY_TYPE.BAD_KEY_INDEX
 	
 	#CHECKS IF THE DECK ONLY USES TIER 1 CARDS
 	if card.tier != 1:

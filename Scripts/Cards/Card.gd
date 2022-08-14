@@ -57,7 +57,7 @@ func _init(params):
 	if params.has("can_play"):
 		canBePlayed = params["can_play"]
 	if params.has("played_this_turn"):
-		playedThisTurn = params.has("played_this_turn")
+		playedThisTurn = params["played_this_turn"]
 	else:
 		playedThisTurn = true
 	if params.has("rarity"):
@@ -70,23 +70,13 @@ func _init(params):
 
 	if params.has("abilities"):
 		for abl in params["abilities"]:
-			var ablData = abl.rsplit(" ")
-			var found = false
+			var abilityLoaded = ListOfCards.deserializeAbility(abl, self)
+			addAbility(abilityLoaded)
 			
-			for data in ProjectSettings.get_setting("_global_script_classes"):
-				if data["class"] == ablData[0]:
-					var abilityLoaded = load(data["path"]).new(self)
-					if ablData.size() > 1:
-						abilityLoaded.setCount(int(ablData[1]))
-					addAbility(abilityLoaded)
-					found = true
-			if not found:
-				print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", abl)
 	if params.has("removed_abilities"):
 		for abl in params["removed_abilities"]:
-			for data in ProjectSettings.get_setting("_global_script_classes"):
-				if data["class"] == abl:
-					removedAbilities.append(load(data["path"]).new(self))
+			var abilityLoaded = ListOfCards.deserializeAbility(abl, self)
+			removedAbilities.append(abilityLoaded)
 
 
 func _physics_process(delta):
@@ -139,6 +129,9 @@ func onDeath():
 		abl.onDeath()
 	
 func onLeave():
+	hasAttacked = false
+	playedThisTurn = false
+	
 	var abls = abilities.duplicate()
 	abls.invert()
 	for abl in abls:
@@ -277,10 +270,10 @@ func onAfterCombat(attacker, blockers):
 	for abl in abls:
 		abl.onAfterCombat(attacker, blockers)
 
-func onAdjustCost(card, cost) -> int:
+func onAdjustCost(card) -> int:
 	var costAdjustment = 0
 	for abl in abilities.duplicate():
-		costAdjustment += abl.onAdjustCost(card, cost)
+		costAdjustment += abl.onAdjustCost(card)
 	return costAdjustment
 
 func onCardsPlayed(slot, cards):
@@ -364,7 +357,8 @@ func copyBase() -> Card:
 	
 func serialize() -> Dictionary:
 	var rtn = {}
-	rtn["id"] = UUID
+	rtn["UUID"] = UUID
+	rtn["rarity"] = RARITY.keys()[rarity]
 	rtn["name"] = name
 	rtn["tier"] = tier
 	rtn["tex"] = texture.resource_path
@@ -376,11 +370,10 @@ func serialize() -> Dictionary:
 	rtn["abilities"] = []
 	rtn["removed_abilities"] = []
 	rtn["can_play"] = canBePlayed
-	rtn["played_this_turn"] = playedThisTurn
 	for abl in abilities:
-		rtn["abilities"].append(abl.get_script())
+		rtn["abilities"].append(abl.serialize())
 	for abl in removedAbilities:
-		rtn["removed_abilities"].append(abl.get_script())
+		rtn["removed_abilities"].append(abl.serialize())
 	rtn["creature_type"] = creatureType
 	
 	return rtn
@@ -513,17 +506,16 @@ func fuseToSelf(card):
 	else:
 		return null
 	
+	var newTier = max(2, min(ListOfCards.MAX_TIER, self.tier + card.tier)) 
 	var numTypes = types.size()
 	var newIndex
-	match numTypes:
-		0:
-			newIndex = ListOfCards.fusionList[0]
-		1:
-			newIndex = ListOfCards.fusionList[1][types[0]]
-		2:
-			newIndex = ListOfCards.fusionList[2][types[0]][types[1]]
-			if newIndex == null:
-				newIndex = ListOfCards.fusionList[2][types[1]][types[0]]
+	
+	if numTypes == 0:
+		newIndex = ListOfCards.fusionList[0]
+	else:
+		newIndex = ListOfCards.fusionList[newTier][types[0]][types[1]]
+		if newIndex == null:
+			newIndex = ListOfCards.fusionList[newTier][types[1]][types[0]]
 	
 	if newIndex == -1:
 		if creatureType.has(CREATURE_TYPE.Null):

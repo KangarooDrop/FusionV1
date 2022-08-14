@@ -16,10 +16,11 @@ func onEffect(params : Array):
 			highest.append(cards[i])
 		elif cards[i].power > highest[0].power:
 			highest = [cards[i]]
+	
 	for c in highest:
 		c.isDying = true
 		
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, destroy all creatures with the highest power (if two or more creatures are tied, destroy all of them)"

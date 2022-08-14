@@ -1,5 +1,8 @@
 extends Node
 
+const MAX_TIER = 5
+var cardKeys = []
+
 var cardList := {}
 
 var cardBackground = preload("res://Art/backgrounds/card_blank.png")
@@ -19,20 +22,62 @@ var creatureTypeImageList = [null,
 
 var fusionList := \
 [
-		86,
+	0,
 		
 		
-		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
+	[
+		[-1,   -1,   -1,       -1,     -1,     -1,     -1,     -1],
+		[-1,   -1,   -1,       -1,     -1,     -1,     -1,     -1],
+		[-1,   -1,   -1,       null,   null,   null,   null,   null],
+		[-1,   -1,   null,     -1,     null,   null,   null,   null],
+		[-1,   -1,   null,     null,   -1,     null,   null,   null],
+		[-1,   -1,   null,     null,   null,   -1,     null,   null],
+		[-1,   -1,   null,     null,   null,   null,   -1,     null],
+		[-1,   -1,   null,     null,   null,   null,   null,   -1]
+	],
 		
 	[
 		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
-		[-1,   0,    -1,   -1,   -1,   -1,   -1,   -1],
-		[-1,   -1,   6,     null, null, null, null, null],
-		[-1,   -1,   7,     8,    null, null, null, null],
-		[-1,   -1,   9,     10,   11,   null, null, null],
-		[-1,   -1,   12,    13,   14,   15,   null, null],
-		[-1,   -1,   16,    17,   18,   19,   20,   null],
-		[-1,   -1,   22,    23,   24,   25,   26,   27]
+		[-1,   0,    null,  null, null, null, null, null],
+		[-1,  100,   100,  null, null, null, null, null],
+		[-1,  102,   101,  102,  null, null, null, null],
+		[-1,  105,   103,  104,  105,  null, null, null],
+		[-1,  109,   106,  107,  108,  109,  null, null],
+		[-1,  114,   110,  111,  112,  113,  114,  null],
+		[-1,  120,   115,  116,  117,  118,  119,  120]
+	],
+		
+	[
+		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
+		[-1,   0,    null,    null,   null,   null,   null,   null],
+		[-1,  200,   200,     null,   null,   null,   null,   null],
+		[-1,  202,   201,     202,    null,   null,   null,   null],
+		[-1,  205,   203,     204,    205,    null,   null,   null],
+		[-1,  209,   206,     207,    208,    209,    null,   null],
+		[-1,  214,   210,     211,    212,    213,    214,    null],
+		[-1,  220,   215,     216,    217,    218,    219,    220]
+	],
+		
+	[
+		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
+		[-1,   0,    null,    null,   null,   null,   null,   null],
+		[-1,  300,   300,     null,   null,   null,   null,   null],
+		[-1,  302,   301,     302,    null,   null,   null,   null],
+		[-1,  305,   303,     304,    305,    null,   null,   null],
+		[-1,  309,   306,     307,    308,    309,    null,   null],
+		[-1,  314,   310,     311,    312,    313,    314,    null],
+		[-1,  320,   315,     316,    317,    318,    319,    320]
+	],
+		
+	[
+		[-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1],
+		[-1,   0,    null,    null,   null,   null,   null,   null],
+		[-1,  400,   400,     null,   null,   null,   null,   null],
+		[-1,  402,   401,     402,    null,   null,   null,   null],
+		[-1,  405,   403,     404,    405,    null,   null,   null],
+		[-1,  409,   406,     407,    408,    409,    null,   null],
+		[-1,  414,   410,     411,    412,    413,    414,    null],
+		[-1,  420,   415,     416,    417,    418,    419,    420]
 	]
 ]
 
@@ -48,8 +93,8 @@ func _ready():
 		rarityToCards.append([])
 	
 	for k in cardDataset.keys():
-		if k in cardList.keys():
-			print("Error: ID Collision at index ", k, " with values ", cardList[k], ", ", cardDataset[k])
+		if k == "##COMMENT##":
+			continue
 		
 		var id = int(k)
 		
@@ -61,6 +106,24 @@ func _ready():
 	
 	fuseTest()
 			
+"""
+func addKeyToAllCards(key : String, default_value=""):
+	var path = "res://database/card_list.json"
+	
+	var file = File.new()
+	file.open("res://database/card_list.json", File.READ_WRITE)
+	var cardDataset : Dictionary = parse_json(file.get_as_text())
+	
+	FileIO.writeToJSON(path.get_base_dir(), "cards.copy" + str(randi()), cardDataset)
+	
+#	for k in cardDataset.keys():
+#		if k == "##COMMENT##":
+#			continue
+#		k[key] = default_value
+	
+#	file.store_line(to_json(var2str(cardDataset)))
+	file.close()
+"""
 
 func getCard(index : int) -> Card:
 	if not index in cardList.keys():
@@ -94,7 +157,38 @@ static func deserialize(data : Dictionary) -> Card:
 	var card : Card = Card.new(data)
 	card.playerID = data["player_id"]
 	return card
+
+static func deserializeAbility(data : String, card : Card) -> Ability:
+	var abilityLoaded = null
+	var ablData = data.split(" ")
 	
+	var found = false
+	for data in ProjectSettings.get_setting("_global_script_classes"):
+		if data["class"] == ablData[0]:
+			abilityLoaded = load(data["path"]).new(card)
+			for i in range(1, ablData.size()):
+				if "=" in ablData[i]:
+					var eq = ablData[i].split("=")
+					var varName = eq[0]
+					var varNum  = eq[1]
+					if varNum.is_valid_integer():
+						varNum = int(varNum)
+					elif varNum.is_valid_float():
+						varNum = float(varNum)
+					elif varNum == "True":
+						varNum = true
+					elif varNum == "False":
+						varNum = false
+					
+					abilityLoaded.myVars[varName] = varNum
+			
+			found = true
+			break
+	if not found:
+		print("ERROR LOADING CARD: COULD NOT FIND ABILITY ", data)
+	
+	return abilityLoaded
+
 func canFuseCards(cards : Array) -> bool:
 	var uniques = []
 	for c in cards:

@@ -2,10 +2,8 @@ extends AbilityETB
 
 class_name AbilityChimera
 
-var buffs = 0
-
 func _init(card : Card).("Chimera", card, Color.brown, true, Vector2(0, 0)):
-	pass
+	myVars["buffsApplied"] = 0
 
 func onApplied(slot):
 	addToStack("onEffect", [card, true])
@@ -14,10 +12,10 @@ func onHoverEnter(slot):
 	onEffect([slot, false])
 
 func onHoverExit(slot):
-	card.power -= buffs * count
-	card.toughness -= buffs * count
-	card.maxToughness -= buffs * count
-	buffs = 0
+	card.power -= myVars.buffsApplied * myVars.count
+	card.toughness -= myVars.buffsApplied * myVars.count
+	card.maxToughness -= myVars.buffsApplied * myVars.count
+	myVars.buffsApplied = 0
 
 func onEffect(params):
 	var playerID = params[0].playerID
@@ -31,18 +29,18 @@ func onEffect(params):
 	#Calculating all bits set to 1 in tribes
 	while tribes > 0:
 		if tribes & 1 == 1:
-			buffs += 1
+			myVars.buffsApplied += 1
 		tribes = tribes >> 1
 	
 	#Increasing p/t based on number of bits in tribe == 1
-	self.card.power += buffs * (count - timesApplied)
-	self.card.toughness += buffs * (count - timesApplied)
-	self.card.maxToughness += buffs * (count - timesApplied)
+	self.card.power += myVars.buffsApplied * (myVars.count - myVars.timesApplied)
+	self.card.toughness += myVars.buffsApplied * (myVars.count - myVars.timesApplied)
+	self.card.maxToughness += myVars.buffsApplied * (myVars.count - myVars.timesApplied)
 	
 	if removeCards:
 		while(board.graveCards[playerID].size() > 0):
 			board.removeCardFromGrave(playerID, 0)
-		timesApplied = count
+		myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature is played, remove all cards from its controller's " + str(TextScrapyard.new(null)) +". Gets +" + str(count - subCount) + "/+" + str(count - subCount) +" for each unique creature type removed this way"
+	return .genDescription() + "When this creature is played, remove all cards from its controller's " + str(TextScrapyard.new(null)) +". Gets +" + str(myVars.count - subCount) + "/+" + str(myVars.count - subCount) +" for each unique creature type removed this way"

@@ -12,16 +12,16 @@ func onEffect(params):
 	var board = NodeLoc.getBoard()
 	for p in board.players:
 		if p.UUID == self.card.playerID:
-			for i in range(count - timesApplied):
+			for i in range(myVars.count - myVars.timesApplied):
 				var card = p.deck.tutorByAbility(self.get_script())
 				if card != null:
 					p.hand.addCardToHand([card, false, true])
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	var string
-	if count == 1:
+	if myVars.count == 1:
 		string = "1 card"
 	else:
-		string = str(count) + " cards"
+		string = str(myVars.count) + " cards"
 	return .genDescription() + "When this creature is played, its controller draws " + string +" with " + str(get_script().new(null)) + " from their deck"

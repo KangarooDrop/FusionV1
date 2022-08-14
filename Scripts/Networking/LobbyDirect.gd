@@ -3,7 +3,6 @@ extends Node
 
 var inLobby = false
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var kickTex = preload("res://Art/UI/kick.png")
 
 onready var lobbySettings = $LobbySettings
@@ -81,7 +80,7 @@ func _on_HostButton_pressed():
 	Server.startServer(Server.DEFAULT_PORT, peers)
 	setInLobby()
 	$Lobby/StartButton.disabled = false
-	addUser(1, SilentWolf.Auth.logged_in_player)
+	addUser(1, Server.username)
 	clearMessages()
 
 
@@ -89,7 +88,7 @@ func _on_JoinButton_pressed():
 	if$Lobby/LineEdit.text != "":
 		Server.online = true
 		setInLobby()
-		addUser(get_tree().get_network_unique_id(), SilentWolf.Auth.logged_in_player)
+		addUser(get_tree().get_network_unique_id(), Server.username)
 		$Lobby/LobbySettingsButton.disabled = true
 		clearMessages()
 		Server.connectToServer($Lobby/LineEdit.text)
@@ -105,13 +104,6 @@ func setOwnGameParams(gameParams : Dictionary):
 
 func getGameParams() -> Dictionary:
 	return lobbySettings.getGameParams()
-
-
-func createPopup(title : String, desc : String):
-	var pop = popupUI.instance()
-	pop.init(title, desc, [["Close", pop, "close", []]])
-	$PopupHolder.add_child(pop)
-	pop.options[0].grab_focus()
 
 
 func _on_LeaveButton_pressed():
@@ -152,7 +144,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	Server.sendChat(SilentWolf.Auth.logged_in_player + ": " + text)
+	Server.sendChat(Server.username + ": " + text)
 	$Lobby/LineEdit4.text = ""
 
 
@@ -214,13 +206,7 @@ func startGame():
 
 
 func openFileSelector():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$FDCenter/OptionDisplay.setOptions("Select Deck", options, keys)
-	
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 	$Lobby.hide()
 	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass
@@ -250,10 +236,12 @@ func onFileButtonClicked(button : Button, key):
 		$OpponentList.show()
 
 func _on_OpponentLeaveButton_pressed():
-	var pop = popupUI.instance()
-	pop.init("Main Menu", "Are you sure you want to quit and return to the main menu?", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
-	$PopupHolder.add_child(pop)
-	pop.options[1].grab_focus()
+	var pop = MessageManager.createPopup("Main Menu", "Are you sure you want to quit and return to the main menu?", [])
+	pop.setButtons([["Yes", self, "toMainMenu", []], ["Back", null, null, []]])
+
+func createPopup(title : String, desc : String):
+	var pop = MessageManager.createPopup(title, desc, [])
+	pop.setButtons([pop.GET_CLOSE_BUTTON()])
 	
 func toMainMenu():
 	if Server.online:

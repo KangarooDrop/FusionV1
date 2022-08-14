@@ -1,43 +1,62 @@
-extends Node
+extends Control
 
 var cardList_A : Array
 
 var deck_A : Deck
 var hand_A : Array
 
+var boardMP = load("res://Scripts/Boards/BoardMP.gd")
+var boardPuzzle = load("res://Scripts/Boards/BoardPuzzle.gd")
+var boardPractice = load("res://Scripts/Boards/BoardMP.gd")
+
+signal BoardScriptAdded(board)
+
 func _ready():
-	$CenterControl/OptionDisplay.connect("onBackPressed", self, "onDeckChangeBackPressed")
-	$CenterControl/OptionDisplay.connect("onOptionPressed", self, "onDeckChangeButtonPressed")
+	$Control/OptionDisplay.connect("onBackPressed", self, "onDeckChangeBackPressed")
+	$Control/OptionDisplay.connect("onOptionPressed", self, "onDeckChangeButtonPressed")
+	
+	var b = get_node("CenterControl/Board")
+	if Settings.gameMode == Settings.GAME_MODE.PUZZLE:
+		b.set_script(boardPuzzle)
+	elif Settings.gameMode == Settings.GAME_MODE.PRACTICE:
+		b.set_script(boardPractice)
+	else:
+		b.set_script(boardMP)
+	
+	emit_signal("BoardScriptAdded", b)
+	
+	b.set_process(true)
+	b.set_physics_process(true)
+	b.set_process_input(true)
+	b._ready()
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.scancode == KEY_ESCAPE:
-			if $CenterControl/OptionDisplay.visible:
+			if $CenterControl/LobbyChat.visible:
+				$CenterControl/LobbyChat.fadingNode.fadeOut()
+			elif $Control/OptionDisplay.visible:
 				onDeckChangeBackPressed()
-			elif $CenterControl/PauseNode/PauseMenu/SettingsPage/FDCenter/OptionDisplay.visible:
-				$CenterControl/PauseNode/PauseMenu/SettingsPage.onShaderBackButtonPressed()
-			elif $CenterControl/PauseNode/PauseMenu/SettingsPage.visible:
-				$CenterControl/PauseNode/PauseMenu/SettingsPage.onBackPressed()
-			elif $CenterControl/PauseNode/PauseMenu/OpponentList.visible:
-				$CenterControl/PauseNode/PauseMenu/OpponentList.hide()
-			elif $CenterControl/PauseNode/PauseMenu/OpponentList.visible:
-				$CenterControl/PauseNode/PauseMenu/OpponentList.hide()
-			elif is_instance_valid($CenterControl/PauseNode/PauseMenu.mmPop):
-				$CenterControl/PauseNode/PauseMenu.mmPop.close()
+			elif $Control/PauseNode/PauseMenu/SettingsPage/FDCenter/OptionDisplay.visible:
+				$Control/PauseNode/PauseMenu/SettingsPage.onShaderBackButtonPressed()
+			elif $Control/PauseNode/PauseMenu/SettingsPage.visible:
+				$Control/PauseNode/PauseMenu/SettingsPage.onBackPressed()
+			elif $Control/PauseNode/PauseMenu/OpponentList.visible:
+				$Control/PauseNode/PauseMenu/OpponentList.hide()
+			elif $Control/PauseNode/PauseMenu/OpponentList.visible:
+				$Control/PauseNode/PauseMenu/OpponentList.hide()
 			else:
-				if $CenterControl/PauseNode/PauseMenu.visible:
-					$CenterControl/PauseNode/PauseMenu.hide()
+				if $Control/PauseNode/PauseMenu.visible:
+					$Control/PauseNode/PauseMenu.hide()
 				else:
-					$CenterControl/PauseNode/PauseMenu.show()
+					$Control/PauseNode/PauseMenu.show()
 				
+		if event.scancode == KEY_ENTER:
+			if not $CenterControl/LobbyChat.visible:
+				$CenterControl/LobbyChat.fadingNode.fadeIn()
 
 func onDeckChangePressed():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$CenterControl/OptionDisplay.setOptions("Select Deck", options, keys)
+	$CenterControl/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 
 func onDeckChangeButtonPressed(button : Button, key):
 	onDeckChangeBackPressed()
@@ -45,5 +64,5 @@ func onDeckChangeButtonPressed(button : Button, key):
 	MessageManager.notify("Deck selected for next game")
 
 func onDeckChangeBackPressed():
-	$CenterControl/OptionDisplay.hide()
-	$CenterControl/PauseNode/PauseMenu.show()
+	$Control/OptionDisplay.hide()
+	$Control/PauseNode/PauseMenu.show()

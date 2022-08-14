@@ -12,10 +12,10 @@ func onEffect(params):
 	if ListOfCards.isInZone(card, CardSlot.ZONES.CREATURE):
 		var slots = card.cardNode.slot.getNeighbors()
 		for s in slots:
-			var card = ListOfCards.getCard(84)
+			var card = ListOfCards.getCard(1055)
 			self.card.addCreatureToBoard(card, s)
 	
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, create a 0/0 ooze on either side of it"

@@ -10,9 +10,9 @@ func onOtherDeath(slot):
 		addToStack("onEffect", [])
 
 func onEffect(params):
-	card.power += count
-	card.toughness += count
-	card.maxToughness += count
+	card.power += myVars.count
+	card.toughness += myVars.count
+	card.maxToughness += myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When another creature you control dies, gain +" + str(count) + "/+" + str(count)
+	return .genDescription() + "When another creature you control dies, gain +" + str(myVars.count) + "/+" + str(myVars.count)

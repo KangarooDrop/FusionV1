@@ -2,8 +2,6 @@ extends Node
 
 class_name TournamentLobby
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-
 enum STATUS {NONE, WAITING, LOSE, WIN, SETTING_UP}
 var currentStatus : int = STATUS.NONE
 
@@ -91,7 +89,7 @@ func generateBracket():
 			if Server.playerNames.has(nodes[j].data):
 				label.text = Server.playerNames[nodes[j].data]
 			elif nodes[j].data == get_tree().get_network_unique_id():
-				label.text = SilentWolf.Auth.logged_in_player
+				label.text = Server.username
 			elif nodes[j].data == -1:
 				label.text = "                 "
 			else:
@@ -167,9 +165,8 @@ func checkNextGame():
 			self.queue_free()
 
 func onQuitButtonPressed():
-	var pop = popupUI.instance()
-	pop.init("Quit Tournament", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "toMainMenu", []], ["Back", pop, "close", []]])
-	$CenterControl.add_child(pop)
+	var pop = MessageManager.createPopup("Quit Tournament", "Are you sure you want to quit? There will be no way to return", [])
+	pop.setButtons([["Yes", self, "toMainMenu", []], ["Back", null, null, []]])
 
 func onSettingsPressed():
 	$SettingsHolder/SettingsPage.visible = true

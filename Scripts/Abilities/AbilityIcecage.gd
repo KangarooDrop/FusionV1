@@ -14,7 +14,7 @@ func onEffect(params):
 			var frozen = AbilityFrozen.new(s.cardNode.card)
 			frozen.onEffect()
 			s.cardNode.card.addAbility(frozen)
-	timesApplied = count
+	myVars.timesApplied = myVars.count
 
 func genDescription(subCount = 0) -> String:
 	return .genDescription() + "When this creature is played, inflict " + str(AbilityFrozen.new(null)) + " on all creatures"

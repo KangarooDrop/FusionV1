@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/SceneScripts/main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/BoardNode.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/UI/PauseScreen.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scripts/UI/WinLose.gd" type="Script" id=5]
 [ext_resource path="res://Art/UI/win.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/BoardChat.tscn" type="PackedScene" id=7]
 
 [node name="main" type="Control"]
 anchor_right = 1.0
@@ -17,20 +18,15 @@ __meta__ = {
 }
 
 [node name="CenterControl" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Camera2D" type="Camera2D" parent="CenterControl"]
-current = true
-zoom = Vector2( 1.125, 1.125 )
-
 [node name="Board" parent="CenterControl" instance=ExtResource( 2 )]
+rect_min_size = Vector2( 100, 0 )
 
 [node name="WinLose" type="Control" parent="CenterControl"]
 visible = false
@@ -49,11 +45,30 @@ texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 64, 32 )
 
-[node name="PauseNode" type="Node2D" parent="CenterControl"]
+[node name="LobbyChat" parent="CenterControl" instance=ExtResource( 7 )]
+
+[node name="Control" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionDisplay" parent="Control" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 0, -32 )
+z_index = 98
+
+[node name="Camera2D" type="Camera2D" parent="Control"]
+current = true
+zoom = Vector2( 1.125, 1.125 )
+
+[node name="PauseNode" type="Node2D" parent="Control"]
+position = Vector2( 0, -16 )
 z_index = 99
 
-[node name="PauseMenu" parent="CenterControl/PauseNode" instance=ExtResource( 4 )]
-
-[node name="OptionDisplay" parent="CenterControl" instance=ExtResource( 3 )]
-visible = false
-z_index = 98
+[node name="PauseMenu" parent="Control/PauseNode" instance=ExtResource( 4 )]
+mouse_filter = 2

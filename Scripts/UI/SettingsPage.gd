@@ -6,6 +6,9 @@ func _ready():
 	#Waits until parent node has called its ready function
 	yield(owner, "ready")
 	
+	if not is_instance_valid(get_tree()):
+		return
+	
 	$VBox/SoundSlider/HSlider.value = SoundEffectManager.volume
 	$VBox/MusicSlider/HSlider.value = MusicManager.volume
 	
@@ -84,6 +87,7 @@ func onShaderLoadButtonPressed(button : Button, key):
 
 func onShaderBackButtonPressed():
 	$FDCenter/OptionDisplay.hide()
+	$FDCenter.rect_position = Vector2()
 
 func onShaderChange(path : String):
 	$VBox/Shaders/SelectShaderButton.text = path.get_file().get_basename().capitalize()

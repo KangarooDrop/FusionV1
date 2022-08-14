@@ -33,7 +33,7 @@ func process(delta: float) -> void:
 			for i in range(1, lobbyData.size()):
 				var dat = (lobbyData[i] as String)
 				if dat.length() > 1:
-					var split = dat.split('#')
+					var split = dat.split('|')
 					rtn.append(split)
 					
 			hole_puncher.emit_signal("public_lobbies_received", rtn)

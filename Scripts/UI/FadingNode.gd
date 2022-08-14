@@ -8,6 +8,8 @@ var fadingOut : bool
 
 var freeOnFadeOut = true
 
+var maxAlpha := 1.0
+
 signal onFadeIn
 signal onFadeOut
 
@@ -19,7 +21,7 @@ func _physics_process(delta):
 		if timer < maxTime:
 			timer += delta
 			if timer >= maxTime:
-				parent.modulate = Color(1, 1, 1, 1)
+				parent.modulate = Color(1, 1, 1, maxAlpha)
 				fadingIn = false
 				emit_signal("onFadeIn")
 	elif fadingOut:
@@ -32,7 +34,7 @@ func _physics_process(delta):
 				close()
 	
 	if fadingIn or fadingOut:
-		parent.modulate = Color(1, 1, 1, timer / maxTime)
+		parent.modulate = Color(1, 1, 1, maxAlpha * timer / maxTime)
 	
 func setVisibility(a : float):
 	parent.modulate = Color(1, 1, 1, a)
@@ -40,6 +42,7 @@ func setVisibility(a : float):
 	
 func fadeIn():
 	fadingIn = true
+	fadingOut = false
 	
 func fadeOut():
 	fadingIn = false

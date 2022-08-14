@@ -22,8 +22,6 @@ var cardSlot = preload("res://Scenes/CardSlot.tscn")
 var cardNode = preload("res://Scenes/CardNode.tscn")
 var hoverScene = preload("res://Scenes/UI/Hover.tscn")
 var fadingScene = preload("res://Scenes/UI/FadingNode.tscn")
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
-var fontTRES = preload("res://Fonts/FontNormal.tres")
 
 var cardDists = 16
 onready var cardWidth = ListOfCards.cardBackground.get_width()
@@ -298,7 +296,7 @@ func addAllPlayerDisplay():
 	for player_id in playerIDs:
 		var uname
 		if not Server.playerIDs.has(player_id):
-			uname = SilentWolf.Auth.logged_in_player
+			uname = Server.username
 		else:
 			uname = Server.playerNames[player_id]
 		addPlayerDisplay(uname, player_id)
@@ -306,8 +304,7 @@ func addAllPlayerDisplay():
 func addPlayerDisplay(username : String, player_id : int):
 	var label = Label.new()
 	label.text = username
-	label.set("custom_colors/font_color", Color(0,0,0))
-	label.set("custom_fonts/font", fontTRES)
+	NodeLoc.setLabelParams(label)
 	$OrderDisplay/VBoxContainer.add_child(label)
 	
 	idToDisplayLabel[player_id] = label
@@ -465,12 +462,12 @@ func removeCard(cardUUID : int):
 	$CardDisplay.addCard(ListOfCards.getCard(cardUUID))
 	
 func quitButtonPressed():
-	var pop = popupUI.instance()
 	if Input.is_key_pressed(KEY_CONTROL):
-		pop.init("DEBUG_QUIT", "Go to Deck Editor?", [["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
+		var pop = MessageManager.createPopup("DEBUG_QUIT", "Go to Deck Editor?", [])
+		pop.setButtons([["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
 	else:
-		pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
-	$CardHolder.add_child(pop)
+		var pop = MessageManager.createPopup("Quit Draft", "Are you sure you want to quit? There will be no way to return", [])
+		pop.setButtons([["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 
 func settingsButtonPressed():
 	$SettingsHolder/SettingsPage.visible = true

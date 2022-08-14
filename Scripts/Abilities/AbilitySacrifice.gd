@@ -12,9 +12,9 @@ func onDeath():
 func onEffect(params):
 	for slot in NodeLoc.getBoard().creatures[card.playerID]:
 		if is_instance_valid(slot.cardNode):
-			slot.cardNode.card.power += count
-			slot.cardNode.card.toughness += count
-			slot.cardNode.card.maxToughness += count
+			slot.cardNode.card.power += myVars.count
+			slot.cardNode.card.toughness += myVars.count
+			slot.cardNode.card.maxToughness += myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature dies, it gives other creatures you control +" + str(count) + "/+" + str(count)
+	return .genDescription() + "When this creature dies, it gives other creatures you control +" + str(myVars.count) + "/+" + str(myVars.count)

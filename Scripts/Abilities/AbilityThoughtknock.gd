@@ -33,10 +33,10 @@ func slotClicked(slot : CardSlot):
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count - timesApplied:
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= myVars.count - myVars.timesApplied:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
 			
@@ -55,8 +55,8 @@ func onEffect(params):
 
 func genDescription(subCount = 0) -> String:
 	var c = ""
-	if count - subCount == 1:
+	if myVars.count - subCount == 1:
 		c = "When this creature is played, its controller reveals their hand and their opponent chooses a card from it. They discard that card"
 	else:
-		c = "When this creature is played, its controller reveals their hand and their opponent chooses " + str(count - subCount) + " cards" + " from it. They discard those cards"
+		c = "When this creature is played, its controller reveals their hand and their opponent chooses " + str(myVars.count - subCount) + " cards" + " from it. They discard those cards"
 	return .genDescription() + c

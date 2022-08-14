@@ -13,13 +13,13 @@ func onApplied(slot):
 func onEffect(params : Array):
 	for p in NodeLoc.getBoard().players:
 		if p.UUID == card.playerID:
-			if p.hand.slots.size() <= count - timesApplied:
+			if p.hand.slots.size() <= myVars.count - myVars.timesApplied:
 				for i in range(p.hand.nodes.size()):
 					p.hand.discardIndex(i)
-				for i in range(count - timesApplied):
+				for i in range(myVars.count - myVars.timesApplied):
 					p.hand.drawCard()
 				
-				timesApplied = count
+				myVars.timesApplied = myVars.count
 				return
 	NodeLoc.getBoard().getSlot(self, card.playerID)
 
@@ -46,19 +46,19 @@ func slotClicked(slot : CardSlot):
 			discardIndexes.erase(index)
 			slot.cardNode.position.y += 16
 		
-		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= count - timesApplied:
+		if discardIndexes.size() >= hand.slots.size() or discardIndexes.size() >= myVars.count - myVars.timesApplied:
 			for i in range(discardIndexes.size()):
 				hand.discardIndex(discardIndexes[i])
-			for i in range(count - timesApplied):
+			for i in range(myVars.count - myVars.timesApplied):
 				hand.drawCard()
-			timesApplied = count
+			myVars.timesApplied = myVars.count
 			discardIndexes.clear()
 			NodeLoc.getBoard().endGetSlot()
 	
 func genDescription(subCount = 0) -> String:
 	var string
-	if count - subCount == 1:
+	if myVars.count - subCount == 1:
 		string = "1 card"
 	else:
-		string = str(count - subCount) + " cards"
+		string = str(myVars.count - subCount) + " cards"
 	return .genDescription() + "When this creature is played, its controller chooses " + string + " cards to discard and then draws " + string

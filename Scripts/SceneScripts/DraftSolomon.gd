@@ -7,7 +7,6 @@ var numBoosters : int = 0
 var opponentID : int = -1
 var cardsPerBooster : int = 10
 
-var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
 var cardNodeScene = preload("res://Scenes/CardNode.tscn")
 
 var hoveringWindow
@@ -91,12 +90,12 @@ func setDraftData(data : Array):
 	pass
 
 func onQuitButtonPressed():
-	var pop = popupUI.instance()
 	if Input.is_key_pressed(KEY_CONTROL):
-		pop.init("DEBUG_QUIT", "Go to Deck Editor?", [["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
+		var pop = MessageManager.createPopup("DEBUG_QUIT", "Go to Deck Editor?", [])
+		pop.setButtons([["Yes", Server, "receivedStartBuilding", []], ["Back", pop, "close", []]])
 	else:
-		pop.init("Quit Draft", "Are you sure you want to quit? There will be no way to return", [["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
-	$CenterControl.add_child(pop)
+		var pop = MessageManager.createPopup("Quit Draft", "Are you sure you want to quit? There will be no way to return", [])
+		pop.setButtons([["Yes", self, "closeDraft", []], ["Back", pop, "close", []]])
 
 func onSettingsPressed():
 	$SettingsHolder/SettingsPage.visible = true
@@ -323,7 +322,7 @@ func opponentSlotClicked(cardDisplayInt : int, cardIndex : int):
 func setCurrentState(newState : int):
 	currentState = newState
 	Server.solomonSetState(opponentID, newState)
-	editOwnName(SilentWolf.Auth.logged_in_player)
+	editOwnName(Server.username)
 
 func setOpponentState(newState : int):
 	opponentState = newState

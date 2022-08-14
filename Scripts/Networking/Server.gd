@@ -1,6 +1,6 @@
 extends Node2D
 
-#SilentWolf.Auth.logged_in_player
+var username := "NO_NAME"
 
 var host = false
 var online = false
@@ -19,6 +19,9 @@ var playersReady := {}
 var playersChallenged := {}
 
 func _ready():
+	seed(OS.get_ticks_usec())
+	username = str(randi())
+	
 	get_tree().connect("network_peer_connected", self, "playerConnected")
 	get_tree().connect("network_peer_disconnected", self, "playerDisconnected")
 	
@@ -39,7 +42,7 @@ func startServer(self_port=DEFAULT_PORT, peers : int = 1):
 		print("Server could not be started")
 		MessageManager.notify("Error: The server could not be started")
 	
-	if Server.host:
+	if host:
 		playersReady[1] = false
 
 func connectToServer(host_ip=ip, host_port=DEFAULT_PORT, self_port=0):
@@ -91,7 +94,7 @@ func _Server_Disconnected():
 ####################################################################
 
 func playerConnected(player_id : int):
-	if Server.host:
+	if host:
 		if Settings.gameMode == Settings.GAME_MODE.LOBBY:
 			var gameParams = get_node("/root/LobbyX").getGameParams()
 			sendParams(player_id, gameParams)
@@ -103,14 +106,14 @@ func playerConnected(player_id : int):
 
 remote func receiveConfirmVersion(versionID):
 	if Settings.compareVersion(Settings.versionID, versionID) == 0:
-		rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", SilentWolf.Auth.logged_in_player)
+		rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username)
 	else:
 		MessageManager.notify("Error: Incompatible game versions")
-		Server.closeServer()
+		closeServer()
 		get_node("/root/LobbyX")._on_LeaveButton_pressed()
 
 func playerDisconnected(player_id : int):
-	if Server.host and playerIDs.has(player_id):
+	if host and playerIDs.has(player_id):
 		removeUser(player_id)
 		for id in playerIDs:
 			rpc_id(id, "removeUser", player_id)
@@ -120,14 +123,14 @@ func sendParams(player_id : int, gameParams):
 
 remote func receiveSendParams(gameParams):
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY:
-		if  gameParams["version"] == Settings.versionID:
-			rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", SilentWolf.Auth.logged_in_player)
+		if  Settings.compareVersion(Settings.versionID, Settings.versionID) == Settings.VERSION_COMP.SAME:
+			rpc_id(get_tree().get_rpc_sender_id(), "receiveSetPlayerData", username)
 	
 	if Settings.gameMode == Settings.GAME_MODE.DIRECT:
 		Settings.gameMode = Settings.GAME_MODE.LOBBY
 	
 	if Settings.gameMode == Settings.GAME_MODE.LOBBY:
-		if  gameParams["version"] == Settings.versionID:
+		if  Settings.compareVersion(Settings.versionID, Settings.versionID) == Settings.VERSION_COMP.SAME:
 			get_node("/root/LobbyX").setOwnGameParams(gameParams)
 		else:
 			print("Error: Incompatible game versions")
@@ -152,7 +155,7 @@ remote func receiveSetPlayerData(username : String):
 		rpc_id(id, "addUser", player_id, username)
 		rpc_id(player_id, "addUser", id, playerNames[id])
 	addUser(player_id, username)
-	rpc_id(player_id, "addUser", 1, SilentWolf.Auth.logged_in_player)
+	rpc_id(player_id, "addUser", 1, username)
 	rpc_id(player_id, "receiveConfirmJoin")
 
 remote func receiveConfirmJoin():
@@ -179,7 +182,7 @@ remote func receiveConfirmJoin():
 					draft = load("res://Scenes/DraftSolomon.tscn").instance()
 				_:
 					MessageManager.notify("Error: Unknown draft type")
-					Server.closeServer()
+					closeServer()
 					var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 					if error != 0:
 						print("Error loading test1.tscn. Error Code = " + str(error))
@@ -345,7 +348,7 @@ remote func receivedStartBuilding():
 				availableCardCount[d.card.UUID] = d.count
 
 	var editor = load("res://Scenes/DeckEditor.tscn").instance()
-	availableCardCount[86] = -1
+	availableCardCount[0] = -1
 	editor.availableCardCount = availableCardCount
 	root.add_child(editor)
 	get_tree().current_scene = editor
@@ -371,7 +374,16 @@ func setPackNum(num : int):
 
 remote func receiveSetPackNum(num : int):
 	var player_id = get_tree().get_rpc_sender_id()
-	NodeLoc.getBoard().setPackNum(player_id, num)
+	var board = NodeLoc.getBoard()
+	
+	while not board is DraftBooster:
+		print("Board not ready yet, waiting; active 2")
+		yield(get_tree().create_timer(0.1), "timeout")
+		board = NodeLoc.getBoard()
+		if not Server.online:
+			return
+	
+	board.setPackNum(player_id, num)
 
 func setBoosterReady():
 	if Server.host:
@@ -729,8 +741,9 @@ remote func receiveSetReady(ready : bool):
 	checkReady()
 	
 func checkReady():
-	if NodeLoc.getBoard() != null:
-		NodeLoc.getBoard().checkReady()
+	var b = NodeLoc.getBoard()
+	if is_instance_valid(b) and b.has_method("checkReady"):
+		b.checkReady()
 	
 	if Server.host:
 		if playerIDs.size() == 0:
@@ -827,7 +840,7 @@ remote func receiveRequestGM(p1, p2):
 			gm = p2
 		gmData[[p1, p2]] = gm
 		
-		print("GM = ", gm, ":", SilentWolf.Auth.logged_in_player if gm == 1 else playerNames[gm])
+		print("GM = ", gm, ":", username if gm == 1 else playerNames[gm])
 	
 	var gm
 	if gmData.has([p1, p2]):

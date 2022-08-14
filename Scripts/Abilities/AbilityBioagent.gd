@@ -12,7 +12,7 @@ func onDeath():
 func onEffect(params):
 	for s in params[0].getNeighbors():
 		if is_instance_valid(s.cardNode):
-			s.cardNode.card.toughness -= count
+			s.cardNode.card.toughness -= myVars.count
 
 func genDescription(subCount = 0) -> String:
-	return .genDescription() + "When this creature dies, it deals " + str(count) +" damage to each adjacent creature"
+	return .genDescription() + "When this creature dies, it deals " + str(myVars.count) +" damage to each adjacent creature"

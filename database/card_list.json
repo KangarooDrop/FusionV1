@@ -1,14 +1,19 @@
 {
+  "##COMMENT##":"BASICS",
+
   "0": {
-    "name": "Null",
-    "tex": "res://Art/portraits/card_NULL.png",
+    "name": "Primordial Ooze",
+    "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
     "power": 2,
     "toughness": 2,
     "creature_type": [
       1
     ],
-    "tier": 0,
-    "rarity": "COMMON"
+    "tier": 1,
+    "abilities": [
+      
+    ],
+    "rarity": "BASIC"
   },
   "1": {
     "name": "Fire Elemental",
@@ -34,7 +39,7 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityWisdom 1"
+      "AbilityWisdom"
     ],
     "rarity": "COMMON"
   },
@@ -53,14 +58,17 @@
     "rarity": "COMMON"
   },
   "4": {
-    "name": "Wolf",
-    "tex": "res://Art/portraits/card_WOLF.png",
-    "power": 3,
-    "toughness": 3,
+    "name": "Badger",
+    "tex": "res://Art/portraits/BADger.png",
+    "power": 1,
+    "toughness": 2,
     "creature_type": [
       5
     ],
-    "tier": 0,
+    "tier": 1,
+    "abilities": [
+      "AbilityRampage"
+    ],
     "rarity": "COMMON"
   },
   "5": {
@@ -78,151 +86,6 @@
     "rarity": "COMMON"
   },
   "6": {
-    "name": "Fiend",
-    "tex": "res://Art/portraits/card_FIEND.png",
-    "creature_type": [
-      2
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "7": {
-    "name": "Djinn",
-    "tex": "res://Art/portraits/card_DJINN.png",
-    "creature_type": [
-      2,
-      3
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "8": {
-    "name": "Torrent",
-    "tex": "res://Art/portraits/card_TORRENT.png",
-    "creature_type": [
-      3
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "9": {
-    "name": "Volcan",
-    "tex": "res://Art/portraits/card_VOLCAN.png",
-    "creature_type": [
-      2,
-      4
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "10": {
-    "name": "Sludge",
-    "tex": "res://Art/portraits/card_SLUDGE.png",
-    "creature_type": [
-      4,
-      3
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "11": {
-    "name": "Golem",
-    "tex": "res://Art/portraits/card_GOLEM.png",
-    "creature_type": [
-      4
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "12": {
-    "name": "Cerberus",
-    "tex": "res://Art/portraits/card_CERBERUS.png",
-    "creature_type": [
-      5,
-      2
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "13": {
-    "name": "Mermotaur",
-    "tex": "res://Art/portraits/card_LEVIATHAN.png",
-    "creature_type": [
-      5,
-      3
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "14": {
-    "name": "Stone Serpent",
-    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
-    "creature_type": [
-      5,
-      4
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "15": {
-    "name": "Gargantua",
-    "tex": "res://Art/portraits/card_GARGANTUA.png",
-    "creature_type": [
-      5
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "16": {
-    "name": "Flame Cannon",
-    "tex": "res://Art/portraits/card_FLAME_CANNON.png",
-    "creature_type": [
-      2,
-      6
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "17": {
-    "name": "Steamer",
-    "tex": "res://Art/portraits/card_STEAMER.png",
-    "creature_type": [
-      6,
-      3
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "18": {
-    "name": "Miner",
-    "tex": "res://Art/portraits/card_MINER.png",
-    "creature_type": [
-      6,
-      4
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "19": {
-    "name": "Cyber wolf",
-    "tex": "res://Art/portraits/card_CYBER_WOLF.png",
-    "creature_type": [
-      5,
-      6
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "20": {
-    "name": "Factory",
-    "tex": "res://Art/portraits/card_FACTORY.png",
-    "creature_type": [
-      6
-    ],
-    "tier": 2,
-    "rarity": "COMMON"
-  },
-  "21": {
     "name": "Necro",
     "tex": "res://Art/portraits/card_NECRO.png",
     "power": 2,
@@ -236,7 +99,163 @@
     ],
     "rarity": "COMMON"
   },
-  "22": {
+
+
+
+
+
+
+
+
+
+  "##COMMENT##":"TIER___2",
+
+  "100": {
+    "name": "Fiend",
+    "tex": "res://Art/portraits/card_FIEND.png",
+    "creature_type": [
+      2
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "101": {
+    "name": "Djinn",
+    "tex": "res://Art/portraits/card_DJINN.png",
+    "creature_type": [
+      2,
+      3
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "102": {
+    "name": "Torrent",
+    "tex": "res://Art/portraits/card_TORRENT.png",
+    "creature_type": [
+      3
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "103":{
+    "name": "Volcan",
+    "tex": "res://Art/portraits/card_VOLCAN.png",
+    "creature_type": [
+      2,
+      4
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "104": {
+    "name": "Sludge",
+    "tex": "res://Art/portraits/card_SLUDGE.png",
+    "creature_type": [
+      4,
+      3
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "105": {
+    "name": "Golem",
+    "tex": "res://Art/portraits/card_GOLEM.png",
+    "creature_type": [
+      4
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "106": {
+    "name": "Cerberus",
+    "tex": "res://Art/portraits/card_CERBERUS.png",
+    "creature_type": [
+      5,
+      2
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "107": {
+    "name": "Mermotaur",
+    "tex": "res://Art/portraits/card_LEVIATHAN.png",
+    "creature_type": [
+      5,
+      3
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "108": {
+    "name": "Stone Serpent",
+    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
+    "creature_type": [
+      5,
+      4
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "109": {
+    "name": "Gargantua",
+    "tex": "res://Art/portraits/card_GARGANTUA.png",
+    "creature_type": [
+      5
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "110": {
+    "name": "Flame Cannon",
+    "tex": "res://Art/portraits/card_FLAME_CANNON.png",
+    "creature_type": [
+      2,
+      6
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "111": {
+    "name": "Steamer",
+    "tex": "res://Art/portraits/card_STEAMER.png",
+    "creature_type": [
+      6,
+      3
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "112": {
+    "name": "Miner",
+    "tex": "res://Art/portraits/card_MINER.png",
+    "creature_type": [
+      6,
+      4
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "113": {
+    "name": "Cyber wolf",
+    "tex": "res://Art/portraits/card_CYBER_WOLF.png",
+    "creature_type": [
+      5,
+      6
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "114": {
+    "name": "Factory",
+    "tex": "res://Art/portraits/card_FACTORY.png",
+    "creature_type": [
+      6
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+  "115": {
     "name": "Combust",
     "tex": "res://Art/portraits/card_COMBUST.png",
     "creature_type": [
@@ -246,7 +265,7 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "23": {
+  "116": {
     "name": "Drifter",
     "tex": "res://Art/portraits/card_DRIFTER.png",
     "creature_type": [
@@ -256,7 +275,7 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "24": {
+  "117": {
     "name": "Grave Robber",
     "tex": "res://Art/portraits/card_DRIFTER.png",
     "creature_type": [
@@ -266,7 +285,7 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "25": {
+  "118": {
     "name": "Necro-Wolf",
     "tex": "res://Art/portraits/card_NECRO_WOLF.png",
     "creature_type": [
@@ -276,7 +295,7 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "26": {
+  "119": {
     "name": "Abomination",
     "tex": "res://Art/portraits/card_ABOMINATION.png",
     "creature_type": [
@@ -286,7 +305,7 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "27": {
+  "120": {
     "name": "Lichomancer",
     "tex": "res://Art/portraits/card_LICHOMANCER.png",
     "creature_type": [
@@ -295,7 +314,707 @@
     "tier": 2,
     "rarity": "COMMON"
   },
-  "28": {
+  "121": {
+    "name": "Slimy Boi",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "creature_type": [
+      1
+    ],
+    "tier": 2,
+    "rarity": "COMMON"
+  },
+
+
+
+
+
+
+
+
+
+  "##COMMENT##":"TIER___3",
+
+  "200": {
+    "name": "Fiend_2",
+    "tex": "res://Art/portraits/card_FIEND.png",
+    "creature_type": [
+      2
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "201": {
+    "name": "Djinn_2",
+    "tex": "res://Art/portraits/card_DJINN.png",
+    "creature_type": [
+      2,
+      3
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "202": {
+    "name": "Torrent_2",
+    "tex": "res://Art/portraits/card_TORRENT.png",
+    "creature_type": [
+      3
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "203":{
+    "name": "Volcan_2",
+    "tex": "res://Art/portraits/card_VOLCAN.png",
+    "creature_type": [
+      2,
+      4
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "204": {
+    "name": "Sludge_2",
+    "tex": "res://Art/portraits/card_SLUDGE.png",
+    "creature_type": [
+      4,
+      3
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "205": {
+    "name": "Golem_2",
+    "tex": "res://Art/portraits/card_GOLEM.png",
+    "creature_type": [
+      4
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "206": {
+    "name": "Cerberus_2",
+    "tex": "res://Art/portraits/card_CERBERUS.png",
+    "creature_type": [
+      5,
+      2
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "207": {
+    "name": "Mermotaur_2",
+    "tex": "res://Art/portraits/card_LEVIATHAN.png",
+    "creature_type": [
+      5,
+      3
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "208": {
+    "name": "Stone Serpent_2",
+    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
+    "creature_type": [
+      5,
+      4
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "209": {
+    "name": "Gargantua_2",
+    "tex": "res://Art/portraits/card_GARGANTUA.png",
+    "creature_type": [
+      5
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "210": {
+    "name": "Flame Cannon_2",
+    "tex": "res://Art/portraits/card_FLAME_CANNON.png",
+    "creature_type": [
+      2,
+      6
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "211": {
+    "name": "Steamer_2",
+    "tex": "res://Art/portraits/card_STEAMER.png",
+    "creature_type": [
+      6,
+      3
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "212": {
+    "name": "Miner_2",
+    "tex": "res://Art/portraits/card_MINER.png",
+    "creature_type": [
+      6,
+      4
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "213": {
+    "name": "Cyber wolf_2",
+    "tex": "res://Art/portraits/card_CYBER_WOLF.png",
+    "creature_type": [
+      5,
+      6
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "214": {
+    "name": "Factory_2",
+    "tex": "res://Art/portraits/card_FACTORY.png",
+    "creature_type": [
+      6
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "215": {
+    "name": "Combust_2",
+    "tex": "res://Art/portraits/card_COMBUST.png",
+    "creature_type": [
+      2,
+      7
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "216": {
+    "name": "Drifter_2",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      3,
+      7
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "217": {
+    "name": "Grave Robber_2",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      4,
+      7
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "218": {
+    "name": "Necro-Wolf_2",
+    "tex": "res://Art/portraits/card_NECRO_WOLF.png",
+    "creature_type": [
+      5,
+      7
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "219": {
+    "name": "Abomination_2",
+    "tex": "res://Art/portraits/card_ABOMINATION.png",
+    "creature_type": [
+      7,
+      6
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "220": {
+    "name": "Lichomancer_2",
+    "tex": "res://Art/portraits/card_LICHOMANCER.png",
+    "creature_type": [
+      7
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+  "221": {
+    "name": "Slimy Boi_2",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "creature_type": [
+      1
+    ],
+    "tier": 3,
+    "rarity": "COMMON"
+  },
+
+
+
+
+
+
+
+
+
+  "##COMMENT##":"TIER___4",
+
+  "300": {
+    "name": "Fiend_3",
+    "tex": "res://Art/portraits/card_FIEND.png",
+    "creature_type": [
+      2
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "301": {
+    "name": "Djinn_3",
+    "tex": "res://Art/portraits/card_DJINN.png",
+    "creature_type": [
+      2,
+      3
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "302": {
+    "name": "Torrent_3",
+    "tex": "res://Art/portraits/card_TORRENT.png",
+    "creature_type": [
+      3
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "303":{
+    "name": "Volcan_3",
+    "tex": "res://Art/portraits/card_VOLCAN.png",
+    "creature_type": [
+      2,
+      4
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "304": {
+    "name": "Sludge_3",
+    "tex": "res://Art/portraits/card_SLUDGE.png",
+    "creature_type": [
+      4,
+      3
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "305": {
+    "name": "Golem_3",
+    "tex": "res://Art/portraits/card_GOLEM.png",
+    "creature_type": [
+      4
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "306": {
+    "name": "Cerberus_3",
+    "tex": "res://Art/portraits/card_CERBERUS.png",
+    "creature_type": [
+      5,
+      2
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "307": {
+    "name": "Mermotaur_3",
+    "tex": "res://Art/portraits/card_LEVIATHAN.png",
+    "creature_type": [
+      5,
+      3
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "308": {
+    "name": "Stone Serpent_3",
+    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
+    "creature_type": [
+      5,
+      4
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "309": {
+    "name": "Gargantua_3",
+    "tex": "res://Art/portraits/card_GARGANTUA.png",
+    "creature_type": [
+      5
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "310": {
+    "name": "Flame Cannon_3",
+    "tex": "res://Art/portraits/card_FLAME_CANNON.png",
+    "creature_type": [
+      2,
+      6
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "311": {
+    "name": "Steamer_3",
+    "tex": "res://Art/portraits/card_STEAMER.png",
+    "creature_type": [
+      6,
+      3
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "312": {
+    "name": "Miner_3",
+    "tex": "res://Art/portraits/card_MINER.png",
+    "creature_type": [
+      6,
+      4
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "313": {
+    "name": "Cyber wolf_3",
+    "tex": "res://Art/portraits/card_CYBER_WOLF.png",
+    "creature_type": [
+      5,
+      6
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "314": {
+    "name": "Factory_3",
+    "tex": "res://Art/portraits/card_FACTORY.png",
+    "creature_type": [
+      6
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "315": {
+    "name": "Combust_3",
+    "tex": "res://Art/portraits/card_COMBUST.png",
+    "creature_type": [
+      2,
+      7
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "316": {
+    "name": "Drifter_3",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      3,
+      7
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "317": {
+    "name": "Grave Robber_3",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      4,
+      7
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "318": {
+    "name": "Necro-Wolf_3",
+    "tex": "res://Art/portraits/card_NECRO_WOLF.png",
+    "creature_type": [
+      5,
+      7
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "319": {
+    "name": "Abomination_3",
+    "tex": "res://Art/portraits/card_ABOMINATION.png",
+    "creature_type": [
+      7,
+      6
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "320": {
+    "name": "Lichomancer_3",
+    "tex": "res://Art/portraits/card_LICHOMANCER.png",
+    "creature_type": [
+      7
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+  "321": {
+    "name": "Slimy Boi_3",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "creature_type": [
+      1
+    ],
+    "tier": 4,
+    "rarity": "COMMON"
+  },
+
+
+
+
+
+
+
+
+
+  "##COMMENT##":"TIER___5",
+
+  "400": {
+    "name": "Fiend_4",
+    "tex": "res://Art/portraits/card_FIEND.png",
+    "creature_type": [
+      2
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "401": {
+    "name": "Djinn_4",
+    "tex": "res://Art/portraits/card_DJINN.png",
+    "creature_type": [
+      2,
+      3
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "402": {
+    "name": "Torrent_4",
+    "tex": "res://Art/portraits/card_TORRENT.png",
+    "creature_type": [
+      3
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "403":{
+    "name": "Volcan_4",
+    "tex": "res://Art/portraits/card_VOLCAN.png",
+    "creature_type": [
+      2,
+      4
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "404": {
+    "name": "Sludge_4",
+    "tex": "res://Art/portraits/card_SLUDGE.png",
+    "creature_type": [
+      4,
+      3
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "405": {
+    "name": "Golem_4",
+    "tex": "res://Art/portraits/card_GOLEM.png",
+    "creature_type": [
+      4
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "406": {
+    "name": "Cerberus_4",
+    "tex": "res://Art/portraits/card_CERBERUS.png",
+    "creature_type": [
+      5,
+      2
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "407": {
+    "name": "Mermotaur_4",
+    "tex": "res://Art/portraits/card_LEVIATHAN.png",
+    "creature_type": [
+      5,
+      3
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "408": {
+    "name": "Stone Serpent_4",
+    "tex": "res://Art/portraits/card_STONE_SERPENT.png",
+    "creature_type": [
+      5,
+      4
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "409": {
+    "name": "Gargantua_4",
+    "tex": "res://Art/portraits/card_GARGANTUA.png",
+    "creature_type": [
+      5
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "410": {
+    "name": "Flame Cannon_4",
+    "tex": "res://Art/portraits/card_FLAME_CANNON.png",
+    "creature_type": [
+      2,
+      6
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "411": {
+    "name": "Steamer_4",
+    "tex": "res://Art/portraits/card_STEAMER.png",
+    "creature_type": [
+      6,
+      3
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "412": {
+    "name": "Miner_4",
+    "tex": "res://Art/portraits/card_MINER.png",
+    "creature_type": [
+      6,
+      4
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "413": {
+    "name": "Cyber wolf_4",
+    "tex": "res://Art/portraits/card_CYBER_WOLF.png",
+    "creature_type": [
+      5,
+      6
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "414": {
+    "name": "Factory_4",
+    "tex": "res://Art/portraits/card_FACTORY.png",
+    "creature_type": [
+      6
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "415": {
+    "name": "Combust_4",
+    "tex": "res://Art/portraits/card_COMBUST.png",
+    "creature_type": [
+      2,
+      7
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "416": {
+    "name": "Drifter_4",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      3,
+      7
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "417": {
+    "name": "Grave Robber_4",
+    "tex": "res://Art/portraits/card_DRIFTER.png",
+    "creature_type": [
+      4,
+      7
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "418": {
+    "name": "Necro-Wolf_4",
+    "tex": "res://Art/portraits/card_NECRO_WOLF.png",
+    "creature_type": [
+      5,
+      7
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "419": {
+    "name": "Abomination_4",
+    "tex": "res://Art/portraits/card_ABOMINATION.png",
+    "creature_type": [
+      7,
+      6
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "420": {
+    "name": "Lichomancer_4",
+    "tex": "res://Art/portraits/card_LICHOMANCER.png",
+    "creature_type": [
+      7
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+  "421": {
+    "name": "Slimy Boi_4",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "creature_type": [
+      1
+    ],
+    "tier": 5,
+    "rarity": "COMMON"
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "##COMMENT##":"EXPANSION__1",
+
+  "1000": {
     "name": "Spitfire",
     "tex": "res://Art/portraits/card_SPITFIRE.png",
     "power": 1,
@@ -309,7 +1028,7 @@
     ],
     "rarity": "COMMON"
   },
-  "29": {
+  "1001": {
     "name": "Legionstones",
     "tex": "res://Art/portraits/card_LEGION_STONES.png",
     "power": 0,
@@ -323,21 +1042,7 @@
     ],
     "rarity": "COMMON"
   },
-  "30": {
-    "name": "Badger",
-    "tex": "res://Art/portraits/BADger.png",
-    "power": 1,
-    "toughness": 2,
-    "creature_type": [
-      5
-    ],
-    "tier": 1,
-    "abilities": [
-      "AbilityRampage"
-    ],
-    "rarity": "COMMON"
-  },
-  "31": {
+  "1002": {
     "name": "Bonelord",
     "tex": "res://Art/portraits/BoneLord.png",
     "power": 1,
@@ -351,7 +1056,7 @@
     ],
     "rarity": "COMMON"
   },
-  "32": {
+  "1003": {
     "name": "Slime",
     "tex": "res://Art/portraits/card_SLIME.png",
     "power": 0,
@@ -365,7 +1070,7 @@
     ],
     "rarity": "COMMON"
   },
-  "33": {
+  "1004": {
     "name": "Frostling",
     "tex": "res://Art/portraits/card_FROSTLING.png",
     "power": 1,
@@ -379,7 +1084,7 @@
     ],
     "rarity": "COMMON"
   },
-  "34": {
+  "1005": {
     "name": "Blighted",
     "tex": "res://Art/portraits/card_BLIGHTED.png",
     "power": -3,
@@ -393,7 +1098,7 @@
     ],
     "rarity": "COMMON"
   },
-  "35": {
+  "1006": {
     "name": "Frost-tongue",
     "tex": "res://Art/portraits/card_FROSTTONGUE.png",
     "power": 0,
@@ -407,7 +1112,7 @@
     ],
     "rarity": "COMMON"
   },
-  "36": {
+  "1007": {
     "name": "Chipper",
     "tex": "res://Art/portraits/card_CHIPPER.png",
     "power": 1,
@@ -421,7 +1126,7 @@
     ],
     "rarity": "COMMON"
   },
-  "37": {
+  "1008": {
     "name": "Thought Sapper",
     "tex": "res://Art/portraits/card_THOUGHT_SAPPER.png",
     "power": 1,
@@ -431,11 +1136,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityMindrot 2"
+      "AbilityMindrot"
     ],
     "rarity": "COMMON"
   },
-  "38": {
+  "1009": {
     "name": "Rust Crawler",
     "tex": "res://Art/portraits/card_RUST_CRAWLER.png",
     "power": 6,
@@ -449,7 +1154,7 @@
     ],
     "rarity": "COMMON"
   },
-  "39": {
+  "1010": {
     "name": "Torchling",
     "tex": "res://Art/portraits/card_TORCHLING.png",
     "power": 1,
@@ -459,11 +1164,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityPyroclast 5"
+      "AbilityPyroclast count=5"
     ],
     "rarity": "COMMON"
   },
-  "40": {
+  "1011": {
     "name": "The Boulder",
     "tex": "res://Art/portraits/card_BOULDER.png",
     "power": 0,
@@ -477,7 +1182,7 @@
     ],
     "rarity": "COMMON"
   },
-  "41": {
+  "1012": {
     "name": "Serpent",
     "tex": "res://Art/portraits/card_SERPENT.png",
     "power": 0,
@@ -487,11 +1192,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityVenomous 2"
+      "AbilityVenomous count=2"
     ],
     "rarity": "COMMON"
   },
-  "42": {
+  "1013": {
     "name": "Carrion",
     "tex": "res://Art/portraits/card_CARRION.png",
     "power": 2,
@@ -505,7 +1210,7 @@
     ],
     "rarity": "COMMON"
   },
-  "43": {
+  "1014": {
     "name": "Phoenix",
     "tex": "res://Art/portraits/card_PHOENIX.png",
     "power": 2,
@@ -515,11 +1220,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityRekindle 2"
+      "AbilityRekindle count=2"
     ],
     "rarity": "COMMON"
   },
-  "44": {
+  "1015": {
     "name": "Ice King",
     "tex": "res://Art/portraits/card_ICE_KING.png",
     "power": 1,
@@ -533,7 +1238,7 @@
     ],
     "rarity": "COMMON"
   },
-  "45": {
+  "1016": {
     "name": "Hullera",
     "tex": "res://Art/portraits/card_HULLERA.png",
     "power": 2,
@@ -543,11 +1248,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityShieldUp 5"
+      "AbilityShieldUp count=5"
     ],
     "rarity": "COMMON"
   },
-  "46": {
+  "1017": {
     "name": "Pupa",
     "tex": "res://Art/portraits/card_PUPA.png",
     "power": 1,
@@ -561,7 +1266,7 @@
     ],
     "rarity": "COMMON"
   },
-  "47": {
+  "1018": {
     "name": "Processor",
     "tex": "res://Art/portraits/card_PROCESSOR.png",
     "power": 2,
@@ -571,11 +1276,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityConfigure 2"
+      "AbilityConfigure count=2"
     ],
     "rarity": "COMMON"
   },
-  "48": {
+  "1019": {
     "name": "Devourer",
     "tex": "res://Art/portraits/card_DEVOURER.png",
     "power": 0,
@@ -589,7 +1294,7 @@
     ],
     "rarity": "COMMON"
   },
-  "49": {
+  "1020": {
     "name": "Amalgam",
     "tex": "res://Art/portraits/card_AMALGAM.png",
     "power": 1,
@@ -599,11 +1304,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityChimera 1"
+      "AbilityChimera count=1"
     ],
     "rarity": "COMMON"
   },
-  "50": {
+  "1021": {
     "name": "Sigmoid",
     "tex": "res://Art/portraits/card_SIGMOID.png",
     "power": -12,
@@ -617,7 +1322,7 @@
     ],
     "rarity": "COMMON"
   },
-  "51": {
+  "1022": {
     "name": "Parasite",
     "tex": "res://Art/portraits/card_PARASITE.png",
     "power": 1,
@@ -631,7 +1336,7 @@
     ],
     "rarity": "COMMON"
   },
-  "52": {
+  "1023": {
     "name": "Ghastly Presence",
     "tex": "res://Art/portraits/card_GHASTLY_PRESENCE.png",
     "power": 2,
@@ -645,7 +1350,7 @@
     ],
     "rarity": "COMMON"
   },
-  "53": {
+  "1024": {
     "name": "Sanctifier",
     "tex": "res://Art/portraits/card_SANCTIFIER.png",
     "power": 0,
@@ -659,7 +1364,7 @@
     ],
     "rarity": "COMMON"
   },
-  "54": {
+  "1025": {
     "name": "Ignitia",
     "tex": "res://Art/portraits/card_IGNITIA.png",
     "power": 1,
@@ -669,11 +1374,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityWorldfire 2"
+      "AbilityWorldfire count=2"
     ],
     "rarity": "COMMON"
   },
-  "55": {
+  "1026": {
     "name": "Rockardio",
     "tex": "res://Art/portraits/card_ROCKARDIO.png",
     "power": 0,
@@ -683,11 +1388,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityPhalanx 2"
+      "AbilityPhalanx count=2"
     ],
     "rarity": "COMMON"
   },
-  "56": {
+  "1027": {
     "name": "Grey Goo",
     "tex": "res://Art/portraits/card_GREY_GOO.png",
     "power": 1,
@@ -701,8 +1406,8 @@
     ],
     "rarity": "COMMON"
   },
-  "57": {
-    "name": "Skin Shedder",
+  "1028": {
+    "name": "Oxza, the Skin Shedder",
     "tex": "res://Art/portraits/card_SKIN_SHEDDER.png",
     "power": 1,
     "toughness": 1,
@@ -711,12 +1416,12 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityMatryoshka 2"
+	"AbilityMatryoshka count=2"
     ],
     "rarity": "LEGENDARY"
   },
-  "58": {
-    "name": "Clone",
+  "1029": {
+    "name": "Clone, Mitosis Maximis",
     "tex": "res://Art/portraits/card_CLONE.png",
     "power": 0,
     "toughness": 0,
@@ -725,12 +1430,12 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityDuplicant 1"
+	"AbilityDuplicant"
     ],
     "rarity": "LEGENDARY"
   },
-  "59": {
-    "name": "Calcified Crab",
+  "1030": {
+    "name": "Kang, the Evershell",
     "tex": "res://Art/portraits/card_CRAB.png",
     "power": 1,
     "toughness": 2,
@@ -739,12 +1444,12 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityMolting 1"
+	"AbilityMolting"
     ],
     "rarity": "LEGENDARY"
   },
-  "60": {
-    "name": "Catylos",
+  "1031": {
+    "name": "Catylos Ablaze",
     "tex": "res://Art/portraits/card_CATYLOS.png",
     "power": 0,
     "toughness": 4,
@@ -753,12 +1458,12 @@
     ],
     "tier": 1,
     "abilities": [
-	"AbilityInsignia 1"
+	"AbilityInsignia"
     ],
     "rarity": "LEGENDARY"
   },
-  "61": {
-    "name": "Scraprion",
+  "1032": {
+    "name": "Scraprion, the Mechanist",
     "tex": "res://Art/portraits/card_SCRAPRION.png",
     "power": 1,
     "toughness": 1,
@@ -771,7 +1476,7 @@
     ],
     "rarity": "LEGENDARY"
   },
-  "62": {
+  "1033": {
     "name": "Nanite Cloud",
     "tex": "res://Art/portraits/card_LOCUSTSWARM.png",
     "power": 0,
@@ -781,11 +1486,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilitySwarm 2"
+      "AbilitySwarm count=2"
     ],
     "rarity": "COMMON"
   },
-  "63": {
+  "1034": {
     "name": "Thought Erasure",
     "tex": "res://Art/portraits/card_THOUGHTERASURE.png",
     "power": 0,
@@ -799,7 +1504,7 @@
     ],
     "rarity": "COMMON"
   },
-  "64": {
+  "1035": {
     "name": "Chupacabra",
     "tex": "res://Art/portraits/card_CHUPACABRA.png",
     "power": 3,
@@ -813,7 +1518,7 @@
     ],
     "rarity": "COMMON"
   },
-  "65": {
+  "1036": {
     "name": "Dreadnought Raven",
     "tex": "res://Art/portraits/card_RAVEN.png",
     "power": 0,
@@ -827,7 +1532,7 @@
     ],
     "rarity": "COMMON"
   },
-  "66": {
+  "1037": {
     "name": "Spineripper",
     "tex": "res://Art/portraits/card_SPINE_RIPPER.png",
     "power": 4,
@@ -841,7 +1546,7 @@
     ],
     "rarity": "COMMON"
   },
-  "67": {
+  "1038": {
     "name": "Supplicant",
     "tex": "res://Art/portraits/card_SUPPLICANT.png",
     "power": 1,
@@ -855,7 +1560,7 @@
     ],
     "rarity": "COMMON"
   },
-  "68": {
+  "1039": {
     "name": "Cicatrix",
     "tex": "res://Art/portraits/card_CICATRIX.png",
     "power": 1,
@@ -869,7 +1574,7 @@
     ],
     "rarity": "COMMON"
   },
-  "69": {
+  "1040": {
     "name": "Bloated Corpse",
     "tex": "res://Art/portraits/card_BLOATEDCORPSE.png",
     "power": 0,
@@ -879,11 +1584,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityBioagent 5"
+      "AbilityBioagent count=5"
     ],
     "rarity": "COMMON"
   },
-  "70": {
+  "1041": {
     "name": "Feller",
     "tex": "res://Art/portraits/card_FELLER.png",
     "power": 2,
@@ -897,8 +1602,8 @@
     ],
     "rarity": "COMMON"
   },
-  "71": {
-    "name": "Riella",
+  "1042": {
+    "name": "Riella, the Great Forge",
     "tex": "res://Art/portraits/card_RIELLA.png",
     "power": 0,
     "toughness": 2,
@@ -907,11 +1612,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityUpgrade 1"
+      "AbilityUpgrade"
     ],
     "rarity": "LEGENDARY"
   },
-  "72": {
+  "1043": {
     "name": "Nihileth",
     "tex": "res://Art/portraits/card_NIHILETH.png",
     "power": 1,
@@ -925,7 +1630,7 @@
     ],
     "rarity": "COMMON"
   },
-  "73": {
+  "1044": {
     "name": "Bottled Faerie",
     "tex": "res://Art/portraits/card_BOTTLED_FAERIE.png",
     "power": 0,
@@ -940,7 +1645,7 @@
     ],
     "rarity": "COMMON"
   },
-  "74": {
+  "1045": {
     "name": "Sigil",
     "tex": "res://Art/portraits/card_SIGIL.png",
     "power": 1,
@@ -950,11 +1655,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityEmblazon 1"
+      "AbilityEmblazon"
     ],
     "rarity": "COMMON"
   },
-  "75": {
+  "1046": {
     "name": "Raanagan",
     "tex": "res://Art/portraits/card_RAANAGAN.png",
     "power": 3,
@@ -964,11 +1669,11 @@
     ],
     "tier": 1,
     "abilities": [
-      "AbilityAbandon 1"
+      "AbilityAbandon"
     ],
     "rarity": "COMMON"
   },
-  "76": {
+  "1047": {
     "name": "Mongu",
     "tex": "res://Art/portraits/card_MONGU.png",
     "power": 1,
@@ -982,7 +1687,7 @@
     ],
     "rarity": "COMMON"
   },
-  "77": {
+  "1048": {
     "name": "Gaint Scorpone'",
     "tex": "res://Art/portraits/card_GIANT_SCORPONE.png",
     "power": 1,
@@ -996,7 +1701,7 @@
     ],
     "rarity": "COMMON"
   },
-  "78": {
+  "1049": {
     "name": "Inverter Arcanist",
     "tex": "res://Art/portraits/card_INVERTER_ARCANIST.png",
     "power": 1,
@@ -1010,7 +1715,7 @@
     ],
     "rarity": "COMMON"
   },
-  "79": {
+  "1050": {
     "name": "Spectre",
     "tex": "res://Art/portraits/card_SPECTRE.png",
     "power": 3,
@@ -1024,7 +1729,7 @@
     ],
     "rarity": "COMMON"
   },
-  "80": {
+  "1051": {
     "name": "Popper",
     "tex": "res://Art/portraits/card_FLICKER.png",
     "power": 1,
@@ -1038,7 +1743,7 @@
     ],
     "rarity": "COMMON"
   },
-  "81": {
+  "1052": {
     "name": "Grafter",
     "tex": "res://Art/portraits/card_GRAFTER.png",
     "power": 3,
@@ -1052,7 +1757,7 @@
     ],
     "rarity": "COMMON"
   },
-  "82": {
+  "1053": {
     "name": "Boney McFingies",
     "tex": "res://Art/portraits/card_BONEY.png",
     "power": 2,
@@ -1066,7 +1771,7 @@
     ],
     "rarity": "COMMON"
   },
-  "83": {
+  "1054": {
     "name": "Death Cable",
     "tex": "res://Art/portraits/card_DEATH_CABLE.png",
     "power": 0,
@@ -1080,7 +1785,7 @@
     ],
     "rarity": "COMMON"
   },
-  "84": {
+  "1055": {
     "name": "Ooze",
     "tex": "res://Art/portraits/card_OOZE.png",
     "power": 0,
@@ -1094,7 +1799,7 @@
     ],
     "rarity": "COMMON"
   },
-  "85": {
+  "1056": {
     "name": "Fledgling Conjurer",
     "tex": "res://Art/portraits/card_CONJURER_2.png",
     "power": 1,
@@ -1108,21 +1813,7 @@
     ],
     "rarity": "COMMON"
   },
-  "86": {
-    "name": "Primordial Ooze",
-    "tex": "res://Art/portraits/card_PRIMORDIAL_OOZE.png",
-    "power": 2,
-    "toughness": 2,
-    "creature_type": [
-      1
-    ],
-    "tier": 1,
-    "abilities": [
-      
-    ],
-    "rarity": "BASIC"
-  },
-  "87": {
+  "1057": {
     "name": "Infernal",
     "tex": "res://Art/portraits/card_INFERNAL.png",
     "power": 4,
@@ -1136,7 +1827,7 @@
     ],
     "rarity": "COMMON"
   },
-  "88": {
+  "1058": {
     "name": "Trampling Wildebeest",
     "tex": "res://Art/portraits/card_WILDEBEEST.png",
     "power": 1,
@@ -1150,7 +1841,7 @@
     ],
     "rarity": "COMMON"
   },
-  "89": {
+  "1059": {
     "name": "Riotus Vines",
     "tex": "res://Art/portraits/card_VINES.png",
     "power": 2,
@@ -1164,7 +1855,7 @@
     ],
     "rarity": "COMMON"
   },
-  "90": {
+  "1060": {
     "name": "Sand Shifter",
     "tex": "res://Art/portraits/card_SAND_SHIFTER.png",
     "power": 2,
@@ -1178,7 +1869,7 @@
     ],
     "rarity": "COMMON"
   },
-  "91": {
+  "1061": {
     "name": "Avalanche",
     "tex": "res://Art/portraits/card_AVALANCHE.png",
     "power": 2,
@@ -1192,8 +1883,8 @@
     ],
     "rarity": "COMMON"
   },
-  "92": {
-    "name": "Centurion",
+  "1062": {
+    "name": "Centro, the Unbound",
     "tex": "res://Art/portraits/card_CENTURION.png",
     "power": 2,
     "toughness": 2,
@@ -1206,7 +1897,7 @@
     ],
     "rarity": "LEGENDARY"
   },
-  "93": {
+  "1063": {
     "name": "Scorpio",
     "tex": "res://Art/portraits/card_SCORPIO.png",
     "power": 2,
@@ -1220,7 +1911,7 @@
     ],
     "rarity": "COMMON"
   },
-  "94": {
+  "1064": {
     "name": "Trapper Engine",
     "tex": "res://Art/portraits/card_TRAPPER_ENGINE.png",
     "power": 3,
@@ -1234,7 +1925,7 @@
     ],
     "rarity": "COMMON"
   },
-  "95": {
+  "1065": {
     "name": "Trap",
     "tex": "res://Art/portraits/card_TRAP.png",
     "power": 0,
@@ -1249,7 +1940,7 @@
     ],
     "rarity": "COMMON"
   },
-  "96": {
+  "1066": {
     "name": "River Weaver",
     "tex": "res://Art/portraits/card_RIVER_WEAVER.png",
     "power": 2,
@@ -1263,9 +1954,9 @@
     ],
     "rarity": "COMMON"
   },
-  "97": {
-    "name": "Flame Extortionist",
-    "tex": "res://Art/portraits/card_WIP.png",
+  "1067": {
+    "name": "Nightskin Extortionist",
+    "tex": "res://Art/portraits/card_EXTORTIONIST.png",
     "power": 3,
     "toughness": 1,
     "creature_type": [
@@ -1277,9 +1968,9 @@
     ],
     "rarity": "COMMON"
   },
-  "98": {
-    "name": "Power Plant",
-    "tex": "res://Art/portraits/card_WIP.png",
+  "1068": {
+    "name": "Gishith Power Plant",
+    "tex": "res://Art/portraits/card_GENERATOR.png",
     "power": 1,
     "toughness": 3,
     "creature_type": [
@@ -1291,9 +1982,9 @@
     ],
     "rarity": "COMMON"
   },
-  "99": {
+  "1069": {
     "name": "Cannibal Sacrament",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_CANNIBAL_SACRAMENT.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -1305,9 +1996,9 @@
     ],
     "rarity": "COMMON"
   },
-  "100": {
+  "1070": {
     "name": "Cockroach",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_COCKROACH.png",
     "power": 0,
     "toughness": 1,
     "creature_type": [
@@ -1319,7 +2010,7 @@
     ],
     "rarity": "COMMON"
   },
-  "101": {
+  "1071": {
     "name": "Contagion Engineer",
     "tex": "res://Art/portraits/card_WIP.png",
     "power": 0,
@@ -1334,7 +2025,7 @@
     ],
     "rarity": "COMMON"
   },
-  "102": {
+  "1072": {
     "name": "Whirlpool Aspect",
     "tex": "res://Art/portraits/card_WIP.png",
     "power": 0,
@@ -1345,6 +2036,20 @@
     "tier": 1,
     "abilities": [
       "AbilityMinoan"
+    ],
+    "rarity": "COMMON",
+  },
+  "1073": {
+    "name": "Rot Eternal",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityCompost count=2"
     ],
     "rarity": "COMMON"
   }
