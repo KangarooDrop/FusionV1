@@ -7,6 +7,14 @@ var deckSize : int = -1
 
 var vanguard : Card
 
+enum DECK_TYPE \
+{
+	NONE,
+	WIP,
+	STANDARD,
+	VANGUARD
+}
+
 static func MIN_DECK_SIZE() -> int:
 	return 20 
 
@@ -149,6 +157,7 @@ static func verifyDeck(deckData) -> int:
 	var total = 0
 	
 	#CHECK IF DECK DATA IS ACTUALLY A DICTIONARY
+	print(typeof(deckData))
 	if typeof(deckData) != TYPE_DICTIONARY:
 		return DECK_VALIDITY_TYPE.WRONG_TYPE
 	

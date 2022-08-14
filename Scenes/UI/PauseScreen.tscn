@@ -79,9 +79,9 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Back"
 
 [node name="OpponentsButton" type="Button" parent="VBoxContainer"]
-margin_top = 66.0
+margin_top = 33.0
 margin_right = 144.0
-margin_bottom = 89.0
+margin_bottom = 56.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -93,9 +93,9 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Opponents"
 
 [node name="ChangeDeckButton" type="Button" parent="VBoxContainer"]
-margin_top = 165.0
+margin_top = 66.0
 margin_right = 144.0
-margin_bottom = 188.0
+margin_bottom = 89.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )
@@ -107,20 +107,6 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Change Deck"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-margin_top = 132.0
-margin_right = 144.0
-margin_bottom = 155.0
-custom_styles/hover = ExtResource( 5 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 6 )
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
-custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-text = "Settings"
-
-[node name="ConcedeButton" type="Button" parent="VBoxContainer"]
 margin_top = 99.0
 margin_right = 144.0
 margin_bottom = 122.0
@@ -132,12 +118,26 @@ custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "Settings"
+
+[node name="ConcedeButton" type="Button" parent="VBoxContainer"]
+margin_top = 132.0
+margin_right = 144.0
+margin_bottom = 155.0
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Concede"
 
 [node name="RestartButton" type="Button" parent="VBoxContainer"]
-margin_top = 33.0
+margin_top = 165.0
 margin_right = 144.0
-margin_bottom = 56.0
+margin_bottom = 188.0
 custom_styles/hover = ExtResource( 5 )
 custom_styles/pressed = ExtResource( 4 )
 custom_styles/normal = ExtResource( 6 )

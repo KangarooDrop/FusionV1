@@ -68,7 +68,7 @@ func onRemove(ability):
 		myVars.buffsApplied = 0
 		
 		var board = NodeLoc.getBoard()
-		if board != null:
+		if board is BoardMP:
 			for c in board.getAllCards():
 				if board.isOnBoard(c):
 					for abl in c.abilities.duplicate():

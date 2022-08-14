@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/checkbox_unchecked.png-747244fa66895a7a282a8f1df36959ae.stex"
+path="res://.import/card_BOUNDARIES.png-131649fd39b61697aab929f36e108f8e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/silent_wolf/assets/gfx/checkbox_unchecked.png"
-dest_files=[ "res://.import/checkbox_unchecked.png-747244fa66895a7a282a8f1df36959ae.stex" ]
+source_file="res://Art/card_BOUNDARIES.png"
+dest_files=[ "res://.import/card_BOUNDARIES.png-131649fd39b61697aab929f36e108f8e.stex" ]
 
 [params]
 

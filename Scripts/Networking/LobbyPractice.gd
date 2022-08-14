@@ -3,28 +3,21 @@ extends Node
 func _ready():
 	$FDCenter/OptionDisplay.connect("onBackPressed", self, "onBackButtonClicked")
 	$FDCenter/OptionDisplay.connect("onOptionPressed", self, "onFileButtonClicked")
-	
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$FDCenter/OptionDisplay.setOptions("Select Deck", options, keys)
-	
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 	if $FDCenter/OptionDisplay.optionList.size() == 0:
 		MessageManager.notify("You must create a new deck before playing")
 		onBackButtonClicked()
 	
 func onFileButtonClicked(button : Button, key):
-	var dError = Deck.verifyDeck(key)
+	var deckData = FileIO.readJSON(Settings.path + key)
+	var dError = Deck.verifyDeck(deckData)
 	
 	if dError != OK:
 		var pop = MessageManager.createPopup("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError], [])
 		pop.setButtons([pop.GET_CLOSE_BUTTON()])
 		return
 	
-	Settings.deckData = key
+	Settings.deckData = deckData
 	Settings.gameMode = Settings.GAME_MODE.PRACTICE
 	
 	var error = get_tree().change_scene("res://Scenes/main.tscn")

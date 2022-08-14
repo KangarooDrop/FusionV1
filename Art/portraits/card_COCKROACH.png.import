@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dummy_info_icon_small.png-dbbedcd89d38767ae4fbec73495e5426.stex"
+path="res://.import/card_COCKROACH.png-2b9e730943fcd6021d43d2ac933fdeb3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/silent_wolf/assets/gfx/dummy_info_icon_small.png"
-dest_files=[ "res://.import/dummy_info_icon_small.png-dbbedcd89d38767ae4fbec73495e5426.stex" ]
+source_file="res://Art/portraits/card_COCKROACH.png"
+dest_files=[ "res://.import/card_COCKROACH.png-2b9e730943fcd6021d43d2ac933fdeb3.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

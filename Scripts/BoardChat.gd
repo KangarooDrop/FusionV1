@@ -41,7 +41,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	Server.sendChat(SilentWolf.Auth.logged_in_player + ": " + text)
+	Server.sendChat(Server.username + ": " + text)
 	lineEdit.text = ""
 
 func addMessage(message):

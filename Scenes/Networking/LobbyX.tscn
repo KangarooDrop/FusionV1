@@ -20,6 +20,7 @@ script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+bypassPunchthrough = true
 
 [node name="RabidHolePuncher" parent="." instance=ExtResource( 7 )]
 relay_server_address = "54.147.182.208"

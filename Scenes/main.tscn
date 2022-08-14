@@ -47,10 +47,6 @@ region_rect = Rect2( 0, 0, 64, 32 )
 
 [node name="LobbyChat" parent="CenterControl" instance=ExtResource( 7 )]
 
-[node name="OptionDisplay" parent="CenterControl" instance=ExtResource( 3 )]
-visible = false
-z_index = 98
-
 [node name="Control" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -61,11 +57,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OptionDisplay" parent="Control" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 0, -32 )
+z_index = 98
+
 [node name="Camera2D" type="Camera2D" parent="Control"]
 current = true
 zoom = Vector2( 1.125, 1.125 )
 
 [node name="PauseNode" type="Node2D" parent="Control"]
+position = Vector2( 0, -16 )
 z_index = 99
 
 [node name="PauseMenu" parent="Control/PauseNode" instance=ExtResource( 4 )]

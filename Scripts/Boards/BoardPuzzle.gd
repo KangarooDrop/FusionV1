@@ -1660,7 +1660,7 @@ func receiveMessage(message : String):
 
 func setOwnUsername():
 	print("Settings own username")
-	$UsernameLabel.text = SilentWolf.Auth.logged_in_player
+	$UsernameLabel.text = Server.username
 	dataLog.append("SET_OWN_USERNAME " + $UsernameLabel.text)
 	
 	if Server.online:

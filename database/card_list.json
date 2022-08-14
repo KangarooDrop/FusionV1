@@ -1407,7 +1407,7 @@
     "rarity": "COMMON"
   },
   "1028": {
-    "name": "Skin Shedder",
+    "name": "Oxza, the Skin Shedder",
     "tex": "res://Art/portraits/card_SKIN_SHEDDER.png",
     "power": 1,
     "toughness": 1,
@@ -1421,7 +1421,7 @@
     "rarity": "LEGENDARY"
   },
   "1029": {
-    "name": "Clone",
+    "name": "Clone, Mitosis Maximis",
     "tex": "res://Art/portraits/card_CLONE.png",
     "power": 0,
     "toughness": 0,
@@ -1435,7 +1435,7 @@
     "rarity": "LEGENDARY"
   },
   "1030": {
-    "name": "Calcified Crab",
+    "name": "Kang, the Evershell",
     "tex": "res://Art/portraits/card_CRAB.png",
     "power": 1,
     "toughness": 2,
@@ -1449,7 +1449,7 @@
     "rarity": "LEGENDARY"
   },
   "1031": {
-    "name": "Catylos",
+    "name": "Catylos Ablaze",
     "tex": "res://Art/portraits/card_CATYLOS.png",
     "power": 0,
     "toughness": 4,
@@ -1463,7 +1463,7 @@
     "rarity": "LEGENDARY"
   },
   "1032": {
-    "name": "Scraprion",
+    "name": "Scraprion, the Mechanist",
     "tex": "res://Art/portraits/card_SCRAPRION.png",
     "power": 1,
     "toughness": 1,
@@ -1603,7 +1603,7 @@
     "rarity": "COMMON"
   },
   "1042": {
-    "name": "Riella",
+    "name": "Riella, the Great Forge",
     "tex": "res://Art/portraits/card_RIELLA.png",
     "power": 0,
     "toughness": 2,
@@ -1884,7 +1884,7 @@
     "rarity": "COMMON"
   },
   "1062": {
-    "name": "Centurion",
+    "name": "Centro, the Unbound",
     "tex": "res://Art/portraits/card_CENTURION.png",
     "power": 2,
     "toughness": 2,
@@ -1955,8 +1955,8 @@
     "rarity": "COMMON"
   },
   "1067": {
-    "name": "Flame Extortionist",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Nightskin Extortionist",
+    "tex": "res://Art/portraits/card_EXTORTIONIST.png",
     "power": 3,
     "toughness": 1,
     "creature_type": [
@@ -1969,8 +1969,8 @@
     "rarity": "COMMON"
   },
   "1068": {
-    "name": "Power Plant",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "name": "Gishith Power Plant",
+    "tex": "res://Art/portraits/card_GENERATOR.png",
     "power": 1,
     "toughness": 3,
     "creature_type": [
@@ -1984,7 +1984,7 @@
   },
   "1069": {
     "name": "Cannibal Sacrament",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_CANNIBAL_SACRAMENT.png",
     "power": 2,
     "toughness": 1,
     "creature_type": [
@@ -1998,7 +1998,7 @@
   },
   "1070": {
     "name": "Cockroach",
-    "tex": "res://Art/portraits/card_WIP.png",
+    "tex": "res://Art/portraits/card_COCKROACH.png",
     "power": 0,
     "toughness": 1,
     "creature_type": [
@@ -2036,6 +2036,20 @@
     "tier": 1,
     "abilities": [
       "AbilityMinoan"
+    ],
+    "rarity": "COMMON",
+  },
+  "1073": {
+    "name": "Rot Eternal",
+    "tex": "res://Art/portraits/card_WIP.png",
+    "power": 0,
+    "toughness": 0,
+    "creature_type": [
+      5
+    ],
+    "tier": 1,
+    "abilities": [
+      "AbilityCompost count=2"
     ],
     "rarity": "COMMON"
   }

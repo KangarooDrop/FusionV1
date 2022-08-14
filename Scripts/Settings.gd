@@ -1,9 +1,7 @@
 extends Node
 
-signal _on_validate_player_data_complete(player_name, player_data)
-
 enum VERSION_COMP {SAME, OLDER, NEWER, BAD_KEYS, UNEVEN_KEYS}
-var versionID = "0.0.4.00"
+var versionID = "0.0.4.01"
 
 
 enum GAME_TYPES {CONSTRUCTED, DRAFT}
@@ -49,6 +47,8 @@ var matchType : int = 0
 
 var cardSlotScale = 1.5
 
+var path = "user://decks/"
+
 var dumpPath = "user://dumps/"
 var settingsPath = "user:/"
 var settingsName = "settings"
@@ -56,9 +56,6 @@ var settingsName = "settings"
 var shaderPath = "user://shaders/"
 
 func _ready():
-	SilentWolf.Players.connect("sw_player_data_received", self, "sw_player_data_received")
-	SilentWolf.Auth.connect("sw_logout_succeeded", self, "onLogOut")
-	
 	var json = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
 		
 	var settings = FileIO.readJSON(settingsPath + "/" + settingsName + ".json")
@@ -75,32 +72,11 @@ func _ready():
 	if not ok:
 		writeToSettings()
 
-const default_sw_dict = {"decks":{}}
-func sw_player_data_received(player_name, player_data):
-	
-	var should_push = false
-	
-	print("Received player data: ", player_data)
-	if typeof(SilentWolf.Players.player_data) != TYPE_DICTIONARY or (SilentWolf.Players.player_data as Dictionary).empty():
-		SilentWolf.Players.player_data = default_sw_dict
-		should_push = true
-		print("Deck is null/empty; setting")
-		
-	if not SilentWolf.Players.player_data.has("decks"):
-		SilentWolf.Players.player_data["decks"] = {}
-		should_push = true
-		print("Key 'deck' dne; setting")
-	
-	if should_push:
-		SilentWolf.Players.post_player_data(player_name, SilentWolf.Players.player_data)
-	
-	emit_signal("_on_validate_player_data_complete", player_name, SilentWolf.Players.player_data)
-
-func onLogOut():
-	SilentWolf.Players.clear_player_data()
-
 func verifySettings(settings : Dictionary) -> bool:
 	var ok = true
+	if not settings.has("username"):
+		settings["username"] = "NO_NAME"
+		ok = false
 	if not settings.has("anim_speed"):
 		settings["anim_speed"] = ANIMATION_SPEEDS.NORMAL / 10.0
 		ok = false
@@ -133,6 +109,7 @@ func writeToSettings():
 func getSettingsDict() -> Dictionary:
 	var rtn := \
 	{
+		"username":Server.username,
 		"anim_speed":animationSpeed,
 		"turn_time":turnTimerMax,
 		"game_time":gameTimerMax,

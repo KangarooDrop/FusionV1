@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/info_icon_small.png-8b621bcc49afb4260b6f80b5f252e0c7.stex"
+path="res://.import/card_CANNIBAL_SACRAMENT.png-048da09ba260deb3f94c4478795e93ef.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/silent_wolf/assets/gfx/info_icon_small.png"
-dest_files=[ "res://.import/info_icon_small.png-8b621bcc49afb4260b6f80b5f252e0c7.stex" ]
+source_file="res://Art/portraits/card_CANNIBAL_SACRAMENT.png"
+dest_files=[ "res://.import/card_CANNIBAL_SACRAMENT.png-048da09ba260deb3f94c4478795e93ef.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

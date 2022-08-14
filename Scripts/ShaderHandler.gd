@@ -13,6 +13,8 @@ var verifiedShaders : Array = \
 	"res://Shaders/Invert.shader",
 	"res://Shaders/LowLight.shader",
 	"res://Shaders/Blur.shader",
+	"res://Shaders/Doppler.shader",
+	"res://Shaders/CRT.shader",
 ]
 
 func _ready():

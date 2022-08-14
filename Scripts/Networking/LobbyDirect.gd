@@ -80,7 +80,7 @@ func _on_HostButton_pressed():
 	Server.startServer(Server.DEFAULT_PORT, peers)
 	setInLobby()
 	$Lobby/StartButton.disabled = false
-	addUser(1, SilentWolf.Auth.logged_in_player)
+	addUser(1, Server.username)
 	clearMessages()
 
 
@@ -88,7 +88,7 @@ func _on_JoinButton_pressed():
 	if$Lobby/LineEdit.text != "":
 		Server.online = true
 		setInLobby()
-		addUser(get_tree().get_network_unique_id(), SilentWolf.Auth.logged_in_player)
+		addUser(get_tree().get_network_unique_id(), Server.username)
 		$Lobby/LobbySettingsButton.disabled = true
 		clearMessages()
 		Server.connectToServer($Lobby/LineEdit.text)
@@ -144,7 +144,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	Server.sendChat(SilentWolf.Auth.logged_in_player + ": " + text)
+	Server.sendChat(Server.username + ": " + text)
 	$Lobby/LineEdit4.text = ""
 
 
@@ -206,14 +206,7 @@ func startGame():
 
 
 func openFileSelector():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$FDCenter/OptionDisplay.setOptions("Select Deck", options, keys)
-	
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 	$Lobby.hide()
 	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass

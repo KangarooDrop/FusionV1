@@ -111,6 +111,6 @@ func _input(event):
 			moveTimer = moveMaxTime
 			spinTimer = spinMaxTime
 		else:
-			var error = get_tree().change_scene("res://Scenes/Login/Home.tscn")
+			var error = get_tree().change_scene("res://Scenes/StartupScreen.tscn")
 			if error != 0:
-				print("Error loading test1.tscn. Error Code = " + str(error))
+				print("Error loading StartupScreen.tscn. Error Code = " + str(error))

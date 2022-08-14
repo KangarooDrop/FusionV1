@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/info_icon.png-75dcfef383fc397e1798b32243763c67.stex"
+path="res://.import/card_EXTORTIONIST.png-84213a9313a8b4008dce0420c1a80fcc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/silent_wolf/assets/gfx/info_icon.png"
-dest_files=[ "res://.import/info_icon.png-75dcfef383fc397e1798b32243763c67.stex" ]
+source_file="res://Art/portraits/card_EXTORTIONIST.png"
+dest_files=[ "res://.import/card_EXTORTIONIST.png-84213a9313a8b4008dce0420c1a80fcc.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

@@ -82,7 +82,6 @@ func makeFallingText(text : String, color : Color, global_position : Vector2):
 func _physics_process(delta):
 	for i in range(10):
 		if ftData.size() > 0:
-			print("hee hee")
 			var ft = fallingTextScene.instance()
 			NodeLoc.getBoard().add_child(ft)
 			var labelSize = lifeNode.get_node("Label").get_minimum_size()

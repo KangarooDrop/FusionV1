@@ -12,8 +12,8 @@ var boardPractice = load("res://Scripts/Boards/BoardMP.gd")
 signal BoardScriptAdded(board)
 
 func _ready():
-	$CenterControl/OptionDisplay.connect("onBackPressed", self, "onDeckChangeBackPressed")
-	$CenterControl/OptionDisplay.connect("onOptionPressed", self, "onDeckChangeButtonPressed")
+	$Control/OptionDisplay.connect("onBackPressed", self, "onDeckChangeBackPressed")
+	$Control/OptionDisplay.connect("onOptionPressed", self, "onDeckChangeButtonPressed")
 	
 	var b = get_node("CenterControl/Board")
 	if Settings.gameMode == Settings.GAME_MODE.PUZZLE:
@@ -35,7 +35,7 @@ func _input(event):
 		if event.scancode == KEY_ESCAPE:
 			if $CenterControl/LobbyChat.visible:
 				$CenterControl/LobbyChat.fadingNode.fadeOut()
-			elif $CenterControl/OptionDisplay.visible:
+			elif $Control/OptionDisplay.visible:
 				onDeckChangeBackPressed()
 			elif $Control/PauseNode/PauseMenu/SettingsPage/FDCenter/OptionDisplay.visible:
 				$Control/PauseNode/PauseMenu/SettingsPage.onShaderBackButtonPressed()
@@ -56,13 +56,7 @@ func _input(event):
 				$CenterControl/LobbyChat.fadingNode.fadeIn()
 
 func onDeckChangePressed():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$CenterControl/OptionDisplay.setOptions("Select Deck", options, keys)
+	$CenterControl/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 
 func onDeckChangeButtonPressed(button : Button, key):
 	onDeckChangeBackPressed()
@@ -70,5 +64,5 @@ func onDeckChangeButtonPressed(button : Button, key):
 	MessageManager.notify("Deck selected for next game")
 
 func onDeckChangeBackPressed():
-	$CenterControl/OptionDisplay.hide()
-	$CenterControl/PauseNode/PauseMenu.show()
+	$Control/OptionDisplay.hide()
+	$Control/PauseNode/PauseMenu.show()

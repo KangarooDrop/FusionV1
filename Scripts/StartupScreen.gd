@@ -42,18 +42,18 @@ func _ready():
 func onDeckEditPressed():
 	var error = get_tree().change_scene("res://Scenes/DeckEditor.tscn")
 	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+		print("Error loading DeckEditor.tscn. Error Code = " + str(error))
 	
 func onPracticePressed():
 	var error = get_tree().change_scene("res://Scenes/Networking/LobbyPractice.tscn")
 	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+		print("Error loading LobbyPractice.tscn. Error Code = " + str(error))
 	
 func onPuzzlePressed():
 	Settings.gameMode = Settings.GAME_MODE.PUZZLE
 	var error = get_tree().change_scene("res://Scenes/main.tscn")
 	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+		print("Error loading main.tscn. Error Code = " + str(error))
 	
 func onSettingsPressed():
 	$VBoxContainer.visible = false
@@ -61,10 +61,6 @@ func onSettingsPressed():
 	
 func onExitPressed():
 	get_tree().quit()
-	
-func onLogOutPressed():
-	SilentWolf.Auth.logout_player()
-	get_tree().change_scene("res://Scenes/Login/Home.tscn")
 
 func onSettingsClose():
 	$VBoxContainer.visible = true
@@ -87,7 +83,7 @@ func onCreditsPressed():
 func onLobbyButtonPressed():
 	var error = get_tree().change_scene("res://Scenes/Networking/LobbyX.tscn")
 	if error != 0:
-		print("Error loading test1.tscn. Error Code = " + str(error))
+		print("Error loading LobbyX.tscn. Error Code = " + str(error))
 
 func onDirectButtonPressed():
 	var error = get_tree().change_scene("res://Scenes/Networking/LobbyDirect.tscn")

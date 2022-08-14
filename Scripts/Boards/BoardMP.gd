@@ -199,7 +199,7 @@ func _ready():
 			
 		if Tournament.lastGameLoss:
 			var pop = MessageManager.createPopup("Choose Starting Player", "", [])
-			pop.setButtons([[SilentWolf.Auth.logged_in_player, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
+			pop.setButtons([[Server.username, self, "chooseStartingPlayer", [0, pop]], [Server.playerNames[Server.opponentID], self, "chooseStartingPlayer", [1, pop]]])
 		elif Tournament.lastGameWin:
 			$LoadingWindow.visible = true
 			$LoadingWindow/Label.text = "Opponent is choosing\nthe starting player"
@@ -1513,7 +1513,7 @@ func isMyTurn() -> bool:
 
 func passMyTurn(withBuffer = false):
 	if isMyTurn():
-		if (not get_node("/root/main/Control/PauseNode/PauseMenu").visible and not get_node("/root/main/CenterControl/OptionDisplay").visible) or (activePlayer == 0 and timers[players[0].UUID].turnOver):
+		if (not get_node("/root/main/Control/PauseNode/PauseMenu").visible and not get_node("/root/main/Control/OptionDisplay").visible) or (activePlayer == 0 and timers[players[0].UUID].turnOver):
 			if not gameOver and gameStarted:
 				if withBuffer:
 					var waiting = true
@@ -2105,7 +2105,7 @@ func receiveMessage(message : String):
 
 func setOwnUsername():
 	print("Settings own username")
-	$UsernameLabel.text = SilentWolf.Auth.logged_in_player
+	$UsernameLabel.text = Server.username
 	dataLog.append("SET_OWN_USERNAME " + $UsernameLabel.text)
 	
 	if Server.online:

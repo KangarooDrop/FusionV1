@@ -75,7 +75,7 @@ func holepunch_progress_update(type, session_name, player_names):
 			vbox.add_child(label)
 			
 			if holepuncher.is_host():
-				if name != SilentWolf.Auth.logged_in_player:
+				if name != Server.username:
 					var tb = TextureButton.new()
 					tb.texture_normal = kickTex
 					tb.texture_pressed = kickTex
@@ -207,7 +207,7 @@ func _on_HostButton_pressed():
 	else:
 		$LoadingWindow.visible = true
 		setInLobby()
-		holepuncher.create_session($Lobby/LineEdit.text, SilentWolf.Auth.logged_in_player, numPlayers)
+		holepuncher.create_session($Lobby/LineEdit.text, Server.username, numPlayers)
 		
 		$LoadingWindow/Label.text = "Connecting to Server"
 		
@@ -216,7 +216,7 @@ func _on_HostButton_pressed():
 func _on_JoinButton_pressed():
 	$LoadingWindow.visible = true
 	setInLobby()
-	holepuncher.join_session($Lobby/LineEdit.text, SilentWolf.Auth.logged_in_player)
+	holepuncher.join_session($Lobby/LineEdit.text, Server.username)
 	
 	$LoadingWindow/Label.text = "Connecting to Server"
 	$Lobby/LobbySettingsButton.disabled = true
@@ -224,8 +224,9 @@ func _on_JoinButton_pressed():
 	clearMessages()
 
 func _on_PublicButton_pressed():
-	$RabidHolePuncher.get_public_lobbies()
 	$LoadingWindow.show()
+	yield(get_tree().create_timer(1), "timeout")
+	$RabidHolePuncher.get_public_lobbies()
 
 func public_lobbies_received(data):
 	$LoadingWindow.hide()
@@ -299,14 +300,7 @@ func startGame():
 	$LeaveButton.show()
 
 func openFileSelector():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	$FDCenter/OptionDisplay.setOptions("Select Deck", options, keys)
-	
+	$FDCenter/OptionDisplay.loadFiles("Select Deck", Settings.path, ["json"])
 	$Lobby.hide()
 	if $FDCenter/OptionDisplay.optionList.size() > 0:
 		pass
@@ -318,7 +312,8 @@ func openFileSelector():
 
 	
 func onFileButtonClicked(button : Button, key):
-	var dError = Deck.verifyDeck(key)
+	var deckData = FileIO.readJSON(Settings.path + key)
+	var dError = Deck.verifyDeck(deckData)
 	
 	if dError != OK:
 		createPopup("Error Loading Deck", "Error loading " + button.text + "\nop_code=" + str(dError) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[dError])
@@ -326,7 +321,7 @@ func onFileButtonClicked(button : Button, key):
 	
 	$FDCenter/OptionDisplay.hide()
 	
-	Settings.deckData = key
+	Settings.deckData = deckData
 	
 	if Settings.matchType == Settings.MATCH_TYPE.TOURNAMENT:
 		Server.setReady(true)
@@ -365,7 +360,7 @@ func sendMessage(text = null):
 		return
 	
 	messageTimer += 1
-	holepuncher.send_chat(SilentWolf.Auth.logged_in_player + ":" + text)
+	holepuncher.send_chat(Server.username + ":" + text)
 	$Lobby/LineEdit4.text = ""
 
 

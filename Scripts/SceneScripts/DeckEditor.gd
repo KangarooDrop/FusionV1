@@ -1,5 +1,7 @@
 extends Node
 
+var popupUI = preload("res://Scenes/UI/PopupUI.tscn")
+
 var availableCardCount : Dictionary = {}
 
 var nums := []
@@ -398,16 +400,9 @@ func onNewPressed():
 		popups.append(pop)
 	else:
 		onConfirmNew()
-		
+
 func onDeleteButtonPressed():
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	fileDisplay.setOptions("Select Deck", options, keys)
-	
+	fileDisplay.loadFiles("Delete File", Settings.path, ["json"])
 	$CenterControl/DeckDisplay.canScroll = false
 	fileWhat = FILE_WHAT.DELETE
 	
@@ -454,14 +449,12 @@ func onConfirmLoad(popup=null):
 		popup.close()
 	
 	fileWhat = FILE_WHAT.LOAD
-	var decks : Dictionary = SilentWolf.Players.player_data["decks"]
-	var options : Array = decks.keys()
-	options.sort()
-	var keys : Array = []
-	for d in options:
-		keys.append(decks[d])
-	fileDisplay.setOptions("Select Deck", options, keys)
+	fileDisplay.loadFiles("Load File", Settings.path, ["json"])
 	$CenterControl/DeckDisplay.canScroll = false
+
+
+	fileDisplay.connect("onBackPressed", self, "onBackPressed")
+	fileDisplay.connect("onOptionPressed", self, "onFilePressed")
 
 func onBackPressed(popup=null):
 	if popup != null:
@@ -477,14 +470,16 @@ var fileToDelete = ""
 
 func onFilePressed(button : Button, key):
 	if fileWhat == FILE_WHAT.LOAD:
-		var error = Deck.verifyDeck(key)
+		var deckData = FileIO.readJSON(Settings.path + key)
+		
+		var error = Deck.verifyDeck(deckData)
 		print("Deck validity: " + str(error))
 		if error == Deck.DECK_VALIDITY_TYPE.VALID:
 			$CenterControl/DeckDisplay.clearData()
-			for dat in key.keys():
-				for k in key[dat].keys():
+			for dat in deckData.keys():
+				for k in deckData[dat].keys():
 					var id = int(k)
-					for i in range(int(key[dat][k])):
+					for i in range(int(deckData[dat][k])):
 						$CenterControl/DeckDisplay.addCard(id)
 						
 						for p in pages:
@@ -509,68 +504,47 @@ func onFilePressed(button : Button, key):
 		popups.append(pop)
 	else:
 		onBackPressed()
+
 	
 func onDeleteConfirmed(popup=null):
-	var bak = SilentWolf.Players.player_data["decks"][fileToDelete]
-	SilentWolf.Players.player_data["decks"].erase(fileToDelete)
-	$CenterControl/LoadingOffset/LoadingWindow.get_node("Label").text = "Deleting Deck"
+	var dir = Directory.new()
+	var error = dir.remove(Settings.path + "/" + fileToDelete)
+	print(error)
 	onBackPressed(popup)
-	$CenterControl/LoadingOffset/LoadingWindow.show()
-	var out = yield(SilentWolf.Players.post_player_data(SilentWolf.Auth.logged_in_player, SilentWolf.Players.player_data), "sw_player_data_posted")
-	$CenterControl/LoadingOffset/LoadingWindow.hide()
-	if out:
-		var pop = MessageManager.createPopup("Deck Deleted", "", [])
-		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
-		popups.append(pop)
-	else:
-		SilentWolf.Players.player_data["decks"][fileToDelete] = bak
-		var pop = MessageManager.createPopup("Error Deleting Deck", "Could not connect to server", [])
-		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
-		popups.append(pop)
-		
+
 func onFileSaveBackPressed():
 	$CenterControl/SaveDisplay/Background/LineEdit.text = ""
 	$CenterControl/SaveDisplay.visible = false
 	
 func onFileSaveButtonPressed():
 	
-	var fileName : String = $CenterControl/SaveDisplay/Background/LineEdit.text
-	$CenterControl/SaveDisplay/Background/LineEdit.release_focus()
-	$CenterControl/SaveDisplay/Background/SaveButton.release_focus()
+	var fileName = $CenterControl/SaveDisplay/Background/LineEdit.text
 	
-	if fileName.empty():
-		SilentWolf.Players.player_data["decks"].erase(fileName)
-		var pop = MessageManager.createPopup("Error Saving Deck", "Deck name cannot be empty", [])
-		pop.setButtons([["Close", self, "closePopupUI", [pop]]])
-		popups.append(pop)
-	else:
-		var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
-		if error == Deck.DECK_VALIDITY_TYPE.VALID:
-			SilentWolf.Players.player_data["decks"][fileName] = $CenterControl/DeckDisplay.getDeckData()
-			$CenterControl/LoadingOffset/LoadingWindow.get_node("Label").text = "Saving Deck"
-			$CenterControl/LoadingOffset/LoadingWindow.show()
-			var out = yield(SilentWolf.Players.post_player_data(SilentWolf.Auth.logged_in_player, SilentWolf.Players.player_data), "sw_player_data_posted")
-			$CenterControl/LoadingOffset/LoadingWindow.hide()
-			if out:
-				print("Deck successfully saved")
-				var pop = MessageManager.createPopup("Deck Saved", "", [])
-				pop.setButtons([["Close", self, "closePopupUI", [pop]]])
-				popups.append(pop)
-				hasSaved = true
-				loadedDeckName = fileName
-			else:
-				SilentWolf.Players.player_data["decks"].erase(fileName)
-				var pop = MessageManager.createPopup("Error Saving Deck", "Could not connect to server", [])
-				pop.setButtons([["Close", self, "closePopupUI", [pop]]])
-				popups.append(pop)
-			
-			
-			
-			
-		else:
-			var pop = MessageManager.createPopup("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [])
-			pop.setButtons([["Close", self, "closePopupUI", [pop]]])
+	var error = Deck.verifyDeck($CenterControl/DeckDisplay.getDeckDataAsJSON())
+	if error == Deck.DECK_VALIDITY_TYPE.VALID:
+		var fileError = FileIO.writeToJSON(Settings.path, fileName, $CenterControl/DeckDisplay.getDeckData())
+		if fileError != 0:
+			print("ERROR CODE WHEN WRITING TO FILE : " + str(fileError))
+			var pop = popupUI.instance()
+			pop.init("Error", "File could not be saved", [["Close", self, "closePopupUI", [pop]]])
+			$CenterControl.add_child(pop)
+			pop.options[0].grab_focus()
 			popups.append(pop)
+		else:
+			print("Deck successfully saved")
+			var pop = popupUI.instance()
+			pop.init("Deck Saved", "", [["Close", self, "closePopupUI", [pop]]])
+			$CenterControl.add_child(pop)
+			hasSaved = true
+			loadedDeckName = fileName
+			pop.options[0].grab_focus()
+			popups.append(pop)
+	else:
+		var pop = popupUI.instance()
+		pop.init("Error Verifying Deck", "Error verifying\nop_code=" + str(error) + " : " + Deck.DECK_VALIDITY_TYPE.keys()[error], [["Close", self, "closePopupUI", [pop]]])
+		$CenterControl.add_child(pop)
+		pop.options[0].grab_focus()
+		popups.append(pop)
 	
 	onFileSaveBackPressed()
 

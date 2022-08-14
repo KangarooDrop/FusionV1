@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/checkbox_checked.png-a8704d0614a98c80620c9451baa9e021.stex"
+path="res://.import/card_GENERATOR.png-3d089e61c4c31b51517d8ece1bc9cd73.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/silent_wolf/assets/gfx/checkbox_checked.png"
-dest_files=[ "res://.import/checkbox_checked.png-a8704d0614a98c80620c9451baa9e021.stex" ]
+source_file="res://Art/portraits/card_GENERATOR.png"
+dest_files=[ "res://.import/card_GENERATOR.png-3d089e61c4c31b51517d8ece1bc9cd73.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
